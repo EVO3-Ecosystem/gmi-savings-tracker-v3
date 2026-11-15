@@ -22,6 +22,8 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from . import calibration as C
+
 ROOT = Path(__file__).resolve().parents[2]
 OTHER = "Other controllable purchases"
 TREND, NAIVE, DRIFT = "Log-linear trend", "Naive (last actual)", "Drift (average yearly growth)"
@@ -247,13 +249,53 @@ def build(f_code, f_scope, f_fund, cfg=None, reference=None):
     return f, m, bt
 
 
+def rechooser(model, rule):
+    """rechoose(rows) for calibration.evaluate: the model each area would have been given from a subset of the backtest.
+    Under the rolling-origin rule the choice is recomputed from the subset's mean MASE; under the legacy single split
+    the choice does not come from the backtest, so the published one is returned."""
+    published = model[["area", "method"]]
+
+    def rechoose(rows):
+        if rule == "legacy_single_split":
+            return published
+        mase = rows[rows.method.isin(METHODS)].groupby(["area", "method"]).mase.mean()
+        out = []
+        for area in published.area:
+            scores = {m: mase.get((area, m), np.inf) for m in METHODS}
+            out.append({"area": area, "method": choose(scores, rule, None)})
+        return pd.DataFrame(out)
+    return rechoose
+
+
+def calibrate(f, m, bt, cfg=None):
+    """Calibrated ranges and how they performed. Returns (f with p10_cal, p90_cal and range_source, coverage table).
+
+    The raw p10 / p50 / p90 are left exactly as built. p10_cal / p90_cal stretch the raw range around p50 by the
+    conformal factor fitted on the backtest misses of each area's chosen model (one factor per horizon when every
+    horizon has enough scores, otherwise one pooled factor; years beyond the backtest's longest horizon use the
+    longest horizon's factor). The coverage table reports the raw and calibrated ranges in sample and out of sample.
+    """
+    cfg = cfg or assumptions()
+    cal, p = C.settings(cfg), cfg["forecast"]
+    fs, cov = C.evaluate(bt, m, rechooser(m, p.get("selection", "rolling_origin_mase")), cal)
+    f = f.copy()
+    fc = f.kind == "Forecast"
+    k = np.array([C.factor_for(fs, h) for h in (f.loc[fc, "fiscal_year"] - p["last_actual_fy"])], dtype=float)
+    lo, hi = C.widen(f.loc[fc, "p10"], f.loc[fc, "p50"], f.loc[fc, "p90"], k) if fc.any() else ([], [])
+    f["p10_cal"], f["p90_cal"], f["range_source"] = np.nan, np.nan, None
+    f.loc[fc, "p10_cal"], f.loc[fc, "p90_cal"], f.loc[fc, "range_source"] = np.round(lo, 0), np.round(hi, 0), "bootstrap"
+    return f, cov
+
+
 def write(con, cfg=None):
-    """Read the marts, build the three tables and store them in the mart schema."""
+    """Read the marts, build the tables and store them in the mart schema."""
     f_code, f_scope, f_fund = (con.execute(f"SELECT * FROM mart.{t}").df() for t in ("f_code", "f_scope", "f_fund"))
     f, m, bt = build(f_code, f_scope, f_fund, cfg)
     cal = calibration(bt, m)
-    for name, df in (("f_forecast", f), ("d_forecast_model", m), ("d_forecast_backtest", bt), ("d_forecast_calibration", cal)):
+    f, cov = calibrate(f, m, bt, cfg)
+    tables = (("f_forecast", f), ("d_forecast_model", m), ("d_forecast_backtest", bt), ("d_forecast_calibration", cal), ("d_range_coverage", cov))
+    for name, df in tables:
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")
         con.unregister("_df")
-    return {"f_forecast": len(f), "d_forecast_model": len(m), "d_forecast_backtest": len(bt), "d_forecast_calibration": len(cal)}
+    return {name: len(df) for name, df in tables}

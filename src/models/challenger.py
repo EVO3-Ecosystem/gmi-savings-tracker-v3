@@ -18,6 +18,8 @@ import pandas as pd
 import yaml
 from lightgbm import LGBMRegressor
 
+from . import calibration as C
+
 ROOT = Path(__file__).resolve().parents[2]
 LGBM = "LightGBM quantile (global)"
 NAIVE = "Naive (last actual)"
@@ -78,7 +80,7 @@ def _naive_band(train_series, years):
 def backtest(f, cfg):
     """Rolling-origin scoring: per origin, train through the origin and predict the next year; per series, mean MASE
     for the challenger and the naive baseline, and each model's 80% band coverage. One row per origin and model."""
-    rows, per_series = [], {}
+    rows, per_series, detail = [], {}, []
     for origin in cfg["origins"]:
         train, test = f[f.fiscal_year <= origin], f[f.fiscal_year == origin + 1]
         if test.empty:
@@ -95,6 +97,8 @@ def backtest(f, cfg):
             last = float(ts[ts.fiscal_year == origin].budget.iloc[0])
             band = _naive_band(ts[ts.fiscal_year <= origin], [origin + 1])[origin + 1]
             pred = {q: float(np.expm1(models[q].predict(row[FEATURES])[0])) for q in (0.1, 0.5, 0.9)}
+            detail.append({"origin_fy": origin, "agency_code": a, "code": c, "last": last, "outcome": out, "naive_p10": band[0],
+                           "naive_p90": band[2], "lgbm_p10": min(pred.values()), "lgbm_p50": pred[0.5], "lgbm_p90": max(pred.values())})
             s = per_series.setdefault((a, c), {NAIVE: [], LGBM: []})
             s[NAIVE].append(abs(last - out) / scale)
             s[LGBM].append(abs(pred[0.5] - out) / scale)
@@ -111,17 +115,97 @@ def backtest(f, cfg):
     scores = pd.DataFrame([{"agency_code": a, "code": c, "scored_origins": len(v[NAIVE]),
                             "naive_mase": float(np.mean(v[NAIVE])), "challenger_mase": float(np.mean(v[LGBM]))}
                            for (a, c), v in per_series.items()])
-    return agg, scores
+    return agg, scores, pd.DataFrame(detail)
+
+
+def series_calibration(detail, cal):
+    """Conformalized quantile regression on the per-series backtest. Returns (margins, coverage rows).
+
+    margins: model -> the log1p margin added to both ends of that model's band, fitted on every origin (used for the
+    published forecast year). Coverage rows report the raw band in sample and the widened band at each origin after
+    the first, where the margin comes only from earlier origins (out of sample)."""
+    alpha, z, rows, margins = 1 - cal["nominal"], cal["wilson_z"], [], {}
+    origins = sorted(detail.origin_fy.unique()) if len(detail) else []
+    for model, lo, hi, source in ((LGBM, "lgbm_p10", "lgbm_p90", "lightgbm"), (NAIVE, "naive_p10", "naive_p90", "naive band")):
+        if not len(detail):
+            margins[model] = 0.0
+            continue
+        d = detail.assign(score=C.cqr_scores(detail[lo], detail[hi], detail.outcome))
+        margins[model] = C.cqr_margin(d.score.values, alpha)
+        raw_cov = (d[lo] <= d.outcome) & (d.outcome <= d[hi])
+        rows.append(C.coverage_row(source, "All series", 1, "in_sample", 0, raw_cov, C.interval_score(d[lo], d[hi], d.outcome), 0.0, z, outcome=d.outcome))
+        held = []
+        for o in origins[1:]:
+            m = C.cqr_margin(d[d.origin_fy < o].score.values, alpha)
+            t = d[d.origin_fy == o]
+            a, b = C.cqr_widen(t[lo], t[hi], m)
+            held.append(pd.DataFrame({"covered": (a <= t.outcome) & (t.outcome <= b), "iscore": C.interval_score(a, b, t.outcome),
+                                      "outcome": t.outcome, "margin": m}))
+        if held:
+            h = pd.concat(held, ignore_index=True)
+            rows.append(C.coverage_row(source, "All series", 1, "expanding_origin", 1, h.covered, h.iscore, float(h.margin.mean()), z, outcome=h.outcome))
+    return margins, rows
+
+
+def area_backtest(detail, area_of, area_actual, cal):
+    """LightGBM-based ranges for focus-area totals, scored at each origin. Returns (rows, margin, coverage rows).
+
+    Per-series quantiles are not additive, so the area range is not built from them. The challenger's growth for an
+    area is the sum of its series medians over the sum of their last actuals; that growth is applied to the area's
+    actual total, and the range around it is that point times exp(+/- margin), where the margin is the conformal
+    quantile of the absolute log errors of the same construction at earlier origins, pooled over areas.
+    area_of: (agency_code, code) -> area. area_actual: (area, fiscal_year) -> actual spending."""
+    alpha, z = 1 - cal["nominal"], cal["wilson_z"]
+    rows = []
+    if len(detail):
+        d = detail.assign(area=[area_of(a, c) for a, c in zip(detail.agency_code, detail.code)])
+        for (o, area), g in d.groupby(["origin_fy", "area"]):
+            base, out = area_actual.get((area, int(o))), area_actual.get((area, int(o) + 1))
+            if not base or not out or g["last"].sum() <= 0:
+                continue
+            pred = base * g.lgbm_p50.sum() / g["last"].sum()
+            rows.append({"origin_fy": int(o), "area": area, "pred": pred, "outcome": out, "score": abs(np.log(out) - np.log(pred))})
+    bt = pd.DataFrame(rows, columns=["origin_fy", "area", "pred", "outcome", "score"])
+    margin = C.conformal_quantile(bt.score.values, alpha) if len(bt) else float("nan")
+    cov, held = [], []
+    for o in sorted(bt.origin_fy.unique())[1:]:
+        m = C.conformal_quantile(bt[bt.origin_fy < o].score.values, alpha)
+        t = bt[bt.origin_fy == o]
+        lo, hi = t.pred * np.exp(-m), t.pred * np.exp(m)
+        held.append(pd.DataFrame({"covered": (lo <= t.outcome) & (t.outcome <= hi), "iscore": C.interval_score(lo, hi, t.outcome),
+                                  "outcome": t.outcome, "margin": m}))
+    if held:
+        h = pd.concat(held, ignore_index=True)
+        cov.append(C.coverage_row("lightgbm area", C.ALL, 1, "expanding_origin", 1, h.covered, h.iscore, float(h.margin.mean()), z, outcome=h.outcome))
+    return bt, margin, cov
+
+
+def statewide_tau(detail):
+    """Size of the shock all series share in a year: root mean square, over the backtest origins, of the log ratio of
+    the actual statewide total to the sum of the series medians. 0 when there is no backtest."""
+    if not len(detail):
+        return 0.0
+    g = detail.groupby("origin_fy")[["outcome", "lgbm_p50"]].sum()
+    return float(np.sqrt(np.mean(np.log(g.outcome / g.lgbm_p50) ** 2)))
 
 
 def build(scope, agency_names, cfg=None):
     """The challenger tables from the spending panel. agency_names: agency_code -> latest name. Returns
     (f_challenger, d_challenger_backtest): per-series forecasts for the year after the last actual, and the
     rolling-origin validation that justifies each series' model."""
+    return build_all(scope, agency_names, cfg)[:2]
+
+
+def build_all(scope, agency_names, cfg=None, cal=None):
+    """build() plus what the range calibration needs: (f_challenger, d_challenger_backtest, per-series backtest rows,
+    per-series LightGBM medians for the forecast year). f_challenger carries p10_cal / p90_cal: each row's band widened
+    by its model's conformal margin."""
     cfg = cfg or assumptions()
+    cal = cal or C.settings()
     p = panel(scope)
     f = features(p, cfg)
-    agg, scores = backtest(f, cfg)
+    agg, scores, detail = backtest(f, cfg)
+    margins, _ = series_calibration(detail, cal)
     keep = scores[(scores.scored_origins >= cfg["min_scored_origins"]) & (scores.challenger_mase < scores.naive_mase - 1e-9)]
     adopted = set(zip(keep.agency_code, keep.code))
     fy = cfg["last_actual_fy"] + 1
@@ -131,7 +215,7 @@ def build(scope, agency_names, cfg=None):
     code_tot = p[p.fiscal_year == cfg["last_actual_fy"]].groupby("code").budget.sum()
     lags_needed = [fy - i for i in range(1, cfg["lags"] + 1)]
     sc = scores.set_index(["agency_code", "code"])
-    rows = []
+    rows, medians = [], []
     for (a, c, name), ts in p.groupby(["agency_code", "code", "spending_code"]):
         hist = ts[ts.fiscal_year <= cfg["last_actual_fy"]]
         vals = hist.set_index("fiscal_year").budget
@@ -143,8 +227,10 @@ def build(scope, agency_names, cfg=None):
                            "t": fy - cfg["first_actual_fy"]}])
         key = (a, c)
         use_lgbm = key in adopted
+        q = {a_: float(np.expm1(models[a_].predict(x)[0])) for a_ in (0.1, 0.5, 0.9)}
+        medians.append({"agency_code": a, "code": c, "last": float(vals.loc[lags_needed[0]]), "lgbm_p50": q[0.5]})
         if use_lgbm:
-            p10, p50, p90 = (float(np.expm1(models[q].predict(x)[0])) for q in (0.1, 0.5, 0.9))
+            p10, p50, p90 = q[0.1], q[0.5], q[0.9]
         else:
             p10, p50, p90 = _naive_band(hist, [fy])[fy]
         lo, mid, hi = min(p10, p50, p90), np.median([p10, p50, p90]), max(p10, p50, p90)
@@ -153,32 +239,74 @@ def build(scope, agency_names, cfg=None):
                      "fiscal_year": fy, "p10": lo, "p50": mid, "p90": hi,
                      "model": LGBM if use_lgbm else NAIVE, "adopted": use_lgbm, "naive_mase": nm, "challenger_mase": cm})
     out = pd.DataFrame(rows)
-    for c in ("p10", "p50", "p90"):
+    m = out.model.map(margins).fillna(0.0).to_numpy(dtype=float) if len(out) else []
+    out["p10_cal"], out["p90_cal"] = C.cqr_widen(out.p10, out.p90, m) if len(out) else ([], [])
+    for c in ("p10", "p50", "p90", "p10_cal", "p90_cal"):
         out[c] = pd.to_numeric(out[c]).round(0)
     for c in ("naive_mase", "challenger_mase"):
         out[c] = pd.to_numeric(out[c]).round(4)
-    return out.sort_values("p50", ascending=False).reset_index(drop=True), agg
+    return out.sort_values("p50", ascending=False).reset_index(drop=True), agg, detail, pd.DataFrame(medians)
 
 
-def _statewide(out, cfg):
+def _statewide(out, cfg, tau=0.0):
     """A band for the statewide FY-after-last-actual total. Per-series p10/p90 are not additive (every series does
-    not hit its own tail in the same year), so the total is simulated: each series is drawn log-normally within its
-    kept band — median p50, log sigma from its band width, draws clamped to the band edges, the same uncertainty
-    convention as the savings calculator — and the draws are summed path by path."""
+    not hit its own tail in the same year), so the total is simulated: each series is drawn log-normally around its
+    median with the log sigma of its calibrated band, times one shock shared by every series in the path (log sigma
+    `tau`, the size of the statewide miss in the backtest), and the draws are summed path by path. Draws are not
+    clamped to the band: clamping removed both tails and made the corridor too narrow."""
     paths = int(cfg.get("bootstrap_paths", 4000))
     rng = np.random.default_rng(cfg["seed"])
-    p10, p50, p90 = (out[c].to_numpy(dtype=float) for c in ("p10", "p50", "p90"))
+    lo, hi = (out[c] if c in out else out[r] for c, r in (("p10_cal", "p10"), ("p90_cal", "p90")))
+    p10, p50, p90 = lo.to_numpy(dtype=float), out["p50"].to_numpy(dtype=float), hi.to_numpy(dtype=float)
     sg = np.log((p90 + 1.0) / (p10 + 1.0)) / (2 * 1.2816)
     draws = p50[:, None] * np.exp(rng.standard_normal((len(out), paths)) * sg[:, None])
-    draws = np.minimum(np.maximum(draws, p10[:, None]), p90[:, None])  # the published band is each series' own bounds
-    q10, q50, q90 = np.quantile(draws.sum(axis=0), [0.1, 0.5, 0.9])
+    common = np.exp(rng.standard_normal(paths) * tau)
+    q10, q50, q90 = np.quantile(draws.sum(axis=0) * common, [0.1, 0.5, 0.9])
     return pd.DataFrame([{"fiscal_year": int(out.fiscal_year.iloc[0]), "p10": round(float(q10)), "p50": round(float(q50)),
                           "p90": round(float(q90)), "n_series": len(out), "n_adopted": int(out.adopted.sum()),
-                          "bootstrap_paths": paths,
-                          "note": "Statewide corridor simulated path by path: each series drawn log-normally within "
-                                  "its kept band (median p50, sigma from the band width, draws clamped to the band "
-                                  "edges); summing the per-series p10/p90 directly would overstate the band, because "
-                                  "series do not all hit their tails together."}])
+                          "bootstrap_paths": paths, "common_shock_sigma": round(float(tau), 4),
+                          "note": "Statewide corridor simulated path by path: each series drawn log-normally around "
+                                  "its median (sigma from its calibrated band) times one shock shared by all series "
+                                  "(sigma from the statewide miss in the backtest); summing the per-series p10/p90 "
+                                  "directly would overstate the band, because series do not all hit their tails together."}])
+
+
+AREA_SQL = "SELECT DISTINCT agency_code, code, area FROM mart.f_code"
+OTHER = "Other controllable purchases"
+
+
+def adopt_area_ranges(con, medians, bt_area, margin, cov, cfg, cal):
+    """Apply the pre-registered adoption rule to the one-year-ahead area ranges and record the outcome.
+
+    Compares the LightGBM-based area range with the calibrated bootstrap range at horizon 1, both out of sample
+    (expanding origin). When the rule adopts, the forecast-year rows of mart.f_forecast get the LightGBM-based
+    p10_cal / p90_cal and range_source = 'lightgbm', except for an area whose LightGBM-based range would not contain
+    the published median. Returns (adopted, coverage rows to append to mart.d_range_coverage)."""
+    tables = {r[0] for r in con.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'mart'").fetchall()}
+    if "d_range_coverage" not in tables or "f_forecast" not in tables or not cov:
+        return False, cov
+    inc = con.execute("""SELECT n, coverage, relative_interval_score FROM mart.d_range_coverage
+                         WHERE source = 'bootstrap' AND area = ? AND horizon = 1 AND scope = 'expanding_origin' AND calibrated = 1""", [C.ALL]).df()
+    incumbent = inc.iloc[0].to_dict() if len(inc) else None
+    adopted = C.adopt({k: cov[0][k] for k in ("n", "coverage", "relative_interval_score")}, incumbent, cal)
+    cov = [{**r, "adopted": int(adopted)} for r in cov]
+    if adopted and len(medians) and not np.isnan(margin):
+        fy = cfg["last_actual_fy"] + 1
+        f = con.execute("SELECT * FROM mart.f_forecast").df()
+        last = f[(f.kind == "Actual") & (f.fiscal_year == cfg["last_actual_fy"])].set_index("area").value
+        g = medians.groupby("area")[["last", "lgbm_p50"]].sum()
+        for area, r in g.iterrows():
+            row = (f.area == area) & (f.kind == "Forecast") & (f.fiscal_year == fy)
+            if area not in last.index or not row.any() or r["last"] <= 0:
+                continue
+            pred = last[area] * r.lgbm_p50 / r["last"]
+            lo, hi = round(pred * np.exp(-margin)), round(pred * np.exp(margin))
+            if lo <= float(f.loc[row, "p50"].iloc[0]) <= hi:
+                f.loc[row, ["p10_cal", "p90_cal", "range_source"]] = [lo, hi, "lightgbm"]
+        con.register("_df", f)
+        con.execute("CREATE OR REPLACE TABLE mart.f_forecast AS SELECT * FROM _df")
+        con.unregister("_df")
+    return adopted, cov
 
 
 SCOPE_SQL = """SELECT b.fiscal_year, b.agency_code, b.subobject_code AS code, b.subobject_name AS spending_code,
@@ -189,14 +317,33 @@ GROUP BY ALL"""
 
 
 def write(con, cfg=None):
+    from . import forecast as F
     cfg = cfg or assumptions()
+    cal = C.settings()
     scope = con.execute(SCOPE_SQL).df()
     names = con.execute("SELECT agency_code, agency, fiscal_year FROM mart.agency_year").df()
     names = names.sort_values("fiscal_year", ascending=False).drop_duplicates("agency_code").set_index("agency_code").agency.to_dict()
-    f, bt = build(scope, names, cfg)
-    tot = _statewide(f, cfg)
-    for name, df in (("f_challenger", f), ("d_challenger_backtest", bt), ("d_challenger_total", tot)):
+    f, bt, detail, medians = build_all(scope, names, cfg, cal)
+    tot = _statewide(f, cfg, statewide_tau(detail))
+    # focus-area view of the same backtest, for the adoption rule
+    amap = {(a, c): area for a, c, area in con.execute(AREA_SQL).fetchall()}
+    area_of = lambda a, c: amap.get((a, c), OTHER)  # noqa: E731
+    s = F.series(con.execute("SELECT * FROM mart.f_code").df(), con.execute("SELECT * FROM mart.f_scope").df())
+    actual = {(r.area, int(r.fiscal_year)): float(r.spend) for r in s[s.stage == "Actual"].itertuples()}
+    bt_area, margin, cov_area = area_backtest(detail, area_of, actual, cal)
+    if len(medians):
+        medians["area"] = [area_of(a, c) for a, c in zip(medians.agency_code, medians.code)]
+    _, cov_series = series_calibration(detail, cal)
+    adopted, cov_area = adopt_area_ranges(con, medians, bt_area, margin, cov_area, cfg, cal)
+    cov = C.table(cov_series + cov_area)
+    for name, df in (("f_challenger", f), ("d_challenger_backtest", bt), ("d_challenger_total", tot), ("d_challenger_series_backtest", detail)):
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")
         con.unregister("_df")
-    return {"f_challenger": len(f), "d_challenger_backtest": len(bt), "d_challenger_total": len(tot)}
+    if con.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_range_coverage'").fetchone()[0]:
+        con.execute("DELETE FROM mart.d_range_coverage WHERE source IN ('lightgbm', 'naive band', 'lightgbm area')")
+        con.register("_df", cov)
+        con.execute("INSERT INTO mart.d_range_coverage BY NAME SELECT * FROM _df")
+        con.unregister("_df")
+    return {"f_challenger": len(f), "d_challenger_backtest": len(bt), "d_challenger_total": len(tot),
+            "d_challenger_series_backtest": len(detail), "area_range_adopted": int(adopted)}

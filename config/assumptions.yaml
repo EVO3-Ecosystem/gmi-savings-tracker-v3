@@ -248,12 +248,13 @@ calibration:
   nominal: 0.80                # the share of outcomes a range is meant to hold
   min_factor: 1.0              # a range is never narrowed below the raw one
   min_scores_per_horizon: 20   # fit one factor per horizon only when every horizon has this many scores; otherwise pool
-  challenger_horizons: [1, 2, 3]   # LightGBM is extended to these horizons (direct, one model per horizon)
-  # Adoption rule, per focus area and horizon: use the LightGBM range (aggregated from agency x code series) when its
-  # out-of-sample coverage is closer to nominal than the bootstrap range's AND its mean interval score is no worse;
-  # otherwise keep the bootstrap range. Ties keep the bootstrap range. Beyond the last challenger horizon: bootstrap.
+  challenger_horizons: [1]     # LightGBM forecasts one year ahead; longer horizons keep the bootstrap range
+  # Adoption rule, per horizon, pooled over the focus areas: use the LightGBM-based area range when its out-of-sample
+  # (expanding-origin) coverage is strictly closer to nominal than the calibrated bootstrap range's AND its interval
+  # score relative to the outcome is no worse; otherwise keep the bootstrap range. A tie keeps the bootstrap range.
+  # An area whose LightGBM-based range would not contain the published median keeps the bootstrap range.
   adopt_rule: closer_coverage_and_no_worse_interval_score
-  min_scored_for_adoption: 9   # an area x horizon needs this many scored forecasts on both sides to be compared
+  min_scored_for_adoption: 9   # each side needs this many scored forecasts at the horizon to be compared
   wilson_z: 1.96               # every reported coverage carries a Wilson interval at this z
 
 # How past flags turned out (src/models/backtest.py). Outcomes are descriptive ("share of flags followed by X"),

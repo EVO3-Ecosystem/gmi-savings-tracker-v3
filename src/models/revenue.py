@@ -26,6 +26,8 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from . import calibration as C
+
 ROOT = Path(__file__).resolve().parents[2]
 TREND, NAIVE, DRIFT, TREND_CPI = "Log-linear trend", "Naive (last actual)", "Drift (average yearly growth)", "Trend + CPI"
 METHODS = (NAIVE, TREND, DRIFT, TREND_CPI)  # tie-break order: simpler first
@@ -161,12 +163,42 @@ def build(hist, cpi, cfg=None):
     return f, bt, meta
 
 
+def calibrate(f, bt, meta, cal=None):
+    """Calibrated revenue range and its coverage rows. The range of the kept method is stretched around its median by
+    the conformal factor fitted on that method's one-step backtest misses. With a handful of scored forecasts the
+    factor is the largest miss or close to it: the range is widened to contain past misses and cannot be validated."""
+    cal = cal or C.settings()
+    z, alpha = cal["wilson_z"], 1 - cal["nominal"]
+    b = bt[bt.method == meta.method.iloc[0]]
+    scores = C.miss(b.p10, b.p50, b.p90, b.outcome) if len(b) else []
+    k = C.factor(scores, alpha, cal["min_factor"])
+    f = f.copy()
+    fc = f.kind == "Forecast"
+    lo, hi = C.widen(f.loc[fc, "p10"], f.loc[fc, "p50"], f.loc[fc, "p90"], k) if fc.any() else ([], [])
+    f["p10_cal"], f["p90_cal"] = np.nan, np.nan
+    f.loc[fc, "p10_cal"], f.loc[fc, "p90_cal"] = np.round(lo, 0), np.round(hi, 0)
+    rows = []
+    if len(b):
+        rows.append(C.coverage_row("revenue", "General Fund revenue", 1, "in_sample", 0, b.covered,
+                                   C.interval_score(b.p10, b.p90, b.outcome), 1.0, z, outcome=b.outcome))
+        a_, b_ = C.widen(b.p10, b.p50, b.p90, k)
+        rows.append(C.coverage_row("revenue", "General Fund revenue", 1, "in_sample", 1, (a_ <= b.outcome) & (b.outcome <= b_),
+                                   C.interval_score(a_, b_, b.outcome), k, z, outcome=b.outcome))
+    return f, C.table(rows)
+
+
 def write(con, cfg=None):
     """Read the reference history and core.cpi_fy, build the tables, store them in the mart schema."""
     cpi = con.execute("SELECT fiscal_year, cpi_avg, months FROM core.cpi_fy").df()
     f, bt, meta = build(history(), cpi, cfg)
+    f, cov = calibrate(f, bt, meta)
     for name, df in (("f_revenue", f), ("d_revenue_backtest", bt), ("d_revenue_model", meta)):
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")
+        con.unregister("_df")
+    if con.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_range_coverage'").fetchone()[0]:
+        con.execute("DELETE FROM mart.d_range_coverage WHERE source = 'revenue'")
+        con.register("_df", cov)
+        con.execute("INSERT INTO mart.d_range_coverage BY NAME SELECT * FROM _df")
         con.unregister("_df")
     return {"f_revenue": len(f), "d_revenue_backtest": len(bt), "d_revenue_model": len(meta)}

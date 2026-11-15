@@ -49,18 +49,46 @@ A pooled widening of about **1.63 times** (around the median, on the log scale) 
 
 **Held-out check of the widening (Nov 7, 2026).** The factor was fitted on early origins and scored on later ones, using the backtest's own rows. Fitted on origins through FY2022 (42 forecasts) it was 2.79 and lifted coverage of the later 21 forecasts from 71% to 95%, which overshoots 80%. Fitted through FY2023 (56 forecasts) it was 1.49 and left coverage of the last 7 forecasts at 71%. The factor moves between 1.5 and 2.8 depending on the cut-off, so with 63 forecasts it is not stable enough to publish as a correction. Conformal methods assume exchangeable errors, which time series violate, and need adaptive or horizon-specific calibration ([Conformal prediction intervals with temporal dependence](https://arxiv.org/pdf/2205.12940); [Stocker et al., a gentle introduction to conformal time series forecasting](https://arxiv.org/html/2511.13608v1)); that needs more calibration points than nine years per area give.
 
-**Recommendation (not applied).** The p10 and p90 columns are documented as the 10th and 90th percentile of the bootstrap forecast and the Calculator uses them, so the ranges are left as published rather than changed silently. Treat them as indicative, not as an 80% range; show the observed coverage next to them; and revisit when FY2026 actuals arrive (about one more point per area), re-running `make build` to refresh the measurement. A calibrated range (widening by the backtest's own errors, the idea behind conformal methods) is the likely end state, but with nine points per area it should be pooled or judgement-based, not fitted per area. The decision is the owner's.
+## Calibrated ranges (applied Nov 15, 2026)
+
+The owner's decision after the November 2026 review: publish a calibrated range beside the raw one. `p10`, `p50` and `p90` are unchanged (still the bootstrap percentiles, so parity with the legacy pipeline holds). Two columns are added to `f_forecast`: `p10_cal` and `p90_cal`, the raw range stretched around `p50` on the log scale by a conformal factor fitted on the backtest misses of each area's kept model (`src/models/calibration.py`; split conformal prediction, [Angelopoulos and Bates 2021](https://arxiv.org/abs/2107.07511)). `range_source` says where the calibrated range came from (`bootstrap`, or `lightgbm` where the adoption rule below picks it). The settings were written to `config/assumptions.yaml` (`calibration:`) before any result was read.
+
+- **One pooled factor: 1.63.** A factor per horizon needs 20 scores at every horizon; the backtest has 28, 21 and 14, so the factor is pooled. Years beyond the backtest's longest horizon (FY2029 to FY2031) use the same factor.
+- **Coverage is reported out of sample**, because the factor and the model choice both come from the same backtest. Two designs, both re-choosing each area's model without the held-out rows (`mart.d_range_coverage`):
+
+| Design | Raw range | Calibrated range | Factor used |
+|---|---|---|---|
+| In sample (the published factor on the rows it was fitted on) | 40 of 63 (63.5%) | 52 of 63 (82.5%) | 1.63 |
+| Leave one outcome year out | 37 of 63 (58.7%) | **53 of 63 (84.1%; 95% interval 73% to 91%)** | 1.96 on average |
+| Expanding origin (only outcomes known at the origin) | 19 of 42 (45.2%) | 41 of 42 (97.6%; 88% to 100%) | 5.46 on average |
+
+- **Reading it.** Held out by year, the calibrated range covers 84%, and the interval around that (73% to 91%) contains the nominal 80%. The interval is wide because 63 forecasts is a small sample, and the true uncertainty is larger still because areas share shocks in a year. The expanding-origin design shows what would have happened in real time: early origins had 7 to 21 past misses to fit on, the factor came out between 4.8 and 7.0, and the ranges were far too wide. The method needs history it did not have then; it has more now.
+- **Still uneven by area.** One pooled factor cannot fix an area whose model is simply wrong. Held out by year: Fleet & fuel 4 of 9, Utilities 6 of 9, Print 7 of 9, the other four areas 9 of 9. Fleet & fuel stays under-covered.
+- **Cost.** A wider range scores worse on the interval score when it was not needed: mean interval score rises from $316M (raw, in sample) to $461M (calibrated, in sample).
+- **If coverage falls short later.** The measured figure is published next to the range, the build warns, and the method is not iterated to chase 80%. The next lever is more actuals.
+
+Reproduce every number in this section from the published tables, without the warehouse:
+
+```bash
+python -m src.models.forecast_published --check
+```
+
+It rebuilds the forecast from `site_data/f_code.csv`, `f_scope.csv` and `f_fund.csv`, fails unless the result equals the published `f_forecast` and `d_forecast_model`, and prints the coverage table.
+
+### LightGBM ranges, where they cover better
+
+The review also asked for the LightGBM ranges where they cover better on past data. The challenger forecasts one year ahead for agency x spending-code series, so it can only compete for the first forecast year. Per-series quantiles are not additive, so the area range is built differently (see [challenger.md](challenger.md)): the challenger's growth for the area's series is applied to the area total, with a conformal margin from the same construction at earlier origins. The rule, fixed in config: for the first forecast year, the LightGBM-based range replaces the bootstrap range only when its expanding-origin coverage is strictly closer to 80% and its interval score relative to the outcome is no worse, with at least 9 scored forecasts on each side; an area whose LightGBM-based range would not contain the published median keeps the bootstrap range. **Whether it is adopted is pending the next pipeline run**: the challenger needs the warehouse, which a rebuild from the published tables does not have.
 
 ## Limits
 
-- Nine points per area. The ranges are bootstrap ranges around a simple model, not validated prediction intervals.
+- Nine points per area. The raw ranges are bootstrap ranges around a simple model. The calibrated ranges are validated only as far as the table above shows: 63 forecasts, pooled over areas.
 - Naive forecasts carry no growth, so a "naive" baseline is flat in expectation; its range still widens because it resamples past yearly changes.
 - Spending is nominal dollars. Real-dollar and per-resident views are separate roadmap items (`core.cpi_fy`, `core.fact_population`).
 - GMI's recurring savings come from its January 2026 report (middle of each reported range, from `reference/gmi_reported_savings.csv`); an area with no figure gets no default rate.
 
 ## Checks that run on every build
 
-Ranges are ordered (forecast and backtest); actuals add up to controllable purchases in every year; every area has nine actual and six forecast years; every area is scored against the plan for FY2026 and FY2027; the kept model is no worse than naive on the rolling backtest; the published ranges cover about their nominal share (warning). Tests prove that no forecast changes when a later actual or the plan changes, that the published forecasts do not depend on the backtest settings, and that the scoring formulas are correct (`tests/test_forecast.py`).
+Ranges are ordered (forecast and backtest); actuals add up to controllable purchases in every year; every area has nine actual and six forecast years; every area is scored against the plan for FY2026 and FY2027; the kept model is no worse than naive on the rolling backtest; the published ranges cover about their nominal share (warning); calibrated ranges contain the raw ones and are ordered. Tests prove that no forecast changes when a later actual or the plan changes, that the published forecasts do not depend on the backtest settings, and that the scoring formulas are correct (`tests/test_forecast.py`).
 
 ## Sources, and how far each was verified
 

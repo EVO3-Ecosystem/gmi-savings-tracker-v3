@@ -30,3 +30,10 @@ rate, and only used if the trend + CPI model is the one kept.
 ## Build-time checks (`phase5_revenue`)
 Actuals tie to the reference CSV to the dollar; bands ordered and non-negative; the kept model matches or beats the
 naive baseline (warning otherwise); FY2027 midpoint implies a plausible one-year growth rate (-10% to +15%).
+
+## Calibrated range (added Nov 15, 2026)
+`f_revenue` keeps the raw `p10`/`p90` and adds `p10_cal`/`p90_cal`: the raw range stretched around the median by the
+conformal factor fitted on the kept method's one-step backtest misses (`src/models/calibration.py`). The kept method
+has five scored forecasts, so the factor is its largest miss: **the range is widened to contain past misses and cannot
+be validated** out of sample. Coverage rows are in `mart.d_range_coverage` (source `revenue`); the measured figures
+are pending the next pipeline run.

@@ -12,6 +12,7 @@ Results are recorded as checks with stage "page"; a failure stops the run from p
 Browser start-up problems are retried once (they are infrastructure, not data, problems).
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -49,6 +50,12 @@ window.dash={colors:['#2a6fdb','#d9822b','#3a9a5b','#a34fc2','#c94b4b','#2b9aa8'
  calc:(id,o)=>calcs.push([id,o]),onData:f=>cbs.push(f),data:id=>DD[id]?{status:'ok',data:DD[id]}:{status:'loading',data:[]}};
 function run(){for(const[id,o]of calcs){DD[id]=o.fn(...o.inputs.map(i=>DD[i]));}cbs.forEach(f=>f());}
 window.addEventListener('load',run);</script>"""
+
+def LAUNCH():
+    """Browser launch options. PAGE_TEST_CHROMIUM names a Chromium binary to use instead of the one Playwright downloads (unset: Playwright's default)."""
+    exe = os.environ.get("PAGE_TEST_CHROMIUM")
+    return {"executable_path": exe} if exe else {}
+
 
 # filter combinations: (name, params, tabs to draw)
 def combos(latest=2025):
@@ -164,7 +171,7 @@ def run_tests(tables, top_agencies, latest=2025, check=None, shots=None):
         browser = None
         for attempt in (1, 2):  # self-healing: one retry if the browser itself fails to start
             try:
-                browser = pw.chromium.launch(); break
+                browser = pw.chromium.launch(**LAUNCH()); break
             except Exception as e:  # noqa: BLE001
                 if attempt == 2:
                     return [("Dashboard tests could run", False, f"browser did not start: {e}")]
