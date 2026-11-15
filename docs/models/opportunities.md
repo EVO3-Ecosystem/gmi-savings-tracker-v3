@@ -105,3 +105,17 @@ Persistence by year: Peer gap 78%, 76%, 76%; Growth 40%, 33%, 41%; Leverage 87%,
 - **Tail spend** has only three areas each year (all flagged every year), too few to compare. **Leverage's** not-flagged cohort is about $18B a year of private payees paid by fewer than ten agencies, a very different population from the 23-29 flagged vendors, so the comparison says little about them.
 
 **Limitations.** Descriptive, not causal: flagged and unflagged units differ in more than the flag. One-year window only; budget lines are re-coded between years, so a "fall" can be a move to another code (12 flagged peer-gap unit-years had no spending the next year). Units are counted once per as-of year, so the pooled rows repeat the same agency-codes across years and are not independent. Nominal dollars. The four detectors' cohorts overlap (the same spending appears on the budget and the payments side), and the as-of years overlap each other, so **no row may be added to another**, and no detector's change may be added to another's. Next stage: a longer window, real dollars (`mart.d_deflator`), and matching flagged units to unflagged ones of similar size and trend before comparing.
+
+## How past flags turned out, extended (Nov 15, 2026)
+
+The first-stage backtest above follows flags for one year from three as-of years. `backtest.outcomes` extends it; the definitions were written to `config/assumptions.yaml` (`detector_backtest:`) before any real run.
+
+- **As-of years:** FY2020 to FY2024 for the budget detectors (growth looks back three years and actuals start in FY2017); FY2025 as well for the payment detectors, which can be followed into FY2026.
+- **Follow-up:** 1, 2 and 3 years, while the follow-up year has actuals.
+- **A fifth detector:** the bid list, rerun as of each year with the same rules.
+- **Outcomes per unit:** flagged again by the same detector; spending fell by at least 5%; spending grew more slowly than all eligible units pooled.
+- **Tables:** `mart.d_detector_outcomes` (one row per detector, as-of year, horizon, cohort and outcome, with counts, a rate and its Wilson interval) and `mart.d_detector_lift` (flagged against not-flagged units, pooled over as-of years, with a Katz log interval). Below 20 units a row carries counts only.
+
+How to read it: these are shares of flags followed by an outcome. They are not precision, because no lead has a recorded review outcome, and they are not savings. Growth flags are picked for a high value, so some later fall is regression to the mean; comparing with unflagged units reduces that and does not remove it. Peer gap is statewide in every past year, because agency clusters exist for FY2025 only.
+
+**Results: pending the next pipeline run.** The detectors need the warehouse; nothing here was computed from real data yet. The link from flags to GMI's 18 reported items is not built.

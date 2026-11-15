@@ -1,22 +1,39 @@
-# Manual check that the portal is reachable and the extract step still works end to end.
-# The pipeline runs locally by decision (no cloud); this workflow only runs when started by hand.
+# The full pipeline in GitHub Actions: extract from the portal, build, check, and keep the evidence.
+# Runs on the 3rd of each month (Phase 6: scheduled runs with no manual steps) and when started by hand.
+# A scheduled run only fires from the default branch. Needs the secret MD_SODA_APP_TOKEN (decision D5:
+# no tokenless extracts from CI); BLS_API_KEY is optional.
 name: Extract and build
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 7 3 * *"
 permissions:
   contents: read
+  issues: write
+concurrency:
+  group: extract-build
+  cancel-in-progress: false
 jobs:
   extract:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
+    env:
+      GMI_SCHEDULED: ${{ github.event_name == 'schedule' && '1' || '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with: {persist-credentials: false}
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -e ".[dev]"
-      - run: python -m src.pipeline.extract --require-token   # decision D5: no tokenless extracts from CI
+      - run: pip install -r requirements.lock.txt && pip install --no-deps -e .
+      - run: python -m src.pipeline.extract --require-token
         env: {MD_SODA_APP_TOKEN: "${{ secrets.MD_SODA_APP_TOKEN }}", BLS_API_KEY: "${{ secrets.BLS_API_KEY }}"}
-      - run: python -m src.pipeline.build
+      - name: Build and check
+        id: build
+        run: python -m src.pipeline.build
+        env: {BLS_API_KEY: "${{ secrets.BLS_API_KEY }}"}
+      - name: Model evaluation tables (also after a failed build)
+        if: always() && steps.build.conclusion != 'skipped'
+        run: python -m src.pipeline.review_tables data/review | tee -a "$GITHUB_STEP_SUMMARY"
       - run: pytest -q
       - name: Reconcile with the Transparency Portal downloads
         run: python -m src.pipeline.reconcile --strict
@@ -25,4 +42,15 @@ jobs:
         run: python -m src.pipeline.governance --strict
         continue-on-error: true
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        with: {name: run-evidence, path: "data/raw/*/manifest.json\ndata/check_history.csv\ndata/runs.csv\ndocs/data-governance.md\ndocs/schemas/*\ndocs/reconciliation/*\ndocs/figures/*"}
+        if: always()
+        with: {name: run-evidence, path: "data/review/*\ndata/raw/*/manifest.json\ndata/check_history.csv\ndata/runs.csv\ndocs/data-governance.md\ndocs/schemas/*\ndocs/reconciliation/*\ndocs/figures/*"}
+      - name: Open an issue when a scheduled run fails
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `Scheduled pipeline run failed (${new Date().toISOString().slice(0, 10)})`,
+              body: `The scheduled extract and build did not finish cleanly.\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nThe job summary lists the checks that did not pass; the run-evidence artifact has the tables.`,
+            });

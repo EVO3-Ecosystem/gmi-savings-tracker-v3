@@ -269,7 +269,7 @@ detector_backtest:
     flagged_again: {}                     # the same unit is flagged again at as_of + horizon
     fell: {min_drop: 0.05}                # spend at as_of + horizon <= (1 - min_drop) x spend at as_of, nominal dollars
     grew_slower_than_peers: {}            # unit change below the pooled change of all eligible units
-  base: all_eligible                      # lift compares flagged units with every eligible unit, flagged included
+  base: not_flagged                       # lift compares flagged with not-flagged eligible units (two separate groups, so the Katz interval applies)
   min_units_for_rate: 20                  # below this, publish counts only (no rate, no lift)
   wilson_z: 1.96                          # Wilson interval for rates; Katz log interval for lift
   reported_match_as_of: 2024              # were GMI's reported savings items flagged before GMI acted?

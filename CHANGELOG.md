@@ -20,9 +20,12 @@ Changed
 - Dashboard: no range is described as holding "8 in 10" outcomes; treemap labels pick dark or light ink by fill; tab bar and filters tightened on small screens; the 404 page links to this repository's site.
 - Python 3.12 is required.
 
+- Detector backtest extended: as-of FY2020 to FY2024 (payments to FY2025), follow-up of 1 to 3 years, the bid list as a fifth detector, three descriptive outcomes, lift of flagged against not-flagged units (`mart.d_detector_outcomes`, `mart.d_detector_lift`). Results need a pipeline run.
+- `Extract and build` workflow now also runs on the 3rd of each month, uploads the model-evaluation tables, and opens an issue when a scheduled run fails.
+
 Not done yet
-- Extended detector backtest (more past years, multi-year follow-up, lift against the base rate): settings are pre-registered in `config/assumptions.yaml`; the code is not written.
-- Scheduled pipeline run, table checksums across runs, model-run registry.
+- Two clean scheduled runs (the schedule starts once this is on the default branch), table checksums across runs, model-run registry.
+- The link from past flags to GMI's 18 reported items.
 
 ## [2.0.0] - 2026-11-10
 
