@@ -1,0 +1,38 @@
+# docker compose run --rm test        tests, offline
+# docker compose run --rm site        build the site from site_data/ into ./site
+# docker compose up serve             serve ./site at http://localhost:8000
+# docker compose run --rm notebook    execute the walkthrough notebook
+# docker compose --profile full run --rm pipeline   extract, build, export (needs MD_SODA_APP_TOKEN)
+x-app: &app
+  build: .
+  image: gmi-savings-tracker:local
+  working_dir: /app
+
+services:
+  test:
+    <<: *app
+    command: ["make", "test", "PY=python"]
+  lint:
+    <<: *app
+    command: ["ruff", "check", "src", "tests"]
+  site:
+    <<: *app
+    command: ["make", "site", "PY=python"]
+    volumes: ["./site:/app/site"]
+  serve:
+    <<: *app
+    command: ["python", "-m", "http.server", "8000", "--directory", "site"]
+    ports: ["8000:8000"]
+    volumes: ["./site:/app/site:ro"]
+  notebook:
+    <<: *app
+    command: ["make", "notebook", "PY=python"]
+    volumes: ["./site:/app/site", "./notebooks:/app/notebooks", "./docs/figures/overview:/app/docs/figures/overview"]
+  pipeline:
+    <<: *app
+    profiles: ["full"]
+    command: ["sh", "-c", "make extract-scheduled build export PY=python"]
+    environment:
+      MD_SODA_APP_TOKEN: ${MD_SODA_APP_TOKEN:?set MD_SODA_APP_TOKEN to run the full pipeline}
+      BLS_API_KEY: ${BLS_API_KEY:-}
+    volumes: ["./data:/app/data"]

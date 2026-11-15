@@ -1,0 +1,11 @@
+.git
+.venv
+data
+site
+legacy/gst/model
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+*.egg-info
+.env
