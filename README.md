@@ -20,7 +20,7 @@ An independent check of Maryland's Government Modernization Initiative (GMI). It
 
 | Page | What it shows |
 |---|---|
-| Dashboard | Nine tabs: overview, focus areas, savings tracker, opportunities, calculator, vendors, agencies, budget, data and pipeline |
+| Dashboard | <!-- n:tabs_Word -->Ten<!-- /n --> tabs: overview, focus areas, savings tracker, opportunities, calculator, forecasts and results, vendors, agencies, budget, data and pipeline |
 | AI layer (`ai.html`) | Payment screen, payee classifier, grant overlap, MCP server and briefs, each with its baseline and limits |
 | Data explorer (`explorer.html`) | SQL in the browser (DuckDB-WASM) over every published table, with a plain table viewer if WebAssembly is blocked |
 | Database catalog (`catalog.html`) | Every table's layer, rows, columns, checks and lineage |
@@ -105,9 +105,9 @@ See [docs/figures/pipeline.mmd](docs/figures/pipeline.mmd); `make diagrams` rend
 | Step | Module | Result |
 |---|---|---|
 | Extract | `src/pipeline/extract.py` | One Parquet file per dataset per run, with a manifest; reuses unchanged data, re-downloads on a count mismatch |
-| Build and check | `build.py`, `checks.py` | DuckDB layers; 103 checks; a failed stop check keeps the last good database |
+| Build and check | `build.py`, `checks.py` | DuckDB layers; <!-- n:checks -->132<!-- /n --> checks; a failed stop check keeps the last good database |
 | Rules | `reference/*.csv` (18 files) | Every mapping and decision in a reviewed file with its reason |
-| Marts | `sql/mart/` (51 files) | The tables the dashboard reads |
+| Marts | `sql/mart/` (<!-- n:marts -->52<!-- /n --> files) | The tables the dashboard reads |
 | Models | `src/models/` | Forecasts, opportunity detectors, savings checks, payment screen, payee classifier, grant groups, each with a model card in `docs/models/` |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
@@ -127,10 +127,13 @@ See [docs/figures/pipeline.mmd](docs/figures/pipeline.mmd); `make diagrams` rend
 <details open>
 <summary>Commands</summary>
 
-Python 3.10 or newer.
+Python 3.12 (`.python-version`). Dependencies are locked in `uv.lock`; `requirements.lock.txt` is the same set for pip.
 
 ```bash
-pip install -e ".[dev]"             # what CI installs; add mcp, ai, ml extras as needed: ".[dev,mcp,ai,ml]"
+uv sync --frozen --extra dev --extra mcp --extra notebook   # the locked environment (pip: pip install -r requirements.lock.txt && pip install --no-deps -e .)
+docker compose run --rm test        # or run the tests in the container built from the lockfile
+make forecast-check                 # rebuild the forecast from the published tables and compare with what was published
+make notebook                       # execute the walkthrough notebook, render it, refresh docs/figures/overview/
 make all                            # extract, then build and check
 make test                           # tests; data-dependent ones skip when data/ is absent
 make export                         # dashboard files (refused after a failed build)
@@ -171,6 +174,14 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 
 </details>
 
+## Follow the analysis without running the pipeline
+
+- [Walkthrough notebook](notebooks/walkthrough.ipynb): the story end to end from the published tables only, committed with its outputs.
+- [Executive overview](docs/executive-overview.md): one page, six figures (`docs/figures/overview/`).
+- [Forecast model card](docs/models/forecast.md): the raw ranges held 40 of 63 past outcomes (63.5%) against a nominal 80%; the calibrated ranges published beside them held 53 of 63 (84.1%) with each outcome year held out.
+
+`reference/` holds <!-- n:reference_files -->22<!-- /n --> rule and source files.
+
 ## Status
 
 | Phase | State |
@@ -180,7 +191,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 | 3. Reference data | Done, Oct 29, 2026 |
 | 4. Marts and dashboard | Done, Nov 2, 2026 |
 | 5. Analytics and verification | Done, Nov 10, 2026: all published files built from the database; published-file parity, 30 files, 0 unexplained; State-site cross-checks; detector backtest |
-| 6. Automate | Open: two clean scheduled runs with no manual steps |
+| 6. Automate | Open: two clean scheduled runs with no manual steps. Lockfile, container and CI-in-container added Nov 15, 2026 |
 
 ## Next steps
 

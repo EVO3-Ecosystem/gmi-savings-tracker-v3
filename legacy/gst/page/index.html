@@ -5,6 +5,8 @@
 .gs .top>div{min-width:0;max-width:100%}
 .gs .top .st{white-space:normal;max-width:100%}
 @media (max-width:640px){.gs .top>div{justify-items:start!important}}
+@media (max-width:900px){.gs nav{scroll-snap-type:x proximity}.gs nav button{scroll-snap-align:start}}
+@media (max-width:480px){.gs nav button{padding-inline:8px;font-size:var(--cds-font-size-caption)}.gs .filters{gap:4px}.gs h1{font-size:1.35rem}}
 .gs .tag{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:var(--cds-gap-xs) 0 0;max-width:70ch}
 .gs .proto{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);border:1px dashed var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-xs) var(--cds-pad-sm)}
 .gs .replink{font-size:var(--cds-font-size-caption);color:var(--color-fg);text-decoration:underline}
@@ -686,6 +688,10 @@
 
 <script>
 /* ======================= formatting ======================= */
+// Label colour for text drawn on a filled mark: dark ink on light fills, white on dark ones (WCAG 2.2 SC 1.4.3 contrast).
+function inkOn(){ const r = this.parentNode && this.parentNode.querySelector('rect'); if (!r) return; const m = (getComputedStyle(r).fill || '').match(/\d+(\.\d+)?/g); if (!m || m.length < 3) return;
+  const [R, G, B] = m.slice(0, 3).map(Number).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; });
+  this.setAttribute('fill', .2126 * R + .7152 * G + .0722 * B > .179 ? '#0b0b0b' : '#fff'); }
 const M = v => v==null||isNaN(v)?'—':(v < 0 ? '−$' : '$') + new Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(Math.abs(v));
 const PCT = d3.format('.1%'), N = d3.format(','), N0 = d3.format(',.0f');
 const TEXT = new Set(['agency_code','agency','stage','category_title','fund_type_name','object_name','scope','title','dataset_id','use','portal_name','portal_updated','years','reconciled','mismatch_notes','stage_pair','measure','definition','grouped_by','higher_is','table','run_id','started_utc','status','mode','check','detail','family','how_matched','source','published','in_budget','area','spending_code','vendor','url','run_date','file_label','official_stage','evidence','evidence_url','note','code','opp_id','payee_name','label','detector','method','kind','vendor','top_agencies','action','basis','tab','status','previous_status','progress','previous','title','spending_code','saving_id','workstream','item','type','count','check_id','check_note','source_url','flag_id','why','model','cluster_name','top_area','goal','objective','agency_name']);
@@ -1848,7 +1854,7 @@ function corridor(box, rows, o={}){ // rows: {year, actual?, p10?, p50?, p90?}; 
     svg.append('line').attr('x1',xx).attr('x2',xx).attr('y1',y(d.p10)).attr('y2',y(d.p90)).attr('stroke', col).attr('stroke-width', 2.5);
     svg.append('line').attr('x1',xx-7).attr('x2',xx+7).attr('y1',y(d.p10)).attr('y2',y(d.p10)).attr('stroke', col).attr('stroke-width', 2.5);
     svg.append('line').attr('x1',xx-7).attr('x2',xx+7).attr('y1',y(d.p90)).attr('y2',y(d.p90)).attr('stroke', col).attr('stroke-width', 2.5);
-    if (d.p50 != null) { const c = svg.append('circle').attr('cx',xx).attr('cy',y(d.p50)).attr('r',3.2).attr('fill', col); c.append('title').text(`FY${d.year} forecast: ${M(d.p50)} (8 in 10 outcomes: ${M(d.p10)}\u2013${M(d.p90)})`); }
+    if (d.p50 != null) { const c = svg.append('circle').attr('cx',xx).attr('cy',y(d.p50)).attr('r',3.2).attr('fill', col); c.append('title').text(`FY${d.year} forecast: ${M(d.p50)} (indicative range, 10th to 90th percentile of simulated outcomes: ${M(d.p10)}\u2013${M(d.p90)})`); }
     const atEnd = d.year === d3.max(rows, r2 => r2.year) || (o.dots || []).some(dt => dt.year > d.year);
     const lab = svg.append('text').attr('x', atEnd ? xx-9 : xx+9).attr('y', y(d.p90)+4).attr('text-anchor', atEnd ? 'end' : null).attr('font-size',10).attr('fill','var(--color-fg-muted)').text(`${M(d.p10)}\u2013${M(d.p90)}`); lab.append('title').text(`FY${d.year} corridor`); });
   if (act.length > 1) svg.append('path').datum(act).attr('fill','none').attr('stroke', o.actColor || 'var(--color-fg)').attr('stroke-width', 2.2).attr('d', d3.line().x(d => x(d.year)).y(d => y(d.actual)).curve(d3.curveMonotoneX));
@@ -1874,7 +1880,7 @@ function drawFcast(p){
   const rr = rev.slice().sort((a,b) => a.fiscal_year - b.fiscal_year).map(r => ({year:r.fiscal_year, actual: r.kind === 'Actual' ? r.value : null, p10:r.p10, p50:r.p50, p90:r.p90}));
   corridor(document.getElementById('fcRev'), rr, {color: dash.colors[2], aria:'General Fund revenue: actuals and the FY2027 forecast corridor', h:270});
   const f27 = rev.find(r => r.kind === 'Forecast'), a26 = rev.find(r => r.kind === 'Actual' && r.fiscal_year === rm.last_actual_fy);
-  setText('fcRevNote', `Total General Fund revenue, budgetary basis: actuals FY${rr[0].year}\u2013FY${rm.last_actual_fy} from the Comptroller's closeouts and Board of Revenue Estimates reports, and the FY${rm.horizon_fy} corridor from the kept model. The interval holds 8 in 10 simulated outcomes. Filters do not apply: revenue is statewide.`);
+  setText('fcRevNote', `Total General Fund revenue, budgetary basis: actuals FY${rr[0].year}\u2013FY${rm.last_actual_fy} from the Comptroller's closeouts and Board of Revenue Estimates reports, and the FY${rm.horizon_fy} corridor from the kept model. The interval is the 10th to 90th percentile of simulated outcomes${rm.coverage_80 != null ? `; in the backtest it held ${Math.round(rm.coverage_80 * 100)}% of past outcomes against a nominal 80%` : ''}. Filters do not apply: revenue is statewide.`);
   const origins = [...new Set(rb.map(r => r.origin_fy))].sort((a,b) => a-b);
   setText('fcRevStats', rm.method ? `${rm.method} on FY${rm.last_actual_fy - rm.n_actual + 1}\u2013FY${rm.last_actual_fy} actuals, kept by rolling-origin backtest (origins ${origins.map(y => 'FY' + y).join(', ')}): scaled error (MASE) ${d3.format('.2f')(rm.chosen_mase)} vs ${d3.format('.2f')(rm.naive_mase)} for the naive last-value forecast; the 80% band covered ${PCT(rm.coverage_80)} of ${rb.length} backtest forecasts \u2014 a thin sample, so treat the band as indicative.${f27 && a26 ? ` The FY${rm.horizon_fy} midpoint ${M(f27.p50)} implies ${ARROW(f27.p50 / a26.value - 1)} on FY${rm.last_actual_fy}, which included about $405M of extraordinary revenue.` : ''}` : '');
   const ctl = fs.filter(r => r.scope === 'Controllable purchases');
@@ -1890,7 +1896,7 @@ function drawFcast(p){
   const lg = bt.filter(r => String(r.model).indexOf('LightGBM') >= 0), nv = bt.filter(r => String(r.model).indexOf('Naive') >= 0);
   setText('fcSpendStats', lg.length && nv.length ? `Rolling-origin backtest on ${N(lg[0].series_scored)} series per origin (${lg.map(r => 'FY' + r.origin_fy).join(', ')}): challenger mean scaled error ${d3.format('.2f')(d3.mean(lg, r => r.mean_mase))} vs ${d3.format('.2f')(d3.mean(nv, r => r.mean_mase))} naive; 80% band coverage ${d3.format('.0%')(d3.min(lg, r => r.coverage_80))}\u2013${d3.format('.0%')(d3.max(lg, r => r.coverage_80))} vs ${d3.format('.0%')(d3.min(nv, r => r.coverage_80))}\u2013${d3.format('.0%')(d3.max(nv, r => r.coverage_80))} naive. Adopted for ${N(ad.length)} of ${N(ch.length)} series (${PCT(ad.length / (ch.length || 1))}); the rest keep the naive forecast.` : '');
   const rt = ok('results_trend') || [];
-  setText('fcLede', f27 ? `Forward look: FY${rm.horizon_fy} General Fund revenue midpoint ${M(f27.p50)} (80% range ${M(f27.p10)}\u2013${M(f27.p90)}); FY2026 controllable-purchases corridor ${M(band26.p10)}\u2013${M(band26.p90)} against the state's working budget of ${M(byY.get(2026))}. Below, ${N(rt.length)} agency performance measures tracked next to real budget change \u2014 the spending-to-results view.` : 'Forecast data is not available for this build.');
+  setText('fcLede', f27 ? `Forward look: FY${rm.horizon_fy} General Fund revenue midpoint ${M(f27.p50)} (indicative range ${M(f27.p10)}\u2013${M(f27.p90)}); FY2026 controllable-purchases corridor ${M(band26.p10)}\u2013${M(band26.p90)} against the state's working budget of ${M(byY.get(2026))}. Below, ${N(rt.length)} agency performance measures tracked next to real budget change \u2014 the spending-to-results view.` : 'Forecast data is not available for this build.');
   // spending-to-results table
   let res = rt.filter(r => !p.agencies.length || p.agencies.includes(r.agency_code));
   const dir = document.getElementById('resDir').value;
@@ -1965,7 +1971,7 @@ function drawConsolidation(p){
   node.append('rect').attr('width', d => Math.max(0, d.x1 - d.x0)).attr('height', d => Math.max(0, d.y1 - d.y0)).attr('rx', 2)
     .attr('fill', d => color(d.data.cluster)).attr('opacity', d => p.agencies.length && !p.agencies.includes(d.data.code) ? .22 : .85)
     .append('title').text(d => `${d.data.name}\nControllable purchases FY${fy}: ${M(d.value)}\nPeer group: ${d.parent.data.name}\nLargest focus area: ${d.data.top}\nClick for the agency page`);
-  node.append('text').attr('x', 3).attr('y', 12).attr('font-size', 10).attr('fill', '#fff').style('pointer-events','none')
+  node.append('text').attr('x', 3).attr('y', 12).attr('font-size', 10).attr('fill', '#fff').each(inkOn).style('pointer-events','none')
     .text(d => { const w = d.x1 - d.x0, h = d.y1 - d.y0; if (w < 62 || h < 16) return ''; const s = d.data.name; const n = Math.floor(w / 5.6); return s.length > n ? s.slice(0, Math.max(4, n - 1)) + '\u2026' : s; });
   svg.append('g').selectAll('text.h').data(root.children || []).join('text').attr('x', d => d.x0 + 4).attr('y', d => d.y0 + 11)
     .attr('font-size', 10).attr('fill', 'var(--color-fg-muted)').text(d => { const s = d.data.name; const n = Math.floor((d.x1 - d.x0) / 5.2); return s.length > n ? s.slice(0, Math.max(6, n - 1)) + '\u2026' : s; });
@@ -2018,7 +2024,7 @@ function drawBudgetTree(p){
   node.append('rect').attr('width', d => Math.max(0, d.x1 - d.x0)).attr('height', d => Math.max(0, d.y1 - d.y0)).attr('rx', 1.5)
     .attr('fill', d => fcol(d.ancestors().find(a => a.depth === 1).data.name)).attr('opacity', .85)
     .append('title').text(d => { const an = d.ancestors(); return `${d.data.name}\n${an[1].data.name} · ${an[2].data.name}\nFY${Y}: ${M(d.value)} (${d3.format('.1%')(d.value / tot)} of the year)\nClick to filter by ${an[1].data.name}`; });
-  node.append('text').attr('x', 3).attr('y', 11).attr('font-size', 9.5).attr('fill', '#fff').style('pointer-events','none')
+  node.append('text').attr('x', 3).attr('y', 11).attr('font-size', 9.5).attr('fill', '#fff').each(inkOn).style('pointer-events','none')
     .text(d => { const w = d.x1 - d.x0, h = d.y1 - d.y0; if (w < 70 || h < 15) return ''; const s = d.data.name; const nn = Math.floor(w / 5.4); return s.length > nn ? s.slice(0, Math.max(4, nn - 1)) + '…' : s; });
   svg.append('g').selectAll('text.a').data(root.descendants().filter(d => d.depth === 2)).join('text').attr('x', d => d.x0 + 3).attr('y', d => d.y0 + 10).attr('font-size', 9).attr('fill', 'var(--color-fg-muted)').style('pointer-events','none')
     .text(d => { const nn = Math.floor((d.x1 - d.x0) / 5.0); const s = d.data.name; return s.length > nn ? s.slice(0, Math.max(6, nn - 1)) + '…' : s; });

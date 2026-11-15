@@ -16,7 +16,17 @@ jobs:
         with: {persist-credentials: false}
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -e ".[dev,mcp]"   # mcp: the MCP protocol tests run; no ml extra, so grant groups use the TF-IDF fallback
+      - run: pip install -r requirements.lock.txt && pip install --no-deps -e .   # the locked environment (uv.lock exported; dev, mcp and notebook extras)
       - run: ruff check src tests
-      - run: python -m compileall -q src legacy/gst/scripts
+      - run: python -m compileall -q src legacy/gst/scripts scripts
       - run: pytest -q   # data-dependent tests skip when data/ is absent
+      - run: python -m src.models.forecast_published --check   # the published forecast is reproducible from the published tables
+      - run: python scripts/render_notebook.py --check          # the walkthrough notebook executes end to end
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with: {persist-credentials: false}
+      - run: docker build -t gmi-savings-tracker:ci .
+      - run: docker run --rm gmi-savings-tracker:ci   # make test site, inside the image built from uv.lock

@@ -244,8 +244,8 @@ def readme_summary(readme):
     return "\n".join(intro).strip(), "\n".join(keep)
 
 
-NAV = ('<a href="./">Dashboard</a> · <a href="explorer.html">Data explorer</a> · <a href="catalog.html">Database catalog</a> · '
-       '<a href="ai.html">AI layer</a> · <a href="about.html">About</a>')
+NAV = ('<a href="./">Dashboard</a> · <a href="walkthrough.html">Walkthrough</a> · <a href="explorer.html">Data explorer</a> · '
+       '<a href="catalog.html">Database catalog</a> · <a href="ai.html">AI layer</a> · <a href="about.html">About</a>')
 
 
 def page(title, body, desc, head="", wide=False):
@@ -316,8 +316,11 @@ def build(out=OUT, src=None, artifact=False):
         if not fixed:
             print("artifact: no U+FFFD characters found")
         return _report(out, src, pq, artifact)
+    walk = ROOT / "notebooks" / "walkthrough.html"  # rendered by scripts/render_notebook.py (make notebook)
+    if walk.is_file():
+        (out / "walkthrough.html").write_text(walk.read_text(encoding="utf-8"), encoding="utf-8")
     (out / "404.html").write_text(page("Page not found", '<h1>Page not found</h1><p>That page is not part of this site. '
-                                       'Go to the <a href="/gmi-savings-tracker/">dashboard</a> or the <a href="/gmi-savings-tracker/about.html">pipeline notes</a>.</p>',
+                                       'Go to the <a href="/gmi-savings-tracker-v3/">dashboard</a> or the <a href="/gmi-savings-tracker-v3/about.html">pipeline notes</a>.</p>',
                                        "Page not found."))
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\n# {SITE_URL}\n")
     (out / ".nojekyll").write_text("")

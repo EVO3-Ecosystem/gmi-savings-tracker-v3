@@ -9,7 +9,7 @@ all:      extract build
 test:     ; $(PY) -m pytest -q tests
 test-fault: ; $(PY) -m pytest -q tests/test_fault_injection.py
 reconcile: ; $(PY) -m src.pipeline.reconcile $(RECONCILE_FLAGS)
-parity:   ; $(PY) -m src.pipeline.parity --legacy $(or $(LEGACY),../gst/out) --strict
+parity:   ; $(PY) -m src.pipeline.parity --legacy $(or $(LEGACY),legacy/gst/out) --strict
 export:   ; $(PY) -m src.pipeline.export $(EXPORT_FLAGS)
 snapshot: ; $(PY) -m src.pipeline.snapshot create
 restore:  ; $(PY) -m src.pipeline.snapshot restore $(SNAP) $(RESTORE_FLAGS)
@@ -29,5 +29,15 @@ postgres:
 site-artifact: ; $(PY) -m src.pipeline.site --artifact $(or $(ARTIFACT_OUT),$${TMPDIR:-/tmp}/gmi-site-artifact)
 docs-strict: ; $(PY) -m src.pipeline.governance --strict $(if $(DASH),--dashboard $(DASH))
 
+# Reproducibility and review targets (work offline, from the published tables in site_data/)
+forecast-check: ; $(PY) -m src.models.forecast_published --check   # rebuild the forecast from site_data and compare with what was published
+overview-figures: ; $(PY) -m src.pipeline.overview_figures          # docs/figures/overview/*.png
+notebook: ; $(PY) scripts/render_notebook.py                        # execute notebooks/walkthrough.ipynb, render it, refresh the figures
+notebook-check: ; $(PY) scripts/render_notebook.py --check
+lock: ; uv lock && uv export --frozen --extra dev --extra mcp --extra notebook --no-emit-project -o requirements.lock.txt -q
+docker-build: ; docker build -t gmi-savings-tracker:local .
+docker-test: docker-build ; docker run --rm gmi-savings-tracker:local
+
+.PHONY: forecast-check overview-figures notebook notebook-check lock docker-build docker-test
 .PHONY: readme-shots
 .PHONY: extract extract-full gate1 build gate3 all test test-fault docs docs-strict reconcile figures diagrams parity export snapshot restore site site-snapshot site-artifact postgres extract-scheduled
