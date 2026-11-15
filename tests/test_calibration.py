@@ -9,9 +9,9 @@ from src.models import calibration as C
 from src.models import challenger as CH
 from src.models import forecast as F
 from src.models import revenue as R
-from tests.test_challenger import CFG as CH_CFG
-from tests.test_challenger import NAMES, _panel
-from tests.test_forecast import _inputs
+from test_challenger import CFG as CH_CFG
+from test_challenger import NAMES, _panel
+from test_forecast import _inputs
 
 CAL = {"nominal": 0.8, "min_factor": 1.0, "min_scores_per_horizon": 20, "min_scored_for_adoption": 9, "wilson_z": 1.96}
 
