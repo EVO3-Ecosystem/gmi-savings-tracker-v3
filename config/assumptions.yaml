@@ -238,3 +238,38 @@ revenue:
 clustering:
   k_range: [3, 6]   # pick k by silhouette score inside this range
   seed: 11
+
+# --- Pre-registered before any real run (2026-11-15). Change a value here, not in code, and never after reading results. ---
+
+# Range calibration (src/models/calibration.py). The published ranges are the bootstrap ranges (forecast.py) or the
+# LightGBM quantile ranges (challenger.py), each widened by a conformal factor fitted only on earlier backtest origins,
+# so the reported coverage is out of sample. Raw p10/p90 stay published beside the calibrated p10_cal/p90_cal.
+calibration:
+  nominal: 0.80                # the share of outcomes a range is meant to hold
+  min_factor: 1.0              # a range is never narrowed below the raw one
+  min_scores_per_horizon: 20   # fit one factor per horizon only when every horizon has this many scores; otherwise pool
+  challenger_horizons: [1, 2, 3]   # LightGBM is extended to these horizons (direct, one model per horizon)
+  # Adoption rule, per focus area and horizon: use the LightGBM range (aggregated from agency x code series) when its
+  # out-of-sample coverage is closer to nominal than the bootstrap range's AND its mean interval score is no worse;
+  # otherwise keep the bootstrap range. Ties keep the bootstrap range. Beyond the last challenger horizon: bootstrap.
+  adopt_rule: closer_coverage_and_no_worse_interval_score
+  min_scored_for_adoption: 9   # an area x horizon needs this many scored forecasts on both sides to be compared
+  wilson_z: 1.96               # every reported coverage carries a Wilson interval at this z
+
+# How past flags turned out (src/models/backtest.py). Outcomes are descriptive ("share of flags followed by X"),
+# never precision and never savings. Definitions fixed here before the extended backtest was run on real data.
+detector_backtest:
+  as_of: [2020, 2021, 2022, 2023, 2024]   # budget detectors: growth needs 3 years back, actuals start FY2017
+  payment_as_of_extra: [2025]             # payment detectors and the bid list can also be followed into FY2026
+  horizons: [1, 2, 3]                     # follow-up years, while as_of + horizon <= the last actual year
+  last_actual_fy: 2025
+  last_payments_fy: 2026
+  outcomes:
+    flagged_again: {}                     # the same unit is flagged again at as_of + horizon
+    fell: {min_drop: 0.05}                # spend at as_of + horizon <= (1 - min_drop) x spend at as_of, nominal dollars
+    grew_slower_than_peers: {}            # unit change below the pooled change of all eligible units
+  base: all_eligible                      # lift compares flagged units with every eligible unit, flagged included
+  min_units_for_rate: 20                  # below this, publish counts only (no rate, no lift)
+  wilson_z: 1.96                          # Wilson interval for rates; Katz log interval for lift
+  reported_match_as_of: 2024              # were GMI's reported savings items flagged before GMI acted?
+
