@@ -65,11 +65,10 @@ def test_series_without_consecutive_history_are_skipped():
 
 def test_statewide_corridor_is_ordered_and_deterministic():
     f, bt = C.build(_panel("trend"), NAMES, CFG)
-    t1, t2 = C._statewide(f, CFG), C._statewide(f, CFG)
+    t1, t2 = C._statewide(f, CFG, 0.1, 3), C._statewide(f, CFG, 0.1, 3)
     assert len(t1) == 1 and t1.p10[0] < t1.p50[0] < t1.p90[0]
     assert t1.n_series[0] == len(f) and t1.n_adopted[0] == int(f.adopted.sum())
     assert t1.fiscal_year[0] == 2026
-    pd.testing.assert_frame_equal(t1, t2)  # seeded: the same build gives the same corridor
-    # the simulated band is narrower than the (wrong) sum of per-series p10/p90, and contains the sum of medians
-    assert t1.p90[0] < f.p90.sum()
-    assert abs(t1.p50[0] / f.p50.sum() - 1) < 0.05
+    pd.testing.assert_frame_equal(t1, t2)  # deterministic: the same build gives the same corridor
+    # centred on the sum of medians, with the band set by the statewide miss
+    assert t1.p50[0] == round(f.p50.sum()) and t1.p10[0] < f.p50.sum() < t1.p90[0]

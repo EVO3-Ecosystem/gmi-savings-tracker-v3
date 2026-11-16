@@ -1,2 +1,2 @@
-fiscal_year,p10,p50,p90,n_series,n_adopted,bootstrap_paths,note
-2026,4538405158,5037454215,6780419623,2609,1083,4000,"Statewide corridor simulated path by path: each series drawn log-normally within its kept band (median p50, sigma from the band width, draws clamped to the band edges); summing the per-series p10/p90 directly would overstate the band, because series do not all hit their tails together."
+fiscal_year,p10,p50,p90,n_series,n_adopted,bootstrap_paths,common_shock_sigma,note
+2026,3376461511,4271470232,5403721583,2609,1083,0,0.18,"Statewide corridor: the sum of the series medians, with a band from the statewide total's own miss in the backtest (log sigma 0.183 over 3 origins; few points, so read it as indicative). Per-series bands are not summed: a few very volatile series would dominate the total."

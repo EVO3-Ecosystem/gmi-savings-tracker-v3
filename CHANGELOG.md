@@ -6,7 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## Unreleased (November 2026 review)
+## [3.1.0] - 2026-11-16
+
+Added
+- Audit depth (docs/strategy-v3.1.md): fund hierarchy and shifts to the General Fund (`mart.d_fund_hierarchy`, `d_fund_shift`), State budget by Assistance Listing beside USAspending obligations (`d_federal_crosswalk`), payee alias evidence and review queue (`d_vendor_alias`, `d_vendor_alias_review`), audit and recoupment lifecycle register (`reference/audit_findings.csv`, `d_audit_findings`), payment-level schema ready for records requests (`src/pipeline/txn.py`, `core.fact_payment_txn`) and field availability (`d_field_availability`).
+- Model registry (`mart.d_model_registry`): every model, its baseline, held-out score and decision, read from its own evaluation each run.
+- Drift monitor (`mart.d_drift`): PSI and KS between consecutive fiscal years; one major shift (FY2021-FY2022 agency mix of payments, PSI 0.32).
+- Dashboard: detector backtest card (persistence and next-year divergence), fund-shift dumbbell chart, federal cross-check chart, alias review queue, audit lifecycle card, model registry, drift chart, field-availability meter. The page now shows the calibrated forecast ranges.
+- README rewritten as a portfolio overview with a methods and validation table; `make readme-shots` captures the new figures.
+
+Changed
+- Statewide challenger corridor: the sum of series medians with a band from the statewide miss in the backtest. Summing per-series draws put the median 48-137% above the last actual on the first real run (docs/models/challenger.md).
+- First real run of the calibrated ranges: 53 of 63 past outcomes (84.1%, Wilson 73-91%) inside the calibrated area ranges with each outcome year held out; 140 of 140 checks pass.
+
+## Earlier (November 2026 review)
 
 Added
 - Calibrated forecast ranges (`p10_cal`, `p90_cal`, `range_source`) beside the raw ones, with coverage measured out of sample in `mart.d_range_coverage`. Raw ranges held 40 of 63 past outcomes; calibrated ranges held 53 of 63 with each outcome year held out.

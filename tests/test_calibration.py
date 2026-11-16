@@ -179,11 +179,12 @@ def test_area_backtest_applies_the_challenger_growth_to_the_area_total(chal):
     assert margin >= 0 and cov[0]["n"] == 2  # origins 2023 and 2024, one area
 
 
-def test_statewide_corridor_is_not_clamped_and_widens_with_a_common_shock(chal):
+def test_statewide_corridor_comes_from_the_statewide_miss(chal):
     f = chal[0]
-    a, b = CH._statewide(f, CH_CFG, 0.0).iloc[0], CH._statewide(f, CH_CFG, 0.1).iloc[0]
-    assert a.p10 < a.p50 < a.p90 and (b.p90 - b.p10) > (a.p90 - a.p10)
-    assert b.common_shock_sigma == 0.1 and "clamp" not in a.note
+    a, b = CH._statewide(f, CH_CFG, 0.05, 3).iloc[0], CH._statewide(f, CH_CFG, 0.1, 3).iloc[0]
+    assert a.p10 < a.p50 < a.p90 and (b.p90 - b.p10) > (a.p90 - a.p10)  # wider with a larger statewide miss
+    assert a.p50 == b.p50 == round(f.p50.sum())  # centred on the sum of the series medians
+    assert abs(np.log(b.p90 / b.p50) - 1.2816 * 0.1) < 1e-6 and b.common_shock_sigma == 0.1
 
 
 def test_adoption_rewrites_only_the_forecast_year_and_only_ranges_that_contain_the_median(built):

@@ -189,3 +189,7 @@ With Phase 3 (ML analytics) and the v2 dashboard merged, what is left, in order:
 | D7 | Ruleset and Dependabot | `.github/rulesets/main.json` to import; Dependabot updates grouped; alerts on (`docs/repo-settings.md`) |
 | D8 | Phase 8 (AI apps) | Required for 5 of 5 (Sierra, Nov 13, 2026: the panel asked for it). Gates: every model beats its baseline before it is shown; every chat answer cites its table; risks documented against the NIST AI RMF |
 | D9 | v3 promotion | Open: Sierra approves testing on v2 |
+
+## Phase 5 closure and v3.1, Nov 16, 2026
+
+Closed from "Remaining phases to completion": (1) detector backtest drawn on the Opportunities tab, with persistence and next-year divergence charts; (5) review-queue CSV export (already in place); (6) `mart.d_model_registry` (every model, baseline, held-out score, decision) and `mart.d_drift` (PSI and KS by fiscal year; one major shift, FY2021–FY2022 payments agency mix); (7) PCA scatter (already in place as the agency peer-group chart). Merged onto v3 main with the upstream calibration (src/models/calibration.py; its first real run: 53 of 63 past outcomes, 84.1%, inside the calibrated ranges out of sample), which clears the last check warning (140 of 140 pass). The statewide challenger corridor now comes from the statewide miss (decision in docs/models/challenger.md). v3.1 audit depth: see [strategy-v3.1.md](strategy-v3.1.md). Approved Nov 16, 2026 (D9).

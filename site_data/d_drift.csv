@@ -1,0 +1,47 @@
+dataset,measure,from_fy,to_fy,psi,ks,level,partial_year
+Payments,Payment amount (log scale),2008,2009,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2008,2009,0.02,,Stable,False
+Payments,Payment amount (log scale),2009,2010,0.0,0.03,Stable,False
+Payments,Agency mix of payments,2009,2010,0.03,,Stable,False
+Payments,Payment amount (log scale),2010,2011,0.01,0.03,Stable,False
+Payments,Agency mix of payments,2010,2011,0.01,,Stable,False
+Payments,Payment amount (log scale),2011,2012,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2011,2012,0.01,,Stable,False
+Payments,Payment amount (log scale),2012,2013,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2012,2013,0.01,,Stable,False
+Payments,Payment amount (log scale),2013,2014,0.0,0.02,Stable,False
+Payments,Agency mix of payments,2013,2014,0.01,,Stable,False
+Payments,Payment amount (log scale),2014,2015,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2014,2015,0.01,,Stable,False
+Payments,Payment amount (log scale),2015,2016,0.0,0.02,Stable,False
+Payments,Agency mix of payments,2015,2016,0.01,,Stable,False
+Payments,Payment amount (log scale),2016,2017,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2016,2017,0.0,,Stable,False
+Payments,Payment amount (log scale),2017,2018,0.0,0.02,Stable,False
+Payments,Agency mix of payments,2017,2018,0.0,,Stable,False
+Payments,Payment amount (log scale),2018,2019,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2018,2019,0.02,,Stable,False
+Payments,Payment amount (log scale),2019,2020,0.01,0.03,Stable,False
+Payments,Agency mix of payments,2019,2020,0.05,,Stable,False
+Payments,Payment amount (log scale),2020,2021,0.03,0.03,Stable,False
+Payments,Agency mix of payments,2020,2021,0.08,,Stable,False
+Payments,Payment amount (log scale),2021,2022,0.1,0.07,Moderate shift,False
+Payments,Agency mix of payments,2021,2022,0.32,,Major shift,False
+Payments,Payment amount (log scale),2022,2023,0.06,0.05,Stable,False
+Payments,Agency mix of payments,2022,2023,0.04,,Stable,False
+Payments,Payment amount (log scale),2023,2024,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2023,2024,0.01,,Stable,False
+Payments,Payment amount (log scale),2024,2025,0.0,0.02,Stable,False
+Payments,Agency mix of payments,2024,2025,0.02,,Stable,False
+Payments,Payment amount (log scale),2025,2026,0.0,0.01,Stable,False
+Payments,Agency mix of payments,2025,2026,0.02,,Stable,False
+Payments,Payment amount (log scale),2026,2027,0.01,0.03,Stable,True
+Payments,Agency mix of payments,2026,2027,0.06,,Stable,True
+Budget,Agency mix of controllable spending (actual),2017,2018,0.03,,Stable,False
+Budget,Agency mix of controllable spending (actual),2018,2019,0.01,,Stable,False
+Budget,Agency mix of controllable spending (actual),2019,2020,0.05,,Stable,False
+Budget,Agency mix of controllable spending (actual),2020,2021,0.17,,Moderate shift,False
+Budget,Agency mix of controllable spending (actual),2021,2022,0.07,,Stable,False
+Budget,Agency mix of controllable spending (actual),2022,2023,0.21,,Moderate shift,False
+Budget,Agency mix of controllable spending (actual),2023,2024,0.11,,Moderate shift,False
+Budget,Agency mix of controllable spending (actual),2024,2025,0.05,,Stable,False

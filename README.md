@@ -1,48 +1,21 @@
-# GMI Savings Tracker v3
+# GMI Savings Tracker
 
-> **Testing ground (v3).** Every upgrade is built, tested and scored here first; a change reaches the flagship, [gmi-savings-tracker](https://github.com/EVO3-Ecosystem/gmi-savings-tracker) ([live site](https://evo3-ecosystem.github.io/gmi-savings-tracker/)), only after it scores 5 of 5 and is approved.
+**An independent, audit-grade check of Maryland's Government Modernization Initiative (GMI), built entirely on the State's open data.** It tests the savings GMI reported against what the State actually paid, finds where more could be saved, and says how sure each number is. Every model has to beat a simple baseline before anything it produces is shown.
+
+> **Testing ground (v3).** Every upgrade is built, tested and scored here first. A change reaches the flagship, [gmi-savings-tracker](https://github.com/EVO3-Ecosystem/gmi-savings-tracker) ([live site](https://evo3-ecosystem.github.io/gmi-savings-tracker/)), only after it scores 5 of 5 and is approved.
 
 [![CI](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml/badge.svg)](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml)
 [![Pages](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/pages.yml/badge.svg)](https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/)
 <!-- facts:badges -->
-![Data checks](https://img.shields.io/badge/data%20checks-131%20of%20132%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--13-0969da)
+![Data checks](https://img.shields.io/badge/data%20checks-140%20of%20140%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--13-0969da)
 <!-- /facts:badges -->
+![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C212%20of%202%2C212-2da44e)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
 [![License: MIT](https://img.shields.io/badge/license-MIT-6e7781)](LICENSE)
 
-An independent check of Maryland's Government Modernization Initiative (GMI). It compares the savings GMI reported with what the State actually paid, and shows conditional paths to $50.2M a year with the evidence behind each. Prototype by Sierra Napier; not an official State of Maryland product.
-
-**All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov). The State's own websites and DBM's budget documents are used only to verify it.
-
-## Live demo
-
-**https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/**
-
-| Page | What it shows |
-|---|---|
-| Dashboard | <!-- n:tabs_Word -->Ten<!-- /n --> tabs: overview, focus areas, savings tracker, opportunities, calculator, forecasts and results, vendors, agencies, budget, data and pipeline |
-| AI layer (`ai.html`) | Payment screen, payee classifier, grant overlap, MCP server and briefs, each with its baseline and limits |
-| Data explorer (`explorer.html`) | SQL in the browser (DuckDB-WASM) over every published table, with a plain table viewer if WebAssembly is blocked |
-| Database catalog (`catalog.html`) | Every table's layer, rows, columns, checks and lineage |
-
-Every number on these pages is computed from the published data files. Click a screenshot to open that page.
+Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov); State websites and DBM's budget books are used only to verify it.
 
 <a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/overview.png" alt="Dashboard overview: FY2026 against FY2025, with the computed finding at the top"></a>
-
-<table>
-<tr>
-<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/savings.png" alt="Savings tracker: reported items grouped as saved, under way and projected"></a><br><b>Savings tracker.</b> GMI's 17 items grouped by how the report words them; the four saved items equal its $29M.</td>
-<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/payment_screen.png" alt="Payment screen: leads by year and confidence, source issues shown separately"></a><br><b>Payment screen.</b> 8 leads by confidence; the FY2022 double listing is shown as a source issue, never a lead.</td>
-</tr>
-<tr>
-<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/ai.html"><img src="docs/figures/readme/ai_layer.png" alt="AI layer page"></a><br><b>AI layer.</b> Each model with its baseline, result and limits.</td>
-<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/explorer.html"><img src="docs/figures/readme/explorer.png" alt="Data explorer running SQL in the browser"></a><br><b>Data explorer.</b> SQL over every published table, in the browser.</td>
-</tr>
-<tr>
-<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/catalog.html"><img src="docs/figures/readme/catalog.png" alt="Database catalog"></a><br><b>Database catalog.</b> Every table, column, check and lineage.</td>
-<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/calculator.png" alt="Calculator with the path to $50.2M"></a><br><b>Calculator.</b> The conditional path to $50.2M, with each assumption adjustable.</td>
-</tr>
-</table>
 
 ## What it found
 
@@ -54,6 +27,73 @@ Every number on these pages is computed from the published data files. Click a s
 - **Payment screen:** 8 possible duplicate payment groups ($1.86M to review). None can be confirmed without payment records.
 - **Source data issue:** the published FY2022 payments data lists a second block of $874.5M for Maryland Environmental Service And Maryland Transportation Authority, confirmed on both State sites on Nov 10, 2026. It is reported as a source issue, never as a lead.
 <!-- /facts:readme -->
+
+**Audit depth (v3.1, data as of Nov 13, 2026):**
+- **Who pays changed:** 87 program-years moved at least 20 points toward the General Fund in two years. MSDE Child Care Assistance Grants went from 23% General Fund (FY2023) to 79% (FY2025, $562M), matching DLS's ~78%, as federal relief ran out.
+- **Federal cross-check:** in the funding data, federal fund source codes are Assistance Listing numbers, so each State budget line can be set beside USAspending obligations for the same program (State FY and federal FY side by side, never added).
+- **Payee identity:** 810 companies paid at addresses in more than one ZIP area and 2,368 likely missed name merges, queued for review. The public data has no vendor number, so name and ZIP are the only keys.
+- **Audit follow-through:** a lifecycle register (identified, recouped, waived and by whom, legal opinion) seeded only from public sources. The MSDE child care case: $66.5M suspected overpayments reported; $10.7M MSDE decided not to recoup; the fund that paid it is not public.
+- **Drift:** the agency mix of payments shifted sharply from FY2021 to FY2022 (PSI 0.32). That is the federal relief period and the year the payments data lists a second $874.5M block, found independently by the payment screen.
+
+## Data science: methods and validation
+
+Every model is scored on held-out data against a baseline it must beat; the registry (`mart.d_model_registry`, Data & pipeline tab) is built from each model's own evaluation in every run, so this table cannot drift from the code.
+
+| Model | Method | Baseline | Held-out result | Decision |
+|---|---|---|---|---|
+| Spending forecast | Trend, drift, naive or their average per focus area, chosen by rolling-origin MASE | Naive (last actual) | MASE 2.09 vs 2.15, origins FY2021–FY2024 | Adopted |
+| Forecast ranges | Bootstrap p10–p90, then **split-conformal widening** (per-horizon factors, Wilson intervals; `src/models/calibration.py`) | Nominal 80% coverage | 53 of 63 past outcomes (84.1%, 95% interval 73–91%) with each outcome year held out; raw ranges under the same design 37 of 63 (58.7%) | Adopted; LightGBM ranges replace them only under a pre-registered rule |
+| Spending challenger | LightGBM quantile regression, one global model over 2,609 agency x code series, conformalized bands | Naive | MASE 5.74 vs 6.21; p10–p90 coverage 73% vs 43% before calibration | Adopted for the 1,083 series where it wins; statewide corridor from the statewide miss |
+| General Fund revenue | Log-linear trend on sourced closeouts | Naive | MASE 0.94 vs 1.38 | Adopted |
+| Payee classifier | TF-IDF character n-grams + logistic regression | Name rules | Macro F1 0.46 vs 0.56 on 364 hand-labeled names | **Not promoted**; feeds a review queue |
+| Agency peer groups | K-Means on spending-mix shares, k by silhouette | No groups | Silhouette 0.31, k = 3 | Shown |
+| Opportunity detectors | Rules with fixed thresholds, rerun as of FY2022–FY2024 | Like-sized unflagged units | 76% of flagged units flagged again next year vs 5% | Leads, sized with stated rates |
+| Anomaly flags | Isolation forest | Rule detectors and bid list | 27% of flags also found by a rule | Review queue only |
+| Grant groups | TF-IDF word 1–2 grams, cosine 0.85 | Unsupervised | Leads stable at 0.80 / 0.85 / 0.90 | Leads only |
+| Drift monitor | PSI and KS between consecutive fiscal years | 0.10 / 0.25 thresholds | 1 major shift (FY2021–FY2022) | Warns, never blocks |
+
+Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a failed build; nothing is adopted that loses to its baseline; savings are never inferred from a model's output.
+
+<table>
+<tr>
+<td width="50%"><img src="docs/figures/readme/detector_backtest.png" alt="Detector backtest: share flagged again the next year, flagged versus not flagged"><br><b>Detector backtest.</b> Flags persist: real signal, not noise.</td>
+<td width="50%"><img src="docs/figures/readme/detector_divergence.png" alt="Median next-year spending change, flagged versus not flagged"><br><b>What flagged spending did next.</b> Growth flags fall back; part of a spike is one year. Descriptive, not causal.</td>
+</tr>
+<tr>
+<td><img src="docs/figures/readme/fund_shift.png" alt="Dumbbell chart of General Fund share before and after"><br><b>Fund shifts.</b> General Fund share two years before and after, largest programs.</td>
+<td><img src="docs/figures/readme/federal_crosswalk.png" alt="State budget federal funds and federal obligations by year"><br><b>Federal cross-check.</b> CCDBG (93.575): State budget beside federal obligations.</td>
+</tr>
+<tr>
+<td><img src="docs/figures/readme/drift.png" alt="PSI between consecutive fiscal years"><br><b>Drift monitor.</b> PSI by year with the 0.10 and 0.25 thresholds.</td>
+<td><img src="docs/figures/readme/model_registry.png" alt="Model registry table"><br><b>Model registry.</b> Every model against its baseline, read from this build.</td>
+</tr>
+</table>
+
+## Live demo
+
+**https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/**
+
+| Page | What it shows |
+|---|---|
+| Dashboard | <!-- n:tabs_Word -->Ten<!-- /n --> tabs: overview, focus areas, savings tracker, opportunities, calculator, forecasts and results, vendors, agencies, budget, data and pipeline |
+| AI layer (`ai.html`) | Payment screen, payee classifier, grant overlap, MCP server and briefs, each with its baseline and limits |
+| Data explorer (`explorer.html`) | SQL in the browser (DuckDB-WASM) over every published table |
+| Database catalog (`catalog.html`) | Every table's layer, rows, columns, checks and lineage |
+
+<table>
+<tr>
+<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/savings.png" alt="Savings tracker"></a><br><b>Savings tracker.</b> GMI's 17 items grouped by how the report words them; the four saved items equal its $29M.</td>
+<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/payment_screen.png" alt="Payment screen"></a><br><b>Payment screen.</b> 8 leads by confidence; the FY2022 double listing is a source issue, never a lead.</td>
+</tr>
+<tr>
+<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/audit_lifecycle.png" alt="Audit and recoupment lifecycle"></a><br><b>Audit lifecycle.</b> Identified, recouped, waived, legal opinion; every row sourced and dated.</td>
+<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/calculator.png" alt="Calculator"></a><br><b>Calculator.</b> The conditional path to $50.2M with calibrated ranges.</td>
+</tr>
+<tr>
+<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/ai.html"><img src="docs/figures/readme/ai_layer.png" alt="AI layer"></a><br><b>AI layer.</b> Each model with its baseline, result and limits.</td>
+<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/explorer.html"><img src="docs/figures/readme/explorer.png" alt="Data explorer"></a><br><b>Data explorer.</b> SQL over every published table, in the browser.</td>
+</tr>
+</table>
 
 ## Data
 
@@ -88,39 +128,36 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 
 **API version.** The extract uses the SODA 2.1 endpoints (`/resource/<id>.json`) through `sodapy`, which work without a token; Tyler Technologies says SODA 2.1 remains fully supported. The SODA3 endpoint (`/api/v3/views/<id>/query.json`) requires an app token; see [Next steps](#next-steps).
 
+**What the open data cannot answer** (Data & pipeline tab, `reference/field_availability.csv`): 4 of the 13 fields an audit-grade tracker needs are public. Payment and invoice numbers and dates, the fund on each payment and vendor numbers sit in FMIS; MD-VIEW shows them one search at a time with no download and is never scraped. The schema for payment-level records is ready (`src/pipeline/txn.py`, `core.fact_payment_txn`), so a Public Information Act response loads with no code change.
+
 ## How it works
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/readme/pipeline_dark.png">
-  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 103 checks, then 51 marts and models, 53 published files, the Pages site, a data release and a read-only MCP server; State sites and DBM books verify the database">
+  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 140 stop checks, 59 marts and 14 model modules, the model registry, 74 published files, the Pages site, a data release and a read-only MCP server; State sites and DBM books verify the database">
 </picture>
-
-<details>
-<summary>Full pipeline diagram (Mermaid source)</summary>
-
-See [docs/figures/pipeline.mmd](docs/figures/pipeline.mmd); `make diagrams` renders it.
-
-</details>
 
 | Step | Module | Result |
 |---|---|---|
-| Extract | `src/pipeline/extract.py` | One Parquet file per dataset per run, with a manifest; reuses unchanged data, re-downloads on a count mismatch |
-| Build and check | `build.py`, `checks.py` | DuckDB layers; <!-- n:checks -->132<!-- /n --> checks; a failed stop check keeps the last good database |
-| Rules | `reference/*.csv` (18 files) | Every mapping and decision in a reviewed file with its reason |
-| Marts | `sql/mart/` (<!-- n:marts -->52<!-- /n --> files) | The tables the dashboard reads |
-| Models | `src/models/` | Forecasts, opportunity detectors, savings checks, payment screen, payee classifier, grant groups, each with a model card in `docs/models/` |
+| Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
+| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->140<!-- /n --> checks; a failed stop check keeps the last good database |
+| Rules | `reference/` (<!-- n:reference_files -->24<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Marts | `sql/mart/` (<!-- n:marts -->59<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
+| Models | `src/models/` (14 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
+
+Quality bar: <!-- n:documented_columns -->2,212<!-- /n --> of 2,212 columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## AI layer
 
 | Piece | Result | Limit |
 |---|---|---|
 | Payment screen | 8 leads, $1.86M to review; a confirmation rate is not measurable | Yearly totals, not payments |
-| Payee classifier | Not adopted: macro F1 0.47 against 0.56 for the rules. Kept as a review queue of 2,475 names | Labels from one annotator |
+| Payee classifier | Not adopted: macro F1 0.46 against 0.56 for the rules. Kept as a review queue of 2,185 names | Labels from one annotator |
 | Grant overlap | After resolving renamed agencies, 2 of the top 20 groups are real overlaps | Leads only, not additive |
 | MCP server | 6 read-only tools; 30 of 30 test questions answered exactly; 75 security tests | Local use (Claude Desktop or Claude Code) |
-| Briefs | 75 of 75 template briefs pass the number guardrail | Live Gemini needs `GEMINI_API_KEY` |
+| Briefs | 75 of 75 template briefs pass the number guardrail | Live Gemini is off by choice; needs `GEMINI_API_KEY` |
 
 ## Run it
 
@@ -141,12 +178,13 @@ make site                           # static site in site/ from data/export/late
 make site-artifact ARTIFACT_OUT=... # the same site without Parquet, for a claude.ai artifact
 make reconcile                      # website downloads vs the API (about 750 MB)
 make docs                           # data governance, schemas and generated facts
+make readme-shots                   # the README screenshots, from the built site
 python -m src.mcp.server            # MCP server over stdio (docs/mcp.md has the client setup)
 python -m src.briefs.generate       # briefs (template backend without a key)
 python -m src.pipeline.publish --dry-run   # validate a data release without network
 ```
 
-All `make` targets: extract, extract-full, build, all, test, test-fault, reconcile, parity, export, snapshot, restore, figures, diagrams, docs, docs-strict, site, site-snapshot, site-artifact.
+All `make` targets: extract, extract-full, extract-scheduled, build, all, test, test-fault, reconcile, parity, export, snapshot, restore, figures, diagrams, docs, docs-strict, site, site-snapshot, site-artifact, readme-shots.
 
 Secrets: `MD_SODA_APP_TOKEN` (optional for SODA 2.1, required for SODA3), `HF_TOKEN` (Hugging Face upload), `GEMINI_API_KEY` (live briefs). Copy `.env.example` to `.env` for local use; in CI they are repository secrets. None is ever committed.
 
@@ -159,16 +197,16 @@ Secrets: `MD_SODA_APP_TOKEN` (optional for SODA 2.1, required for SODA3), `HF_TO
 
 ```
 config/        datasets, dashboard files, assumptions
-reference/     reviewed rules and decisions (CSV)
+reference/     reviewed rules, decisions, audit register, field availability (CSV)
 sql/mart/      one SQL file per mart
-src/pipeline/  extract, enrich, build, checks, marts, export, site, publish, reconcile, parity, governance
-src/models/    forecasts, detectors, savings, payment screen, classifier, grant groups
+src/pipeline/  extract, enrich, build, checks, marts, txn, export, site, publish, reconcile, parity, governance
+src/models/    forecasts, challenger, revenue, detectors, backtest, savings, payment screen, classifier, grant groups, anomaly, registry
 src/mcp/       read-only MCP server
 src/briefs/    briefs and their guardrail
 tests/         pytest
-docs/          data governance, model cards, checks, reconciliation, parity, reviews, roadmap
+docs/          data governance, model cards, checks, reconciliation, parity, reviews, roadmap, v3.1 strategy
 site_data/     checked-in export snapshot the Pages site is built from
-data/          git-ignored: raw runs, database, exports
+data/          git-ignored: raw runs, database, exports, data/txn for records-request files
 legacy/        the original pandas pipeline and dashboard, kept as the parity baseline
 ```
 
@@ -178,29 +216,32 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 
 - [Walkthrough notebook](notebooks/walkthrough.ipynb): the story end to end from the published tables only, committed with its outputs.
 - [Executive overview](docs/executive-overview.md): one page, six figures (`docs/figures/overview/`).
-- [Forecast model card](docs/models/forecast.md): the raw ranges held 40 of 63 past outcomes (63.5%) against a nominal 80%; the calibrated ranges published beside them held 53 of 63 (84.1%) with each outcome year held out.
-
-`reference/` holds <!-- n:reference_files -->22<!-- /n --> rule and source files.
+- [Model cards](docs/models): <!-- n:model_cards -->12<!-- /n --> cards, each with its baseline, validation and limits.
 
 ## Status
 
 | Phase | State |
 |---|---|
-| 1. Extract | Done, Oct 28, 2026 |
-| 2. Database | Done, Oct 29, 2026 |
-| 3. Reference data | Done, Oct 29, 2026 |
-| 4. Marts and dashboard | Done, Nov 2, 2026 |
-| 5. Analytics and verification | Done, Nov 10, 2026: all published files built from the database; published-file parity, 30 files, 0 unexplained; State-site cross-checks; detector backtest |
-| 6. Automate | Open: two clean scheduled runs with no manual steps. Lockfile, container and CI-in-container added Nov 15, 2026 |
+| 1–4. Extract, database, reference data, marts and dashboard | Done, Oct 28–Nov 2, 2026 |
+| 5. Analytics and verification | Done, Nov 16, 2026: detector backtest on the page, model registry, drift monitor, conformal ranges, State-site cross-checks, published-file parity |
+| v3.1 Audit depth | Built Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema |
+| 6. Automate | Workflows in place (weekly freshness run, Pages, ruleset, Dependabot); proven once v3 runs on GitHub |
+| 8. AI apps | AI page, MCP server and guarded briefs built; live generation off by choice |
+
+## Limitations
+
+- Payments and grants are yearly totals per payee, not payments: no duplicate-window, split-purchase or monthly analysis can be confirmed without payment-level records.
+- Detector and anomaly results are leads. The backtest is descriptive: flagged and unflagged units differ in more than the flag.
+- Forecast calibration rests on 63 scored points over four origins (Wilson interval 73–91%); the factors are re-estimated every run and coverage is a check. The statewide spending corridor rests on three backtest origins.
+- The audit register holds only what public sources state; a blank is unknown, never zero.
 
 ## Next steps
 
 - Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
-- Check FTE totals against DBM's budget documents.
-- Move the extract to SODA3 once `MD_SODA_APP_TOKEN` is a repository secret, keeping SODA 2.1 as a fallback.
-- Ask the Comptroller for payment-level dated records and about the FY2022 double listing.
+- Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
+- Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
 
-Full history and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md).
+History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md).
 
 ## License
 

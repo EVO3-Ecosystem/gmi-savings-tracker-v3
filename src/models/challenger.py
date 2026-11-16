@@ -248,27 +248,25 @@ def build_all(scope, agency_names, cfg=None, cal=None):
     return out.sort_values("p50", ascending=False).reset_index(drop=True), agg, detail, pd.DataFrame(medians)
 
 
-def _statewide(out, cfg, tau=0.0):
-    """A band for the statewide FY-after-last-actual total. Per-series p10/p90 are not additive (every series does
-    not hit its own tail in the same year), so the total is simulated: each series is drawn log-normally around its
-    median with the log sigma of its calibrated band, times one shock shared by every series in the path (log sigma
-    `tau`, the size of the statewide miss in the backtest), and the draws are summed path by path. Draws are not
-    clamped to the band: clamping removed both tails and made the corridor too narrow."""
-    paths = int(cfg.get("bootstrap_paths", 4000))
-    rng = np.random.default_rng(cfg["seed"])
-    lo, hi = (out[c] if c in out else out[r] for c, r in (("p10_cal", "p10"), ("p90_cal", "p90")))
-    p10, p50, p90 = lo.to_numpy(dtype=float), out["p50"].to_numpy(dtype=float), hi.to_numpy(dtype=float)
-    sg = np.log((p90 + 1.0) / (p10 + 1.0)) / (2 * 1.2816)
-    draws = p50[:, None] * np.exp(rng.standard_normal((len(out), paths)) * sg[:, None])
-    common = np.exp(rng.standard_normal(paths) * tau)
-    q10, q50, q90 = np.quantile(draws.sum(axis=0) * common, [0.1, 0.5, 0.9])
-    return pd.DataFrame([{"fiscal_year": int(out.fiscal_year.iloc[0]), "p10": round(float(q10)), "p50": round(float(q50)),
-                          "p90": round(float(q90)), "n_series": len(out), "n_adopted": int(out.adopted.sum()),
-                          "bootstrap_paths": paths, "common_shock_sigma": round(float(tau), 4),
-                          "note": "Statewide corridor simulated path by path: each series drawn log-normally around "
-                                  "its median (sigma from its calibrated band) times one shock shared by all series "
-                                  "(sigma from the statewide miss in the backtest); summing the per-series p10/p90 "
-                                  "directly would overstate the band, because series do not all hit their tails together."}])
+def _statewide(out, cfg, tau=0.0, origins=0):
+    """A band for the statewide FY-after-last-actual total, measured on the total itself.
+
+    p50 = the sum of the series medians; p10 / p90 = p50 x exp(-/+ 1.2816 x tau), where tau is the root-mean-square log
+    miss of the actual statewide total against the sum of the series medians over the backtest origins
+    (statewide_tau). Summing per-series draws was tried and rejected on the Nov 16, 2026 run: 154 series have a
+    calibrated p90 more than 20 times their median (pandemic-era swings), so any sum of draws, clamped or not, moved the
+    statewide median 25-130% above the sum of medians, a total no series median supports. The per-series calibrated
+    bands stay published in f_challenger; only the statewide corridor is taken from the statewide miss."""
+    z = 1.2816
+    p50 = float(out["p50"].sum())
+    lo, hi = p50 * np.exp(-z * tau), p50 * np.exp(z * tau)
+    return pd.DataFrame([{"fiscal_year": int(out.fiscal_year.iloc[0]), "p10": round(lo), "p50": round(p50),
+                          "p90": round(hi), "n_series": len(out), "n_adopted": int(out.adopted.sum()),
+                          "bootstrap_paths": 0, "common_shock_sigma": round(float(tau), 4),
+                          "note": f"Statewide corridor: the sum of the series medians, with a band from the statewide total's "
+                                  f"own miss in the backtest (log sigma {tau:.3f} over {origins} origins; few points, so read "
+                                  f"it as indicative). Per-series bands are not summed: a few very volatile series would "
+                                  f"dominate the total."}])
 
 
 AREA_SQL = "SELECT DISTINCT agency_code, code, area FROM mart.f_code"
@@ -324,7 +322,7 @@ def write(con, cfg=None):
     names = con.execute("SELECT agency_code, agency, fiscal_year FROM mart.agency_year").df()
     names = names.sort_values("fiscal_year", ascending=False).drop_duplicates("agency_code").set_index("agency_code").agency.to_dict()
     f, bt, detail, medians = build_all(scope, names, cfg, cal)
-    tot = _statewide(f, cfg, statewide_tau(detail))
+    tot = _statewide(f, cfg, statewide_tau(detail), int(detail.origin_fy.nunique()) if len(detail) else 0)
     # focus-area view of the same backtest, for the adoption rule
     amap = {(a, c): area for a, c, area in con.execute(AREA_SQL).fetchall()}
     area_of = lambda a, c: amap.get((a, c), OTHER)  # noqa: E731
