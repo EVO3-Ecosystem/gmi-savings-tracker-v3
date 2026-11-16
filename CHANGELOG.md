@@ -15,6 +15,7 @@ Added
 - `notebooks/walkthrough.ipynb` (reads only the published tables, committed executed), `docs/executive-overview.md`, and six figures in `docs/figures/overview/`.
 - `uv.lock`, `requirements.lock.txt`, `.python-version`, `Dockerfile`, `compose.yaml`; CI installs from the lockfile and also runs the tests inside the image.
 - `src/pipeline/doc_counts.py`: counts typed in the docs are generated from the files they describe.
+- Statewide program screen (`src/models/program_screen.py`, `mart.d_program_screen`): every program of every agency screened for fast growth and large yearly swings, with audit findings beside it. `reference/audit_findings_override.csv` records reported findings with a program, an amount and a recoupment status; `docs/research/childcare-overpayments.md` is the first case.
 
 Changed
 - Dashboard: no range is described as holding "8 in 10" outcomes; treemap labels pick dark or light ink by fill; tab bar and filters tightened on small screens; the 404 page links to this repository's site.

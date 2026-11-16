@@ -141,6 +141,26 @@ Dashboard-level gaps added in the *GMI Dashboard Optimization Roadmap v2* (Claud
 
 **Portfolio housekeeping done Nov 5, 2026:** genai-engineering README counts and claims corrected to its data files (pushed); sierra-applied-ml README corrected to its results files and its links moved to snapaiarchitect (patch ready; this session can't push to that repo); profile README in `snapaiarchitect/snapaiarchitect` links all three repos (pushed; the repo is private, so it shows on the profile only once made public). Pinning is a manual step on GitHub.
 
+## Audit findings, recoupment status and program metadata (Nov 15, 2026)
+
+Prompted by the reported child care overpayments at the State Department of Education ([docs/research/childcare-overpayments.md](research/childcare-overpayments.md)). The goal is better metadata in the marts and the dashboard: which program a finding concerns, how much, and whether the money is being recovered.
+
+**Status, checked against the repository on Nov 15, 2026.**
+
+| Item | Status | Where it fits |
+|---|---|---|
+| Statewide program screen (`src/models/program_screen.py`, `mart.d_program_screen`): every program of every agency with 5+ actual years and $10M+ screened for fast growth (2x or more) and a large yearly swing (30% or more), with the agency's latest audit report and any reported finding beside it. On the published data: 298 programs across 50 agencies, 75 with both signals | Done Nov 16, 2026 (code, tests, figure, notebook section). In the pipeline and the export list; on the site after the next pipeline run. Not yet a dashboard card | Phase 5 analytics; Phase 4 dashboard for the card |
+| `reference/ola_findings.csv`: 17 agencies, one row per audit report, counts of findings, repeat findings and redacted findings | Done (decision register #21) | Phase 3 reference data; published as `ola_findings` |
+| `reference/audit_findings_override.csv`: one row per reported finding, with program, amount, period and `recoupment_status` (Active, Waived/Forgiven, Pending Attorney General Review, Recovered) | Started: layout and the first three rows (child care). Rows for the other agencies need a source for each amount and status | Phase 3 reference data |
+| Program codes on findings (for example the child care grants as unit Aid To Education, program 59) | Started for the three rows. The budget data publishes unit names, not unit codes such as R00A02 | Phase 3; needs the unit code carried into `f_program` |
+| Load the override file into `ref` and publish it; check that every agency and program code exists and every status is one of the four | Not started | Phase 3 (`reference.py`, `checks.py`) |
+| Vendor alias and parent-child normalization (subsidiaries and trade names grouped under a parent) | Not started. `vendor_families` groups names by rule today; the payee classifier was not adopted (macro F1 0.46 against 0.56 for the name rules) | Phase 3; gap #9 |
+| Anomaly severity mart: review-queue flags joined to audit findings, weights in `config/assumptions.yaml` | Not started. To be labelled a triage order: the join is by agency, and a finding about one program says little about another | Phase 4 marts, Phase 5 review queue |
+| Budget against spending by program | Not started. Extend `sql/mart/43_f_budget_vs_pay.sql` (agency level today) to program level; report the variance, do not split it into causes the data cannot show | Phase 4 marts |
+| Dashboard: findings and recoupment status on the agency page; program-level budget against payments on the Budget tab | Not started. Same chart system, one dollar axis with the variance in its own panel | Phase 4 dashboard |
+
+**What this will not do.** It will not detect provider-level overpayments: the open data has yearly totals per payee, with no attendance or eligibility records. It records reported findings beside the spending they concern.
+
 ## Best practices applied and planned (Nov 7, 2026)
 
 Researched for each open suggestion; what is done is marked, the rest is the standard Phase 5 will follow.

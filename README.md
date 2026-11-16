@@ -180,7 +180,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - [Executive overview](docs/executive-overview.md): one page, six figures (`docs/figures/overview/`).
 - [Forecast model card](docs/models/forecast.md): the raw ranges held 40 of 63 past outcomes (63.5%) against a nominal 80%; the calibrated ranges published beside them held 53 of 63 (84.1%) with each outcome year held out.
 
-`reference/` holds <!-- n:reference_files -->22<!-- /n --> rule and source files.
+`reference/` holds <!-- n:reference_files -->23<!-- /n --> rule and source files.
 
 ## Status
 

@@ -274,3 +274,14 @@ detector_backtest:
   wilson_z: 1.96                          # Wilson interval for rates; Katz log interval for lift
   reported_match_as_of: 2024              # were GMI's reported savings items flagged before GMI acted?
 
+
+# Statewide program screen (src/models/program_screen.py): every budget program of every agency, screened the same
+# way, with audit findings beside it. Set on 2026-11-16 before the screen was run on the published data.
+program_screen:
+  first_fy: 2017
+  last_actual_fy: 2025
+  min_years: 5                 # a program needs this many actual years to be screened
+  min_spend: 10000000          # and at least this much in its last actual year
+  fast_growth_multiple: 2.0    # signal: last actual year at least this many times the first
+  large_swing: 0.30            # signal: any year-to-year change of at least this share, up or down
+  top_n: 20                    # rows drawn in the figure
