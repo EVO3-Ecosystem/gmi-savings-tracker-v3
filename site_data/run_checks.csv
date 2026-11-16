@@ -81,7 +81,7 @@ run_id,stage,check,status,detail
 20261113T180346Z,mart,Challenger adopted only where it beat the naive baseline in rolling validation,pass,0 rows adopted without beating naive
 20261113T180346Z,mart,Every challenger forecast is for the year after the last actual,pass,"FY2026; 2,609 series forecast"
 20261113T180346Z,mart,Challenger p10-p90 bands cover about their nominal 80% in rolling validation,pass,"73.2% covered (nominal 80%), mean band 1.57 log points wide; challenger kept for 1,083 of 2,609 series"
-20261113T180346Z,mart,"The statewide challenger corridor is ordered, covers every series, and sits near the last actual total",pass,"FY2026 corridor 3.4B–5.4B around 4.3B, 2,609 series (1,083 adopted), simulated path by path"
+20261113T180346Z,mart,"The statewide challenger corridor is ordered, covers every series, and sits near the last actual total",pass,"FY2026 corridor 3.4B–5.4B around 4.3B, 2,609 series (1,083 adopted); band from the statewide miss in the backtest"
 20261113T180346Z,mart,Revenue actuals tie to the sourced closeout/BRE history to the dollar,pass,"10 actual rows, 10 distinct years, largest gap $0"
 20261113T180346Z,mart,Revenue forecast bands are ordered (p10 <= p50 <= p90) and non-negative,pass,0 rows out of order
 20261113T180346Z,mart,Kept revenue model matches or beats every simpler candidate in the rolling backtest,pass,kept Log-linear trend (MASE 0.94); naive 1.37; 0 candidates scored lower but were not kept
@@ -139,3 +139,6 @@ run_id,stage,check,status,detail
 20261113T180346Z,mart,Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema,pass,13 fields listed; 0 payment-level rows loaded (0 until a records request is answered)
 20261113T180346Z,mart,Model registry: every model listed with its baseline; no model adopted that does not beat it,pass,8 models; adopted without beating the baseline: none
 20261113T180346Z,mart,Drift: PSI between every pair of consecutive fiscal years; major shifts reported,pass,0 series with a missing year; major shifts: Agency mix of payments FY2021-FY2022 PSI 0.32
+20261113T180346Z,mart,"Every actual year and the enacted FY2027 budget reconcile with DBM's budget books and Fiscal Digest (within 0.01%, 99%+ programs exact)",pass,"12 of 12 comparisons reconcile, FY2017-FY2027; largest difference FY2025 All funds, operating + higher education $5,424,211"
+20261113T180346Z,mart,Book bridges reported: FY2026 working budget (budget amendments) and the FY2027 walk from the allowance (legislative action),pass,"FY2026 bridge (All funds, operating + higher education): remainder $482.4M; FY2027 walk (All funds, operating + higher education): remainder $-773.8M; FY2027 walk (General funds): remainder $6.1M"
+20261113T180346Z,mart,Every yearly budget and payments total matches the State's Open Finance sites (within $10),pass,31 of 31 years match

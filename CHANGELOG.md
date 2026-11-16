@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [3.2.0] - 2026-11-16
+
+Added
+- Reconciliation with the State's own documents for every year (`src/pipeline/books.py`, `mart.d_book_reconciliation`, `d_site_reconciliation`, `d_book_program_differences`, Data & pipeline tab): FY2017-FY2025 program actuals against DBM's Governor's budget books (9 of 9 years reconcile, 99.3-100% of programs equal to the dollar); the enacted FY2027 budget against the Fiscal Digest by fund (to the dollar); yearly totals against the Open Finance sites (31 of 31 to the cent); an FY2026 working-budget bridge and an FY2027 general fund walk with labelled remainders.
+- Stop checks re-test the warehouse against the stored DBM and site figures on every build; thresholds pre-registered in `config/assumptions.yaml` (`books`).
+
+Changed
+- License: proprietary, all rights reserved (was MIT). Copies obtained under the earlier license keep those terms.
+
 ## [3.1.0] - 2026-11-16
 
 Added

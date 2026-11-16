@@ -7,11 +7,11 @@
 [![CI](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml/badge.svg)](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml)
 [![Pages](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/pages.yml/badge.svg)](https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/)
 <!-- facts:badges -->
-![Data checks](https://img.shields.io/badge/data%20checks-140%20of%20140%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--13-0969da)
+![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--13-0969da)
 <!-- /facts:badges -->
 ![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C212%20of%202%2C212-2da44e)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
-[![License: MIT](https://img.shields.io/badge/license-MIT-6e7781)](LICENSE)
+[![License: All rights reserved](https://img.shields.io/badge/license-all%20rights%20reserved-6e7781)](LICENSE)
 
 Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov); State websites and DBM's budget books are used only to verify it.
 
@@ -27,6 +27,8 @@ Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **Al
 - **Payment screen:** 8 possible duplicate payment groups ($1.86M to review). None can be confirmed without payment records.
 - **Source data issue:** the published FY2022 payments data lists a second block of $874.5M for Maryland Environmental Service And Maryland Transportation Authority, confirmed on both State sites on Nov 10, 2026. It is reported as a source issue, never as a lead.
 <!-- /facts:readme -->
+
+**Data accuracy (v3.2):** every actual year FY2017–FY2025 reconciles with DBM's printed budget books (statewide totals within 0.008%, 99.3–100% of programs equal to the dollar), the enacted FY2027 budget equals DBM's Fiscal Digest to the dollar in every fund, and 31 of 31 yearly totals equal the State's Open Finance sites to the cent ([details](#data)).
 
 **Audit depth (v3.1, data as of Nov 13, 2026):**
 - **Who pays changed:** 87 program-years moved at least 20 points toward the General Fund in two years. MSDE Child Care Assistance Grants went from 23% General Fund (FY2023) to 79% (FY2025, $562M), matching DLS's ~78%, as federal relief ran out.
@@ -110,11 +112,19 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 
 Counts are from the Nov 10, 2026 run; the same notes appear on the dashboard's Data & pipeline tab (`reference/source_notes.csv`). Every run checks each dataset's row count and yearly totals against the portal's own figures before anything is built.
 
-**Independent checks, Nov 9–10, 2026** (`docs/reconciliation/`):
-- Budget totals FY2025–FY2027 equal operatingbudget.maryland.gov to the dollar.
-- Payment totals FY2024–FY2027 equal vendorpayments.maryland.gov to the cent.
-- DBM Volume 2 budget books: 69% (FY2021) and 80% (FY2022) of programs equal to the dollar, against a 60% threshold.
-- The four website downloads match the API year by year (`make reconcile`).
+![Which years reconcile with each source](docs/figures/readme/reconciliation.png)
+
+**Reconciled with the State's own documents, every year (v3.2, Nov 16, 2026)** (`src/pipeline/books.py`, Data & pipeline tab). Every result below is stored as sourced reference data and re-tested by a stop check on every build:
+
+| Check | Years | Result |
+|---|---|---|
+| Yearly totals against the Open Finance sites (operatingbudget / vendorpayments.maryland.gov) | Budget FY2017–FY2027, payments FY2008–FY2027 | 31 of 31 equal to the cent |
+| Program actuals against DBM's Governor's budget books (Actual column, printed two years later) | FY2017–FY2025 | 9 of 9 years reconcile: statewide totals within $5.4M (0.008%), 99.3–100% of programs equal to the dollar |
+| Enacted budget against DBM's FY2027 Fiscal Digest (Exhibit B), by fund | FY2027 | General, special and federal funds equal to the dollar; 626 of 626 programs |
+| Working budget bridge: appropriation + enacted deficiencies (Digest Exhibit E) | FY2026 | $482.4M remainder, labelled as budget amendments; DBM prints the working appropriation in the FY2028 books |
+| General fund walk: allowance + Supplemental Budgets 1 and 2 + the Legislature's cuts and additions (DLS conference report) | FY2027 | Within $6.1M (0.02%) of the enacted figure; DLS reports to $0.1M |
+
+The identity that makes the books tie: **book Total Expenditure − reimbursable funds − non-budgeted funds = operating budget (yu65-jmmv) + public higher education (4mca-332u).** Reimbursable funds (paid by one agency to another) and non-budgeted funds (MDTA, MES, the Stadium Authority, State Retirement investments) are printed in the books but not appropriated in the State budget, and the open data does not carry them. Only 13 programs differ across nine years, each listed with its reason in `reference/book_program_differences.csv`: four small programs in the data but not printed in the books ($8.8M), one $9,000 difference, and eight rounding differences of $1–$16. Also checked: the four website downloads match the API year by year (`make reconcile`).
 
 ![API extract vs website downloads, by fiscal year](docs/figures/reconciliation.png)
 
@@ -140,14 +150,14 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Step | Module | Result |
 |---|---|---|
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
-| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->140<!-- /n --> checks; a failed stop check keeps the last good database |
-| Rules | `reference/` (<!-- n:reference_files -->24<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
-| Marts | `sql/mart/` (<!-- n:marts -->59<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
+| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
+| Rules | `reference/` (<!-- n:reference_files -->27<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (14 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: <!-- n:documented_columns -->2,212<!-- /n --> of 2,212 columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: <!-- n:documented_columns -->2,319<!-- /n --> of 2,212 columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## AI layer
 
@@ -224,7 +234,8 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 |---|---|
 | 1–4. Extract, database, reference data, marts and dashboard | Done, Oct 28–Nov 2, 2026 |
 | 5. Analytics and verification | Done, Nov 16, 2026: detector backtest on the page, model registry, drift monitor, conformal ranges, State-site cross-checks, published-file parity |
-| v3.1 Audit depth | Built Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema |
+| v3.1 Audit depth | Released Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema, model registry, drift monitor |
+| v3.2 Data accuracy | Released Nov 16, 2026: every year reconciled with DBM's budget books, the Fiscal Digest and the State's Open Finance sites |
 | 6. Automate | Workflows in place (weekly freshness run, Pages, ruleset, Dependabot); proven once v3 runs on GitHub |
 | 8. AI apps | AI page, MCP server and guarded briefs built; live generation off by choice |
 
@@ -245,4 +256,6 @@ History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md).
 
 ## License
 
-Code: [MIT](LICENSE). Data: Maryland open data, subject to the portal's terms; DBM and DoIT do not guarantee its accuracy or completeness.
+**© 2026 Sierra Napier. All rights reserved.** This repository represents proprietary analytical architecture and portfolio code; commercial use, reproduction, or redistribution without express written permission is prohibited. You may read it and run it locally to evaluate the work; see [LICENSE](LICENSE).
+
+Data: Maryland open data, subject to the portal's terms; DBM and DoIT do not guarantee its accuracy or completeness.

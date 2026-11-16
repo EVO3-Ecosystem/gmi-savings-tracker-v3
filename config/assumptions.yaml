@@ -281,3 +281,8 @@ fund_hierarchy:
 vendor_alias:
   min_paid: 100000             # review only companies and payees paid at least this much over all years
   stem_tokens: 3               # a likely missed merge: the first this-many words of the normalized name and the ZIP agree
+# v3.2 reconciliation with DBM's documents (src/pipeline/books.py). Set before the comparison was run (Nov 16, 2026).
+books:
+  tolerance_share: 0.0001      # a statewide total reconciles within 0.01% of DBM's figure ...
+  min_exact: 0.99              # ... with at least 99% of programs in both equal to the dollar
+  site_tolerance: 10           # dollars: a yearly total against operatingbudget / vendorpayments.maryland.gov

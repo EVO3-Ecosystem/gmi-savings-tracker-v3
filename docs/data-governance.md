@@ -1,7 +1,7 @@
 # Data governance — GMI Savings Tracker
 
 <!-- gen:stamp -->
-_Generated 2026-11-16T18:55Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 16, 2026._
+_Generated 2026-11-16T19:27Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 16, 2026._
 <!-- /gen:stamp -->
 
 The rules for where the tracker's data comes from, what every column means, who can change what, and how every figure is backed by a source. The schema sections are rebuilt from the sources on every run (`python -m src.pipeline.governance`), so they can't fall out of date. The policy sections are written by hand.
@@ -830,6 +830,46 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | high | DOUBLE | derived | High end of the estimated saving; uses a screening assumption (see Assumptions register) |
 | top_agencies | VARCHAR | derived | Three agencies paying the vendor most in FY2026 |
 
+**mart.d_book_program_differences** (13 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | INTEGER | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| program | VARCHAR | derived | Program code (agency, unit, program) |
+| agency | VARCHAR | derived | Agency name in the open data |
+| program_name | VARCHAR | derived | Program name |
+| book | DOUBLE | derived | The document's comparable amount for the program |
+| data | DOUBLE | derived | The open data's amount |
+| difference | DOUBLE | derived | data - book |
+| reason | VARCHAR | derived | Why it differs: not printed in the book, rounding, or amount differs |
+| source | VARCHAR | derived | Document compared |
+
+**mart.d_book_reconciliation** (15 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | INTEGER | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| stage | VARCHAR | derived | Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance) |
+| basis | VARCHAR | derived | What is summed: all funds (operating + higher education) or one fund type |
+| kind | VARCHAR | derived | reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action) |
+| source_document | VARCHAR | derived | DBM (or DLS) document and column the figure is read from |
+| url | VARCHAR | derived | URL(s) of the document(s) read |
+| book_total_expenditure | DOUBLE | derived | The documents' Total Expenditure for the year, summed over programs |
+| book_reimbursable | DOUBLE | derived | Reimbursable funds in that total (not appropriated in the State budget) |
+| book_non_budgeted | DOUBLE | derived | Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget) |
+| book_comparable | DOUBLE | derived | Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data |
+| bridge_items | DOUBLE | derived | Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk) |
+| book_side | DOUBLE | derived | book_comparable + bridge_items |
+| data_total | DOUBLE | derived | The open data for the same year and basis, from this build |
+| difference | DOUBLE | derived | data_total - book_side |
+| difference_share | DOUBLE | derived | difference / book_side |
+| programs_in_both | DOUBLE | derived | Programs found in both the document and the open data |
+| programs_exact | DOUBLE | derived | Of those, programs equal to the dollar |
+| exact_share | DOUBLE | derived | programs_exact / programs_in_both |
+| programs_differing | BIGINT | derived | Programs differing by more than rounding (mart.d_book_program_differences) |
+| status | VARCHAR | derived | Reconciles, Does not reconcile, or Explained remainder (bridge and walk rows) |
+| checked_on | VARCHAR | derived | Date the documents were read |
+
 **mart.d_challenger_backtest** (6 rows)
 
 | column | type | origin | definition |
@@ -1397,6 +1437,20 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | previous_status | "NULL" | ops | Status in the previous run |
 | changed | BOOLEAN | ops | True when the status changed since the previous run |
 
+**mart.d_site_reconciliation** (31 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| dataset | VARCHAR | source | budget or payments |
+| fiscal_year | INTEGER | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| host | VARCHAR | source | State Open Finance site |
+| url | VARCHAR | source | API URL read |
+| site_total | DOUBLE | source | The site's total for the fiscal year |
+| data_total | DOUBLE | derived | The open data's total for the year from this build |
+| difference | DOUBLE | derived | data_total - site_total |
+| partial_year | BOOLEAN | derived | True for a year still in progress (the site can move ahead of the extract) |
+| checked_on | VARCHAR | source | Date the site was read |
+
 **mart.d_source_issues** (2 rows)
 
 | column | type | origin | definition |
@@ -1866,7 +1920,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | source | VARCHAR | derived | Which model grain was scored (Vendor-agency payments or Agency spending code) |
 | scored | BIGINT | derived | Rows the isolation forest scored in that grain |
 
-**mart.run_checks** (140 rows)
+**mart.run_checks** (143 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -2045,7 +2099,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | payee_names | BIGINT | derived | Distinct payee names grouped into the vendor |
 | focus_area | VARCHAR | derived | One of GMI's six focus areas assigned by reference/focus_area_rules.csv; empty when none |
 
-**ops.check_coverage** (140 rows)
+**ops.check_coverage** (143 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -2053,7 +2107,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | layer | VARCHAR | ops | Database layer the check ran on (raw, core, ref, mart) |
 | tables | VARCHAR | derived | Warehouse tables the check's queries read (recorded by src/pipeline/checks.py), space-separated |
 
-**ops.check_result** (140 rows)
+**ops.check_result** (143 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -2074,7 +2128,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | rows | BIGINT | ops | Row count |
 | detail | VARCHAR | ops | Numbers behind the check result |
 
-**ops.lineage** (400 rows)
+**ops.lineage** (407 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -2348,6 +2402,39 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | value | VARCHAR | reference | Baseline value recorded from the legacy dashboard |
 | source | VARCHAR | reference | Where the reference value is documented |
 
+**ref.book_program_differences** (13 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | VARCHAR | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| program | VARCHAR | derived | Program code (agency, unit, program) |
+| agency | VARCHAR | derived | Agency name in the open data |
+| program_name | VARCHAR | derived | Program name |
+| book | VARCHAR | derived | The document's comparable amount for the program |
+| data | VARCHAR | derived | The open data's amount |
+| difference | VARCHAR | derived | data - book |
+| reason | VARCHAR | derived | Why it differs: not printed in the book, rounding, or amount differs |
+| source | VARCHAR | derived | Document compared |
+
+**ref.book_reconciliation** (15 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | VARCHAR | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| stage | VARCHAR | reference | Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance) |
+| basis | VARCHAR | reference | What is summed: all funds (operating + higher education) or one fund type |
+| source_document | VARCHAR | reference | DBM (or DLS) document and column the figure is read from |
+| url | VARCHAR | reference | URL(s) of the document(s) read |
+| book_total_expenditure | VARCHAR | reference | The documents' Total Expenditure for the year, summed over programs |
+| book_reimbursable | VARCHAR | reference | Reimbursable funds in that total (not appropriated in the State budget) |
+| book_non_budgeted | VARCHAR | reference | Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget) |
+| book_comparable | VARCHAR | reference | Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data |
+| bridge_items | VARCHAR | reference | Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk) |
+| programs_in_both | VARCHAR | reference | Programs found in both the document and the open data |
+| programs_exact | VARCHAR | reference | Of those, programs equal to the dollar |
+| kind | VARCHAR | reference | reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action) |
+| checked_on | VARCHAR | reference | Date the documents were read |
+
 **ref.budget_stage** (11 rows)
 
 | column | type | origin | definition |
@@ -2356,7 +2443,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | stage | VARCHAR | reference | Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks |
 | source | VARCHAR | reference | Where the reference value is documented |
 
-**ref.column_dictionary** (708 rows)
+**ref.column_dictionary** (826 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -2616,6 +2703,17 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | target | VARCHAR | reference | Agency code the rule maps to |
 | note | VARCHAR | reference | Explanation of the rule or row |
 
+**ref.site_totals** (31 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| dataset | VARCHAR | source | budget or payments |
+| fiscal_year | VARCHAR | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| site_total | VARCHAR | source | The site's total for the fiscal year |
+| host | VARCHAR | source | State Open Finance site |
+| url | VARCHAR | source | API URL read |
+| checked_on | VARCHAR | source | Date the site was read |
+
 **ref.source_notes** (8 rows)
 
 | column | type | origin | definition |
@@ -2761,6 +2859,46 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | low | number | derived | Low end of the estimated saving; uses a screening assumption (see Assumptions register) |
 | high | number | derived | High end of the estimated saving; uses a screening assumption (see Assumptions register) |
 | top_agencies | text | derived | Three agencies paying the vendor most in FY2026 |
+
+**d_book_program_differences** (13 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | number | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| program | text | derived | Program code (agency, unit, program) |
+| agency | text | derived | Agency name in the open data |
+| program_name | text | derived | Program name |
+| book | number | derived | The document's comparable amount for the program |
+| data | number | derived | The open data's amount |
+| difference | number | derived | data - book |
+| reason | text | derived | Why it differs: not printed in the book, rounding, or amount differs |
+| source | text | derived | Document compared |
+
+**d_book_reconciliation** (15 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| fiscal_year | number | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| stage | text | derived | Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance) |
+| basis | text | derived | What is summed: all funds (operating + higher education) or one fund type |
+| kind | text | derived | reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action) |
+| source_document | text | derived | DBM (or DLS) document and column the figure is read from |
+| url | text | derived | URL(s) of the document(s) read |
+| book_total_expenditure | number | derived | The documents' Total Expenditure for the year, summed over programs |
+| book_reimbursable | number | derived | Reimbursable funds in that total (not appropriated in the State budget) |
+| book_non_budgeted | number | derived | Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget) |
+| book_comparable | number | derived | Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data |
+| bridge_items | number | derived | Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk) |
+| book_side | number | derived | book_comparable + bridge_items |
+| data_total | number | derived | The open data for the same year and basis, from this build |
+| difference | number | derived | data_total - book_side |
+| difference_share | number | derived | difference / book_side |
+| programs_in_both | number | derived | Programs found in both the document and the open data |
+| programs_exact | number | derived | Of those, programs equal to the dollar |
+| exact_share | number | derived | programs_exact / programs_in_both |
+| programs_differing | number | derived | Programs differing by more than rounding (mart.d_book_program_differences) |
+| status | text | derived | Reconciles, Does not reconcile, or Explained remainder (bridge and walk rows) |
+| checked_on | text | derived | Date the documents were read |
 
 **d_challenger_backtest** (6 rows)
 
@@ -3204,6 +3342,20 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | previous_status | number | ops | Status in the previous run |
 | changed | number | ops | True when the status changed since the previous run |
 
+**d_site_reconciliation** (31 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| dataset | text | source | budget or payments |
+| fiscal_year | number | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
+| host | text | source | State Open Finance site |
+| url | text | source | API URL read |
+| site_total | number | source | The site's total for the fiscal year |
+| data_total | number | derived | The open data's total for the year from this build |
+| difference | number | derived | data_total - site_total |
+| partial_year | number | derived | True for a year still in progress (the site can move ahead of the extract) |
+| checked_on | text | source | Date the site was read |
+
 **d_source_issues** (2 rows)
 
 | column | type | origin | definition |
@@ -3613,7 +3765,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | rule_detector_overlap | text | derived | Rule detector that already covers the row (Opportunity detector, Bid list), or none |
 | status | text | derived | Review state of the flag (Under review, Approved variance, Refer to OLA) |
 
-**run_checks** (140 rows)
+**run_checks** (143 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -3679,7 +3831,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 ## 12. Coverage and drift
 
 <!-- gen:coverage -->
-2,212 of 2,212 columns documented (85 source, 1476 warehouse, 651 dashboard).
+2,319 of 2,319 columns documented (85 source, 1544 warehouse, 690 dashboard).
 <!-- /gen:coverage -->
 
 **Source schema changes since the last snapshot:**

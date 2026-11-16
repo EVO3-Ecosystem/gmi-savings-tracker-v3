@@ -6,6 +6,8 @@ d_all_funds,mart,11,True
 d_area_top,mart,175,True
 d_audit_findings,mart,19,True
 d_bid_list,mart,27,True
+d_book_program_differences,mart,13,True
+d_book_reconciliation,mart,15,True
 d_challenger_backtest,mart,6,True
 d_challenger_total,mart,1,True
 d_deflator,mart,20,True
@@ -34,6 +36,7 @@ d_revenue_backtest,mart,20,True
 d_revenue_model,mart,1,True
 d_savings,mart,18,True
 d_savings_status,mart,12,True
+d_site_reconciliation,mart,31,True
 d_source_issues,mart,2,True
 d_vendor_alias_review,mart,3178,True
 d_vendor_moves,mart,40,True
@@ -65,7 +68,7 @@ measures,mart,14,True
 pipeline_runs,mart,1,True
 results_trend,mart,2367,True
 review_queue,mart,2459,True
-run_checks,mart,140,True
+run_checks,mart,143,True
 sources,mart,6,True
 stage_evidence,mart,4,True
 totals_by_fy,mart,19,True

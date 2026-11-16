@@ -193,3 +193,8 @@ With Phase 3 (ML analytics) and the v2 dashboard merged, what is left, in order:
 ## Phase 5 closure and v3.1, Nov 16, 2026
 
 Closed from "Remaining phases to completion": (1) detector backtest drawn on the Opportunities tab, with persistence and next-year divergence charts; (5) review-queue CSV export (already in place); (6) `mart.d_model_registry` (every model, baseline, held-out score, decision) and `mart.d_drift` (PSI and KS by fiscal year; one major shift, FY2021–FY2022 payments agency mix); (7) PCA scatter (already in place as the agency peer-group chart). Merged onto v3 main with the upstream calibration (src/models/calibration.py; its first real run: 53 of 63 past outcomes, 84.1%, inside the calibrated ranges out of sample), which clears the last check warning (140 of 140 pass). The statewide challenger corridor now comes from the statewide miss (decision in docs/models/challenger.md). v3.1 audit depth: see [strategy-v3.1.md](strategy-v3.1.md). Approved Nov 16, 2026 (D9).
+
+## v3.2 data accuracy, Nov 16, 2026
+
+Every year is reconciled with the State's own documents (src/pipeline/books.py; README "Data"): FY2017-FY2025 program actuals with DBM's Governor's budget books (9 of 9 years; 99.3-100% of programs equal to the dollar), the enacted FY2027 budget with DBM's Fiscal Digest by fund (to the dollar), and 31 yearly totals with the Open Finance sites (to the cent). FY2026 (working budget) is bridged and its $482.4M remainder labelled as budget amendments; it becomes an exact check when the FY2028 books print the FY2026 working appropriation (January 2027). License changed to proprietary, all rights reserved.
+

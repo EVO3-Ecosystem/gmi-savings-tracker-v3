@@ -1,21 +1,29 @@
-MIT License
+GMI Savings Tracker — Proprietary License (All Rights Reserved)
 
-Copyright (c) 2026 Sierra Napier / EVO3 Ecosystem
+© 2026 Sierra Napier. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This repository represents proprietary analytical architecture and portfolio code; commercial use, reproduction, or
+redistribution without express written permission is prohibited.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Ownership. The source code, SQL, models, model cards, documentation, dashboard and figures in this repository
+   (the "Software") are owned by Sierra Napier. No ownership interest is transferred to anyone.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. What you may do without asking. You may view and read the Software, and run it on your own computer, solely to
+   review and evaluate the author's work (for example, as a prospective employer, client or collaborator). The
+   repository's hosting service may let you fork or view it as its terms of service require; that does not grant
+   any further right under this license.
+
+3. What requires express written permission. Any other use, including: commercial use of any kind; reproducing,
+   copying, publishing, distributing, sublicensing or selling the Software or any part of it; preparing derivative
+   works, or incorporating the pipeline architecture, models, detectors, anomaly or calibration methods, or
+   dashboard into another product, service or engagement; and using the Software to deliver work for a third party.
+
+4. Third-party material is not covered by this license. Maryland open data published through the State's portals
+   stays subject to the portal's terms. Open-source dependencies keep their own licenses. Copies of this repository
+   obtained under an earlier license keep the terms they were obtained under.
+
+5. No warranty. The Software is provided "as is", without warranty of any kind, express or implied. The author is
+   not liable for any claim, damages or other liability arising from it or its use. It is an independent prototype,
+   not an official State of Maryland product, and nothing in it is financial, legal or audit advice.
+
+Requests for permission: open an issue on the repository or contact the author through her GitHub profile.

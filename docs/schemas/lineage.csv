@@ -70,6 +70,10 @@ mart.d_bid_list,mart.agency_clusters
 mart.d_bid_list,mart.agency_year
 mart.d_bid_list,mart.payment_area
 mart.d_bid_list,ref.dim_stage
+mart.d_book_program_differences,ref.book_program_differences
+mart.d_book_reconciliation,core.fact_budget_all_funds
+mart.d_book_reconciliation,ref.book_program_differences
+mart.d_book_reconciliation,ref.book_reconciliation
 mart.d_challenger_backtest,core.fact_budget_scope
 mart.d_challenger_backtest,mart.agency_year
 mart.d_challenger_backtest,mart.d_range_coverage
@@ -223,6 +227,9 @@ mart.d_revenue_model,core.cpi_fy
 mart.d_revenue_model,mart.d_range_coverage
 mart.d_savings,mart.payment_area
 mart.d_savings_status,mart.payment_area
+mart.d_site_reconciliation,core.fact_budget
+mart.d_site_reconciliation,core.fact_payment
+mart.d_site_reconciliation,ref.site_totals
 mart.d_source_issues,core.fact_payment_mapped
 mart.d_source_issues,mart.agency_master
 mart.d_source_issues,mart.d_payment_screen

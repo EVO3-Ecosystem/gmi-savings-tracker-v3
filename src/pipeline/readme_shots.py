@@ -32,6 +32,7 @@ ELEMENTS = [  # v3.1: one chart or card each, screenshotted by element id (file,
     ("federal_crosswalk.png", "Budget", "fxChart"),
     ("model_registry.png", "Data & pipeline", "mrCard"),
     ("drift.png", "Data & pipeline", "drChart"),
+    ("reconciliation.png", "Data & pipeline", "rcChart"),
 ]
 
 

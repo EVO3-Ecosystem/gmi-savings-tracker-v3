@@ -131,6 +131,7 @@ def run(con, run_id, manifest):
     phase5_source_issues(con, check, one)
     phase5_audit_depth(con, check, one)
     phase5_registry(con, check, one)
+    phase5_books(con, check, one)
     con = real
     df = pd.DataFrame(out)
     while hasattr(con, "_con"):  # the DuckDB connection itself (build.py may pass a recording wrapper): replacement scans look in this frame
@@ -787,6 +788,33 @@ def phase5_registry(con, check, one):
     major = con.execute("""SELECT measure, from_fy, to_fy, psi FROM mart.d_drift WHERE level = 'Major shift' AND NOT partial_year ORDER BY psi DESC""").fetchall()
     check("mart", "Drift: PSI between every pair of consecutive fiscal years; major shifts reported",
           gaps == 0, f"{gaps} series with a missing year; major shifts: " + ("; ".join(f"{m} FY{a}-FY{b} PSI {p:.2f}" for m, a, b, p in major) or "none"), "warn")
+
+
+def phase5_books(con, check, one):
+    """v3.2 reconciliation (src/pipeline/books.py, sql/mart/59 and 62): every actual year and the enacted FY2027 budget
+    agree with DBM's own documents, and every yearly total agrees with the State's Open Finance sites."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_book_reconciliation'"):
+        return
+    cfg = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["books"]
+    rec = con.execute("""SELECT fiscal_year, basis, difference, difference_share, exact_share, status FROM mart.d_book_reconciliation
+                         WHERE kind = 'reconcile' ORDER BY fiscal_year, basis""").fetchall()
+    bad = [r for r in rec if r[5] != "Reconciles"]
+    years = sorted({r[0] for r in rec})
+    worst = max(rec, key=lambda r: abs(r[2] or 0)) if rec else None
+    check("mart", f"Every actual year and the enacted FY2027 budget reconcile with DBM's budget books and Fiscal Digest (within {cfg['tolerance_share']:.2%}, {cfg['min_exact']:.0%}+ programs exact)",
+          bool(rec) and not bad and years[0] <= 2017,
+          f"{len(rec) - len(bad)} of {len(rec)} comparisons reconcile, FY{years[0]}-FY{years[-1]}" + (f"; largest difference FY{worst[0]} {worst[1]} ${worst[2]:,.0f}" if worst else "")
+          + ("; not reconciling: " + "; ".join(f"FY{r[0]} {r[1]} ${r[2]:,.0f}" for r in bad) if bad else ""))
+    rest = con.execute("SELECT fiscal_year, kind, basis, difference FROM mart.d_book_reconciliation WHERE kind <> 'reconcile' ORDER BY fiscal_year, basis").fetchall()
+    check("mart", "Book bridges reported: FY2026 working budget (budget amendments) and the FY2027 walk from the allowance (legislative action)",
+          len(rest) >= 2, "; ".join(f"FY{y} {k} ({b}): remainder ${d / 1e6:,.1f}M" for y, k, b, d in rest), "warn")
+    site = con.execute("SELECT dataset, fiscal_year, difference, partial_year FROM mart.d_site_reconciliation").fetchall()
+    off = [r for r in site if r[2] is None or (abs(r[2]) > cfg["site_tolerance"] and not r[3])]
+    moved = [r for r in site if r[2] is not None and abs(r[2]) > cfg["site_tolerance"] and r[3]]
+    check("mart", f"Every yearly budget and payments total matches the State's Open Finance sites (within ${cfg['site_tolerance']})",
+          bool(site) and not off, f"{len(site) - len(off) - len(moved)} of {len(site)} years match"
+          + ("; partial year moved since the site was read: " + ", ".join(f"{d} FY{y}" for d, y, _, _ in moved) if moved else "")
+          + ("; not matching: " + ", ".join(f"{d} FY{y} ${x:,.0f}" if x is not None else f"{d} FY{y} missing" for d, y, x, _ in off) if off else ""))
 
 
 def _run_date(run_id):

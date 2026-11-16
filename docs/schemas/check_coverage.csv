@@ -139,3 +139,6 @@ Payee aliases: no government payee in the evidence; review queue is two kinds of
 Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema,mart,core.fact_payment_txn mart.d_field_availability
 Model registry: every model listed with its baseline; no model adopted that does not beat it,mart,mart.d_model_registry
 Drift: PSI between every pair of consecutive fiscal years; major shifts reported,mart,mart.d_drift
+"Every actual year and the enacted FY2027 budget reconcile with DBM's budget books and Fiscal Digest (within 0.01%, 99%+ programs exact)",mart,mart.d_book_reconciliation
+Book bridges reported: FY2026 working budget (budget amendments) and the FY2027 walk from the allowance (legislative action),mart,mart.d_book_reconciliation
+Every yearly budget and payments total matches the State's Open Finance sites (within $10),mart,mart.d_site_reconciliation

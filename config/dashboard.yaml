@@ -72,3 +72,7 @@ d_detector_backtest: d_detector_backtest    # opportunity detectors rerun as of 
 d_model_registry: d_model_registry    # every model: task, method, baseline, training window, score vs baseline, decision, model card
 d_drift: d_drift    # PSI and KS between consecutive fiscal years for payment amounts, payment agency mix and budget agency mix
 d_range_coverage: d_range_coverage    # forecast range coverage, raw and calibrated, in sample and out of sample, with Wilson intervals
+# ---- v3.2 reconciliation with DBM's documents (src/pipeline/books.py)
+d_book_reconciliation: d_book_reconciliation    # every year against DBM's budget books and the FY2027 Fiscal Digest; FY2026 bridge and FY2027 walk
+d_site_reconciliation: d_site_reconciliation    # every yearly budget and payments total against the State's Open Finance sites
+d_book_program_differences: d_book_program_differences    # every program that differs from DBM's figure, with the reason

@@ -345,6 +345,36 @@ mart.d_bid_list,agencies,DOUBLE,27,Agencies paying the vendor (or with payments 
 mart.d_bid_list,low,DOUBLE,27,Low end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_bid_list,high,DOUBLE,27,High end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_bid_list,top_agencies,VARCHAR,27,Three agencies paying the vendor most in FY2026,derived
+mart.d_book_program_differences,fiscal_year,INTEGER,13,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_book_program_differences,program,VARCHAR,13,"Program code (agency, unit, program)",derived
+mart.d_book_program_differences,agency,VARCHAR,13,Agency name in the open data,derived
+mart.d_book_program_differences,program_name,VARCHAR,13,Program name,derived
+mart.d_book_program_differences,book,DOUBLE,13,The document's comparable amount for the program,derived
+mart.d_book_program_differences,data,DOUBLE,13,The open data's amount,derived
+mart.d_book_program_differences,difference,DOUBLE,13,data - book,derived
+mart.d_book_program_differences,reason,VARCHAR,13,"Why it differs: not printed in the book, rounding, or amount differs",derived
+mart.d_book_program_differences,source,VARCHAR,13,Document compared,derived
+mart.d_book_reconciliation,fiscal_year,INTEGER,15,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_book_reconciliation,stage,VARCHAR,15,"Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance)",derived
+mart.d_book_reconciliation,basis,VARCHAR,15,What is summed: all funds (operating + higher education) or one fund type,derived
+mart.d_book_reconciliation,kind,VARCHAR,15,"reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action)",derived
+mart.d_book_reconciliation,source_document,VARCHAR,15,DBM (or DLS) document and column the figure is read from,derived
+mart.d_book_reconciliation,url,VARCHAR,15,URL(s) of the document(s) read,derived
+mart.d_book_reconciliation,book_total_expenditure,DOUBLE,15,"The documents' Total Expenditure for the year, summed over programs",derived
+mart.d_book_reconciliation,book_reimbursable,DOUBLE,15,Reimbursable funds in that total (not appropriated in the State budget),derived
+mart.d_book_reconciliation,book_non_budgeted,DOUBLE,15,"Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget)",derived
+mart.d_book_reconciliation,book_comparable,DOUBLE,15,Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data,derived
+mart.d_book_reconciliation,bridge_items,DOUBLE,15,"Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk)",derived
+mart.d_book_reconciliation,book_side,DOUBLE,15,book_comparable + bridge_items,derived
+mart.d_book_reconciliation,data_total,DOUBLE,15,"The open data for the same year and basis, from this build",derived
+mart.d_book_reconciliation,difference,DOUBLE,15,data_total - book_side,derived
+mart.d_book_reconciliation,difference_share,DOUBLE,15,difference / book_side,derived
+mart.d_book_reconciliation,programs_in_both,DOUBLE,15,Programs found in both the document and the open data,derived
+mart.d_book_reconciliation,programs_exact,DOUBLE,15,"Of those, programs equal to the dollar",derived
+mart.d_book_reconciliation,exact_share,DOUBLE,15,programs_exact / programs_in_both,derived
+mart.d_book_reconciliation,programs_differing,BIGINT,15,Programs differing by more than rounding (mart.d_book_program_differences),derived
+mart.d_book_reconciliation,status,VARCHAR,15,"Reconciles, Does not reconcile, or Explained remainder (bridge and walk rows)",derived
+mart.d_book_reconciliation,checked_on,VARCHAR,15,Date the documents were read,derived
 mart.d_challenger_backtest,origin_fy,BIGINT,6,Rolling-validation origin: models trained through this fiscal year predicted the next,derived
 mart.d_challenger_backtest,model,VARCHAR,6,Forecasting model that produced the row,derived
 mart.d_challenger_backtest,series_scored,BIGINT,6,Agency x spending-code series scored at that origin,derived
@@ -732,6 +762,15 @@ mart.d_savings_status,after,DOUBLE,12,Matching payments in FY2026,derived
 mart.d_savings_status,status,VARCHAR,12,"Whether the reported saving is seen in payments (Seen, Partly seen, Not seen yet, Payments fell, Payments did not fall)",derived
 mart.d_savings_status,previous_status,"""NULL""",12,Status in the previous run,ops
 mart.d_savings_status,changed,BOOLEAN,12,True when the status changed since the previous run,ops
+mart.d_site_reconciliation,dataset,VARCHAR,31,budget or payments,source
+mart.d_site_reconciliation,fiscal_year,INTEGER,31,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_site_reconciliation,host,VARCHAR,31,State Open Finance site,source
+mart.d_site_reconciliation,url,VARCHAR,31,API URL read,source
+mart.d_site_reconciliation,site_total,DOUBLE,31,The site's total for the fiscal year,source
+mart.d_site_reconciliation,data_total,DOUBLE,31,The open data's total for the year from this build,derived
+mart.d_site_reconciliation,difference,DOUBLE,31,data_total - site_total,derived
+mart.d_site_reconciliation,partial_year,BOOLEAN,31,True for a year still in progress (the site can move ahead of the extract),derived
+mart.d_site_reconciliation,checked_on,VARCHAR,31,Date the site was read,source
 mart.d_source_issues,issue_id,VARCHAR,2,Source issue identifier: 'SRC-<fiscal year>-<agency code>',derived
 mart.d_source_issues,issue,VARCHAR,2,Short description of the data-publication issue,derived
 mart.d_source_issues,fiscal_year,INTEGER,2,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
@@ -1021,11 +1060,11 @@ mart.review_queue,rule_detector_overlap,VARCHAR,2459,"Rule detector that already
 mart.review_queue,status,VARCHAR,2459,"Review state of the flag (Under review, Approved variance, Refer to OLA)",derived
 mart.review_queue_scored,source,VARCHAR,2,Which model grain was scored (Vendor-agency payments or Agency spending code),derived
 mart.review_queue_scored,scored,BIGINT,2,Rows the isolation forest scored in that grain,derived
-mart.run_checks,run_id,VARCHAR,140,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-mart.run_checks,stage,VARCHAR,140,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-mart.run_checks,check,VARCHAR,140,Check description,ops
-mart.run_checks,status,VARCHAR,140,"pass, warn or fail",ops
-mart.run_checks,detail,VARCHAR,140,Numbers behind the check result,ops
+mart.run_checks,run_id,VARCHAR,143,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+mart.run_checks,stage,VARCHAR,143,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+mart.run_checks,check,VARCHAR,143,Check description,ops
+mart.run_checks,status,VARCHAR,143,"pass, warn or fail",ops
+mart.run_checks,detail,VARCHAR,143,Numbers behind the check result,ops
 mart.sources,source,VARCHAR,6,Short name of the source dataset,derived
 mart.sources,dataset_id,VARCHAR,6,Portal four-by-four identifier,ops
 mart.sources,title,VARCHAR,6,Dataset title used on the dashboard,derived
@@ -1135,22 +1174,22 @@ mart.vendor_type,payee_type,VARCHAR,56789,"Payee type from reference/payee_type_
 mart.vendor_type,type_basis,VARCHAR,56789,"How the payee type was assigned: name rule, grants data nonprofit = Y, or default",derived
 mart.vendor_type,payee_names,BIGINT,56789,Distinct payee names grouped into the vendor,derived
 mart.vendor_type,focus_area,VARCHAR,56789,One of GMI's six focus areas assigned by reference/focus_area_rules.csv; empty when none,derived
-ops.check_coverage,check,VARCHAR,140,Check description,ops
-ops.check_coverage,layer,VARCHAR,140,"Database layer the check ran on (raw, core, ref, mart)",ops
-ops.check_coverage,tables,VARCHAR,140,"Warehouse tables the check's queries read (recorded by src/pipeline/checks.py), space-separated",derived
-ops.check_result,run_id,VARCHAR,140,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-ops.check_result,layer,VARCHAR,140,"Database layer the check ran on (raw, core, ref, mart)",ops
-ops.check_result,check,VARCHAR,140,Check description,ops
-ops.check_result,severity,VARCHAR,140,Stop (blocks the run) or Warn,ops
-ops.check_result,result,VARCHAR,140,"pass, warn or fail",ops
-ops.check_result,detail,VARCHAR,140,Numbers behind the check result,ops
+ops.check_coverage,check,VARCHAR,143,Check description,ops
+ops.check_coverage,layer,VARCHAR,143,"Database layer the check ran on (raw, core, ref, mart)",ops
+ops.check_coverage,tables,VARCHAR,143,"Warehouse tables the check's queries read (recorded by src/pipeline/checks.py), space-separated",derived
+ops.check_result,run_id,VARCHAR,143,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+ops.check_result,layer,VARCHAR,143,"Database layer the check ran on (raw, core, ref, mart)",ops
+ops.check_result,check,VARCHAR,143,Check description,ops
+ops.check_result,severity,VARCHAR,143,Stop (blocks the run) or Warn,ops
+ops.check_result,result,VARCHAR,143,"pass, warn or fail",ops
+ops.check_result,detail,VARCHAR,143,Numbers behind the check result,ops
 ops.enrichment,run_id,VARCHAR,7,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
 ops.enrichment,source,VARCHAR,7,Source name or URL the data came from,ops
 ops.enrichment,status,VARCHAR,7,Run or source status,ops
 ops.enrichment,rows,BIGINT,7,Row count,ops
 ops.enrichment,detail,VARCHAR,7,Numbers behind the check result,ops
-ops.lineage,table_name,VARCHAR,400,Warehouse table (schema.name) created by the build,derived
-ops.lineage,depends_on,VARCHAR,400,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
+ops.lineage,table_name,VARCHAR,407,Warehouse table (schema.name) created by the build,derived
+ops.lineage,depends_on,VARCHAR,407,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
 ops.payee_name_seen,payee_name,VARCHAR,62022,"Payee name exactly as paid (ref.map_payee_vendor.payee), one row per name ever seen by a passing build",ops
 ops.payee_name_seen,first_seen_run_id,VARCHAR,62022,Extract run of the first build that passed its stop checks and saw this payee name,ops
 ops.payee_name_seen,first_seen_date,VARCHAR,62022,UTC date of that extract run (YYYY-MM-DD),ops
@@ -1323,13 +1362,36 @@ ref.audit_findings,note,VARCHAR,2,Explanation of the rule or row,reference
 ref.baseline_quality,measure,VARCHAR,7,Name of the quality measure,reference
 ref.baseline_quality,value,VARCHAR,7,Baseline value recorded from the legacy dashboard,reference
 ref.baseline_quality,source,VARCHAR,7,Where the reference value is documented,reference
+ref.book_program_differences,fiscal_year,VARCHAR,13,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.book_program_differences,program,VARCHAR,13,"Program code (agency, unit, program)",derived
+ref.book_program_differences,agency,VARCHAR,13,Agency name in the open data,derived
+ref.book_program_differences,program_name,VARCHAR,13,Program name,derived
+ref.book_program_differences,book,VARCHAR,13,The document's comparable amount for the program,derived
+ref.book_program_differences,data,VARCHAR,13,The open data's amount,derived
+ref.book_program_differences,difference,VARCHAR,13,data - book,derived
+ref.book_program_differences,reason,VARCHAR,13,"Why it differs: not printed in the book, rounding, or amount differs",derived
+ref.book_program_differences,source,VARCHAR,13,Document compared,derived
+ref.book_reconciliation,fiscal_year,VARCHAR,15,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.book_reconciliation,stage,VARCHAR,15,"Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance)",reference
+ref.book_reconciliation,basis,VARCHAR,15,What is summed: all funds (operating + higher education) or one fund type,reference
+ref.book_reconciliation,source_document,VARCHAR,15,DBM (or DLS) document and column the figure is read from,reference
+ref.book_reconciliation,url,VARCHAR,15,URL(s) of the document(s) read,reference
+ref.book_reconciliation,book_total_expenditure,VARCHAR,15,"The documents' Total Expenditure for the year, summed over programs",reference
+ref.book_reconciliation,book_reimbursable,VARCHAR,15,Reimbursable funds in that total (not appropriated in the State budget),reference
+ref.book_reconciliation,book_non_budgeted,VARCHAR,15,"Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget)",reference
+ref.book_reconciliation,book_comparable,VARCHAR,15,Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data,reference
+ref.book_reconciliation,bridge_items,VARCHAR,15,"Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk)",reference
+ref.book_reconciliation,programs_in_both,VARCHAR,15,Programs found in both the document and the open data,reference
+ref.book_reconciliation,programs_exact,VARCHAR,15,"Of those, programs equal to the dollar",reference
+ref.book_reconciliation,kind,VARCHAR,15,"reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action)",reference
+ref.book_reconciliation,checked_on,VARCHAR,15,Date the documents were read,reference
 ref.budget_stage,fiscal_year,VARCHAR,11,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 ref.budget_stage,stage,VARCHAR,11,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 ref.budget_stage,source,VARCHAR,11,Where the reference value is documented,reference
-ref.column_dictionary,column,VARCHAR,708,Column name being defined,reference
-ref.column_dictionary,applies_to,VARCHAR,708,"Tables the definition applies to (comma-separated, wildcards allowed); blank for all",reference
-ref.column_dictionary,origin,VARCHAR,708,"Where the column comes from: portal, source, reference, derived or ops",reference
-ref.column_dictionary,definition,VARCHAR,708,What the column means,reference
+ref.column_dictionary,column,VARCHAR,826,Column name being defined,reference
+ref.column_dictionary,applies_to,VARCHAR,826,"Tables the definition applies to (comma-separated, wildcards allowed); blank for all",reference
+ref.column_dictionary,origin,VARCHAR,826,"Where the column comes from: portal, source, reference, derived or ops",reference
+ref.column_dictionary,definition,VARCHAR,826,What the column means,reference
 ref.controllable_rule,rule,VARCHAR,17,Name of the mapping or scope rule,reference
 ref.controllable_rule,value,VARCHAR,17,The code or pattern the rule matches,reference
 ref.controllable_rule,note,VARCHAR,17,Explanation of the rule or row,reference
@@ -1451,6 +1513,12 @@ ref.payment_agency_rule,rule,VARCHAR,21,Name of the mapping or scope rule,refere
 ref.payment_agency_rule,payment_name_pattern,VARCHAR,21,Regular expression matching payment agency names,reference
 ref.payment_agency_rule,target,VARCHAR,21,Agency code the rule maps to,reference
 ref.payment_agency_rule,note,VARCHAR,21,Explanation of the rule or row,reference
+ref.site_totals,dataset,VARCHAR,31,budget or payments,source
+ref.site_totals,fiscal_year,VARCHAR,31,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.site_totals,site_total,VARCHAR,31,The site's total for the fiscal year,source
+ref.site_totals,host,VARCHAR,31,State Open Finance site,source
+ref.site_totals,url,VARCHAR,31,API URL read,source
+ref.site_totals,checked_on,VARCHAR,31,Date the site was read,source
 ref.source_notes,dataset,VARCHAR,8,"Short dataset key, as in config/datasets.yaml",reference
 ref.source_notes,note,VARCHAR,8,A reviewed note about where the source differs from what its portal page says,reference
 ref.source_notes,checked_on,VARCHAR,8,Date the note was checked,reference

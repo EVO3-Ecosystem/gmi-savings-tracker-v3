@@ -728,6 +728,21 @@
       <p><b>Master lists.</b> Payments carry an agency code from FY2020; earlier names are mapped by that code, then by hand for renamed agencies, and capital-budget accounts are grouped as capital. MDOT's modal administrations roll up to the Department of Transportation. Payee names are grouped when they differ only by suffix or spacing, and known company families are merged.</p>
       <p><b>Built by</b> Sierra Napier with Python. The pipeline runs monthly, checks itself and the dashboard before publishing, and can also be deployed on AWS or Google Cloud.</p>
     </div>
+    <div class="card" id="rcCard">
+      <div class="hd"><h2 id="rcH">Reconciled with the State's own documents, every year</h2></div>
+      <p class="note" id="rcNote" data-source="d_book_reconciliation d_site_reconciliation">—</p>
+      <p class="insight" id="rcIns"></p>
+      <div class="legend" id="rcLegend"></div>
+      <div class="chart" id="rcChart" data-source="d_book_reconciliation d_site_reconciliation" style="min-height:170px" role="img" aria-label="Which fiscal years reconcile with each source"></div>
+      <div class="tbl"><table data-source="d_book_reconciliation" data-row-key="fiscal_year">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="stage">Stage</th><th data-field="basis" title="All funds = operating budget plus public higher education, less reimbursable and non-budgeted funds">Basis</th><th data-field="source_document">DBM document</th><th class="n" data-field="book_side">DBM figure</th><th class="n" data-field="data_total">Open data</th><th class="n" data-field="difference">Difference</th><th class="n" data-field="exact_share">Programs equal to the dollar</th><th data-field="status">Status</th></tr></thead>
+        <tbody id="rcBody"></tbody></table></div>
+      <h3 style="margin-top:var(--cds-gap-md)">Every program that differs</h3>
+      <div class="tbl"><table data-source="d_book_program_differences" data-row-key="program">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="program">Program</th><th data-field="program_name">Name</th><th class="n" data-field="book">DBM</th><th class="n" data-field="data">Open data</th><th class="n" data-field="difference">Difference</th><th data-field="reason">Reason</th></tr></thead>
+        <tbody id="rdBody"></tbody></table></div>
+      <p class="stagenote">The books print each program's total expenditure; reimbursable funds (paid by one agency to another) and non-budgeted funds (MDTA, MES, the Stadium Authority, State Retirement investments) are taken out because the State budget does not appropriate them and the open data does not carry them. Budget books: <a href="https://dbm.maryland.gov/budget/Pages/operbudget/historical-operbud-docs.aspx" target="_blank" rel="noopener">dbm.maryland.gov archive</a>. Thresholds were set before the comparison was run (config/assumptions.yaml, books).</p>
+    </div>
     <div class="card" id="mrCard">
       <div class="hd"><h2 id="mrH">Model registry: every model against its baseline</h2></div>
       <p class="note" id="mrNote" data-source="d_model_registry">—</p>
@@ -1679,6 +1694,31 @@ function drawDetectorBacktest(){ const d = ok('d_detector_backtest'); if (!d) { 
         s2.append('text').attr('x', v >= 0 ? xx(v) + 5 : xx(v) - 5).attr('y', yy + 7).attr('dy', '.32em').attr('text-anchor', v >= 0 ? 'start' : 'end').attr('font-size', 11).attr('fill', FG2).text(d3.format('+.1%')(v)); }); }); }
   table('dbBody', d.slice().sort((a, b) => a.detector.localeCompare(b.detector) || a.as_of_fy - b.as_of_fy || a.cohort.localeCompare(b.cohort)), [{key:'detector'},{key:'as_of_fy',n:1,fmt:v => 'FY' + v},{key:'cohort'},{key:'units',n:1,fmt:N},
     {key:'flagged_next_share',n:1,fmt:PCT},{key:'median_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)},{key:'pooled_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)}]); }
+const USD = v => v == null ? '—' : (v < 0 ? '−$' : '$') + d3.format(',.0f')(Math.abs(v));
+function drawReconciliation(){ const r = ok('d_book_reconciliation'), st = ok('d_site_reconciliation'); if (!r || !st) { setText('rcNote', 'The reconciliation is not in this build.'); return; }
+  const rec = r.filter(x => x.kind === 'reconcile'), good = rec.filter(x => x.status === 'Reconciles'), sOk = st.filter(x => Math.abs(x.difference) <= 10);
+  const yrs = d3.extent(rec, x => x.fiscal_year);
+  setText('rcNote', `Three independent checks. The open data's yearly totals against the State's Open Finance sites (budget FY2017–FY2027, payments FY2008–FY2027), to the cent. Every actual year's programs against DBM's printed actuals in the Governor's budget books two years later. The enacted FY2027 budget against DBM's Fiscal Digest, fund by fund. A year reconciles when the statewide total is within 0.01% and 99% or more of programs are equal to the dollar.`);
+  const wk = r.filter(x => x.kind !== 'reconcile');
+  setText('rcIns', `${N(good.length)} of ${N(rec.length)} comparisons with DBM's documents reconcile (FY${yrs[0]}–FY${yrs[1]}), and ${N(sOk.length)} of ${N(st.length)} yearly site totals match to the cent. ` +
+    wk.map(x => x.kind === 'bridge' ? `FY${x.fiscal_year}'s working budget is ${M(x.difference)} above its appropriation plus enacted deficiencies: budget amendments, which DBM prints in the FY${x.fiscal_year + 2} books.` :
+      x.basis === 'General funds' ? `The FY${x.fiscal_year} general fund walk (allowance, both supplementals, and the Legislature's cuts and additions as DLS reports them, rounded to $0.1M) lands within ${M(Math.abs(x.difference))} of the enacted figure.` :
+      `FY${x.fiscal_year}: the enacted budget is ${M(-x.difference)} below the allowance plus supplementals, the Legislature's net reductions.`).join(' '));
+  legend('rcLegend', [['Reconciles / matches', 'var(--color-ok)'], ['Bridged: remainder explained', 'var(--color-warn)'], ['Not checked (no source for that year)', 'var(--color-border-line)']]);
+  const box = document.getElementById('rcChart'), y0 = 2008, y1 = 2027, rowsDef = [['Payments site', y => st.find(x => x.dataset === 'payments' && x.fiscal_year === y)], ['Budget site', y => st.find(x => x.dataset === 'budget' && x.fiscal_year === y)],
+    ['DBM budget books', y => r.find(x => x.fiscal_year === y && x.kind !== 'walk' && /All funds/.test(x.basis))], ['Fiscal Digest', y => r.find(x => x.fiscal_year === y && x.kind === 'reconcile' && /General funds/.test(x.basis))]];
+  const narrow = (box.clientWidth || 700) < 560, lw = narrow ? 78 : 130, cw = Math.max(10, ((box.clientWidth || 700) - lw - 8) / (y1 - y0 + 1)), H = rowsDef.length * 30 + 24, {svg} = svgIn(box, H);
+  rowsDef.forEach(([lab, get], i) => { svg.append('text').attr('x', lw - 8).attr('y', i * 30 + 16).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'currentColor').text(narrow ? lab.replace('DBM budget ', '').replace(' site', '') : lab);
+    d3.range(y0, y1 + 1).forEach((y, j) => { const x = get(y); const okv = x && (x.status ? x.status === 'Reconciles' : Math.abs(x.difference) <= 10), br = x && x.status === 'Explained remainder';
+      svg.append('rect').attr('x', lw + j * cw + 1).attr('y', i * 30 + 4).attr('width', cw - 2).attr('height', 24).attr('rx', 3)
+        .attr('fill', okv ? 'var(--color-ok)' : br ? 'var(--color-warn)' : x ? 'var(--color-bad)' : 'var(--color-border-line)').attr('opacity', x ? .85 : .5)
+        .append('title').text(`${lab}, FY${y}: ` + (!x ? 'no source for this year' : x.status ? `${x.status}; difference ${M(x.difference)}` : `difference $${d3.format(',.2f')(x.difference)}`)); }); });
+  d3.range(y0, y1 + 1).forEach((y, j) => { if (narrow && y % 4) return; svg.append('text').attr('x', lw + j * cw + cw / 2).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 10).attr('fill', FG2).text("'" + String(y).slice(2)); });
+  table('rcBody', r, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'stage'},{key:'basis',fmt:v => String(v).replace('All funds, operating + higher education', 'All funds')},{key:'source_document'},{key:'book_side',n:1,fmt:M},{key:'data_total',n:1,fmt:M},
+    {key:'difference',n:1,fmt:v => Math.abs(v) < 1e5 ? USD(v) : M(v)},{key:'exact_share',n:1,fmt:(v, x) => v == null ? '—' : `${PCT(v)} (${N(x.programs_exact)} of ${N(x.programs_in_both)})`},{key:'status'}]);
+  const d = ok('d_book_program_differences') || [];
+  table('rdBody', d, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'program'},{key:'program_name',fmt:v => v || ''},{key:'book',n:1,fmt:USD},{key:'data',n:1,fmt:USD},
+    {key:'difference',n:1,fmt:USD},{key:'reason'}]); }
 function drawRegistry(){ const r = ok('d_model_registry'); if (!r) { setText('mrNote', 'The model registry is not in this build.'); return; }
   const ad = r.filter(x => /^Adopted|^Shown/.test(x.decision)).length;
   setText('mrNote', `${N(r.length)} models. Each is judged on held-out data against a simple baseline it has to beat before anything it produces is shown; ${N(ad)} are in use, the payee classifier is kept for review because it does not beat the name rules, and the rest produce leads only, never savings. Every number is read from the model's own evaluation in this build. For MASE lower is better; for F1, silhouette and persistence higher is better.`);
@@ -2300,7 +2340,7 @@ dash.calc('c_run',{inputs:['runs','checks'],title:'Pipeline status',description:
       pill:n('fail')?`Data checks: ${n('fail')} failed`:`Data checks passed: ${n('pass')} of ${checks.length}`,state:n('fail')?'fail':(n('warn')?'warn':'pass')}];}});
 function drawReport(){ const r = ok('reports'), a = document.getElementById('repLink'); if (!r || !r.length) { a.hidden = true; return; } const l = r.slice().sort((x,y) => d3.descending(x.run_date, y.run_date))[0]; a.href = l.url; a.textContent = 'Download PDF report (' + l.run_date + ')'; a.hidden = false; }
 function fillMarks(){ const d = dash.data('c_run'); document.querySelectorAll('[data-source="c_run"][data-field]').forEach(el => { el.textContent = (d.status === 'ok' && d.data[0]) ? d.data[0][el.dataset.field] : '—'; }); document.getElementById('runPill').className = 'st ' + (d.status === 'ok' && d.data[0] ? d.data[0].state : ''); }
-const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
+const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawReconciliation(); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));
