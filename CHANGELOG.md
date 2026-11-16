@@ -14,6 +14,10 @@ Added
 
 Changed
 - License: proprietary, all rights reserved (was MIT). Copies obtained under the earlier license keep those terms.
+- Version 3.2.0 in `pyproject.toml` and `CITATION.cff`; README badges, pipeline diagram and next steps updated.
+
+Fixed
+- The site copies figure subfolders, so the about page's README figures resolve.
 
 ## [3.1.0] - 2026-11-16
 

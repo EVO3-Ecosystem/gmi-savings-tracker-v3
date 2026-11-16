@@ -9,7 +9,7 @@
 <!-- facts:badges -->
 ![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--13-0969da)
 <!-- /facts:badges -->
-![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C212%20of%202%2C212-2da44e)
+![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C319%20of%202%2C319-2da44e) ![Version](https://img.shields.io/badge/version-3.2.0-0969da)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
 [![License: All rights reserved](https://img.shields.io/badge/license-all%20rights%20reserved-6e7781)](LICENSE)
 
@@ -144,20 +144,21 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/readme/pipeline_dark.png">
-  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 140 stop checks, 59 marts and 14 model modules, the model registry, 74 published files, the Pages site, a data release and a read-only MCP server; State sites and DBM books verify the database">
+  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 143 stop checks, 62 SQL marts and 15 model modules, the model registry, 75 published tables, the Pages site, a data release and a read-only MCP server; DBM's budget books, the Fiscal Digest and the Open Finance sites reconcile every year">
 </picture>
 
 | Step | Module | Result |
 |---|---|---|
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
 | Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
+| Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
 | Rules | `reference/` (<!-- n:reference_files -->27<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
 | Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (14 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: <!-- n:documented_columns -->2,319<!-- /n --> of 2,212 columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: every one of the <!-- n:documented_columns -->2,319<!-- /n --> columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## AI layer
 
@@ -207,9 +208,9 @@ Secrets: `MD_SODA_APP_TOKEN` (optional for SODA 2.1, required for SODA3), `HF_TO
 
 ```
 config/        datasets, dashboard files, assumptions
-reference/     reviewed rules, decisions, audit register, field availability (CSV)
+reference/     reviewed rules, decisions, audit register, field availability, DBM and site reconciliation figures (CSV)
 sql/mart/      one SQL file per mart
-src/pipeline/  extract, enrich, build, checks, marts, txn, export, site, publish, reconcile, parity, governance
+src/pipeline/  extract, enrich, build, checks, marts, txn, books, export, site, publish, reconcile, parity, governance
 src/models/    forecasts, challenger, revenue, detectors, backtest, savings, payment screen, classifier, grant groups, anomaly, registry
 src/mcp/       read-only MCP server
 src/briefs/    briefs and their guardrail
@@ -250,6 +251,8 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 
 - Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
 - Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
+- January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
+- Merge the open pull requests in order: #5 (walkthrough report), then #6 (program screen) after its audit findings are folded into `reference/audit_findings.csv`.
 - Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
 
 History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md).
