@@ -56,6 +56,8 @@
 .gs .insight{font-size:var(--cds-font-size-body);line-height:1.45;margin:0 0 var(--cds-gap-sm);max-width:92ch}
 .gs ul.ins{margin:0;padding-left:1.1rem;display:grid;gap:6px;font-size:var(--cds-font-size-body);line-height:1.45}
 .gs .chart{position:relative;min-height:280px}
+.gs .filters .lab{max-width:100%;min-width:0}.gs .filters select{max-width:100%;min-width:0}#fxL{width:min(100%,44rem);text-overflow:ellipsis}.gs #hhiBadges .st{white-space:normal;max-width:100%;overflow-wrap:anywhere}
+.gs .meter{height:14px;border-radius:7px;background:var(--color-border-line);overflow:hidden;max-width:520px;margin:0 0 var(--cds-gap-md)}.gs .meter>i{display:block;height:100%;background:var(--color-ok)}
 .gs .sm{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:var(--cds-gap-md)}.gs .sm .cell{min-width:0;position:relative;border-radius:var(--cds-radius);padding:var(--cds-pad-xs)}.gs .sm .cell:hover,.gs .sm .cell:focus-visible{background:var(--color-bg);outline:none}.gs .sm .cell b{display:block;font-size:var(--cds-font-size-caption);font-weight:var(--cds-font-weight-medium)}.gs .sm .cell span{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);font-variant-numeric:tabular-nums}.gs .sm .plot{position:relative;height:96px}.gs .insight{font-size:var(--cds-font-size-body);line-height:1.45;margin:0 0 var(--cds-gap-sm)}.gs details.card>summary{cursor:pointer;list-style:none}.gs details.card>summary::before{content:'▸ ';color:var(--color-fg-muted)}.gs details.card[open]>summary::before{content:'▾ '}
 .gs .tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:5}
 .gs .tip .t{color:var(--cds-text-secondary)}
@@ -345,6 +347,20 @@
         <tbody id="anBody"></tbody></table></div>
       <p class="stagenote">Review status is saved in this browser only — the published page has no backend, so nothing is sent anywhere. The year filter does not apply here; the agency filter does.</p>
     </div>
+    <div class="card" id="dbCard">
+      <div class="hd"><h2 id="dbH">Do the detectors find something real? Backtest, FY2022–FY2024</h2></div>
+      <p class="note" id="dbNote" data-source="d_detector_backtest">—</p>
+      <p class="insight" id="dbIns"></p>
+      <div class="legend" id="dbLegend"></div>
+      <div class="chart" id="dbChart" data-source="d_detector_backtest" style="min-height:300px" role="img" aria-label="Share of units flagged again the next year, flagged versus not flagged, by detector and year"></div>
+      <h3 id="dvH" style="margin-top:var(--cds-gap-md)">What flagged spending did the next year</h3>
+      <p class="note" id="dvNote">Median change in each unit's spending from the as-of year to the next, averaged over the three backtest years. Flagged units against like-sized units that were not flagged.</p>
+      <div class="chart" id="dvChart" data-source="d_detector_backtest" style="min-height:200px" role="img" aria-label="Median next-year spending change, flagged versus not flagged, by detector"></div>
+      <div class="tbl"><table data-source="d_detector_backtest" data-row-key="detector">
+        <thead><tr><th data-field="detector">Detector</th><th class="n" data-field="as_of_fy">As of</th><th data-field="cohort">Cohort</th><th class="n" data-field="units">Units</th><th class="n" data-field="flagged_next_share">Flagged again next year</th><th class="n" data-field="median_change">Median change next year</th><th class="n" data-field="pooled_change">Pooled change</th></tr></thead>
+        <tbody id="dbBody"></tbody></table></div>
+      <p class="stagenote">Each detector was rerun on the data up to the as-of year only, with today's thresholds, then followed one year. Not flagged means like-sized units that passed the same size filters. Descriptive: a fall the next year is not evidence of a saving.</p>
+    </div>
     <div class="card" id="auCard">
       <div class="hd"><h2 id="auH">Audit and recoupment lifecycle <span class="tag2">(amounts reported, not savings)</span></h2></div>
       <p class="note" id="auNote" data-source="d_audit_findings">—</p>
@@ -609,10 +625,13 @@
           <tbody id="objBody"></tbody></table></div></div>
     </div>
     <p class="stagenote" id="budPair"></p>
+
     <div class="card" id="fhCard">
       <div class="hd"><h2 id="fhH">Who pays for each program: shifts to the General Fund</h2></div>
       <p class="note" id="fhNote" data-source="d_fund_shift">—</p>
       <p class="insight" id="fhIns"></p>
+      <div class="legend" id="fhLegend"></div>
+      <div class="chart" id="fhChart" data-source="d_fund_shift" style="min-height:200px" role="img" aria-label="General Fund share two years before and in the flagged year, largest programs"></div>
       <div class="tbl"><table data-source="d_fund_shift" data-row-key="program_code">
         <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="agency">Agency</th><th data-field="program_name">Program</th><th class="n" data-field="program_budget">Budget, all funds</th><th class="n" data-field="general_share_2y_before">General Fund share 2 years before</th><th class="n" data-field="general_share">General Fund share</th><th class="n" data-field="general_share_change">Change</th><th class="n" data-field="federal_share">Federal share (before → now)</th></tr></thead>
         <tbody id="fhBody"></tbody></table></div>
@@ -621,6 +640,8 @@
       <div class="hd"><h2 id="fxH">Federal programs: the State budget next to federal obligations</h2></div>
       <p class="note" id="fxNote" data-source="d_federal_crosswalk">—</p>
       <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Federal program <select id="fxL" aria-label="Federal program (Assistance Listing)"></select></span></div>
+      <div class="legend" id="fxLegend"></div>
+      <div class="chart" id="fxChart" data-source="d_federal_crosswalk" style="min-height:240px" role="img" aria-label="State budget federal funds and federal obligations by year for the selected program"></div>
       <div class="tbl"><table data-source="d_federal_crosswalk" data-row-key="fiscal_year">
         <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="stage">State budget stage</th><th class="n" data-field="state_federal_budget">State budget, federal funds (State FY, Jul–Jun)</th><th class="n" data-field="federal_obligated">Federal obligations to Maryland governments (federal FY, Oct–Sep)</th><th class="n" data-field="agencies">State agencies</th></tr></thead>
         <tbody id="fxBody"></tbody></table></div>
@@ -705,9 +726,24 @@
       <p><b>Master lists.</b> Payments carry an agency code from FY2020; earlier names are mapped by that code, then by hand for renamed agencies, and capital-budget accounts are grouped as capital. MDOT's modal administrations roll up to the Department of Transportation. Payee names are grouped when they differ only by suffix or spacing, and known company families are merged.</p>
       <p><b>Built by</b> Sierra Napier with Python. The pipeline runs monthly, checks itself and the dashboard before publishing, and can also be deployed on AWS or Google Cloud.</p>
     </div>
+    <div class="card" id="mrCard">
+      <div class="hd"><h2 id="mrH">Model registry: every model against its baseline</h2></div>
+      <p class="note" id="mrNote" data-source="d_model_registry">—</p>
+      <div class="tbl"><table data-source="d_model_registry" data-row-key="model">
+        <thead><tr><th data-field="model">Model</th><th data-field="method">Method</th><th data-field="baseline">Baseline</th><th data-field="training_window">Learned from</th><th data-field="metric">Judged on</th><th class="n" data-field="model_score">Model</th><th class="n" data-field="baseline_score">Baseline</th><th data-field="decision">Decision</th><th data-field="model_card">Model card</th></tr></thead>
+        <tbody id="mrBody"></tbody></table></div>
+    </div>
+    <div class="card" id="drCard">
+      <div class="hd"><h2 id="drH">Data drift between fiscal years</h2></div>
+      <p class="note" id="drNote" data-source="d_drift">—</p>
+      <p class="insight" id="drIns"></p>
+      <div class="legend" id="drLegend"></div>
+      <div class="chart" id="drChart" data-source="d_drift" style="min-height:260px" role="img" aria-label="Population stability index between consecutive fiscal years, three measures"></div>
+    </div>
     <div class="card" id="faCard">
       <div class="hd"><h2 id="faH">What an audit-grade tracker needs, and what the open data holds</h2></div>
       <p class="note" id="faNote" data-source="d_field_availability">—</p>
+      <div class="meter" id="faMeter" role="img" aria-label="Share of needed fields in the open data"></div>
       <div class="tbl"><table data-source="d_field_availability" data-row-key="field">
         <thead><tr><th data-field="improvement">Area</th><th data-field="field">Field</th><th data-field="in_open_data">In the open data?</th><th data-field="where_it_exists">Where it exists</th><th data-field="plan">Plan</th></tr></thead>
         <tbody id="faBody"></tbody></table></div>
@@ -991,10 +1027,12 @@ function payments(p){ // payments to vendors: statewide totals, by agency, or by
 const who = p => !p.agencies.length ? 'Maryland' : p.agencies.length === 1 ? agName(p.agencies[0]) : `${p.agencies.length} selected agencies`;
 
 /* forecast ranges: indicative, with the coverage the pipeline measured on its rolling backtest (a check in the checks dataset) */
-function fcCov(){ const ck = ok('checks'); if (!ck) return null; const r = ck.find(c => /forecast ranges cover/i.test(c.check)); if (!r) return null;
-  const m = String(r.detail).match(/([\d.]+)% of (\d+) forecasts.*nominal (\d+)%/); if (!m) return null;
-  const pct = Math.round(+m[1]) + '%', nominal = m[3] + '%';
-  return {pct, nominal, n: +m[2], text: `Measured on the pipeline's rolling backtest, ${pct} of ${m[2]} past forecasts fell inside such a range, against the nominal ${nominal}; read the ranges as indicative, likely too narrow.`}; }
+function fcCov(){ const c = ok('d_forecast_calibration'), r = c && c.find(x => x.area === 'All areas');
+  if (r && r.calibrated_share != null) { const pct = Math.round(r.calibrated_share * 100) + '%', nominal = Math.round(r.nominal * 100) + '%', raw = Math.round(r.covered_share * 100) + '%';
+    return {pct, nominal, n: r.scored, text: `The ranges are calibrated: the model's own bootstrap ranges held ${raw} of ${r.scored} past forecasts, so they are widened ${d3.format('.2f')(r.widen_by)}x (split conformal). Held out one area at a time, ${pct} of past forecasts fell inside such a range, against the nominal ${nominal}; read the ranges as indicative.`}; }
+  const ck = ok('checks'); if (!ck) return null; const q = ck.find(x => /forecast ranges cover/i.test(x.check)); if (!q) return null;
+  const m = String(q.detail).match(/([\d.]+)% of (\d+) forecasts.*nominal (\d+)%/); if (!m) return null;
+  return {pct: Math.round(+m[1]) + '%', nominal: m[3] + '%', n: +m[2], text: `Measured on the pipeline's rolling backtest, ${Math.round(+m[1])}% of ${m[2]} past forecasts fell inside such a range, against the nominal ${m[3]}%.`}; }
 /* ======================= path to $50M: conditional wording, from the data ======================= */
 function planFacts(){ const pl = ok('d_plan50'); if (!pl || !pl.length) return null;
   const tot = d3.max(pl, r => r.cumulative), lo = sum(pl, 'low'), hi = sum(pl, 'high');
@@ -1573,6 +1611,82 @@ function drawPayScreen(p){ const g = ok('d_payment_screen'), s = ok('d_payment_s
     {key:'review_status',cls:'c-conf',pill:() => 'rv',fmt:v => v ? String(v).replace(/_/g, ' ') : 'not reviewed',title:r => r.review_note || ''}], {bar:'review_amount', click:r => r.agency_code && openDetail('agency:' + r.agency_code)});
   setText('psStatus', `Rules (config/assumptions.yaml, payment_screen): possible duplicate = same agency, vendor and exact amount ($1,000 or more) with record dates within 7 days; repeated annual line = the same in one fiscal year with record dates further apart; possible split purchase = 2+ payments within 14 days, each under the small-procurement limit in force on its record date ($50,000, then $100,000 from Oct 1, 2023, Ch. 161 of 2023), together above it. ${split ? 'Split purchases: ' + split.status.toLowerCase() + '.' : ''} The payments data are ${grain === 'annual' ? 'one row per agency, payee and year with a record date, not dated payments, so the screen cannot see duplicates inside an annual total' : 'dated payments'}. Government, health-plan, debt-service, payroll-like and pass-through payees are left out; payees that may be individuals are not named. ${conf ? 'Confidence and review status come with each group; hover a review chip for its note. ' : ''}The year and area filters do not apply here; the agency filter does.`);
   drawSourceIssues(); }
+const repoUrl = () => { const a = [...document.querySelectorAll('a[href^="https://github.com/"]')].map(x => x.href.match(/^https:\/\/github\.com\/[^/]+\/[^/#?]+/)).find(Boolean); return a ? a[0] : 'https://github.com/EVO3-Ecosystem/gmi-savings-tracker'; }; // the site shell links the repository
+function svgIn(box, H){ box.textContent = ''; const W = Math.max(280, box.clientWidth || 700); return {W, H, svg: d3.select(box).append('svg').attr('width', W).attr('height', H).attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block')}; }
+const MUTED = 'var(--cds-chart-muted)', FG2 = 'var(--color-fg-muted)';
+function dumbbell(box, rows){ // rows: {label, a, b, hi}; a = before, b = after, shares 0-1. Narrow: label above each row
+  if (!rows.length) { box.textContent = ''; emptyMsg(box); return; }
+  const narrow = (box.clientWidth || 700) < 560, rh = narrow ? 40 : 26, H = rows.length * rh + 30, {W, svg} = svgIn(box, H), m = {l: narrow ? 8 : 260, r: 58, t: 8, b: 22};
+  const x = d3.scaleLinear([0, 1], [m.l, W - m.r]), y = (i) => m.t + i * rh + (narrow ? 27 : 13);
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(narrow ? 3 : 5, '%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  rows.forEach((r, i) => { const c = r.hi ? dash.colors[1] : dash.colors[0], max = narrow ? Math.floor((W - 16) / 6.6) : 42;
+    svg.append('text').attr('x', narrow ? m.l : m.l - 8).attr('y', narrow ? y(i) - 14 : y(i)).attr('dy', '.32em').attr('text-anchor', narrow ? 'start' : 'end').attr('font-size', 12).attr('fill', 'currentColor').attr('font-weight', r.hi ? 600 : 400)
+      .text(r.label.length > max ? r.label.slice(0, max - 1) + '…' : r.label).append('title').text(r.label);
+    svg.append('line').attr('x1', x(r.a)).attr('x2', x(r.b)).attr('y1', y(i)).attr('y2', y(i)).attr('stroke', c).attr('stroke-width', 3).attr('opacity', .45);
+    svg.append('circle').attr('cx', x(r.a)).attr('cy', y(i)).attr('r', 5).attr('fill', 'var(--color-panel)').attr('stroke', c).attr('stroke-width', 2);
+    svg.append('circle').attr('cx', x(r.b)).attr('cy', y(i)).attr('r', 5.5).attr('fill', c);
+    svg.append('text').attr('x', x(r.b) + 9).attr('y', y(i)).attr('dy', '.32em').attr('font-size', 11).attr('fill', FG2).text('+' + Math.round((r.b - r.a) * 100) + ' pts'); }); }
+function lines2(box, rows, series, o={}){ // rows: [{x, ...}], series: [{key, label, color, dash}]
+  const H = o.h || 240, {W, svg} = svgIn(box, H), m = {l: 56, r: 12, t: 12, b: 24};
+  const vals = rows.flatMap(r => series.map(s => r[s.key])).filter(v => v != null);
+  if (!vals.length) { box.textContent = ''; emptyMsg(box); return; }
+  const x = d3.scaleLinear(d3.extent(rows, r => r.x), [m.l, W - m.r]), y = d3.scaleLinear([Math.min(0, d3.min(vals)), d3.max(vals) * 1.08], [H - m.b, m.t]).nice();
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.min(rows.length, W < 520 ? 4 : 10)).tickFormat(v => o.xfmt ? o.xfmt(v) : v)).call(g => g.select('.domain').attr('stroke', MUTED)).selectAll('text').attr('fill', FG2);
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(o.yfmt || M)).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  (o.rules || []).forEach(([v, lab]) => { svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', MUTED).attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('x', W - m.r).attr('y', y(v) - 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', FG2).text(lab); });
+  series.forEach(s => { const pts = rows.filter(r => r[s.key] != null);
+    svg.append('path').datum(pts).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-dasharray', s.dash || null).attr('d', d3.line().x(r => x(r.x)).y(r => y(r[s.key])));
+    svg.selectAll(null).data(pts).join('circle').attr('cx', r => x(r.x)).attr('cy', r => y(r[s.key])).attr('r', 3.2).attr('fill', s.color)
+      .append('title').text(r => `${o.xfmt ? o.xfmt(r.x) : r.x} · ${s.label}: ${(o.yfmt || M)(r[s.key])}`); });
+  if (o.after) o.after(svg, x, y); }
+function drawDetectorBacktest(){ const d = ok('d_detector_backtest'); if (!d) { setText('dbNote', 'The detector backtest is not in this build.'); return; }
+  const dets = [...new Set(d.map(r => r.detector))];
+  const avg = (det, c, k) => d3.mean(d.filter(r => r.detector === det && r.cohort === c), r => r[k]);
+  setText('dbNote', `Four opportunity detectors, each rerun as of FY2022, FY2023 and FY2024 on the data available then, and followed into the next year. A detector that finds something real flags the same units again; one that finds noise does not. The chart shows the share flagged again the next year, flagged units against like-sized units that were not flagged.`);
+  const g = avg('Growth above trend', 'Flagged', 'median_change'), gn = avg('Growth above trend', 'Not flagged', 'median_change');
+  setText('dbIns', dets.map(t => `${t}: ${PCT(avg(t, 'Flagged', 'flagged_next_share'))} of flagged units flagged again, vs ${PCT(avg(t, 'Not flagged', 'flagged_next_share'))} of the rest`).join('; ') + '.' +
+    (g != null ? ` Growth flags also fell back the next year (median ${d3.format('+.1%')(g)}, vs ${d3.format('+.1%')(gn)} for unflagged codes): part of a growth flag is a one-year spike, so it is a lead to check, not a trend to bank.` : ''));
+  legend('dbLegend', [['Flagged at the as-of year', dash.colors[0]], ['Not flagged (like-sized)', MUTED]]);
+  const box = document.getElementById('dbChart'), narrow = (box.clientWidth || 700) < 560, rowH = 22, H = dets.length * (3 * rowH + 18) + 26, {W, svg} = svgIn(box, H), m = {l: narrow ? 92 : 170, r: 16, t: 6, b: 22};
+  const x = d3.scaleLinear([0, 1], [m.l, W - m.r]);
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5, '%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  dets.forEach((t, j) => { const y0 = m.t + j * (3 * rowH + 18);
+    svg.append('text').attr('x', 0).attr('y', y0 + 12).attr('font-size', 12).attr('font-weight', 600).attr('fill', 'currentColor').text(narrow ? t.split(' ')[0] : t);
+    [2022, 2023, 2024].forEach((yr, i) => { const yy = y0 + 22 + i * rowH; const f = d.find(r => r.detector === t && r.as_of_fy === yr && r.cohort === 'Flagged'), n = d.find(r => r.detector === t && r.as_of_fy === yr && r.cohort === 'Not flagged'); if (!f || !n) return;
+      svg.append('text').attr('x', m.l - 8).attr('y', yy).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', FG2).text('FY' + yr);
+      svg.append('line').attr('x1', x(n.flagged_next_share)).attr('x2', x(f.flagged_next_share)).attr('y1', yy).attr('y2', yy).attr('stroke', MUTED).attr('stroke-width', 2);
+      svg.append('circle').attr('cx', x(n.flagged_next_share)).attr('cy', yy).attr('r', 5).attr('fill', MUTED).append('title').text(`Not flagged: ${N(n.units)} units, ${PCT(n.flagged_next_share)} flagged next year`);
+      svg.append('circle').attr('cx', x(f.flagged_next_share)).attr('cy', yy).attr('r', 5.5).attr('fill', dash.colors[0]).append('title').text(`Flagged: ${N(f.units)} units, ${PCT(f.flagged_next_share)} flagged again`); }); });
+  { const bx = document.getElementById('dvChart'), nar = (bx.clientWidth || 700) < 560, rh = 46, H2 = dets.length * rh + 28, {W: W2, svg: s2} = svgIn(bx, H2), mm = {l: nar ? 92 : 170, r: 56, t: 6, b: 22};
+    const vals = dets.flatMap(t => ['Flagged', 'Not flagged'].map(c => avg(t, c, 'median_change'))), lim = Math.max(0.05, d3.max(vals, v => Math.abs(v || 0))) * 1.15;
+    const xx = d3.scaleLinear([-lim, lim], [mm.l, W2 - mm.r]);
+    s2.append('g').attr('transform', `translate(0,${H2 - mm.b})`).call(d3.axisBottom(xx).ticks(nar ? 3 : 6, '+.0%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+    s2.append('line').attr('x1', xx(0)).attr('x2', xx(0)).attr('y1', mm.t).attr('y2', H2 - mm.b).attr('stroke', FG2);
+    dets.forEach((t, j) => { const y0 = mm.t + j * rh;
+      s2.append('text').attr('x', mm.l - 8).attr('y', y0 + rh / 2 - 2).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'currentColor').text(nar ? t.split(' ')[0] : t);
+      [['Flagged', dash.colors[0], 0], ['Not flagged', MUTED, 1]].forEach(([c, col, k]) => { const v = avg(t, c, 'median_change'); if (v == null) return; const yy = y0 + 6 + k * 17;
+        s2.append('rect').attr('x', Math.min(xx(0), xx(v))).attr('width', Math.max(1, Math.abs(xx(v) - xx(0)))).attr('y', yy).attr('height', 13).attr('rx', 2).attr('fill', col).append('title').text(`${t}, ${c.toLowerCase()}: median ${d3.format('+.1%')(v)} next year`);
+        s2.append('text').attr('x', v >= 0 ? xx(v) + 5 : xx(v) - 5).attr('y', yy + 7).attr('dy', '.32em').attr('text-anchor', v >= 0 ? 'start' : 'end').attr('font-size', 11).attr('fill', FG2).text(d3.format('+.1%')(v)); }); }); }
+  table('dbBody', d.slice().sort((a, b) => a.detector.localeCompare(b.detector) || a.as_of_fy - b.as_of_fy || a.cohort.localeCompare(b.cohort)), [{key:'detector'},{key:'as_of_fy',n:1,fmt:v => 'FY' + v},{key:'cohort'},{key:'units',n:1,fmt:N},
+    {key:'flagged_next_share',n:1,fmt:PCT},{key:'median_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)},{key:'pooled_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)}]); }
+function drawRegistry(){ const r = ok('d_model_registry'); if (!r) { setText('mrNote', 'The model registry is not in this build.'); return; }
+  const ad = r.filter(x => /^Adopted|^Shown/.test(x.decision)).length;
+  setText('mrNote', `${N(r.length)} models. Each is judged on held-out data against a simple baseline it has to beat before anything it produces is shown; ${N(ad)} are in use, the payee classifier is kept for review because it does not beat the name rules, and the rest produce leads only, never savings. Every number is read from the model's own evaluation in this build. For MASE lower is better; for F1, silhouette and persistence higher is better.`);
+  const f3 = v => v == null ? '—' : d3.format('.3~f')(v);
+  table('mrBody', r, [{key:'model'},{key:'method'},{key:'baseline'},{key:'training_window'},{key:'metric'},{key:'model_score',n:1,fmt:(v, x) => (/share|persistence/i.test(x.metric) ? (v == null ? '—' : PCT(v)) : f3(v))},
+    {key:'baseline_score',n:1,fmt:(v, x) => (/share|persistence/i.test(x.metric) ? (v == null ? '—' : PCT(v)) : f3(v))},{key:'decision'},{key:'model_card',fmt:v => v || ''}]);
+  [...document.querySelectorAll('#mrBody tr')].forEach((tr, i) => { const x = r[i], td = tr && tr.children[8]; if (!td || !x || !x.model_card) return; td.textContent = '';
+    const a = document.createElement('a'); a.href = repoUrl() + '/blob/main/' + x.model_card; a.target = '_blank'; a.rel = 'noopener'; a.textContent = x.model_card.split('/').pop(); td.appendChild(a); }); }
+function drawDrift(){ const d = ok('d_drift'); if (!d) { setText('drNote', 'The drift monitor is not in this build.'); return; }
+  const fy0 = 2017, ms = [['Payment amount (log scale)', dash.colors[0]], ['Agency mix of payments', dash.colors[1]], ['Agency mix of controllable spending (actual)', dash.colors[2]]];
+  setText('drNote', `Population stability index (PSI) between each Maryland fiscal year and the one before, for what the models learn from. Below 0.10 is stable, 0.10–0.25 a moderate shift, above 0.25 a major shift. A shift is not an error: it marks the years whose patterns differ from the training years, so model errors there are read with care. FY${fy0} onward shown; the latest payments year is partial.`);
+  const major = d.filter(r => r.level === 'Major shift' && !TRUE(r.partial_year)).sort((a, b) => b.psi - a.psi);
+  setText('drIns', major.length ? major.map(r => `${r.measure}, FY${r.from_fy}→FY${r.to_fy}: PSI ${d3.format('.2f')(r.psi)}`).join('; ') + '. This is the federal relief period, and the year the payment screen found MDTA and MES payments published twice (Opportunities tab, data-quality issues).' : 'No major shift between consecutive years.');
+  legend('drLegend', ms.map(([l, c]) => [l, c, 1]));
+  const ys = d3.range(fy0 + 1, d3.max(d, r => r.to_fy) + 1);
+  const rows = ys.map(y => Object.fromEntries([['x', y], ...ms.map(([l], i) => ['s' + i, (d.find(r => r.measure === l && r.to_fy === y) || {}).psi ?? null])]));
+  lines2(document.getElementById('drChart'), rows, ms.map(([l, c], i) => ({key: 's' + i, label: l, color: c})), {yfmt: d3.format('.2f'), xfmt: v => 'FY' + String(v).slice(2), rules: [[0.10, 'moderate 0.10'], [0.25, 'major 0.25']]}); }
 const TRUE = v => v === true || v === 1 || String(v).toLowerCase() === 'true'; // exported booleans arrive as text
 function drawFundShift(p){ const s = ok('d_fund_shift'); if (!s) { setText('fhNote', 'The fund-mix table is not in this build.'); return; }
   const f = s.filter(r => TRUE(r.shift_to_general) && (!p.agencies.length || p.agencies.includes(r.agency_code)) && (!p.years.length || p.years.includes(r.fiscal_year)));
@@ -1582,7 +1696,10 @@ function drawFundShift(p){ const s = ok('d_fund_shift'); if (!s) { setText('fhNo
   setText('fhIns', `${N(f.length)} program-years flagged in this view.` + (c25 && c23 ? ` MSDE Child Care Assistance Grants went from ${PCT(c23.general_share)} General Fund in FY2023 to ${PCT(c25.general_share)} in FY2025 (${M(c25.program_budget)} all funds), as federal relief money ran out; DLS reports about 78% for FY2025.` : ''));
   table('fhBody', f.slice().sort((a, b) => b.program_budget - a.program_budget), [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'agency',fmt:v => TITLE(v || '')},{key:'program_name'},{key:'program_budget',n:1,fmt:M},
     {key:'general_share_2y_before',n:1,fmt:PCT},{key:'general_share',n:1,fmt:PCT},{key:'general_share_change',n:1,fmt:v => (v > 0 ? '+' : '') + d3.format('.0f')(v * 100) + ' pts'},
-    {key:'federal_share',n:1,fmt:(v, r) => PCT(r.federal_share_2y_before) + ' → ' + PCT(v)}]); }
+    {key:'federal_share',n:1,fmt:(v, r) => PCT(r.federal_share_2y_before) + ' → ' + PCT(v)}]);
+  legend('fhLegend', [['General Fund share two years before (open circle)', MUTED], ['General Fund share in the year', dash.colors[0]], ['MSDE child care', dash.colors[1]]]);
+  const top = f.slice().sort((a, b) => b.program_budget - a.program_budget).slice(0, 12);
+  dumbbell(document.getElementById('fhChart'), top.map(r => ({label: `${r.program_name} (${r.agency_code}, FY${r.fiscal_year})`, a: r.general_share_2y_before, b: r.general_share, hi: r.agency_code === 'R00' && /Child Care/i.test(r.program_name || '')}))); }
 function drawFederalCrosswalk(){ const x = ok('d_federal_crosswalk'); const sel = document.getElementById('fxL'); if (!x || !sel) { setText('fxNote', 'The federal cross-check is not in this build.'); return; }
   const LK = r => typeof r.listing === 'number' ? r.listing.toFixed(3) : String(r.listing); // 10.550 is read as a number; keep three decimals
   if (!sel.options.length) { const tot = d3.rollups(x, v => d3.sum(v, r => r.state_federal_budget), LK).sort((a, b) => b[1] - a[1]).slice(0, 60);
@@ -1592,7 +1709,11 @@ function drawFederalCrosswalk(){ const x = ok('d_federal_crosswalk'); const sel 
   const rows = x.filter(r => LK(r) === sel.value).sort((a, b) => a.fiscal_year - b.fiscal_year);
   setText('fxNote', `In the State's funding-sources data the fund source code of federal money is the federal Assistance Listing number, so each budget line can be matched to the federal program that pays for it (93.575 is the Child Care and Development Block Grant). The 60 largest programs by State budget are listed. A gap between the two columns is a question to ask, not an error: the State budgets in its own year and may carry money over, and obligations count new awards only.`);
   table('fxBody', rows, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'stage'},{key:'state_federal_budget',n:1,fmt:M},
-    {key:'federal_obligated',n:1,fmt:(v, r) => v == null ? (TRUE(r.federal_reported) ? '$0' : 'not reported') : M(v) + (v < 0 ? ' (net deobligation)' : '') + (TRUE(r.federal_partial) ? ' (partial year)' : '')},{key:'agencies',n:1,fmt:v => v == null ? '' : N(v)}]); }
+    {key:'federal_obligated',n:1,fmt:(v, r) => v == null ? (TRUE(r.federal_reported) ? '$0' : 'not reported') : M(v) + (v < 0 ? ' (net deobligation)' : '') + (TRUE(r.federal_partial) ? ' (partial year)' : '')},{key:'agencies',n:1,fmt:v => v == null ? '' : N(v)}]);
+  legend('fxLegend', [['State budget, federal funds (State FY)', dash.colors[0], 1], ['Federal obligations (federal FY)', dash.colors[1], 1]]);
+  lines2(document.getElementById('fxChart'), rows.map(r => ({x: r.fiscal_year, st: r.state_federal_budget, fed: r.federal_obligated})),
+    [{key: 'st', label: 'State budget', color: dash.colors[0]}, {key: 'fed', label: 'Federal obligations', color: dash.colors[1], dash: '5 3'}], {xfmt: v => 'FY' + String(v).slice(2)}); }
+
 function drawAliasReview(){ const a = ok('d_vendor_alias_review'); if (!a) { setText('vqNote', 'The alias review queue is not in this build.'); return; }
   const k = document.getElementById('vqKind'), q = document.getElementById('vqQ');
   if (!k._w) { k._w = 1; k.addEventListener('change', drawAliasReview); q.addEventListener('input', drawAliasReview); }
@@ -1615,6 +1736,7 @@ function drawAuditLifecycle(p){ const a = ok('d_audit_findings'); if (!a) { setT
 function drawFieldAvail(){ const a = ok('d_field_availability'); if (!a) { setText('faNote', 'The field-availability table is not in this build.'); return; }
   const n = a.length ? a[0].transaction_rows : 0, yes = a.filter(r => /^Yes/.test(r.in_open_data)).length;
   setText('faNote', `${N(yes)} of ${N(a.length)} fields are in the State's open data. Payment number, invoice number and date, payment date and the fund on each payment exist in FMIS, the State's financial system, and MD-VIEW shows them one search at a time with no download; they need a Public Information Act request. The schema for those records is ready (src/pipeline/txn.py); ${n ? N(n) + ' payment-level rows are loaded' : 'no payment-level rows are loaded yet'}.`);
+  const mt = document.getElementById('faMeter'); if (mt) { mt.textContent = ''; const i = document.createElement('i'); i.style.width = (100 * yes / Math.max(1, a.length)) + '%'; mt.appendChild(i); mt.setAttribute('aria-label', `${yes} of ${a.length} needed fields are in the open data`); }
   table('faBody', a, [{key:'improvement'},{key:'field'},{key:'in_open_data'},{key:'where_it_exists',fmt:v => v || ''},{key:'plan'}]); }
 function drawSourceIssues(){ const card = document.getElementById('psIssues'); if (!card) return; const iss = ok('d_source_issues');
   if (!iss) { setText('psIssNote', 'No data-quality issues in the source have been published for this build.'); document.getElementById('psIssBody').textContent = ''; return; }
@@ -1745,7 +1867,7 @@ function drawCalc(p){
   tile('FY2027 net savings, likely', M(net(2027) + (prIn ? PR.likely : 0)), prIn ? `includes ${M(PR.likely)} of payment recovery leads (one-time, not additive with other findings); savings alone ${M(net(2027))}` : `indicative range: ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}`);
   drawPayLever(PR, prIn); tile('Chance FY2027 reaches $50M (indicative)', d3.format('.0%')(pHit), 'share of 2,000 simulated years; the ranges run narrow');
   tile('Five years, FY2027–FY2031', M(cum), `indicative range: ${M(qt(cumS, .1))}–${M(qt(cumS, .9))}`); tile('General Fund share, FY2027', g27 ? PCT(gf27 / g27) : '—', `${M(gf27)} of gross savings`);
-  setText('caLede', `At these settings, the six focus areas and other controllable purchases would save about ${M(net(2027))} in FY2027 (indicative range ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}${fcCov() ? `; such ranges held ${fcCov().pct} of actuals in the backtest, not ${fcCov().nominal}` : ''}), net of the fee, and ${M(cum)} over FY2027–FY2031. Spending baselines are forecasts from the state's own FY2017–FY2025 actuals, using whichever model predicted FY2023–FY2025 best; savings rates default to what GMI reported achieving. Use "Reach $50M" to see the extra rate it takes.`);
+  setText('caLede', `At these settings, the six focus areas and other controllable purchases would save about ${M(net(2027))} in FY2027 (indicative range ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}${fcCov() ? `; such calibrated ranges held ${fcCov().pct} of actuals out of sample, nominal ${fcCov().nominal}` : ''}), net of the fee, and ${M(cum)} over FY2027–FY2031. Spending baselines are forecasts from the state's own FY2017–FY2025 actuals, using whichever model predicted FY2023–FY2025 best; savings rates default to what GMI reported achieving. Use "Reach $50M" to see the extra rate it takes.`);
   // savings by year
   const yrs = [{year:2026, a:29e6, lo:29e6, hi:29e6, note:'GMI reported'}].concat(FY.map((y, k) => ({year:y, a:net(y), lo:qt(S[k], .1), hi:qt(S[k], .9)})));
   { const box = document.getElementById('caYears'); box.textContent = ''; const W = box.clientWidth || 500, H = 240, m = {l:48, r:10, t:12, b:24}; const x = d3.scaleBand(yrs.map(d => d.year), [m.l, W - m.r]).padding(.3), y = d3.scaleLinear([0, Math.max(60e6, d3.max(yrs, d => d.hi))], [H - m.b, m.t]).nice();
@@ -2169,7 +2291,7 @@ dash.calc('c_run',{inputs:['runs','checks'],title:'Pipeline status',description:
       pill:n('fail')?`Data checks: ${n('fail')} failed`:`Data checks passed: ${n('pass')} of ${checks.length}`,state:n('fail')?'fail':(n('warn')?'warn':'pass')}];}});
 function drawReport(){ const r = ok('reports'), a = document.getElementById('repLink'); if (!r || !r.length) { a.hidden = true; return; } const l = r.slice().sort((x,y) => d3.descending(x.run_date, y.run_date))[0]; a.href = l.url; a.textContent = 'Download PDF report (' + l.run_date + ')'; a.hidden = false; }
 function fillMarks(){ const d = dash.data('c_run'); document.querySelectorAll('[data-source="c_run"][data-field]').forEach(el => { el.textContent = (d.status === 'ok' && d.data[0]) ? d.data[0][el.dataset.field] : '—'; }); document.getElementById('runPill').className = 'st ' + (d.status === 'ok' && d.data[0] ? d.data[0].state : ''); }
-const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawFieldAvail(); }, fcast:drawFcast};
+const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));

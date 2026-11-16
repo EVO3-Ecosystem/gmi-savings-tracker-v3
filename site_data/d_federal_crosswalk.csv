@@ -908,8 +908,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2019,Actual,93.597,Grants to State for Access and Visitation Programs,1,1,159441.0,153549.0,True,False,1.04
 2019,Actual,93.511,Affordable Care Act Grants to States for Health Insurance Premium Review,1,1,156157.0,-49392.0,True,False,
 2019,Actual,93.127,Emergency Medical Services for Children,1,1,155313.0,,False,False,
-2019,Actual,16.735,Prison Rape Elimination Act,1,1,150000.0,-43589.12,True,False,
 2019,Actual,93.234,Traumatic Brain Injury Demonstration Grant Program,1,1,150000.0,150000.0,True,False,1.0
+2019,Actual,16.735,Prison Rape Elimination Act,1,1,150000.0,-43589.12,True,False,
 2019,Actual,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,149029.0,80000.0,True,False,1.86
 2019,Actual,94.011,Foster Grandparent Program,1,1,142826.0,527228.25,True,False,0.27
 2019,Actual,16.582,Crime Victim Assistance-Discretionary Grants,1,1,137864.0,275669.51,True,False,0.5
@@ -1344,8 +1344,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2020,Actual,16.580,Edward Byrne Memorial State and Local Law Enforcement Assistance Discretionary Grants Programs,1,1,11960.0,,False,False,
 2020,Actual,14.401C,Fair Housing Assistance Program,1,1,11180.0,,False,False,
 2020,Actual,93.687,Maternal Opioid Misuse Model,1,1,10792.0,735828.0,True,False,0.01
-2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,81.090,State Heating Oil and Propane Program,1,1,10000.0,,False,False,
+2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,93.747,Elder Abuse Prevention Interventions Program,1,2,9239.0,,False,False,
 2020,Actual,17.280,Workforce Investment Act (WIA) Dislocated Worker National Reserve Demonstration Grants,1,7,8678.0,,False,False,
 2020,Actual,16.842,Opioid Affected Youth Initiative,1,1,7017.0,,False,False,
@@ -2488,8 +2488,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2023,Actual,93.251,Universal Newborn Hearing Screening,1,1,306208.0,135000.0,True,False,2.27
 2023,Actual,66.817,Corrective Action Program State and Tribal Response Program Grants,1,1,305155.0,463665.0,True,False,0.66
 2023,Actual,93.747D,Elder Abuse Prevention Interventions Program,2,2,304234.0,,False,False,
-2023,Actual,10.556,Special Milk Program for Children,1,1,300000.0,,False,False,
 2023,Actual,84.206,Javits Gifted and Talented Program,1,1,300000.0,,False,False,
+2023,Actual,10.556,Special Milk Program for Children,1,1,300000.0,,False,False,
 2023,Actual,16.745,Juvenile and Mental Health Collaboration Program,1,1,299143.0,,False,False,
 2023,Actual,10.565,Commodity Supplemental Food Program,1,2,293480.0,386737.0,True,False,0.76
 2023,Actual,93.747,Elder Abuse Prevention Interventions Program,2,2,291491.0,58850.0,True,False,4.95
@@ -3673,8 +3673,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,93.391,National Initiative to Address COVID-19 Health Disparities,1,1,125222.0,,False,False,
 2026,Working budget,10.435,State Mediation Program,1,2,123826.0,,False,False,
 2026,Working budget,93.079,Center for Disease Control and Prevention,1,1,122943.0,,False,False,
-2026,Working budget,10.678,Forest Stewardship Program,1,5,116738.0,0.0,True,False,
 2026,Working budget,10.674,Wood Utilization Assistance,1,5,116738.0,,False,False,
+2026,Working budget,10.678,Forest Stewardship Program,1,5,116738.0,0.0,True,False,
 2026,Working budget,17.277,Workforce Investment Act (WIA) National Emergency Grants,1,7,112286.0,0.0,True,False,
 2026,Working budget,10.162,Inspection Grading and Standardization,1,2,110724.0,144194.12,True,False,0.77
 2026,Working budget,16.839,STOP School Violence Prevention and Mental Health Training Program,1,1,110405.0,,False,False,
@@ -4044,8 +4044,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2027,Legislative appropriation,15.929,Save America's Treasures,1,1,63102.0,,False,False,
 2027,Legislative appropriation,93.938,Cooperative Agreements to Support Comprehensive School Health Programs to Prevent the Spread of HIV and Other Important Health Problems,1,1,55502.0,,False,False,
 2027,Legislative appropriation,10.676,Forest Legacy Program,1,5,50954.0,,False,False,
-2027,Legislative appropriation,15.615,Cooperative Endangered Species Conservation Fund,1,5,50463.0,,False,False,
 2027,Legislative appropriation,15.684,White-nose Syndrome National Response Implementation,1,5,50463.0,,False,False,
+2027,Legislative appropriation,15.615,Cooperative Endangered Species Conservation Fund,1,5,50463.0,,False,False,
 2027,Legislative appropriation,93.421,Strengthening Public Health Systems and Service through National Partnerships to Improve and Protect the Nation’s Health,1,1,49597.0,,False,False,
 2027,Legislative appropriation,45.164,Promotion of the Humanities-Public Programs,1,1,47132.0,,False,False,
 2027,Legislative appropriation,93.301,Small Rural Hospital Improvement Grant Program,1,1,41628.0,,False,False,

@@ -1,0 +1,9 @@
+area,method,scored,covered_share,nominal,widen_by,loo_widen_by,calibrated_share,sequential_share
+Fleet & fuel,Naive (last actual),9,0.1111,0.8,1.63,1.17,0.2222,
+"IT hardware, software & services",Naive (last actual),9,0.8889,0.8,1.63,1.68,1.0,
+Other controllable purchases,Naive (last actual),9,0.8889,0.8,1.63,1.68,1.0,
+"Print, copy & mail",Naive (last actual),9,0.5556,0.8,1.63,1.49,0.7778,
+Real estate & leases,Log-linear trend,9,0.4444,0.8,1.63,1.49,0.7778,
+Telecom,Naive (last actual),9,1.0,0.8,1.63,1.68,1.0,
+Utilities & facility energy,Naive (last actual),9,0.5556,0.8,1.63,1.42,0.6667,
+All areas,chosen model of each area,63,0.6349,0.8,1.63,,0.7778,0.9762

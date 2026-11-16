@@ -34,6 +34,7 @@ DATASETS = {  # dataset id on the dashboard -> published table
     "results_trend": "results_trend", "agency_clusters": "agency_clusters", "ola_findings": "ola_findings",
     "d_fund_shift": "d_fund_shift", "d_federal_crosswalk": "d_federal_crosswalk", "d_vendor_alias_review": "d_vendor_alias_review",
     "d_audit_findings": "d_audit_findings", "d_field_availability": "d_field_availability",
+    "d_detector_backtest": "d_detector_backtest", "d_model_registry": "d_model_registry", "d_drift": "d_drift", "d_forecast_calibration": "d_forecast_calibration",
 }
 OPTIONAL = {"d_source_issues"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
 AREAS = ['IT hardware, software & services', 'Fleet & fuel', 'Utilities & facility energy', 'Real estate & leases', 'Print, copy & mail', 'Telecom']

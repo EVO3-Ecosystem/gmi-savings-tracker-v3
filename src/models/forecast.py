@@ -133,30 +133,67 @@ def backtest(s, cfg=None):
     return out
 
 
-def calibration(bt, model, alpha=0.2):
-    """How far the published p10-p90 ranges are from their nominal 80%, measured on the rolling backtest against actuals,
-    for each area's chosen model, plus the pooled factor that would have made them cover 80%.
+def _miss(df):
+    """How many times its own half-range each outcome missed the median by, on the log scale (<= 1 = inside p10-p90)."""
+    lo, mid, hi, out = (np.log(df[c].astype(float)) for c in ("p10", "p50", "p90", "outcome"))
+    up = (hi - mid).clip(lower=1e-9)
+    down = (mid - lo).clip(lower=1e-9)
+    return np.where(out >= mid, (out - mid) / up, (mid - out) / down)
 
-    widen_by: the (1 - alpha) quantile (with the usual finite-sample rank correction) of how many times wider than its
-    own range each outcome's miss was, on the log scale around the median; 1 = already calibrated, above 1 = too narrow.
-    It is measured in-sample on a handful of points, so it is a size of the problem, not a validated correction.
+
+def _conformal_k(miss, alpha):
+    """Split-conformal widening factor: the (1 - alpha) quantile of the misses with the finite-sample rank correction,
+    never below 1 (a range is never narrowed)."""
+    v = np.sort(np.asarray(miss, dtype=float))
+    n = len(v)
+    return max(1.0, float(v[min(n - 1, int(np.ceil((n + 1) * (1 - alpha))) - 1)])) if n else float("nan")
+
+
+def calibration(bt, model, alpha=0.2):
+    """Forecast-range calibration on the rolling backtest against actuals, for each area's chosen model.
+
+    covered_share: share of outcomes inside the model's own p10-p90 range (the bootstrap, uncalibrated).
+    widen_by: split-conformal factor from every scored point (Vovk et al. 2005; Angelopoulos & Bates 2021): the
+      published ranges are the model's ranges widened by it on the log scale around the median.
+    calibrated_share: out-of-sample coverage of the widened ranges by cross-conformal, leave one area out: each area's
+      outcomes are scored against a factor computed without that area's own errors.
+    sequential_share (All areas row): the stricter stress test, a factor from only the outcomes known at each origin;
+      with 7 to 42 calibration points it over-covers, reported, not used.
     """
     chosen = bt.merge(model[["area", "method"]], on=["area", "method"])
     chosen = chosen[chosen.target == "actual"].copy()
-    lo, mid, hi, out = (np.log(chosen[c].astype(float)) for c in ("p10", "p50", "p90", "outcome"))
-    up = (hi - mid).clip(lower=1e-9)
-    down = (mid - lo).clip(lower=1e-9)
-    chosen["miss"] = np.where(out >= mid, (out - mid) / up, (mid - out) / down)
+    chosen["miss"] = _miss(chosen)
     n = len(chosen)
-    k = float(np.sort(chosen.miss.values)[min(n - 1, int(np.ceil((n + 1) * (1 - alpha))) - 1)]) if n else float("nan")
+    k = _conformal_k(chosen.miss.values, alpha)
+    loo = {a: _conformal_k(chosen[chosen.area != a].miss.values, alpha) for a in chosen.area.unique()}
+    chosen["cal_covered"] = [m <= loo[a] for m, a in zip(chosen.miss, chosen.area)]
+    seq = []
+    for o in (sorted(chosen.origin_fy.unique()) if {"origin_fy", "forecast_fy"} <= set(chosen.columns) else []):
+        known = chosen[chosen.forecast_fy <= o]
+        if len(known) >= 5:
+            kk = _conformal_k(known.miss.values, alpha)
+            seq += list(chosen[chosen.origin_fy == o].miss <= kk)
     rows = [{"area": a, "method": g.method.iloc[0], "scored": len(g), "covered_share": float(g.covered.mean()), "nominal": 1 - alpha,
-             "widen_by": k} for a, g in chosen.groupby("area")]
+             "widen_by": k, "loo_widen_by": loo[a], "calibrated_share": float(g.cal_covered.mean()), "sequential_share": None}
+            for a, g in chosen.groupby("area")]
     rows.append({"area": "All areas", "method": "chosen model of each area", "scored": n, "covered_share": float(chosen.covered.mean()) if n else None,
-                 "nominal": 1 - alpha, "widen_by": k})
+                 "nominal": 1 - alpha, "widen_by": k, "loo_widen_by": None, "calibrated_share": float(chosen.cal_covered.mean()) if n else None,
+                 "sequential_share": float(np.mean(seq)) if seq else None})
     out_df = pd.DataFrame(rows)
-    for c in ("covered_share", "widen_by"):
+    for c in ("covered_share", "widen_by", "loo_widen_by", "calibrated_share", "sequential_share"):
         out_df[c] = pd.to_numeric(out_df[c]).round(4)
     return out_df
+
+
+def widen(f, k):
+    """Publish calibrated ranges: p10/p90 widened by k on the log scale around p50; the model's own kept as p10_model/p90_model."""
+    f = f.copy()
+    f["p10_model"], f["p90_model"] = f.p10, f.p90
+    fc = f.kind == "Forecast"
+    mid = np.log(f.loc[fc, "p50"].astype(float))
+    f.loc[fc, "p10"] = np.exp(mid - k * (mid - np.log(f.loc[fc, "p10_model"].astype(float)))).round(0)
+    f.loc[fc, "p90"] = np.exp(mid + k * (np.log(f.loc[fc, "p90_model"].astype(float)) - mid)).round(0)
+    return f
 
 
 def simulate(method, x, y, fy, n_paths, rng):
@@ -252,6 +289,7 @@ def write(con, cfg=None):
     f_code, f_scope, f_fund = (con.execute(f"SELECT * FROM mart.{t}").df() for t in ("f_code", "f_scope", "f_fund"))
     f, m, bt = build(f_code, f_scope, f_fund, cfg)
     cal = calibration(bt, m)
+    f = widen(f, float(cal.loc[cal.area == "All areas", "widen_by"].iloc[0]))  # conformal: published ranges cover ~80%
     for name, df in (("f_forecast", f), ("d_forecast_model", m), ("d_forecast_backtest", bt), ("d_forecast_calibration", cal)):
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")

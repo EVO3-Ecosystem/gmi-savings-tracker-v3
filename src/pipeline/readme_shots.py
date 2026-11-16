@@ -24,6 +24,15 @@ SHOTS = [
     ("explorer.png", "explorer.html", None, None),
     ("catalog.png", "catalog.html", None, None),
 ]
+ELEMENTS = [  # v3.1: one chart or card each, screenshotted by element id (file, tab, element id)
+    ("detector_backtest.png", "Opportunities", "dbChart"),
+    ("detector_divergence.png", "Opportunities", "dvChart"),
+    ("audit_lifecycle.png", "Opportunities", "auCard"),
+    ("fund_shift.png", "Budget", "fhChart"),
+    ("federal_crosswalk.png", "Budget", "fxChart"),
+    ("model_registry.png", "Data & pipeline", "mrCard"),
+    ("drift.png", "Data & pipeline", "drChart"),
+]
 
 
 def _save(png: bytes, path: Path, width: int = 1600) -> None:
@@ -65,10 +74,21 @@ def main(argv=None) -> int:
                 pg.wait_for_timeout(500)
                 _save(pg.screenshot(), OUT / name)
                 pg.close()
+            pg = b.new_page(viewport={"width": 1280, "height": 900}, device_scale_factor=2)
+            pg.goto(base + "index.html")
+            pg.wait_for_timeout(8000)
+            for name, tab, el in ELEMENTS:
+                pg.get_by_role("tab", name=tab).click()
+                pg.wait_for_timeout(1500)
+                loc = pg.locator(f"#{el}")
+                loc.scroll_into_view_if_needed()
+                pg.wait_for_timeout(300)
+                (OUT / name).write_bytes(loc.screenshot())
+            pg.close()
             b.close()
     finally:
         srv.shutdown()
-    print(f"readme_shots: {len(SHOTS)} screenshots in {OUT.relative_to(ROOT)}")
+    print(f"readme_shots: {len(SHOTS) + len(ELEMENTS)} screenshots in {OUT.relative_to(ROOT)}")
     return 0
 
 

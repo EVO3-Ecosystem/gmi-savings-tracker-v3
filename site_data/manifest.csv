@@ -9,14 +9,18 @@ d_bid_list,mart,27,True
 d_challenger_backtest,mart,6,True
 d_challenger_total,mart,1,True
 d_deflator,mart,20,True
+d_detector_backtest,mart,24,True
+d_drift,mart,46,True
 d_families,mart,1257,True
 d_federal_crosswalk,mart,4063,True
 d_field_availability,mart,13,True
+d_forecast_calibration,mart,8,True
 d_forecast_model,mart,7,True
 d_fund_shift,mart,6453,True
 d_grant_groups,mart,4570,True
 d_grant_groups_sensitivity,mart,3,True
 d_master_quality,mart,5,True
+d_model_registry,mart,8,True
 d_multi,mart,216,True
 d_multi_basis,mart,10,True
 d_opps,mart,389,True
@@ -61,7 +65,7 @@ measures,mart,14,True
 pipeline_runs,mart,1,True
 results_trend,mart,2367,True
 review_queue,mart,2459,True
-run_checks,mart,138,True
+run_checks,mart,140,True
 sources,mart,6,True
 stage_evidence,mart,4,True
 totals_by_fy,mart,19,True

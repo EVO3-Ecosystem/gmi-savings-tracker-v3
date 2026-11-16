@@ -73,24 +73,24 @@ fiscal_year,area,vendor,agencies,spend,rank
 2025,Fleet & fuel,HERTRICH FLEET SERVICES,16,9407243.26,4
 2025,Fleet & fuel,SPORT CHEVROLET,20,5775531.1,5
 2025,Fleet & fuel,CRISWELL NISSAN OF GERMANTOWN,7,1670750.0,6
-2025,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,56231338.83,1
-2025,"IT hardware, software & services",CARAHSOFT,39,53852477.51,2
-2025,"IT hardware, software & services",SHI INTERNATIONAL,40,48755551.05,3
-2025,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,31,27470874.02,4
-2025,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9889875.26,5
-2025,"IT hardware, software & services",IBM,7,8399743.43,6
-2025,"Print, copy & mail",CANON,37,4988168.04,1
-2025,"Print, copy & mail",XEROX,28,2909261.17,2
-2025,"Print, copy & mail",QUADIENT,26,1914253.44,3
-2025,"Print, copy & mail",PITNEY BOWES,24,1752841.45,4
-2025,"Print, copy & mail",RICOH,24,861156.94,5
-2025,"Print, copy & mail",SHARP ELECTRONICS,17,740919.55,6
 2025,Real estate & leases,MERRITT PROPERTIES,2,1661657.93,1
 2025,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,1603283.63,2
 2025,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1469832.0,3
 2025,Real estate & leases,BALTIMORE TOWER PROPERTIES,2,1428474.67,4
 2025,Real estate & leases,BERKSHIRE PROPERTIES,2,1125834.75,5
 2025,Real estate & leases,ST JOHN PROPERTIES,3,982557.68,6
+2025,"Print, copy & mail",CANON,37,4988168.04,1
+2025,"Print, copy & mail",XEROX,28,2909261.17,2
+2025,"Print, copy & mail",QUADIENT,26,1914253.44,3
+2025,"Print, copy & mail",PITNEY BOWES,24,1752841.45,4
+2025,"Print, copy & mail",RICOH,24,861156.94,5
+2025,"Print, copy & mail",SHARP ELECTRONICS,17,740919.55,6
+2025,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,56231338.83,1
+2025,"IT hardware, software & services",CARAHSOFT,39,53852477.51,2
+2025,"IT hardware, software & services",SHI INTERNATIONAL,40,48755551.05,3
+2025,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,31,27470874.02,4
+2025,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9889875.26,5
+2025,"IT hardware, software & services",IBM,7,8399743.43,6
 2026,"IT hardware, software & services",CARAHSOFT,38,57400434.54,1
 2026,"IT hardware, software & services",SHI INTERNATIONAL,40,52558360.47,2
 2026,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,35,43245118.3,3

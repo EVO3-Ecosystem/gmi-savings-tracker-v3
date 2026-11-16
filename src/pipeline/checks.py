@@ -130,6 +130,7 @@ def run(con, run_id, manifest):
     phase5_payment_screen(con, check, one)
     phase5_source_issues(con, check, one)
     phase5_audit_depth(con, check, one)
+    phase5_registry(con, check, one)
     con = real
     df = pd.DataFrame(out)
     while hasattr(con, "_con"):  # the DuckDB connection itself (build.py may pass a recording wrapper): replacement scans look in this frame
@@ -282,12 +283,17 @@ def phase5(con, check, one):
     unplanned = one("""SELECT count(*) FROM (SELECT area FROM mart.d_forecast_backtest WHERE target = 'plan' GROUP BY area
         HAVING count(DISTINCT forecast_fy) < 2)""") + one("SELECT count(*) FROM mart.d_forecast_model WHERE area NOT IN (SELECT area FROM mart.d_forecast_backtest WHERE target = 'plan')")
     check("mart", "Every forecast area is also scored against the State's plan for FY2026 and FY2027", unplanned == 0, f"{unplanned} areas without both plan years")
-    cov = con.execute("SELECT covered_share, scored, nominal, widen_by FROM mart.d_forecast_calibration WHERE area = 'All areas'").fetchone()
+    cov = con.execute("""SELECT covered_share, scored, nominal, widen_by, calibrated_share, sequential_share
+                         FROM mart.d_forecast_calibration WHERE area = 'All areas'""").fetchone()
     if cov:
-        share, scored, nominal, widen = cov
-        check("mart", "Published forecast ranges cover about their nominal share on the rolling backtest", abs(share - nominal) <= 0.10,
-              f"{share:.1%} of {scored} forecasts of actual spending fell inside the p10-p90 range (nominal {nominal:.0%}); "
-              f"about {widen:.2f}x wider ranges would have been needed (in-sample, a handful of points)", "warn")
+        raw, scored, nominal, widen, share, seq = cov
+        bad = one("""SELECT count(*) FROM mart.f_forecast WHERE kind = 'Forecast'
+                     AND NOT (p10 <= p10_model AND p10_model <= p50 AND p50 <= p90_model AND p90_model <= p90)""")
+        check("mart", "Published forecast ranges cover about their nominal share out of sample (conformal calibration)",
+              abs(share - nominal) <= 0.10 and bad == 0,
+              f"{share:.1%} of {scored} forecasts of actual spending inside the published range (cross-conformal, leave one area out; nominal {nominal:.0%}); "
+              f"the model's own bootstrap range covered {raw:.1%}, so ranges are widened {widen:.2f}x; sequential stress test {seq:.1%}; "
+              f"{bad} published rows where the widened range does not contain the model's", "warn")
     worse = con.execute("""SELECT m.area, avg(b.mase) FILTER (WHERE b.method = m.method) AS chosen, avg(b.mase) FILTER (WHERE b.method = 'Naive (last actual)') AS naive
         FROM mart.d_forecast_model m JOIN mart.d_forecast_backtest b USING (area) WHERE b.target = 'actual' GROUP BY m.area, m.method
         HAVING avg(b.mase) FILTER (WHERE b.method = m.method) > avg(b.mase) FILTER (WHERE b.method = 'Naive (last actual)') + 1e-9""").fetchall()
@@ -762,6 +768,23 @@ def phase5_audit_depth(con, check, one):
     txn = one("SELECT count(*) FROM core.fact_payment_txn")
     check("mart", "Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema",
           fa > 0, f"{fa} fields listed; {txn:,} payment-level rows loaded (0 until a records request is answered)")
+
+
+def phase5_registry(con, check, one):
+    """Model registry and drift (src/models/registry.py): every model listed with its baseline; nothing adopted that loses
+    to its baseline; drift measured for every pair of consecutive years."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_model_registry'"):
+        return
+    n = one("SELECT count(*) FROM mart.d_model_registry")
+    built = one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_forecast_backtest'")
+    lost = con.execute("""SELECT model FROM mart.d_model_registry WHERE starts_with(decision, 'Adopted') AND beats_baseline IS NOT TRUE""").fetchall()
+    check("mart", "Model registry: every model listed with its baseline; no model adopted that does not beat it",
+          (n >= 6 or not built) and not lost, f"{n} models{'' if built else ' (model stages not run in this build)'}; adopted without beating the baseline: {', '.join(r[0] for r in lost) or 'none'}")
+    gaps = one("""SELECT count(*) FROM (SELECT dataset, measure, count(*) AS pairs, max(to_fy) - min(from_fy) AS span FROM mart.d_drift GROUP BY 1, 2)
+                  WHERE pairs <> span""")
+    major = con.execute("""SELECT measure, from_fy, to_fy, psi FROM mart.d_drift WHERE level = 'Major shift' AND NOT partial_year ORDER BY psi DESC""").fetchall()
+    check("mart", "Drift: PSI between every pair of consecutive fiscal years; major shifts reported",
+          gaps == 0, f"{gaps} series with a missing year; major shifts: " + ("; ".join(f"{m} FY{a}-FY{b} PSI {p:.2f}" for m, a, b, p in major) or "none"), "warn")
 
 
 def _run_date(run_id):
