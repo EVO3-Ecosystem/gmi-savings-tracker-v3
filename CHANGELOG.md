@@ -17,6 +17,9 @@ Added
 - `src/pipeline/doc_counts.py`: counts typed in the docs are generated from the files they describe.
 
 Changed
+- Walkthrough notebook: its cells are written by `scripts/build_walkthrough.py` (edit there, not in the .ipynb); `make notebook` writes, executes and renders it.
+- Walkthrough page (`notebooks/walkthrough.html`): rendered by `scripts/render_notebook.py` as a site page instead of nbconvert's lab template. It has a real title, the site navigation and disclaimer, a skip link and contents, and key findings first with links to their evidence. Code is folded, and terms are defined in a glossary. References carry DOIs and links. Each chart is a `<figure>` with alt text, a caption that states the finding, and its data table. Tables are captioned, use readable money (`-$5.5M`, "not stated" instead of `0.00`) and have header scopes. The render fails if any of this is missing. axe-core reports no WCAG 2.2 AA violations in light, dark or phone width (the old page had 30).
+- Overview figures: titles state the finding; dollar labels no longer render as mathtext (`45$M$to$148M`); savings statuses are grouped by kind with patterns, not colour alone; check bars and range edges meet 3:1 contrast.
 - Dashboard: no range is described as holding "8 in 10" outcomes; treemap labels pick dark or light ink by fill; tab bar and filters tightened on small screens; the 404 page links to this repository's site.
 - Python 3.12 is required.
 
