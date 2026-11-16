@@ -611,3 +611,67 @@ months,core.fact_md_employment,derived,Months of the BLS employment series avera
 description,"mart.grant_clusters,grant_clusters",portal,"Grant or loan program description as the grantor published it (free text, as listed)"
 category,"mart.grant_clusters,grant_clusters",portal,Grant or Loan
 zipcode,"mart.grant_clusters,grant_clusters",portal,Grantee ZIP code as published
+source_file,core.fact_payment_txn,source,File in data/txn the row came from (one per records-request response)
+payment_number,core.fact_payment_txn,source,Payment or voucher number
+payment_date,core.fact_payment_txn,source,Date the payment was issued
+invoice_number,core.fact_payment_txn,source,Vendor invoice number
+invoice_date,core.fact_payment_txn,source,Vendor invoice date
+vendor_number,core.fact_payment_txn,source,State vendor number
+payee_name,core.fact_payment_txn,source,Payee name as entered
+payee_zip,core.fact_payment_txn,source,Payee ZIP
+line_description,core.fact_payment_txn,source,Line or payment description
+finding_id,"ref.audit_findings,mart.d_audit_findings",reference,"Finding id: agency, program and year for a public finding; OLA- plus the agency code for an OLA report row"
+program,"ref.audit_findings,mart.d_audit_findings",reference,Program or audit unit the finding is about
+source_type,"ref.audit_findings,mart.d_audit_findings",reference,"Kind of source: OLA audit report, internal audit reported by the press, agency statement reported by the press"
+document,"ref.audit_findings,mart.d_audit_findings",reference,"The document the finding comes from, as named by its source"
+document_date,"ref.audit_findings,mart.d_audit_findings",reference,Date of that document (blank when the source does not give one)
+period,"ref.audit_findings,mart.d_audit_findings",reference,"Years the finding covers, as the source states them"
+finding,"ref.audit_findings,mart.d_audit_findings",reference,"What was found, in the source's terms"
+amount_identified,"ref.audit_findings,mart.d_audit_findings",reference,"Dollars the source says were identified (overpaid, questioned); blank when not stated, never 0. Not savings"
+amount_recouped,"ref.audit_findings,mart.d_audit_findings",reference,"Dollars recovered, as reported; blank when not stated"
+recoupment_status,"ref.audit_findings,mart.d_audit_findings",reference,"Whether the money is being, or will be, recovered, as reported"
+waiver,"ref.audit_findings,mart.d_audit_findings",reference,"Whether repayment was waived: Yes, No or Unknown"
+waiver_decided_by,"ref.audit_findings,mart.d_audit_findings",reference,Who decided the waiver
+legal_opinion,"ref.audit_findings,mart.d_audit_findings",reference,"Legal opinion requested about the finding or the waiver, and by whom"
+legal_opinion_status,"ref.audit_findings,mart.d_audit_findings",reference,Status of that legal opinion as of the as_of date
+fund_source,"ref.audit_findings,mart.d_audit_findings",reference,Fund that paid the money in question (federal or General Fund); blank when no source states it
+confirmation,"ref.audit_findings,mart.d_audit_findings",reference,"Whether an audit document confirms the row, or it rests on a press or agency report"
+as_of,"ref.audit_findings,mart.d_audit_findings",reference,Calendar date the source was last checked for this row
+improvement,"ref.field_availability,mart.d_field_availability",reference,"Area of the v3.1 strategy: transaction-level, fund hierarchy, entity resolution, audit lifecycle"
+field,"ref.field_availability,mart.d_field_availability",reference,Field an audit-grade tracker needs
+in_open_data,"ref.field_availability,mart.d_field_availability",reference,"Whether the State's open data publishes the field, with the detail"
+where_it_exists,"ref.field_availability,mart.d_field_availability",reference,"Where the field exists otherwise (FMIS, MD-VIEW, agency systems)"
+plan,"ref.field_availability,mart.d_field_availability",reference,"What is built from it, or the records request that would supply it"
+transaction_rows,mart.d_field_availability,derived,Payment-level rows loaded into core.fact_payment_txn in this build (0 until a records request is answered)
+listing,"mart.d_federal_crosswalk,mart.d_fund_hierarchy,raw.federal_by_listing",derived,"Federal Assistance Listing number (formerly CFDA), e.g. 93.575 Child Care and Development Block Grant"
+listing_name,"mart.d_federal_crosswalk,raw.federal_by_listing",source,Assistance Listing program title
+obligated,raw.federal_by_listing,source,"Federal obligations in the federal fiscal year (October-September) to government recipients in Maryland, award types 02-05; net of deobligations, so it can be negative"
+programs,mart.d_federal_crosswalk,derived,State budget programs funded under the listing in the year
+state_federal_budget,mart.d_federal_crosswalk,derived,"State budget federal funds under the listing in the Maryland fiscal year (July-June), from gy87-e27x"
+federal_obligated,mart.d_federal_crosswalk,source,"Federal obligations under the listing in the federal fiscal year of the same number (October-September), set beside the State figure and never added to it; negative is a net deobligation"
+federal_reported,mart.d_federal_crosswalk,derived,"True when USAspending has the federal year at all (false: not reported, shown blank, not zero)"
+federal_partial,mart.d_federal_crosswalk,derived,True when the federal fiscal year is still in progress
+budget_to_obligated,mart.d_federal_crosswalk,derived,"State budget federal funds divided by federal obligations: a ratio to question, not a reconciliation"
+assistance_listing,mart.d_fund_hierarchy,derived,The fund source code when it is an Assistance Listing number (federal funds); blank otherwise
+fund_group,mart.d_fund_hierarchy,derived,"General, Special, Federal or Federal relief (ARPA, CARES and other pandemic relief sources)"
+share_of_program,mart.d_fund_hierarchy,derived,The fund line's share of the program's budget in the year
+program_budget,"mart.d_fund_hierarchy,mart.d_fund_shift",derived,"Program budget, all funds, in the year"
+general,mart.d_fund_shift,derived,General Fund dollars for the program in the year
+federal,mart.d_fund_shift,derived,Federal fund dollars (not relief)
+federal_relief,mart.d_fund_shift,derived,"Federal relief dollars (ARPA, CARES and similar)"
+special,mart.d_fund_shift,derived,Special fund dollars
+general_share,mart.d_fund_shift,derived,General Fund share of the program budget
+federal_share,mart.d_fund_shift,derived,"Federal share, relief included"
+general_share_2y_before,mart.d_fund_shift,derived,General Fund share two fiscal years earlier
+federal_share_2y_before,mart.d_fund_shift,derived,Federal share two fiscal years earlier
+general_share_change,mart.d_fund_shift,derived,Change in General Fund share against two years earlier (0.20 = 20 points)
+shift_to_general,mart.d_fund_shift,derived,True when the General Fund share rose at least fund_hierarchy.shift_pp points and the budget is at least fund_hierarchy.min_program (config/assumptions.yaml)
+payee_name,mart.d_vendor_alias,portal,Payee name exactly as an agency entered it
+zip,mart.d_vendor_alias,portal,Payee ZIP as entered; (none) when blank
+records,mart.d_vendor_alias,derived,Payment records (agency x payee x ZIP x year) behind the row
+kind,mart.d_vendor_alias_review,derived,ZIPs disagree (one company family paid at more than one 3-digit ZIP area) or Possible missed merge (two companies with the same first words and ZIP)
+company,mart.d_vendor_alias_review,derived,Company (normalized vendor) the item is about
+other_company,mart.d_vendor_alias_review,derived,"For a possible missed merge, the other company"
+names,mart.d_vendor_alias_review,derived,Spellings of the company's name in the payments (ZIPs disagree only)
+zip3s,mart.d_vendor_alias_review,derived,3-digit ZIP areas the spellings were paid at (ZIPs disagree only)
+evidence,mart.d_vendor_alias_review,derived,"The ZIP areas, or the shared first words and ZIP"

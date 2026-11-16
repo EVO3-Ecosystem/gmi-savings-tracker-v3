@@ -238,3 +238,11 @@ revenue:
 clustering:
   k_range: [3, 6]   # pick k by silhouette score inside this range
   seed: 11
+
+# v3.1 audit-grade data (docs/strategy-v3.1.md). Thresholds set before the results were looked at.
+fund_hierarchy:
+  shift_pp: 20                 # flag a program whose general-fund share rose by at least this many points in two years ...
+  min_program: 10000000        # ... and whose budget is at least this many dollars
+vendor_alias:
+  min_paid: 100000             # review only companies and payees paid at least this much over all years
+  stem_tokens: 3               # a likely missed merge: the first this-many words of the normalized name and the ZIP agree

@@ -35,6 +35,7 @@ Context source pulled: population,raw,
 Context source pulled: mfr,raw,
 Context source pulled: bls_employment,raw,
 Context source pulled: bea_md_gdp,raw,
+Context source pulled: federal_by_listing,raw,
 FY2026 payment dollars matched to a budget agency,ref,core.fact_payment core.fact_payment_mapped ref.baseline_quality
 FY2027 (partial year) payment dollars matched,ref,core.fact_payment core.fact_payment_mapped
 Payment agency names mapped,ref,ref.map_payment_agency
@@ -131,3 +132,8 @@ Grant groups: sensitivity reported at every threshold (leads are not savings),ma
 Payment screen vs source issues: no record is both a lead and a source issue; leads + source issues = every flagged record,mart,mart.d_payment_screen mart.d_source_issues mart.v_payment_screen_rows
 Source issues: verified issues still in the data with the dollars verified at the source on 2026-11-10,mart,mart.d_source_issues
 "Payment leads: confidence, review status and note set; measured rate NULL (lever 0) unless the review confirms a lead",mart,mart.d_payment_screen mart.d_payment_screen_summary
+"Fund hierarchy: every year ties to the funding-sources data; four fund groups; shares in [0, 1] and add up",mart,core.fact_fund mart.d_fund_hierarchy mart.d_fund_shift
+"Federal cross-check: every row is an Assistance Listing; State and federal years side by side, never summed",mart,mart.d_federal_crosswalk
+Payee aliases: no government payee in the evidence; review queue is two kinds of lead only,mart,mart.d_vendor_alias mart.d_vendor_alias_review
+"Audit register: every row has a public https source, an as-of date and a confirmation level; recouped <= identified; a waiver names who decided",mart,mart.d_audit_findings
+Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema,mart,core.fact_payment_txn mart.d_field_availability

@@ -62,6 +62,8 @@ mart.d_all_funds,core.fact_budget_all_funds
 mart.d_all_funds,core.fact_budget_highered
 mart.d_all_funds,ref.dim_stage
 mart.d_area_top,mart.v_purchase
+mart.d_audit_findings,ref.audit_findings
+mart.d_audit_findings,ref.ola_findings
 mart.d_bid_list,core.fact_budget_scope
 mart.d_bid_list,mart.agency_clusters
 mart.d_bid_list,mart.agency_year
@@ -86,6 +88,10 @@ mart.d_econ,core.fact_md_employment
 mart.d_econ,core.fact_md_gdp
 mart.d_econ,core.fact_population
 mart.d_families,mart.v_purchase
+mart.d_federal_crosswalk,mart.d_fund_hierarchy
+mart.d_federal_crosswalk,raw.federal_by_listing
+mart.d_field_availability,core.fact_payment_txn
+mart.d_field_availability,ref.field_availability
 mart.d_forecast_backtest,mart.f_code
 mart.d_forecast_backtest,mart.f_fund
 mart.d_forecast_backtest,mart.f_scope
@@ -95,6 +101,10 @@ mart.d_forecast_calibration,mart.f_scope
 mart.d_forecast_model,mart.f_code
 mart.d_forecast_model,mart.f_fund
 mart.d_forecast_model,mart.f_scope
+mart.d_fund_hierarchy,core.fact_fund
+mart.d_fund_hierarchy,mart.agency_name
+mart.d_fund_hierarchy,ref.dim_stage
+mart.d_fund_shift,mart.d_fund_hierarchy
 mart.d_grant_group_members,mart.v_grant_rows
 mart.d_grant_groups,mart.v_grant_rows
 mart.d_grant_groups_sensitivity,mart.v_grant_rows
@@ -161,6 +171,10 @@ mart.d_source_issues,mart.d_payment_screen
 mart.d_source_issues,mart.v_payment_screen_rows
 mart.d_state_plan,ref.dim_agency
 mart.d_state_plan,ref.state_plan_map
+mart.d_vendor_alias,core.fact_payment_mapped
+mart.d_vendor_alias,mart.vendor_type
+mart.d_vendor_alias,ref.map_payee_vendor
+mart.d_vendor_alias_review,mart.d_vendor_alias
 mart.d_vendor_moves,mart.payment_area
 mart.d_vendor_names,core.fact_payment_mapped
 mart.d_vendor_names,core.mfr_measure

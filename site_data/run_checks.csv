@@ -11,6 +11,7 @@ run_id,stage,check,status,detail
 20261113T180346Z,raw,Context source pulled: mfr,pass,"FY2027: 111 agency PDFs (0 unchanged and reused), 14 MB"
 20261113T180346Z,raw,Context source pulled: bls_employment,pass,"FRED MDNAN (= BLS SMU24000000000000001; BLS unavailable: BLS: ['Request could not be serviced, as the daily threshold): 2007-01 to 2026-09"
 20261113T180346Z,raw,Context source pulled: bea_md_gdp,pass,"BEA SAGDP9 (real GDP by state, chained 2017 $): 1997-2025, 2025 $437.4B"
+20261113T180346Z,raw,Context source pulled: federal_by_listing,pass,FFY2017-FFY2026: 715 Assistance Listings
 20261113T180346Z,core,Yearly totals = portal: budget,pass,11 years (2017-2027); largest gap $0.00; 0 years with a row-count difference
 20261113T180346Z,core,No missing year or amount: budget,pass,0 rows
 20261113T180346Z,core,Yearly totals = portal: fund,pass,11 years (2017-2027); largest gap $0.00; 0 years with a row-count difference
@@ -131,3 +132,8 @@ run_id,stage,check,status,detail
 20261113T180346Z,mart,Payment screen vs source issues: no record is both a lead and a source issue; leads + source issues = every flagged record,pass,0 records in both; 0 groups split between them; 0 issue ids without a source-issue row; 16 lead records + 394 source-issue records = 410 of 410 flagged
 20261113T180346Z,mart,Source issues: verified issues still in the data with the dollars verified at the source on 2026-11-10,pass,"2 of 2 verified issues present; $874,477,234.00 vs $874,477,234.00 at the source; 0 issues not yet verified"
 20261113T180346Z,mart,"Payment leads: confidence, review status and note set; measured rate NULL (lever 0) unless the review confirms a lead",pass,0 leads with a missing or invalid label; measured rate None (not measurable without payment records); lever high rate 0.0
+20261113T180346Z,mart,"Fund hierarchy: every year ties to the funding-sources data; four fund groups; shares in [0, 1] and add up",pass,"largest yearly gap $0.00; 0 rows outside the four groups; 0 programs whose funds do not add up; 9 program-years with a negative fund line (a reduction, kept); 87 shift flags"
+20261113T180346Z,mart,"Federal cross-check: every row is an Assistance Listing; State and federal years side by side, never summed",pass,"4,063 listing-years; 0 not an Assistance Listing; 156 with net deobligations (labeled)"
+20261113T180346Z,mart,Payee aliases: no government payee in the evidence; review queue is two kinds of lead only,pass,"$322.0B of non-government payments as evidence; 0 government rows; queue: Possible missed merge 2,368; ZIPs disagree 810"
+20261113T180346Z,mart,"Audit register: every row has a public https source, an as-of date and a confirmation level; recouped <= identified; a waiver names who decided",pass,19 rows; 0 unsourced or undated; 0 impossible amounts; 0 waivers without a decider
+20261113T180346Z,mart,Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema,pass,13 fields listed; 0 payment-level rows loaded (0 until a records request is answered)

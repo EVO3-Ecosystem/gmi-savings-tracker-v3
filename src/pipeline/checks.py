@@ -129,6 +129,7 @@ def run(con, run_id, manifest):
     phase5_deflator(con, check, one)
     phase5_payment_screen(con, check, one)
     phase5_source_issues(con, check, one)
+    phase5_audit_depth(con, check, one)
     con = real
     df = pd.DataFrame(out)
     while hasattr(con, "_con"):  # the DuckDB connection itself (build.py may pass a recording wrapper): replacement scans look in this frame
@@ -720,6 +721,47 @@ def phase5_source_issues(con, check, one):
 # earlier extract run, so an identical rerun reports the same names as its first passing build did, and none extra.
 PAYEE_HISTORY = "payee_name_seen.csv"
 PAYEE_COLUMNS = ["payee_name", "first_seen_run_id", "first_seen_date", "last_seen_run_id", "last_seen_date"]
+
+
+def phase5_audit_depth(con, check, one):
+    """v3.1 audit depth (sql/mart/52-58, docs/strategy-v3.1.md): fund mix ties to the funding data; the federal cross-check keeps
+    the two fiscal years apart; the alias evidence ties to payments; every audit-register row is sourced and dated."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_fund_hierarchy'"):
+        return  # a build whose marts stop earlier (the no-network fixture) has none of these tables
+    gap = one("""SELECT coalesce(max(abs(h - f)), 0) FROM (SELECT fiscal_year, sum(budget) AS h FROM mart.d_fund_hierarchy GROUP BY 1)
+                 JOIN (SELECT fiscal_year, sum(budget) AS f FROM core.fact_fund GROUP BY 1) USING (fiscal_year)""")
+    groups = one("SELECT count(*) FROM mart.d_fund_hierarchy WHERE fund_group NOT IN ('General', 'Special', 'Federal', 'Federal relief')")
+    share = one("""SELECT count(*) FROM mart.d_fund_shift
+                   WHERE abs(coalesce(general, 0) + coalesce(federal, 0) + coalesce(federal_relief, 0) + coalesce(special, 0) - program_budget) > 1""")
+    negs = one("SELECT count(*) FROM mart.d_fund_shift WHERE least(general, federal, federal_relief, special) < 0")  # reductions: real, reported
+    flags = one("SELECT count(*) FROM mart.d_fund_shift WHERE shift_to_general")
+    check("mart", "Fund hierarchy: every year ties to the funding-sources data; four fund groups; each program's funds add up",
+          gap <= 1.0 and groups == 0 and share == 0,
+          f"largest yearly gap ${gap:,.2f}; {groups} rows outside the four groups; {share} programs whose funds do not add up; {negs} program-years with a negative fund line (a reduction, kept); {flags} shift flags")
+    bad = one("SELECT count(*) FROM mart.d_federal_crosswalk WHERE NOT regexp_matches(listing, '^[0-9]{2}\\.[0-9]{3}[A-Z]?$')")
+    deob = one("SELECT count(*) FROM mart.d_federal_crosswalk WHERE federal_obligated < 0")  # net deobligations: real, labeled on the page
+    rows = one("SELECT count(*) FROM mart.d_federal_crosswalk")
+    check("mart", "Federal cross-check: every row is an Assistance Listing; State and federal years side by side, never summed",
+          rows > 0 and bad == 0, f"{rows:,} listing-years; {bad} not an Assistance Listing; {deob} with net deobligations (labeled)", "warn")
+    alias = one("SELECT coalesce(sum(paid), 0) FROM mart.d_vendor_alias")
+    over = one("SELECT count(*) FROM mart.d_vendor_alias WHERE payee_type = 'Government'")
+    queue = con.execute("SELECT kind, count(*) FROM mart.d_vendor_alias_review GROUP BY 1 ORDER BY 1").fetchall()
+    check("mart", "Payee aliases: no government payee in the evidence; review queue is two kinds of lead only",
+          over == 0 and {k for k, _ in queue} <= {"ZIPs disagree", "Possible missed merge"},
+          f"${alias / 1e9:,.1f}B of non-government payments as evidence; {over} government rows; queue: "
+          + "; ".join(f"{k} {n:,}" for k, n in queue))
+    unsrc = one("""SELECT count(*) FROM mart.d_audit_findings WHERE source_url IS NULL OR NOT starts_with(source_url, 'https://')
+                   OR as_of IS NULL OR confirmation IS NULL""")
+    neg = one("""SELECT count(*) FROM mart.d_audit_findings WHERE amount_identified < 0 OR amount_recouped < 0
+                 OR amount_recouped > amount_identified""")
+    waiv = one("SELECT count(*) FROM mart.d_audit_findings WHERE waiver = 'Yes' AND waiver_decided_by IS NULL")
+    n = one("SELECT count(*) FROM mart.d_audit_findings")
+    check("mart", "Audit register: every row has a public https source, an as-of date and a confirmation level; recouped <= identified; a waiver names who decided",
+          unsrc == 0 and neg == 0 and waiv == 0, f"{n} rows; {unsrc} unsourced or undated; {neg} impossible amounts; {waiv} waivers without a decider")
+    fa = one("SELECT count(*) FROM mart.d_field_availability")
+    txn = one("SELECT count(*) FROM core.fact_payment_txn")
+    check("mart", "Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema",
+          fa > 0, f"{fa} fields listed; {txn:,} payment-level rows loaded (0 until a records request is answered)")
 
 
 def _run_date(run_id):

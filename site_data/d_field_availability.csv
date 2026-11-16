@@ -1,0 +1,14 @@
+improvement,field,in_open_data,where_it_exists,plan,transaction_rows
+Transaction-level,Payment or voucher number,No,MD-VIEW search form (no download); FMIS,Comptroller PIA request,0
+Transaction-level,Invoice number and invoice date,No,MD-VIEW search form; FMIS,Comptroller PIA request,0
+Transaction-level,Payment date,No: every row is dated January 1; fiscal_period is always 1,MD-VIEW; FMIS,Comptroller PIA request,0
+Transaction-level,Line description and payment tier code,No,Agency systems (child care: CCATS),MSDE PIA request,0
+Fund hierarchy,Fund type,"Yes (funding sources, gy87-e27x)",,Built: d_fund_hierarchy,0
+Fund hierarchy,Federal program (Assistance Listing number),Yes: federal fund source codes are Assistance Listing numbers,,Built: d_federal_crosswalk,0
+Fund hierarchy,Reimbursable funds,No: neither budget dataset lists a reimbursable fund type,DBM budget books; FMIS,Records request,0
+Fund hierarchy,Fund on each payment,No,FMIS,Comptroller PIA request,0
+Entity resolution,Payee name as entered,Yes,,Built: d_vendor_alias,0
+Entity resolution,Payee ZIP,Yes (vendor_zip),,Built: d_vendor_alias_review,0
+Entity resolution,Vendor number or tax ID,No,FMIS vendor file; SAM.gov for federal recipients,Comptroller PIA request,0
+Audit lifecycle,Findings and repeat findings,Partly: OLA reports (PDF),ola.maryland.gov,Built: ola_findings,0
+Audit lifecycle,"Recoupment, waiver, dispute, legal opinion",No,Agency records; Attorney General correspondence; press reports,Built: d_audit_findings (public sources only); MSDE PIA request,0

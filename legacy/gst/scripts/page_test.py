@@ -32,6 +32,8 @@ DATASETS = {  # dataset id on the dashboard -> published table
     "review_queue": "review_queue", "f_challenger": "f_challenger", "d_challenger_backtest": "d_challenger_backtest", "d_challenger_total": "d_challenger_total",
     "f_revenue": "f_revenue", "d_revenue_backtest": "d_revenue_backtest", "d_revenue_model": "d_revenue_model",
     "results_trend": "results_trend", "agency_clusters": "agency_clusters", "ola_findings": "ola_findings",
+    "d_fund_shift": "d_fund_shift", "d_federal_crosswalk": "d_federal_crosswalk", "d_vendor_alias_review": "d_vendor_alias_review",
+    "d_audit_findings": "d_audit_findings", "d_field_availability": "d_field_availability",
 }
 OPTIONAL = {"d_source_issues"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
 AREAS = ['IT hardware, software & services', 'Fleet & fuel', 'Utilities & facility energy', 'Real estate & leases', 'Print, copy & mail', 'Telecom']

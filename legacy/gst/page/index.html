@@ -345,6 +345,15 @@
         <tbody id="anBody"></tbody></table></div>
       <p class="stagenote">Review status is saved in this browser only — the published page has no backend, so nothing is sent anywhere. The year filter does not apply here; the agency filter does.</p>
     </div>
+    <div class="card" id="auCard">
+      <div class="hd"><h2 id="auH">Audit and recoupment lifecycle <span class="tag2">(amounts reported, not savings)</span></h2></div>
+      <p class="note" id="auNote" data-source="d_audit_findings">—</p>
+      <p class="insight" id="auIns"></p>
+      <div class="tbl"><table data-source="d_audit_findings" data-row-key="finding_id">
+        <thead><tr><th data-field="finding">Finding</th><th data-field="agency">Agency and program</th><th data-field="period">Period</th><th class="n" data-field="amount_identified">Identified</th><th class="n" data-field="amount_recouped">Recouped</th><th data-field="recoupment_status">Recoupment</th><th data-field="waiver">Waiver</th><th data-field="legal_opinion_status">Legal opinion</th><th data-field="fund_source">Fund source</th><th data-field="confirmation">Confirmed by</th><th data-field="source_url">Source</th></tr></thead>
+        <tbody id="auBody"></tbody></table></div>
+      <p class="stagenote" id="auStage">A blank field means the public record does not say, never zero. The Office of Legislative Audits findings in the card above are part of the same register (mart.d_audit_findings); OLA reports do not publish recoupment status.</p>
+    </div>
   </section>
   <section class="panel" id="p-calc" role="tabpanel" aria-labelledby="t-calc" hidden>
     <p class="lede" id="caLede" data-source="f_forecast d_forecast_model">—</p>
@@ -529,6 +538,15 @@
         <thead><tr><th data-field="vendor">Vendor</th><th data-field="payee_type">Type</th><th data-field="main_function">Main function</th><th class="n">Paid</th><th class="n">Change</th><th class="n">Agencies</th><th class="n" data-field="payee_names">Payee names</th></tr></thead>
         <tbody id="vlBody"></tbody></table></div>
     </details>
+    <div class="card" id="vqCard">
+      <div class="hd"><h2 id="vqH">Payee names: alias review queue <span class="tag2">(leads for a reviewer, no mapping changes by itself)</span></h2></div>
+      <p class="note" id="vqNote" data-source="d_vendor_alias_review">—</p>
+      <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Kind <select id="vqKind" aria-label="Review kind"><option value="">Both kinds</option><option>ZIPs disagree</option><option>Possible missed merge</option></select></span><span class="lab"><input type="search" id="vqQ" placeholder="Company name" aria-label="Filter the alias review queue by company"></span><span id="vqCount"></span></div>
+      <div class="tbl"><table data-source="d_vendor_alias_review" data-row-key="company">
+        <thead><tr><th data-field="kind">Kind</th><th data-field="company">Company</th><th data-field="other_company">Other company</th><th class="n" data-field="names">Spellings</th><th class="n" data-field="zip3s">ZIP areas</th><th data-field="evidence">Evidence</th><th class="n" data-field="paid">Paid, all years</th></tr></thead>
+        <tbody id="vqBody"></tbody></table></div>
+      <p class="stagenote">The payments data has no vendor number or tax ID, so a payee name and its ZIP are the only keys the public data offers. A reviewed decision is recorded in reference/vendor_families.csv. Government payees are left out.</p>
+    </div>
   </section>
 
   <!-- BUDGET -->
@@ -591,6 +609,23 @@
           <tbody id="objBody"></tbody></table></div></div>
     </div>
     <p class="stagenote" id="budPair"></p>
+    <div class="card" id="fhCard">
+      <div class="hd"><h2 id="fhH">Who pays for each program: shifts to the General Fund</h2></div>
+      <p class="note" id="fhNote" data-source="d_fund_shift">—</p>
+      <p class="insight" id="fhIns"></p>
+      <div class="tbl"><table data-source="d_fund_shift" data-row-key="program_code">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="agency">Agency</th><th data-field="program_name">Program</th><th class="n" data-field="program_budget">Budget, all funds</th><th class="n" data-field="general_share_2y_before">General Fund share 2 years before</th><th class="n" data-field="general_share">General Fund share</th><th class="n" data-field="general_share_change">Change</th><th class="n" data-field="federal_share">Federal share (before → now)</th></tr></thead>
+        <tbody id="fhBody"></tbody></table></div>
+    </div>
+    <div class="card" id="fxCard">
+      <div class="hd"><h2 id="fxH">Federal programs: the State budget next to federal obligations</h2></div>
+      <p class="note" id="fxNote" data-source="d_federal_crosswalk">—</p>
+      <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Federal program <select id="fxL" aria-label="Federal program (Assistance Listing)"></select></span></div>
+      <div class="tbl"><table data-source="d_federal_crosswalk" data-row-key="fiscal_year">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="stage">State budget stage</th><th class="n" data-field="state_federal_budget">State budget, federal funds (State FY, Jul–Jun)</th><th class="n" data-field="federal_obligated">Federal obligations to Maryland governments (federal FY, Oct–Sep)</th><th class="n" data-field="agencies">State agencies</th></tr></thead>
+        <tbody id="fxBody"></tbody></table></div>
+      <p class="stagenote">The two years overlap by nine months and are set side by side, never added or netted. Obligations are USAspending awards to government recipients in Maryland (award types 02–05); a federal year still in progress is marked partial.</p>
+    </div>
   </section>
 
   <!-- DATA & PIPELINE -->
@@ -669,6 +704,13 @@
       <p><b>Filters.</b> Every filter starts at All. Years, focus areas and agencies take several values at once; the cards add up the selection. Clicking a bar for an area or agency filters the page by it; clicking a year adds or removes that year, and time charts keep every year on screen with the selection highlighted. A check beside the filters confirms that the parts on screen add up to the totals on screen.</p>
       <p><b>Master lists.</b> Payments carry an agency code from FY2020; earlier names are mapped by that code, then by hand for renamed agencies, and capital-budget accounts are grouped as capital. MDOT's modal administrations roll up to the Department of Transportation. Payee names are grouped when they differ only by suffix or spacing, and known company families are merged.</p>
       <p><b>Built by</b> Sierra Napier with Python. The pipeline runs monthly, checks itself and the dashboard before publishing, and can also be deployed on AWS or Google Cloud.</p>
+    </div>
+    <div class="card" id="faCard">
+      <div class="hd"><h2 id="faH">What an audit-grade tracker needs, and what the open data holds</h2></div>
+      <p class="note" id="faNote" data-source="d_field_availability">—</p>
+      <div class="tbl"><table data-source="d_field_availability" data-row-key="field">
+        <thead><tr><th data-field="improvement">Area</th><th data-field="field">Field</th><th data-field="in_open_data">In the open data?</th><th data-field="where_it_exists">Where it exists</th><th data-field="plan">Plan</th></tr></thead>
+        <tbody id="faBody"></tbody></table></div>
     </div>
   </section>
 
@@ -1531,6 +1573,49 @@ function drawPayScreen(p){ const g = ok('d_payment_screen'), s = ok('d_payment_s
     {key:'review_status',cls:'c-conf',pill:() => 'rv',fmt:v => v ? String(v).replace(/_/g, ' ') : 'not reviewed',title:r => r.review_note || ''}], {bar:'review_amount', click:r => r.agency_code && openDetail('agency:' + r.agency_code)});
   setText('psStatus', `Rules (config/assumptions.yaml, payment_screen): possible duplicate = same agency, vendor and exact amount ($1,000 or more) with record dates within 7 days; repeated annual line = the same in one fiscal year with record dates further apart; possible split purchase = 2+ payments within 14 days, each under the small-procurement limit in force on its record date ($50,000, then $100,000 from Oct 1, 2023, Ch. 161 of 2023), together above it. ${split ? 'Split purchases: ' + split.status.toLowerCase() + '.' : ''} The payments data are ${grain === 'annual' ? 'one row per agency, payee and year with a record date, not dated payments, so the screen cannot see duplicates inside an annual total' : 'dated payments'}. Government, health-plan, debt-service, payroll-like and pass-through payees are left out; payees that may be individuals are not named. ${conf ? 'Confidence and review status come with each group; hover a review chip for its note. ' : ''}The year and area filters do not apply here; the agency filter does.`);
   drawSourceIssues(); }
+const TRUE = v => v === true || v === 1 || String(v).toLowerCase() === 'true'; // exported booleans arrive as text
+function drawFundShift(p){ const s = ok('d_fund_shift'); if (!s) { setText('fhNote', 'The fund-mix table is not in this build.'); return; }
+  const f = s.filter(r => TRUE(r.shift_to_general) && (!p.agencies.length || p.agencies.includes(r.agency_code)) && (!p.years.length || p.years.includes(r.fiscal_year)));
+  setText('fhNote', `Programs whose General Fund share of the budget rose at least 20 points in two years, with a budget of $10M or more (config/assumptions.yaml, fund_hierarchy). From the funding-sources data (gy87-e27x), by Maryland fiscal year; FY2026 is the working budget and FY2027 the legislative appropriation. A shift is a cost the State took over from federal or special funds, often when federal relief ends; it is not a saving or an overrun.`);
+  const cc = s.filter(r => r.agency_code === 'R00' && /Child Care Assistance/i.test(r.program_name || '')).sort((a, b) => a.fiscal_year - b.fiscal_year);
+  const c25 = cc.find(r => r.fiscal_year === 2025), c23 = cc.find(r => r.fiscal_year === 2023);
+  setText('fhIns', `${N(f.length)} program-years flagged in this view.` + (c25 && c23 ? ` MSDE Child Care Assistance Grants went from ${PCT(c23.general_share)} General Fund in FY2023 to ${PCT(c25.general_share)} in FY2025 (${M(c25.program_budget)} all funds), as federal relief money ran out; DLS reports about 78% for FY2025.` : ''));
+  table('fhBody', f.slice().sort((a, b) => b.program_budget - a.program_budget), [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'agency',fmt:v => TITLE(v || '')},{key:'program_name'},{key:'program_budget',n:1,fmt:M},
+    {key:'general_share_2y_before',n:1,fmt:PCT},{key:'general_share',n:1,fmt:PCT},{key:'general_share_change',n:1,fmt:v => (v > 0 ? '+' : '') + d3.format('.0f')(v * 100) + ' pts'},
+    {key:'federal_share',n:1,fmt:(v, r) => PCT(r.federal_share_2y_before) + ' → ' + PCT(v)}]); }
+function drawFederalCrosswalk(){ const x = ok('d_federal_crosswalk'); const sel = document.getElementById('fxL'); if (!x || !sel) { setText('fxNote', 'The federal cross-check is not in this build.'); return; }
+  const LK = r => typeof r.listing === 'number' ? r.listing.toFixed(3) : String(r.listing); // 10.550 is read as a number; keep three decimals
+  if (!sel.options.length) { const tot = d3.rollups(x, v => d3.sum(v, r => r.state_federal_budget), LK).sort((a, b) => b[1] - a[1]).slice(0, 60);
+    const nm = new Map(x.map(r => [LK(r), r.listing_name]));
+    tot.forEach(([l]) => { const o = document.createElement('option'); o.value = l; o.textContent = `${l} ${nm.get(l) || ''}`; sel.appendChild(o); });
+    if ([...sel.options].some(o => o.value === '93.575')) sel.value = '93.575'; sel.addEventListener('change', drawFederalCrosswalk); }
+  const rows = x.filter(r => LK(r) === sel.value).sort((a, b) => a.fiscal_year - b.fiscal_year);
+  setText('fxNote', `In the State's funding-sources data the fund source code of federal money is the federal Assistance Listing number, so each budget line can be matched to the federal program that pays for it (93.575 is the Child Care and Development Block Grant). The 60 largest programs by State budget are listed. A gap between the two columns is a question to ask, not an error: the State budgets in its own year and may carry money over, and obligations count new awards only.`);
+  table('fxBody', rows, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'stage'},{key:'state_federal_budget',n:1,fmt:M},
+    {key:'federal_obligated',n:1,fmt:(v, r) => v == null ? (TRUE(r.federal_reported) ? '$0' : 'not reported') : M(v) + (v < 0 ? ' (net deobligation)' : '') + (TRUE(r.federal_partial) ? ' (partial year)' : '')},{key:'agencies',n:1,fmt:v => v == null ? '' : N(v)}]); }
+function drawAliasReview(){ const a = ok('d_vendor_alias_review'); if (!a) { setText('vqNote', 'The alias review queue is not in this build.'); return; }
+  const k = document.getElementById('vqKind'), q = document.getElementById('vqQ');
+  if (!k._w) { k._w = 1; k.addEventListener('change', drawAliasReview); q.addEventListener('input', drawAliasReview); }
+  const z = a.filter(r => r.kind === 'ZIPs disagree').length, mm = a.length - z;
+  setText('vqNote', `${N(z)} companies whose spellings were paid at ZIPs in more than one 3-digit ZIP area (a branch, a remittance address, a subsidiary or a wrong merge), and ${N(mm)} pairs of companies whose names share their first three words and a ZIP but are kept apart (a family the reference file may lack). Only companies paid $100K or more over all years. For a possible missed merge, Paid is the smaller company's total: the most a merge could move.`);
+  const t = (q.value || '').toLowerCase(), f = a.filter(r => (!k.value || r.kind === k.value) && (!t || String(r.company).toLowerCase().includes(t) || String(r.other_company || '').toLowerCase().includes(t)));
+  setText('vqCount', `${N(f.length)} items${f.length > 300 ? ', the largest 300 shown' : ''}`);
+  table('vqBody', f.slice().sort((a, b) => b.paid - a.paid).slice(0, 300), [{key:'kind'},{key:'company',fmt:v => TITLE(v || '')},{key:'other_company',fmt:v => v ? TITLE(v) : ''},{key:'names',n:1,fmt:v => v == null ? '' : N(v)},{key:'zip3s',n:1,fmt:v => v == null ? '' : N(v)},{key:'evidence'},{key:'paid',n:1,fmt:M}]); }
+function drawAuditLifecycle(p){ const a = ok('d_audit_findings'); if (!a) { setText('auNote', 'The audit register is not in this build.'); return; }
+  const f = a.filter(r => r.source_type !== 'OLA audit report' && (!p.agencies.length || p.agencies.includes(r.agency_code)));
+  const asof = d3.max(f, r => r.as_of);
+  setText('auNote', `Findings with their follow-through: the amount identified, what was recouped, whether repayment was waived and by whom, and whether a legal opinion was asked for. Seeded only from public documents, each row with its source and the date it was last checked${asof ? ' (latest ' + asof + ')' : ''}. "Confirmed by" says whether an audit document confirms the row or it rests on a press or agency report.`);
+  const big = f.slice().sort((a, b) => (b.amount_identified || 0) - (a.amount_identified || 0))[0], wv = f.filter(r => r.waiver === 'Yes').sort((a, b) => (b.amount_identified || 0) - (a.amount_identified || 0))[0];
+  setText('auIns', f.length ? `Largest reported finding: ${M(big.amount_identified)} (${big.finding.toLowerCase()}, ${big.period}).` + (wv ? ` ${M(wv.amount_identified)} was overpaid through agency error and ${wv.waiver_decided_by} decided not to seek repayment.` : '') + ` The sources do not say whether the second amount is part of the first, so they are not added. The fund that paid the money (federal CCDF or General Fund) is not stated in any public source; payment-level records would answer it.` : '');
+  table('auBody', f, [{key:'finding'},{key:'agency',fmt:(v, r) => [TITLE(v || ''), r.program].filter(Boolean).join(': ')},{key:'period'},{key:'amount_identified',n:1,fmt:v => v == null ? '' : M(v)},{key:'amount_recouped',n:1,fmt:v => v == null ? '' : M(v)},
+    {key:'recoupment_status',fmt:v => v || ''},{key:'waiver',fmt:(v, r) => [v, r.waiver_decided_by ? 'by ' + r.waiver_decided_by : ''].filter(Boolean).join(' ')},{key:'legal_opinion_status',fmt:(v, r) => [r.legal_opinion, v].filter(Boolean).join('. ')},
+    {key:'fund_source',fmt:v => v || 'Not stated'},{key:'confirmation'},{key:'source_url',fmt:(v, r) => 'checked ' + r.as_of}]);
+  [...document.querySelectorAll('#auBody tr')].forEach((tr, i) => { const r = f[i], td = tr && tr.children[10]; if (!td || !r || !/^https:\/\//.test(r.source_url || '')) return;
+    td.textContent = ''; const l = document.createElement('a'); l.href = r.source_url; l.target = '_blank'; l.rel = 'noopener'; l.textContent = 'Source'; td.appendChild(l); td.appendChild(document.createTextNode(', checked ' + r.as_of)); }); }
+function drawFieldAvail(){ const a = ok('d_field_availability'); if (!a) { setText('faNote', 'The field-availability table is not in this build.'); return; }
+  const n = a.length ? a[0].transaction_rows : 0, yes = a.filter(r => /^Yes/.test(r.in_open_data)).length;
+  setText('faNote', `${N(yes)} of ${N(a.length)} fields are in the State's open data. Payment number, invoice number and date, payment date and the fund on each payment exist in FMIS, the State's financial system, and MD-VIEW shows them one search at a time with no download; they need a Public Information Act request. The schema for those records is ready (src/pipeline/txn.py); ${n ? N(n) + ' payment-level rows are loaded' : 'no payment-level rows are loaded yet'}.`);
+  table('faBody', a, [{key:'improvement'},{key:'field'},{key:'in_open_data'},{key:'where_it_exists',fmt:v => v || ''},{key:'plan'}]); }
 function drawSourceIssues(){ const card = document.getElementById('psIssues'); if (!card) return; const iss = ok('d_source_issues');
   if (!iss) { setText('psIssNote', 'No data-quality issues in the source have been published for this build.'); document.getElementById('psIssBody').textContent = ''; return; }
   const scr = hasCol(iss, 'screen_review_amount'), moved = scr ? d3.sum(iss, r => r.screen_review_amount) : null, pairs = scr ? d3.sum(iss, r => r.screen_groups) : null;
@@ -2084,7 +2169,7 @@ dash.calc('c_run',{inputs:['runs','checks'],title:'Pipeline status',description:
       pill:n('fail')?`Data checks: ${n('fail')} failed`:`Data checks passed: ${n('pass')} of ${checks.length}`,state:n('fail')?'fail':(n('warn')?'warn':'pass')}];}});
 function drawReport(){ const r = ok('reports'), a = document.getElementById('repLink'); if (!r || !r.length) { a.hidden = true; return; } const l = r.slice().sort((x,y) => d3.descending(x.run_date, y.run_date))[0]; a.href = l.url; a.textContent = 'Download PDF report (' + l.run_date + ')'; a.hidden = false; }
 function fillMarks(){ const d = dash.data('c_run'); document.querySelectorAll('[data-source="c_run"][data-field]').forEach(el => { el.textContent = (d.status === 'ok' && d.data[0]) ? d.data[0][el.dataset.field] : '—'; }); document.getElementById('runPill').className = 'st ' + (d.status === 'ok' && d.data[0] ? d.data[0].state : ''); }
-const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:drawVendors, budget:drawBudget, data:drawData, fcast:drawFcast};
+const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));
