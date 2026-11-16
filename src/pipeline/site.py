@@ -10,7 +10,7 @@ look and palette), without the "preview for approval" banner and with a prototyp
 are not embedded: the harness's data stub is built empty and its start-up line is swapped for one that fetches
 data/<file>.csv for every dashboard dataset, then draws. The page itself (legacy/gst/page/index.html) is not changed.
 
-The site also gets 404.html, robots.txt, figures/ (docs/figures/*.png) and about.html (the README's pipeline summary).
+The site also gets 404.html, robots.txt, figures/ (docs/figures/**/*.png) and about.html (the README's pipeline summary).
 Nothing on the site loads from another host: d3 is inlined by the harness, as in the preview.
 
 The artifact variant (--artifact) is the same build with what a claude.ai artifact cannot use or does not need left out:
@@ -293,8 +293,10 @@ def build(out=OUT, src=None, artifact=False):
         for f in pq:
             shutil.copy(f, out / "parquet" / f.name)
     (out / "figures").mkdir()
-    for f in sorted(FIGURES.glob("*.png")):
-        shutil.copy(f, out / "figures" / f.name)
+    for f in sorted(FIGURES.rglob("*.png")):  # subfolders too (readme/, overview/): the about page shows README figures from them
+        dest = out / "figures" / f.relative_to(FIGURES)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(f, dest)
     intro, summary = readme_summary((ROOT / "README.md").read_text())
     (out / "about.html").write_text(page("About the GMI Savings Tracker",
                                          "<h1>GMI Savings Tracker: how it is built</h1>" + md_to_html(intro) + md_to_html(summary)
