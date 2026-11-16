@@ -59,7 +59,7 @@ def screen(f_program, ola=None, reported=None, agencies=None, cfg=None):
     out = pd.DataFrame(rows)
     if out.empty:
         return pd.DataFrame(columns=COLUMNS)
-    out["agency"] = out.agency_code.map(agencies or {}).fillna(out.agency_code)
+    out["agency"] = [(agencies or {}).get(a, a) for a in out.agency_code]
     if ola is not None and len(ola):
         o = ola.sort_values("report_date").groupby("agency_code").last()
         for col, src in (("ola_report_date", "report_date"), ("ola_findings", "findings"), ("ola_repeat_findings", "repeat_findings")):

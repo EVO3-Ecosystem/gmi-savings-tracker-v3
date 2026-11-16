@@ -569,6 +569,14 @@
       <div class="legend" id="pgTreeLegend"></div>
       <div class="chart" id="pgTree" data-source="f_program f_function" style="min-height:440px"></div>
     </div>
+    <div class="card" id="prgCard">
+      <div class="hd"><h2 id="prgH">Programs that grew fast and swung sharply</h2></div>
+      <p class="note" id="prgNote">—</p>
+      <p class="insight" id="prgFind"></p>
+      <div class="chart" id="prgChart" data-source="f_program"></div>
+      <p class="note">An order in which to ask questions, not a finding. Programs grow and swing for ordinary reasons: federal relief money in FY2021 and FY2022, reserve accounts that are filled and emptied by design, a new law phasing in. An audit of an agency says little about any one of its programs.</p>
+    </div>
+    <div id="prgTable" style="min-width:0"></div>
     <div class="card">
       <div class="hd"><h2 id="grH">Grants and loans, as listed</h2></div>
       <p class="note" id="grNote">Every row as the state publishes it (grants and loans dataset, absk-avps), with no grouping. Grantor names are free text, so one agency can appear under several spellings. FY2009–FY2025; the agency filter does not apply. Descriptions are cut to one line; hover for the full text.</p><p class="insight" id="grFind"></p>
@@ -1305,6 +1313,7 @@ function drawBudget(p){
     table('objBody', ob, [{key:'object_name'},{key:'value',n:1,fmt:M},{key:'change',n:1,chg:'neutral'},{key:'controllable',n:1,fmt:M}]);
     const ot = d3.sum(ob, r => r.value), oc = d3.sum(ob, r => r.controllable); setText('objFind', ot ? `${PCT(oc / ot)} of this spending (${M(oc)}) is controllable; ${ob[0].object_name.toLowerCase()} is the largest type at ${PCT(ob[0].value / ot)}.` : ''); }
   drawBudgetTree(p);
+  drawProgramScreen(p);
   setText('budPair', `${fl}${m.n > 1 ? ' combined' : ''}. Change: ${m.label || 'no earlier years to compare'}.` + (m.mixed ? ' This selection mixes actual spending and budgets.' : ''));
 }
 /* ======================= budget, payments, funding and grants (portal views) ======================= */
@@ -1831,6 +1840,10 @@ function drawDetail(p){
       const br2 = breakdown(pgD.filter(r => r.agency_code === code), 'program_name', 'budget', q, {ignoreArea:true, years:[Y2]});
       newTable(tb, `Programs, FY${Y2}`, `Operating budget by program at ${nm}, the latest selected year; the change is against the year before.`, [['Program'],['Amount',1],['Change',1],['Share',1]], br2,
         [{key:'program_name'},{key:'value',n:1,fmt:M},{key:'change',n:1,chg:'neutral'},{key:'share',n:1,fmt:PCT}], {bar:'value'}); }
+    const afD = (ok('audit_findings') || []).filter(r => r.agency_code === code);
+    if (afD.length) newTable(tb, 'Reported findings', `Amounts reported by an audit or the press for programs at ${nm}, with what is known about recovering the money. Rows can overlap, so they are not added up. A blank status means no source states one.`,
+      [['Finding'],['Program'],['Amount',1],['Period'],['Recoupment'],['Source']], afD,
+      [{key:'finding'},{key:'program_name'},{key:'amount',n:1,fmt:v => v == null || v === '' ? '—' : M(+v)},{key:'period'},{key:'recoupment_status'},{key:'source'}]);
   }
 }
 
@@ -2002,6 +2015,41 @@ function exportReviewQueue(){
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 /* (#44) budget treemap: function → agency → program, one year, from f_program joined to f_function */
+// Statewide program screen: the same rule as src/models/program_screen.py, settings from config/assumptions.yaml (program_screen).
+const PSCFG = /*program_screen*/{"first_fy": 2017, "last_actual_fy": 2025, "min_years": 5, "min_spend": 10000000, "fast_growth_multiple": 2.0, "large_swing": 0.3, "top_n": 20};
+function programScreen(pg, af, names){
+  const by = d3.group(pg.filter(r => r.stage === 'Actual' && r.fiscal_year >= PSCFG.first_fy && r.fiscal_year <= PSCFG.last_actual_fy), r => [r.agency_code, r.unit_name, r.program_code].join('|'));
+  const rep = d3.group((af || []).filter(r => String(r.program_code ?? '') !== ''), r => r.agency_code + '|' + String(r.program_code));
+  const out = [];
+  for (const [, rows] of by) {
+    const yr = [...d3.rollup(rows, v => d3.sum(v, r => r.budget), r => r.fiscal_year)].filter(d => d[1] > 0).sort((a, b) => a[0] - b[0]);
+    if (yr.length < PSCFG.min_years || yr[yr.length - 1][1] < PSCFG.min_spend) continue;
+    let swing = null, swingFy = null;
+    for (let i = 1; i < yr.length; i++) { if (yr[i][0] - yr[i - 1][0] !== 1) continue; const c = yr[i][1] / yr[i - 1][1] - 1; if (swing == null || Math.abs(c) > Math.abs(swing)) { swing = c; swingFy = yr[i][0]; } }
+    const r0 = rows[0], last = rows.reduce((a, b) => b.fiscal_year >= a.fiscal_year ? b : a), mult = yr[yr.length - 1][1] / yr[0][1];
+    const fast = mult >= PSCFG.fast_growth_multiple, big = swing != null && Math.abs(swing) >= PSCFG.large_swing;
+    const f = rep.get(r0.agency_code + '|' + String(r0.program_code)) || [];
+    out.push({agency_code: r0.agency_code, agency: (names && names.get(r0.agency_code)) || r0.agency_code, unit_name: r0.unit_name, program_code: r0.program_code, program_name: last.program_name,
+      first_fy: yr[0][0], last_fy: yr[yr.length - 1][0], spend_first: yr[0][1], spend_last: yr[yr.length - 1][1], growth_multiple: mult, largest_swing: swing, swing_fy: swingFy,
+      signals: (fast ? 1 : 0) + (big ? 1 : 0), reported_findings: f.length, reported_amount: f.length ? d3.max(f, r => +r.amount || 0) : null,
+      recoupment_status: [...new Set(f.map(r => r.recoupment_status).filter(Boolean))].sort().join('; ')});
+  }
+  return out.sort((a, b) => b.signals - a.signals || b.spend_last - a.spend_last);
+}
+window.gstProgramScreen = () => { const pg = ok('f_program'); return pg ? programScreen(pg, ok('audit_findings'), null) : null; };
+function drawProgramScreen(p){
+  const pg = ok('f_program'), box = document.getElementById('prgChart'), tb = document.getElementById('prgTable'); if (!pg || !box || !tb) return;
+  const da = ok('d_agency'), names = new Map((da || []).map(r => [r.agency_code, r.agency]));
+  const all = programScreen(pg, ok('audit_findings'), names), rows = all.filter(r => !p.agencies.length || p.agencies.includes(r.agency_code));
+  const both = rows.filter(r => r.signals === 2), X = v => v.toFixed(1) + 'x', SW = v => v == null ? '—' : (v > 0 ? '+' : '−') + PCT(Math.abs(v));
+  setText('prgNote', `Every program with ${PSCFG.min_years} or more actual years and at least ${M(PSCFG.min_spend)} in its last one, FY${PSCFG.first_fy}–FY${PSCFG.last_actual_fy}. Fast growth: ${PSCFG.fast_growth_multiple} times or more over the period. Large swing: a change of ${PCT(PSCFG.large_swing)} or more from one year to the next. Bars: actual spending in the last year, for the largest programs with both; a bar in the second colour has a reported finding (see the table).`);
+  setText('prgFind', rows.length ? `${N(both.length)} of ${N(rows.length)} programs across ${N(new Set(rows.map(r => r.agency_code)).size)} agencies both grew fast and swung sharply${both.length ? `; the largest is ${both[0].program_name} at ${both[0].agency} (${M(both[0].spend_last)}, ${X(both[0].growth_multiple)} since FY${both[0].first_fy})` : ''}.` : 'No program in this selection has enough history to screen.');
+  hbars(box, both.slice(0, 12).map(r => ({label: `${r.program_name} (${r.agency_code})`, a: r.spend_last, chg: null, color: r.reported_findings ? dash.colors[1] : dash.colors[0]})), {aria: 'Largest programs that grew fast and swung sharply, by actual spending in the last year'});
+  tb.textContent = '';
+  newTable(tb, 'Every screened program', 'Most signals first, then largest. Reported finding: an amount reported by an audit or the press for this program, with what is known about recovering it (the largest amount where several overlap).',
+    [['Program'],['Agency'],['Last year',1],['Growth',1],['Largest swing',1],['In',1],['Signals',1],['Reported finding',1],['Recoupment']], rows,
+    [{key:'program_name'},{key:'agency'},{key:'spend_last',n:1,fmt:M},{key:'growth_multiple',n:1,fmt:X},{key:'largest_swing',n:1,fmt:SW},{key:'swing_fy',n:1,fmt:v => v == null ? '—' : 'FY' + v},{key:'signals',n:1},{key:'reported_amount',n:1,fmt:v => v == null ? '—' : M(v)},{key:'recoupment_status'}], {bar:'spend_last'});
+}
 function drawBudgetTree(p){
   const box = document.getElementById('pgTree'); if (!box) return; box.textContent = ''; legend('pgTreeLegend', []);
   const pg = ok('f_program'), ff = ok('f_function'); if (!pg || !ff) return;

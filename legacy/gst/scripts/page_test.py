@@ -33,8 +33,9 @@ DATASETS = {  # dataset id on the dashboard -> published table
     "review_queue": "review_queue", "f_challenger": "f_challenger", "d_challenger_backtest": "d_challenger_backtest", "d_challenger_total": "d_challenger_total",
     "f_revenue": "f_revenue", "d_revenue_backtest": "d_revenue_backtest", "d_revenue_model": "d_revenue_model",
     "results_trend": "results_trend", "agency_clusters": "agency_clusters", "ola_findings": "ola_findings",
+    "audit_findings": "audit_findings_override",  # reference/audit_findings_override.csv: reported findings with a recoupment status
 }
-OPTIONAL = {"d_source_issues"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
+OPTIONAL = {"d_source_issues", "audit_findings"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
 AREAS = ['IT hardware, software & services', 'Fleet & fuel', 'Utilities & facility energy', 'Real estate & leases', 'Print, copy & mail', 'Telecom']
 
 CSS = (":root{--color-bg:#fafafa;--color-panel:#fff;--color-border-line:#ddd;--color-fg:#111;--color-fg-muted:#666;--color-ok:#2a7;--color-warn:#c80;"

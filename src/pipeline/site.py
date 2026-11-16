@@ -280,7 +280,11 @@ def build(out=OUT, src=None, artifact=False):
         shutil.rmtree(out)
     (out / "data").mkdir(parents=True)
     index, datasets = build_index(src, sha)
-    missing = sorted({f for f in datasets.values() if not (src / f"{f}.csv").exists()})
+    refs = {"audit_findings_override": ROOT / "reference" / "audit_findings_override.csv"}  # reference files the page reads as they are
+    for name, f in refs.items():
+        if f.is_file():
+            shutil.copy(f, out / "data" / f"{name}.csv")
+    missing = sorted({f for f in datasets.values() if f not in refs and not (src / f"{f}.csv").exists()})
     if missing:
         raise SystemExit(f"export is missing dashboard files: {', '.join(missing)}")
     for f in published_files(datasets):
