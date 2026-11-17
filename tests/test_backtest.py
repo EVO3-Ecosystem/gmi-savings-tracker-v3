@@ -63,3 +63,17 @@ def test_only_data_up_to_the_next_year_is_read():
     later = budget.fiscal_year > 2023
     noisy = budget.assign(budget=budget.budget.where(~later, budget.budget * 50))
     pd.testing.assert_frame_equal(base, B.run(noisy, ay, pay.assign(amount=pay.amount.where(pay.fiscal_year <= 2023, 1e9)), _cfg(), as_of=(2022,)))
+
+
+def test_a_year_with_no_actual_budget_rows_screens_as_empty_not_as_an_error():
+    """The payment detectors are rerun for years after the last actual budget year (FY2026, FY2027). The budget screen then has no
+    rows, and pandas 3 gives an empty frame's mapped fte column a string dtype: budget / fte raised TypeError on the first real run."""
+    budget, ay, pay = _world()
+    for t in (2026, 2027):  # no Actual budget rows and no FTE rows for these years in the constructed world
+        out = B._screen_all(budget, ay, pay, _cfg(), t)
+        assert set(out) >= set(B.DETECTORS)
+        assert len(out["Peer gap"]) == 0 and len(out["Growth above trend"]) == 0
+    budget_only_early = budget[budget.fiscal_year <= 2022]  # FTE exists for 2025 but there are no Actual budget rows: the same empty path
+    out = B.screen(budget_only_early, ay, pay, B._cfg(_cfg(), 2025))
+    assert len(out["Peer gap"]) == 0
+

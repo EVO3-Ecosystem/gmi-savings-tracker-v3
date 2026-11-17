@@ -50,7 +50,7 @@ def screen(code_agency, agency_year, payments, cfg):
     fte = agency_year[agency_year.fiscal_year == y].set_index("agency_code").fte
     key = ["agency_code", "code", "comptroller_subobject_name", "area"]
     cur = c[c.fiscal_year == y].groupby(key, dropna=False).budget.sum().reset_index()
-    cur["fte"] = cur.agency_code.map(fte)
+    cur["fte"] = pd.to_numeric(cur.agency_code.map(fte), errors="coerce")  # a year with no rows maps to a string dtype in pandas 3
     pe = cur[(cur.fte >= pg["min_positions"]) & (cur.budget > 0)].copy()
     pe["per"] = pe.budget / pe.fte
     st = pe.groupby("code").per.agg(p75=lambda s: s.quantile(pg["percentile"]), n="count")
