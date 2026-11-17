@@ -1,0 +1,60 @@
+source,area,horizon,scope,calibrated,n,hits,coverage,cov_lo,cov_hi,mean_interval_score,relative_interval_score,factor,adopted
+bootstrap,All areas,0,in_sample,0,63,40,0.63,0.51,0.74,315965155.0,0.59,1.0,0
+bootstrap,All areas,1,in_sample,0,28,18,0.64,0.46,0.79,239564932.0,0.42,1.0,0
+bootstrap,All areas,2,in_sample,0,21,13,0.62,0.41,0.79,343252715.0,0.68,1.0,0
+bootstrap,All areas,3,in_sample,0,14,9,0.64,0.39,0.84,427834261.0,0.78,1.0,0
+bootstrap,Fleet & fuel,0,in_sample,0,9,1,0.11,0.02,0.44,332069228.0,1.55,1.0,0
+bootstrap,"IT hardware, software & services",0,in_sample,0,9,8,0.89,0.56,0.98,235256919.0,0.34,1.0,0
+bootstrap,Other controllable purchases,0,in_sample,0,9,8,0.89,0.56,0.98,1476128470.0,0.54,1.0,0
+bootstrap,"Print, copy & mail",0,in_sample,0,9,5,0.56,0.27,0.81,17543834.0,0.34,1.0,0
+bootstrap,Real estate & leases,0,in_sample,0,9,4,0.44,0.19,0.73,19965048.0,0.14,1.0,0
+bootstrap,Telecom,0,in_sample,0,9,9,1.0,0.7,1.0,26178456.0,0.52,1.0,0
+bootstrap,Utilities & facility energy,0,in_sample,0,9,5,0.56,0.27,0.81,104614131.0,0.68,1.0,0
+bootstrap,All areas,0,in_sample,1,63,52,0.83,0.71,0.9,460687279.0,0.68,1.63,0
+bootstrap,All areas,1,in_sample,1,28,23,0.82,0.64,0.92,378816445.0,0.51,1.63,0
+bootstrap,All areas,2,in_sample,1,21,17,0.81,0.6,0.92,447454908.0,0.76,1.63,0
+bootstrap,All areas,3,in_sample,1,14,12,0.86,0.6,0.96,644277504.0,0.9,1.63,0
+bootstrap,Fleet & fuel,0,in_sample,1,9,4,0.44,0.19,0.73,288898834.0,1.34,1.63,0
+bootstrap,"IT hardware, software & services",0,in_sample,1,9,9,1.0,0.7,1.0,387082706.0,0.56,1.63,0
+bootstrap,Other controllable purchases,0,in_sample,1,9,9,1.0,0.7,1.0,2364082355.0,0.85,1.63,0
+bootstrap,"Print, copy & mail",0,in_sample,1,9,8,0.89,0.56,0.98,15771103.0,0.31,1.63,0
+bootstrap,Real estate & leases,0,in_sample,1,9,7,0.78,0.45,0.94,17136290.0,0.13,1.63,0
+bootstrap,Telecom,0,in_sample,1,9,9,1.0,0.7,1.0,44222483.0,0.87,1.63,0
+bootstrap,Utilities & facility energy,0,in_sample,1,9,6,0.67,0.35,0.88,107617184.0,0.69,1.63,0
+bootstrap,All areas,0,out_of_sample,0,63,37,0.59,0.46,0.7,318013282.0,0.63,1.0,0
+bootstrap,All areas,1,out_of_sample,0,28,17,0.61,0.42,0.76,241110733.0,0.45,1.0,0
+bootstrap,All areas,2,out_of_sample,0,21,12,0.57,0.37,0.76,346368133.0,0.74,1.0,0
+bootstrap,All areas,3,out_of_sample,0,14,8,0.57,0.33,0.79,429286103.0,0.81,1.0,0
+bootstrap,Fleet & fuel,0,out_of_sample,0,9,1,0.11,0.02,0.44,332069228.0,1.55,1.0,0
+bootstrap,"IT hardware, software & services",0,out_of_sample,0,9,8,0.89,0.56,0.98,235256919.0,0.34,1.0,0
+bootstrap,Other controllable purchases,0,out_of_sample,0,9,8,0.89,0.56,0.98,1476128470.0,0.54,1.0,0
+bootstrap,"Print, copy & mail",0,out_of_sample,0,9,5,0.56,0.27,0.81,17543834.0,0.34,1.0,0
+bootstrap,Real estate & leases,0,out_of_sample,0,9,4,0.44,0.19,0.73,21009169.0,0.15,1.0,0
+bootstrap,Telecom,0,out_of_sample,0,9,6,0.67,0.35,0.88,39471221.0,0.8,1.0,0
+bootstrap,Utilities & facility energy,0,out_of_sample,0,9,5,0.56,0.27,0.81,104614131.0,0.68,1.0,0
+bootstrap,All areas,0,out_of_sample,1,63,53,0.84,0.73,0.91,582104945.0,0.79,1.96,0
+bootstrap,All areas,1,out_of_sample,1,28,24,0.86,0.69,0.94,438030574.0,0.56,1.83,0
+bootstrap,All areas,2,out_of_sample,1,21,17,0.81,0.6,0.92,565809529.0,0.88,1.95,0
+bootstrap,All areas,3,out_of_sample,1,14,12,0.86,0.6,0.96,894696809.0,1.09,2.21,0
+bootstrap,Fleet & fuel,0,out_of_sample,1,9,4,0.44,0.19,0.73,305463375.0,1.43,1.96,0
+bootstrap,"IT hardware, software & services",0,out_of_sample,1,9,9,1.0,0.7,1.0,479675612.0,0.7,1.96,0
+bootstrap,Other controllable purchases,0,out_of_sample,1,9,9,1.0,0.7,1.0,3075460426.0,1.11,1.96,0
+bootstrap,"Print, copy & mail",0,out_of_sample,1,9,7,0.78,0.45,0.94,21174329.0,0.41,1.96,0
+bootstrap,Real estate & leases,0,out_of_sample,1,9,9,1.0,0.7,1.0,20120958.0,0.15,1.96,0
+bootstrap,Telecom,0,out_of_sample,1,9,9,1.0,0.7,1.0,44191379.0,0.88,1.96,0
+bootstrap,Utilities & facility energy,0,out_of_sample,1,9,6,0.67,0.35,0.88,128648535.0,0.83,1.96,0
+bootstrap,All areas,0,expanding_origin,0,42,19,0.45,0.31,0.6,702800304.0,0.85,1.0,0
+bootstrap,All areas,1,expanding_origin,0,21,10,0.48,0.28,0.68,479840613.0,0.62,1.0,0
+bootstrap,All areas,2,expanding_origin,0,14,8,0.57,0.33,0.79,741472494.0,1.03,1.0,0
+bootstrap,All areas,3,expanding_origin,0,7,1,0.14,0.03,0.51,1294334994.0,1.2,1.0,0
+bootstrap,All areas,0,expanding_origin,1,42,41,0.98,0.88,1.0,1723498907.0,2.3,5.46,0
+bootstrap,All areas,1,expanding_origin,1,21,20,0.95,0.77,0.99,1192849308.0,1.48,4.75,0
+bootstrap,All areas,2,expanding_origin,1,14,14,1.0,0.78,1.0,1860355132.0,2.42,5.74,0
+bootstrap,All areas,3,expanding_origin,1,7,7,1.0,0.65,1.0,3041735252.0,4.51,7.03,0
+lightgbm,All series,1,in_sample,0,6512,4769,0.73,0.72,0.74,4002258.0,224.58,0.0,0
+lightgbm,All series,1,expanding_origin,1,4339,3515,0.81,0.8,0.82,3872329.0,323.27,0.15,0
+naive band,All series,1,in_sample,0,6512,2797,0.43,0.42,0.44,26704712.0,15890.76,0.0,0
+naive band,All series,1,expanding_origin,1,4339,3640,0.84,0.83,0.85,68837513.0,50481.66,0.7,0
+lightgbm area,All areas,1,expanding_origin,1,14,13,0.93,0.69,0.99,259227758.0,0.49,0.25,1
+revenue,General Fund revenue,1,in_sample,0,5,3,0.6,0.23,0.88,6393578133.0,0.26,1.0,0
+revenue,General Fund revenue,1,in_sample,1,5,4,0.8,0.38,0.96,8552789218.0,0.34,3.58,0

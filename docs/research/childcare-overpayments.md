@@ -58,4 +58,4 @@ Many flagged programs have ordinary explanations: federal relief money in FY2021
 
 1. Payment-level child care scholarship records from the department (provider, month, children, rate, amount), by Public Information Act request.
 2. The internal audit reports themselves, to replace press summaries with the audit's own figures and method.
-3. `reference/audit_findings_override.csv`: one row per reported finding with its program, amount and recoupment status, so reported findings sit beside the spending they concern. The three items above are its first rows.
+3. `reference/audit_finding_programs.csv`: ties each finding in the audit register (`reference/audit_findings.csv`, the one source for the finding, its amount and its recoupment status) to a budget program, so reported findings sit beside the spending they concern. The two overpayment findings above are linked to the Child Care Assistance Grants program. The $44 million never-launched online system is a press report of an award that delivered nothing, not an overpayment, so it is not in the register and not linked to a program; it stays here as context.

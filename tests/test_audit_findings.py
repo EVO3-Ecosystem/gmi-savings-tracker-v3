@@ -1,39 +1,46 @@
-"""reference/audit_findings_override.csv: one row per reported finding, with a program, an amount and a recoupment status."""
+"""reference/audit_finding_programs.csv ties findings in the audit register (reference/audit_findings.csv) to budget programs.
+
+The register is the one source for a finding's text, amount and recoupment status; this file only says which budget program a finding is about."""
 from pathlib import Path
 
 import pandas as pd
+import pytest
+
+from src.models import program_screen as PS
 
 ROOT = Path(__file__).resolve().parents[1]
-F = pd.read_csv(ROOT / "reference" / "audit_findings_override.csv", dtype=str, keep_default_na=False)
-STATUSES = {"", "Active", "Waived/Forgiven", "Pending Attorney General Review", "Recovered"}
-COLUMNS = ["finding_id", "agency_code", "report_date", "unit_name", "program_code", "program_name", "finding", "amount", "period",
-           "recoupment_status", "source", "source_url", "verified", "note"]
+REG = pd.read_csv(ROOT / "reference" / "audit_findings.csv", dtype=str, keep_default_na=False)
+LINK = pd.read_csv(ROOT / "reference" / "audit_finding_programs.csv", dtype=str, keep_default_na=False)
+COLUMNS = ["finding_id", "agency_code", "unit_name", "program_code", "program_name"]
 
 
-def test_layout_ids_and_statuses():
-    assert list(F.columns) == COLUMNS
-    assert F.finding_id.is_unique and (F.finding_id != "").all()
-    assert set(F.recoupment_status) <= STATUSES
-    assert (F.finding != "").all() and (F.source != "").all() and F.source_url.str.startswith("https://").all() and (F.verified != "").all()
-    assert pd.to_numeric(F.amount[F.amount != ""]).gt(0).all()
+def test_layout_and_ids():
+    assert list(LINK.columns) == COLUMNS
+    assert LINK.finding_id.is_unique and (LINK.finding_id != "").all()
+    assert (LINK[["agency_code", "unit_name", "program_code", "program_name"]] != "").all().all()
 
 
-def test_agencies_and_programs_exist_in_the_published_data():
-    agencies = set(pd.read_csv(ROOT / "reference" / "ola_findings.csv", dtype=str).agency_code)
-    assert set(F.agency_code) <= agencies
+def test_every_linked_finding_is_in_the_register_for_the_same_agency():
+    m = LINK.merge(REG[["finding_id", "agency_code"]], on="finding_id", how="left", suffixes=("", "_register"))
+    assert m.agency_code_register.notna().all(), "a linked finding is not in the register"
+    assert (m.agency_code == m.agency_code_register).all()
+
+
+def test_linked_programs_exist_in_the_published_data():
     prog = pd.read_csv(ROOT / "site_data" / "f_program.csv", dtype=str)
-    have = set(zip(prog.agency_code, prog.program_code, prog.program_name))
-    named = F[F.program_code != ""]
-    assert all((r.agency_code, r.program_code, r.program_name) in have for r in named.itertuples())
+    have = set(zip(prog.agency_code, prog.unit_name, prog.program_code))
+    assert all((r.agency_code, r.unit_name, r.program_code) in have for r in LINK.itertuples())
 
 
-def test_an_ola_report_date_must_match_an_ola_row_and_press_findings_carry_none():
-    ola = pd.read_csv(ROOT / "reference" / "ola_findings.csv", dtype=str)
-    dated = F[F.report_date != ""]
-    assert all(((ola.agency_code == r.agency_code) & (ola.report_date == r.report_date)).any() for r in dated.itertuples())
-    assert (F[F.source.str.contains("press report")].report_date == "").all()
+def test_the_reported_findings_frame_takes_amount_and_status_from_the_register():
+    rep = PS.reported_findings()
+    assert list(rep.finding_id) == list(LINK.finding_id)
+    ten_point_seven = rep[rep.finding_id == "MSDE-CCS-2026-02"].iloc[0]
+    assert float(ten_point_seven.amount) == 10_700_000  # $10.7M, not $107M
+    assert ten_point_seven.recoupment_status == REG[REG.finding_id == "MSDE-CCS-2026-02"].recoupment_status.iloc[0]
 
 
-def test_the_child_care_amount_is_ten_point_seven_million_not_one_hundred_and_seven():
-    row = F[F.finding_id == "A002"].iloc[0]
-    assert float(row.amount) == 10_700_000 and row.recoupment_status == "Waived/Forgiven"
+def test_a_link_to_a_finding_that_is_not_in_the_register_is_refused():
+    bad = LINK.assign(finding_id=[f"NOT-A-FINDING-{i}" for i in range(len(LINK))])
+    with pytest.raises(ValueError, match="not in the register"):
+        PS.reported_findings(register=REG, links=bad)

@@ -163,6 +163,35 @@ def federal_awards(out):
             "ok": bool((full.amount > 0).all())}
 
 
+def federal_by_listing(out):
+    """USAspending: federal grant obligations (award types 02-05) to government recipients located in Maryland, by Assistance
+    Listing number and federal fiscal year (Oct-Sep), for the cross-check against the State budget's federal fund sources
+    (gy87-e27x fund_source_code holds the Assistance Listing number, e.g. 93.575). Obligations, not outlays; all Maryland
+    government recipients (the State and local governments), so a listing can exceed the State's own budget line."""
+    today = dt.date.today()
+    rows = []
+    for fy in range(2017, today.year + 1):
+        start, end = f"{fy - 1}-10-01", min(f"{fy}-09-30", today.isoformat())
+        if start > today.isoformat():
+            break
+        page = 1
+        while True:
+            body = {"filters": {"time_period": [{"start_date": start, "end_date": end}], "award_type_codes": ["02", "03", "04", "05"],
+                                "recipient_type_names": ["government"], "recipient_locations": [{"country": "USA", "state": "MD"}]},
+                    "limit": 100, "page": page}
+            j = _get("https://api.usaspending.gov/api/v2/search/spending_by_category/cfda/", "POST", json=body).json()
+            for r in j.get("results", []):
+                rows.append({"federal_fy": fy, "listing": r["code"], "listing_name": r["name"], "obligated": float(r["amount"] or 0),
+                             "partial": end < f"{fy}-09-30"})
+            if not j.get("page_metadata", {}).get("hasNext"):
+                break
+            page += 1
+    df = pd.DataFrame(rows)
+    df.to_parquet(out / "federal_by_listing.parquet", index=False)
+    return {"rows": len(df), "detail": f"FFY{df.federal_fy.min()}-FFY{df.federal_fy.max()}: {df.listing.nunique()} Assistance Listings",
+            "ok": len(df) > 0}
+
+
 def population(out):
     base = "https://www2.census.gov/programs-surveys/popest/datasets"
     newest = None
@@ -235,7 +264,7 @@ def mfr_reuse(out, prev_dir):
 
 
 SOURCES = {"cpi": cpi, "federal_awards": federal_awards, "population": population, "mfr": mfr,
-           "bls_employment": bls_employment_md, "bea_md_gdp": bea_md_gdp}
+           "bls_employment": bls_employment_md, "bea_md_gdp": bea_md_gdp, "federal_by_listing": federal_by_listing}
 
 
 def run_all(out, prev_dir, log):

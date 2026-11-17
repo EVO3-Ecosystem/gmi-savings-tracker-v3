@@ -6,6 +6,11 @@
 The forecast reads only three marts (f_code, f_scope, f_fund), and all three are published unfiltered, so anyone
 with the repository can reproduce the published forecast, its rolling backtest and the range calibration without
 the warehouse. The check compares the raw columns: the published files were rounded to cents on export.
+
+One exception: where the pre-registered adoption rule gave a forecast year the LightGBM-based range
+(range_source = 'lightgbm'), that range comes from the challenger's internals, which are not published. Those rows are
+checked instead against the published adoption record (d_range_coverage: an adopted LightGBM row at that horizon) and
+for containing the published median; their bootstrap columns are still compared.
 """
 import argparse
 import sys
@@ -31,9 +36,27 @@ def rebuild(site=SITE, cfg=None):
     return {"f_forecast": f, "d_forecast_model": m, "d_forecast_backtest": bt, "d_forecast_calibration": cal, "d_range_coverage": cov}
 
 
+def adopted_rows(site=SITE):
+    """Published f_forecast rows whose range came from the LightGBM adoption, and messages for any that the published
+    adoption record does not support."""
+    pub = pd.read_csv(site / "f_forecast.csv")
+    lg = pub[pub.get("range_source", pd.Series(dtype=str)).fillna("") == "lightgbm"]
+    msgs = []
+    if len(lg):
+        cov = pd.read_csv(site / "d_range_coverage.csv") if (site / "d_range_coverage.csv").exists() else pd.DataFrame()
+        last = pub[pub.kind == "Actual"].fiscal_year.max()
+        ok_h = set(cov[(cov.get("source").astype(str).str.startswith("lightgbm")) & (cov.get("adopted") == 1)].horizon.astype(int)) if len(cov) else set()
+        for r in lg.itertuples():
+            if int(r.fiscal_year - last) not in ok_h:
+                msgs.append(f"f_forecast {r.area} FY{r.fiscal_year}: LightGBM range without an adopted LightGBM row in d_range_coverage")
+            if not (r.p10_cal <= r.p50 <= r.p90_cal):
+                msgs.append(f"f_forecast {r.area} FY{r.fiscal_year}: LightGBM range does not contain the median")
+    return set(zip(lg.area, lg.fiscal_year)), msgs
+
+
 def differences(tables, site=SITE, tolerance=1.0):
     """Mismatches between the rebuild and the published f_forecast / d_forecast_model, as a list of messages."""
-    out = []
+    adopted, out = adopted_rows(site)
     for name, keys in (("f_forecast", ["area", "fiscal_year", "kind"]), ("d_forecast_model", ["area"])):
         pub = pd.read_csv(site / f"{name}.csv")
         new = tables[name][[c for c in pub.columns if c in tables[name].columns]]
@@ -43,8 +66,11 @@ def differences(tables, site=SITE, tolerance=1.0):
         j = pub.merge(new, on=keys, how="outer", suffixes=("_pub", "_new"), indicator=True)
         if (j._merge != "both").any():
             out.append(f"{name}: {(j._merge != 'both').sum()} rows differ in {keys}")
+        skip = j.apply(lambda r: (r.area, r.fiscal_year) in adopted, axis=1) if name == "f_forecast" and adopted else pd.Series(False, index=j.index)
         for c in (c for c in pub.columns if c not in keys and c in new.columns):
             a, b = j[f"{c}_pub"], j[f"{c}_new"]
+            if c in ("p10_cal", "p90_cal", "range_source"):
+                a, b = a[~skip], b[~skip]
             if pd.api.types.is_numeric_dtype(a) and pd.api.types.is_numeric_dtype(b):
                 tol = tolerance if a.abs().max() > 1000 else 1e-4
                 bad = ~(((a - b).abs() <= tol) | (a.isna() & b.isna()))

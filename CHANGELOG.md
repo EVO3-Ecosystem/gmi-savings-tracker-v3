@@ -6,7 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## Unreleased (November 2026 review)
+## [3.2.0] - 2026-11-16
+
+Added
+- Reconciliation with the State's own documents for every year (`src/pipeline/books.py`, `mart.d_book_reconciliation`, `d_site_reconciliation`, `d_book_program_differences`, Data & pipeline tab): FY2017-FY2025 program actuals against DBM's Governor's budget books (9 of 9 years reconcile, 99.3-100% of programs equal to the dollar); the enacted FY2027 budget against the Fiscal Digest by fund (to the dollar); yearly totals against the Open Finance sites (31 of 31 to the cent); an FY2026 working-budget bridge and an FY2027 general fund walk with labelled remainders.
+- Stop checks re-test the warehouse against the stored DBM and site figures on every build; thresholds pre-registered in `config/assumptions.yaml` (`books`).
+- Analyst detail on every chart (73 panels): what it shows, method, how to read it, caveats, and data sources with portal vintage; model figures are read live from the build, and model-backed charts link their model card. The Overview checkbox opens them all.
+- Models & analysis page (`models.html`): all 12 model cards, each headed by its registry score, and the analysis figures; linked from the dashboard and every page. The walkthrough now ships in every build.
+
+Changed
+- License: proprietary, all rights reserved (was MIT). Copies obtained under the earlier license keep those terms.
+- Version 3.2.0 in `pyproject.toml` and `CITATION.cff`; README badges, pipeline diagram and next steps updated.
+
+Fixed
+- The site copies figure subfolders, so the about page's README figures resolve.
+- Page text now matches the pipeline: forecast models are chosen by rolling-origin MASE (origins FY2021-FY2024), ranges are conformally calibrated, and the FY2026 corridor note describes the statewide-miss band (it had read "0 paths"). Two stale lines in the walkthrough corrected.
+
+## [3.1.0] - 2026-11-16
+
+Added
+- Audit depth (docs/strategy-v3.1.md): fund hierarchy and shifts to the General Fund (`mart.d_fund_hierarchy`, `d_fund_shift`), State budget by Assistance Listing beside USAspending obligations (`d_federal_crosswalk`), payee alias evidence and review queue (`d_vendor_alias`, `d_vendor_alias_review`), audit and recoupment lifecycle register (`reference/audit_findings.csv`, `d_audit_findings`), payment-level schema ready for records requests (`src/pipeline/txn.py`, `core.fact_payment_txn`) and field availability (`d_field_availability`).
+- Model registry (`mart.d_model_registry`): every model, its baseline, held-out score and decision, read from its own evaluation each run.
+- Drift monitor (`mart.d_drift`): PSI and KS between consecutive fiscal years; one major shift (FY2021-FY2022 agency mix of payments, PSI 0.32).
+- Dashboard: detector backtest card (persistence and next-year divergence), fund-shift dumbbell chart, federal cross-check chart, alias review queue, audit lifecycle card, model registry, drift chart, field-availability meter. The page now shows the calibrated forecast ranges.
+- README rewritten as a portfolio overview with a methods and validation table; `make readme-shots` captures the new figures.
+
+Changed
+- Statewide challenger corridor: the sum of series medians with a band from the statewide miss in the backtest. Summing per-series draws put the median 48-137% above the last actual on the first real run (docs/models/challenger.md).
+- First real run of the calibrated ranges: 53 of 63 past outcomes (84.1%, Wilson 73-91%) inside the calibrated area ranges with each outcome year held out; 140 of 140 checks pass.
+
+## Earlier (November 2026 review)
 
 Added
 - Calibrated forecast ranges (`p10_cal`, `p90_cal`, `range_source`) beside the raw ones, with coverage measured out of sample in `mart.d_range_coverage`. Raw ranges held 40 of 63 past outcomes; calibrated ranges held 53 of 63 with each outcome year held out.
@@ -15,10 +44,13 @@ Added
 - `notebooks/walkthrough.ipynb` (reads only the published tables, committed executed), `docs/executive-overview.md`, and six figures in `docs/figures/overview/`.
 - `uv.lock`, `requirements.lock.txt`, `.python-version`, `Dockerfile`, `compose.yaml`; CI installs from the lockfile and also runs the tests inside the image.
 - `src/pipeline/doc_counts.py`: counts typed in the docs are generated from the files they describe.
-- Statewide program screen (`src/models/program_screen.py`, `mart.d_program_screen`): every program of every agency screened for fast growth and large yearly swings, with audit findings beside it. `reference/audit_findings_override.csv` records reported findings with a program, an amount and a recoupment status; `docs/research/childcare-overpayments.md` is the first case.
+- Statewide program screen (`src/models/program_screen.py`, `mart.d_program_screen`): every program of every agency screened for fast growth and large yearly swings, with audit findings beside it. `reference/audit_finding_programs.csv` ties findings in the audit register (`reference/audit_findings.csv`) to budget programs, so the register stays the one source for a finding's amount and recoupment status; `docs/research/childcare-overpayments.md` is the first case.
 - Dashboard, Budget tab: "Programs that grew fast and swung sharply", computed in the page from the program table with the same rule and settings as the Python module (a test holds the two equal), plus a table of every screened program. Agency pages list reported findings with their recoupment status.
 
 Changed
+- Walkthrough notebook: its cells are written by `scripts/build_walkthrough.py` (edit there, not in the .ipynb); `make notebook` writes, executes and renders it.
+- Walkthrough page (`notebooks/walkthrough.html`): rendered by `scripts/render_notebook.py` as a site page instead of nbconvert's lab template. It has a real title, the site navigation and disclaimer, a skip link and contents, and key findings first with links to their evidence. Code is folded, and terms are defined in a glossary. References carry DOIs and links. Each chart is a `<figure>` with alt text, a caption that states the finding, and its data table. Tables are captioned, use readable money (`-$5.5M`, "not stated" instead of `0.00`) and have header scopes. The render fails if any of this is missing. axe-core reports no WCAG 2.2 AA violations in light, dark or phone width (the old page had 30).
+- Overview figures: titles state the finding; dollar labels no longer render as mathtext (`45$M$to$148M`); savings statuses are grouped by kind with patterns, not colour alone; check bars and range edges meet 3:1 contrast.
 - Dashboard: no range is described as holding "8 in 10" outcomes; treemap labels pick dark or light ink by fill; tab bar and filters tightened on small screens; the 404 page links to this repository's site.
 - Python 3.12 is required.
 

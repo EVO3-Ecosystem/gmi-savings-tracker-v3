@@ -32,7 +32,7 @@ docs-strict: ; $(PY) -m src.pipeline.governance --strict $(if $(DASH),--dashboar
 # Reproducibility and review targets (work offline, from the published tables in site_data/)
 forecast-check: ; $(PY) -m src.models.forecast_published --check   # rebuild the forecast from site_data and compare with what was published
 overview-figures: ; $(PY) -m src.pipeline.overview_figures          # docs/figures/overview/*.png
-notebook: ; $(PY) scripts/render_notebook.py                        # execute notebooks/walkthrough.ipynb, render it, refresh the figures
+notebook: ; $(PY) scripts/build_walkthrough.py && $(PY) scripts/render_notebook.py   # write the walkthrough notebook, execute it, render it, refresh the figures
 notebook-check: ; $(PY) scripts/render_notebook.py --check
 lock: ; uv lock && uv export --frozen --extra dev --extra mcp --extra notebook --no-emit-project -o requirements.lock.txt -q
 docker-build: ; docker build -t gmi-savings-tracker:local .

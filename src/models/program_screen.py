@@ -10,7 +10,7 @@ For each agency, unit and program with enough actual years and enough spending (
   largest_swing     the largest year-to-year change, up or down, as a share of the earlier year
   signals           how many of the two thresholds the program crosses (fast growth, large swing): 0, 1 or 2
 Beside it, by agency: the latest Office of Legislative Audits report (findings, repeat findings), and by program: any
-reported finding in reference/audit_findings_override.csv with its amount and recoupment status.
+reported finding in the audit register (reference/audit_findings.csv, linked to programs by reference/audit_finding_programs.csv) with its amount and recoupment status.
 
 What it is: an order in which to ask questions. What it is not: a finding, a risk score or evidence of error. Programs
 grow and swing for ordinary reasons (new law, federal relief money, a program renamed or merged), and an audit of an
@@ -35,7 +35,7 @@ def assumptions():
 
 def screen(f_program, ola=None, reported=None, agencies=None, cfg=None):
     """One row per screened program, most signals first, then largest. f_program: fiscal_year, stage, agency_code,
-    unit_name, program_code, program_name, budget. ola: reference/ola_findings.csv. reported: the override file.
+    unit_name, program_code, program_name, budget. ola: reference/ola_findings.csv. reported: reported_findings().
     agencies: agency_code -> name."""
     cfg = cfg or assumptions()
     a = f_program[(f_program.stage == "Actual") & f_program.fiscal_year.between(cfg["first_fy"], cfg["last_actual_fy"])]
@@ -80,11 +80,24 @@ def screen(f_program, ola=None, reported=None, agencies=None, cfg=None):
     return out.sort_values(["signals", "spend_last"], ascending=[False, False])[COLUMNS].reset_index(drop=True)
 
 
+def reported_findings(register=None, links=None):
+    """The audit register's findings that are tied to a budget program, in the shape the screen and the page read: the register
+    (reference/audit_findings.csv) is the one source for the finding, its amount and its recoupment status; the link file
+    (reference/audit_finding_programs.csv) says which program each finding is about."""
+    reg = register if register is not None else pd.read_csv(ROOT / "reference" / "audit_findings.csv", dtype=str, keep_default_na=False)
+    lnk = links if links is not None else pd.read_csv(ROOT / "reference" / "audit_finding_programs.csv", dtype=str, keep_default_na=False)
+    m = lnk.merge(reg, on="finding_id", how="left", suffixes=("", "_register"), validate="one_to_one")
+    if m.finding.isna().any():
+        raise ValueError(f"audit_finding_programs.csv names findings that are not in the register: {sorted(m[m.finding.isna()].finding_id)}")
+    m["agency_code"] = m.agency_code.where(m.agency_code != "", m.agency_code_register)
+    m = m.rename(columns={"amount_identified": "amount", "source_type": "source"})
+    return m[["finding_id", "agency_code", "unit_name", "program_code", "program_name", "finding", "amount", "period", "recoupment_status", "source", "source_url", "confirmation"]]
+
+
 def reference():
     """(ola findings, reported findings) from reference/."""
     ola = pd.read_csv(ROOT / "reference" / "ola_findings.csv", dtype={"agency_code": str})
-    rep = pd.read_csv(ROOT / "reference" / "audit_findings_override.csv", dtype=str, keep_default_na=False)
-    return ola, rep
+    return ola, reported_findings()
 
 
 def write(con, cfg=None):

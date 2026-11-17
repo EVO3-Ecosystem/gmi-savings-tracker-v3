@@ -52,12 +52,20 @@
 .gs h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
 .gs h3{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0}
 .gs .xp{font:inherit;font-size:var(--cds-font-size-caption);border:1px solid var(--color-border-line);border-radius:999px;background:var(--color-panel);color:var(--color-fg);padding:2px 10px;cursor:pointer;white-space:nowrap}
+.gs .adBtn{font:inherit;font-size:var(--cds-font-size-caption);border:1px dashed var(--color-border-line);border-radius:999px;background:transparent;color:var(--color-fg-muted);padding:2px 10px;cursor:pointer;white-space:nowrap}
+.gs .adBtn[aria-expanded="true"]{border-style:solid;color:var(--color-fg);background:var(--color-panel)}
+.gs .adGrp{display:inline-flex;gap:6px;flex:none}.gs .hd > .adBtn{flex:none}
+.gs .ad{margin:6px 0 10px;padding:10px 12px;border-left:3px solid var(--color-border-line);background:var(--color-panel);border-radius:0 8px 8px 0;font-size:var(--cds-font-size-caption);line-height:1.5}
+.gs .ad dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:4px 12px}.gs .ad dt{font-weight:600;color:var(--color-fg)}.gs .ad dd{margin:0;color:var(--color-fg-muted)}
+@media (max-width:600px){.gs .ad dl{grid-template-columns:1fr}.gs .ad dd{margin-bottom:6px}.gs .hd{flex-wrap:wrap}}
 .gs .tile .xp{position:absolute;top:var(--cds-pad-md);right:var(--cds-pad-md)}
 .gs .xp:hover{border-color:var(--color-fg-muted)}
 .gs .note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:var(--cds-gap-xs) 0 var(--cds-gap-md);max-width:92ch}
 .gs .insight{font-size:var(--cds-font-size-body);line-height:1.45;margin:0 0 var(--cds-gap-sm);max-width:92ch}
 .gs ul.ins{margin:0;padding-left:1.1rem;display:grid;gap:6px;font-size:var(--cds-font-size-body);line-height:1.45}
 .gs .chart{position:relative;min-height:280px}
+.gs .filters .lab{max-width:100%;min-width:0}.gs .filters select{max-width:100%;min-width:0}#fxL{width:min(100%,44rem);text-overflow:ellipsis}.gs #hhiBadges .st{white-space:normal;max-width:100%;overflow-wrap:anywhere}
+.gs .meter{height:14px;border-radius:7px;background:var(--color-border-line);overflow:hidden;max-width:520px;margin:0 0 var(--cds-gap-md)}.gs .meter>i{display:block;height:100%;background:var(--color-ok)}
 .gs .sm{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:var(--cds-gap-md)}.gs .sm .cell{min-width:0;position:relative;border-radius:var(--cds-radius);padding:var(--cds-pad-xs)}.gs .sm .cell:hover,.gs .sm .cell:focus-visible{background:var(--color-bg);outline:none}.gs .sm .cell b{display:block;font-size:var(--cds-font-size-caption);font-weight:var(--cds-font-weight-medium)}.gs .sm .cell span{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);font-variant-numeric:tabular-nums}.gs .sm .plot{position:relative;height:96px}.gs .insight{font-size:var(--cds-font-size-body);line-height:1.45;margin:0 0 var(--cds-gap-sm)}.gs details.card>summary{cursor:pointer;list-style:none}.gs details.card>summary::before{content:'▸ ';color:var(--color-fg-muted)}.gs details.card[open]>summary::before{content:'▾ '}
 .gs .tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:5}
 .gs .tip .t{color:var(--cds-text-secondary)}
@@ -162,35 +170,35 @@
       <div class="tile"><span class="k">Spending vs forecast range</span><span class="v" id="vCor" data-source="d_challenger_total f_scope">—</span><span class="d"><span class="st stg" id="gCor"></span></span><span class="d" id="dCor"></span><button class="lnk" id="corGo" style="justify-self:start">Forecast details</button></div>
       <div class="tile"><span class="k">Review queue</span><span class="v" id="vRev" data-source="review_queue">—</span><span class="d" id="dRev"></span><button class="lnk" id="revGo" style="justify-self:start">Open the queue</button></div>
     </div>
-    <div class="filters" style="padding:0"><label class="lab"><input type="checkbox" id="ovAnalyst"> Analyst detail: models, coverage, data vintages</label></div>
+    <div class="filters" style="padding:0"><label class="lab"><input type="checkbox" id="ovAnalyst"> Analyst detail: models, coverage and data vintages here, and open every chart's analyst detail</label></div>
     <div class="card method" id="ovMethod" hidden></div>
     <div class="card">
-      <div class="hd"><h2 id="ovBPH">Budget and payments, FY2017–FY2026</h2><button class="xp" data-expand="budget">Expand</button></div>
+      <div class="hd"><h2 id="ovBPH" data-ad="ovBPH">Budget and payments, FY2017–FY2026</h2><button class="xp" data-expand="budget">Expand</button></div>
       <p class="note" id="ovBPNote">Operating budget at its latest stage (bars) and payments to all payees (line). They measure different things, so they sit side by side and are never added.</p>
       <div class="legend" id="ovBPLegend"></div>
       <div class="chart" id="ovBP" data-source="f_budget_vs_pay"></div>
     </div>
     <div class="grid">
       <div class="card">
-        <div class="hd"><h2 id="ovFundH">How it's funded, where payments go</h2><button class="xp" data-expand="budget">Expand</button></div>
+        <div class="hd"><h2 id="ovFundH" data-ad="ovFundH">How it's funded, where payments go</h2><button class="xp" data-expand="budget">Expand</button></div>
         <p class="note" id="ovFundNote">Budget by fund type and payments by payee, for one year.</p>
         <div class="chart" id="ovFund" data-source="f_overlap" style="min-height:0"></div>
         <p class="insight" id="ovGrants"></p>
       </div>
       <div class="card">
-        <div class="hd"><h2 id="ov50H">A conditional path to $50M</h2><button class="xp" data-expand="calc">Expand</button></div>
+        <div class="hd"><h2 id="ov50H" data-ad="ov50H">A conditional path to $50M</h2><button class="xp" data-expand="calc">Expand</button></div>
         <p class="note" id="ov50Note">Yearly savings from the steps on the Calculator and Opportunities tabs, against GMI's $50M FY2026 target.</p>
         <div class="chart" id="ov50" data-source="d_plan50" style="min-height:0"></div>
         <p class="insight" id="ov50Detail"></p>
       </div>
     </div>
     <div class="card">
-        <div class="hd"><h2 id="overAreasH">Focus areas</h2><button class="xp" data-expand="areas">Expand</button></div>
+        <div class="hd"><h2 id="overAreasH" data-ad="overAreasH">Focus areas</h2><button class="xp" data-expand="areas">Expand</button></div>
         <p class="note" id="overAreasNote">Spending by the state's spending codes (solid) and the part payee names alone can find (thin), for the selected years combined. Click a bar to filter by that area.</p>
         <div class="chart" id="overAreas" data-source="f_area"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>Recommended next steps</h2></div>
+      <div class="hd"><h2 id="ovNext" data-ad="ovNext">Recommended next steps</h2></div>
       <p class="note">Recommendations for discussion, drawn from the findings in this tracker. Figures are statewide and update with each monthly refresh. Click a step to open the evidence behind it.</p>
       <ol class="recs" id="recs" data-source="d_opps d_savings f_savings_check d_forecast_model vendor_families"></ol>
     </div>
@@ -201,13 +209,13 @@
     <p class="lede" id="areasLede" data-source="f_area">—</p>
     <div class="areas" id="areaCards" data-source="f_area"></div>
     <div class="card">
-      <div class="hd"><h2 id="areasTrendH">Focus-area spending by year</h2><button class="xp" data-expand="areas">Expand</button></div>
+      <div class="hd"><h2 id="areasTrendH" data-ad="areasTrendH">Focus-area spending by year</h2><button class="xp" data-expand="areas">Expand</button></div>
       <p class="note">By the state's spending codes, FY2017–FY2027. Selected years are solid and selected areas are full color; dashed outlines mark budget years. Click a year to add or remove it.</p>
       <div class="legend" id="areasLegend"></div>
       <div class="chart" id="areasChart" data-source="f_area"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="areasTblH">Focus areas for the selection</h2><button class="xp" data-expand="areas">Expand</button></div>
+      <div class="hd"><h2 id="areasTblH" data-ad="areasTblH">Focus areas for the selection</h2><button class="xp" data-expand="areas">Expand</button></div>
       <p class="note">Selected years combined: spending by code, change, share of the six areas, agencies spending, and how much of it payee names alone find. Click a row for the area's page.</p>
       <div class="tbl"><table data-source="f_area" data-row-key="area">
         <thead><tr><th data-field="area">Area</th><th class="n" data-field="spend">By spending code</th><th class="n">Change</th><th class="n">Share</th><th class="n">Agencies</th><th class="n" data-field="payee_spend">By payee name</th><th class="n">Coverage</th></tr></thead>
@@ -215,19 +223,19 @@
       <p class="stagenote" id="areasStage"></p>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="scopeH">Where savings can come from</h2><button class="xp" data-expand="scope">Expand</button></div>
+      <div class="hd"><h2 id="scopeH" data-ad="scopeH">Where savings can come from</h2><button class="xp" data-expand="scope">Expand</button></div>
       <p class="note" id="scopeNote">Operating budget by what an agency can change.</p>
       <div class="legend" id="scopeLegend"></div>
       <div class="chart" id="scopeChart" data-source="f_scope"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>Agencies by spending mix: the consolidation view</h2></div>
+      <div class="hd"><h2 id="consolH" data-ad="consolH">Agencies by spending mix: the consolidation view</h2></div>
       <p class="note" id="tmNote">—</p>
       <div class="legend" id="tmLegend"></div>
       <div class="chart" id="tmChart" data-source="agency_clusters" style="min-height:360px"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>Vendor concentration by focus area</h2></div>
+      <div class="hd"><h2 id="hhiAreaH" data-ad="hhiAreaH">Vendor concentration by focus area</h2></div>
       <p class="note">Herfindahl–Hirschman Index (HHI) of vendor payments in each area, latest payments year. Above 1,800 a market counts as highly concentrated under the 2023 DOJ/FTC Merger Guidelines — a case for multi-agency agreements or for bringing in new bidders.</p>
       <div id="hhiBadges" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       <p class="stagenote" id="hhiNote"></p>
@@ -243,18 +251,18 @@
       <div class="tile"><span class="k">No single payment line to match</span><span class="v" id="trNo" data-source="d_savings">—</span><span class="d" id="trNoS"></span></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>How the reported figures fit together</h2></div>
+      <div class="hd"><h2 id="trFitH" data-ad="trFitH">How the reported figures fit together</h2></div>
       <p class="note">The report gives each item its own figure, but the figures are not all the same kind: some money is already saved, some is a yearly saving still building up, and some is only expected. They are grouped here by how the report words each one and are not added into a single total.</p>
       <div class="tbl"><table data-source="d_savings"><thead><tr><th>Group</th><th class="n">Amount</th><th>Items</th><th>What it means</th></tr></thead><tbody id="trGrpBody"></tbody></table></div>
       <p class="note" id="trGrpNote"></p>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="trChartH">Reported saving vs. the change in payments</h2></div>
+      <div class="hd"><h2 id="trChartH" data-ad="trChartH">Reported saving vs. the change in payments</h2></div>
       <p class="note" id="trChartNote">Thick bar: savings GMI reports as saved or under way for each check; projected amounts are left out, since they are not expected in payments yet. Thin bar: how far payments to the matching vendors fell. No thin bar means payments did not fall.</p>
       <div class="chart" id="trChart" data-source="d_savings f_savings_check" style="min-height:200px"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="trTblH">Every reported item, its check and its status since the last refresh (recommendation 2)</h2></div>
+      <div class="hd"><h2 id="trTblH" data-ad="trTblH">Every reported item, its check and its status since the last refresh (recommendation 2)</h2></div>
       <p class="note" id="trTolNote"></p>
       <p class="note">Hover over a check result to see the vendors it covers. A check says whether the change shows up in what the state paid; it is a lead to follow, not proof. Payee names miss spending booked under other names, and contracts change for other reasons.</p>
       <div class="tbl"><table data-source="d_savings f_savings_check" data-row-key="saving_id">
@@ -263,7 +271,7 @@
       <p class="stagenote" id="trStage"></p>
     </div>
     <div class="card">
-      <div class="hd"><h2>Sources</h2></div>
+      <div class="hd"><h2 id="trSrcH" data-ad="trSrcH">Sources</h2></div>
       <p class="note">Every reported figure on this tab is quoted from one of these documents; hover over a Source cell for the exact words. Payment figures are computed from the state's payments data. Checked Oct 29, 2026; the $29M total and the grouping above re-checked Nov 10, 2026.</p>
       <ul class="ins" style="font-size:var(--cds-font-size-caption)">
         <li>Maryland Department of Budget and Management, <a href="https://governor.maryland.gov/media/893" target="_blank" rel="noopener">Government Modernization Initiative Final Report</a> (Joint Chairmen's Report, p. 77), January 26, 2026 (FY2026): all GMI items, page numbers as shown, and GMI's own FY2026 total: "$29 million in FY2026 in-year savings, $20 million of which are General Fund savings."</li>
@@ -275,7 +283,7 @@
       </ul>
     </div>
     <div class="card">
-      <div class="hd"><h2>Largest vendor decreases, FY2025 to FY2026</h2></div>
+      <div class="hd"><h2 id="trMovesH" data-ad="trMovesH">Largest vendor decreases, FY2025 to FY2026</h2></div>
       <p class="note">Vendors paid by five or more agencies whose operating payments fell most from FY2025 to FY2026, from the state's payments data. Construction, health plans, schools, banks, governments and health and human-service providers are left out; the payments data does not flag non-profits, so that filter goes by payee name and may miss some. Context for the vendor-contract item, not a match to it: GMI has not named its seven vendors.</p>
       <div class="tbl"><table data-source="d_vendor_moves" data-row-key="vendor">
         <thead><tr><th data-field="vendor">Vendor</th><th class="n" data-field="agencies">Agencies</th><th class="n" data-field="fy2024">FY2024</th><th class="n" data-field="fy2025">FY2025</th><th class="n" data-field="fy2026">FY2026</th><th class="n" data-field="change">Change</th><th class="n">%</th></tr></thead>
@@ -286,17 +294,17 @@
     <p class="lede" id="opLede" data-source="d_opps">—</p>
     <div class="tiles" id="opTiles"></div>
     <div class="card">
-      <div class="hd"><h2>Statewide bid list (recommendation 1)</h2><button class="xp" data-expand="bid">Expand</button></div>
+      <div class="hd"><h2 id="bidH" data-ad="bidH">Statewide bid list (recommendation 1)</h2><button class="xp" data-expand="bid">Expand</button></div>
       <p class="note">Commercial vendors paid separately by ten or more agencies in FY2026, largest first. Regulated utilities and service providers are left out. Savings use an assumed 2–5% from one enterprise agreement (a screening assumption, not a published rate). Click a vendor for its page.</p>
       <div class="tbl"><table data-source="d_bid_list"><thead><tr><th class="n">#</th><th>Vendor</th><th class="n">Agencies</th><th class="n">FY2025</th><th class="n">FY2026</th><th class="n">Savings 2–5%</th><th>Largest buyers</th></tr></thead><tbody id="bidBody"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>Leads by detector</h2><button class="xp" data-expand="opps">Expand</button></div>
+      <div class="hd"><h2 id="detH" data-ad="detH">Leads by detector</h2><button class="xp" data-expand="opps">Expand</button></div>
       <p class="note">Four automated checks run on every controllable spending code at every agency (FY2025 actual budget) and on FY2026 payments to vendors. Bars show the likely value of each detector's leads; the thin bar shows the high end. Detectors overlap, so the bars are not added. Click a bar for that detector's page.</p>
       <div class="chart" id="opChart" data-source="d_opps" style="min-height:200px"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="opTblH">Findings, largest first</h2><button class="xp" data-expand="opps">Expand</button></div>
+      <div class="hd"><h2 id="opTblH" data-ad="opTblH">Findings, largest first</h2><button class="xp" data-expand="opps">Expand</button></div>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Detector <select id="opDet" aria-label="Detector"><option value="">All detectors</option><option>Growth above trend</option><option>Peer gap</option><option>Leverage</option><option>Tail spend</option></select></span><span id="opCount"></span></div>
       <div class="tbl"><table data-source="d_opps" data-row-key="opp_id">
         <thead><tr><th data-field="detector">Detector</th><th data-field="agency">Agency</th><th data-field="spending_code">Spending code or vendor</th><th data-field="area">Focus area</th><th class="n" data-field="baseline">Spending</th><th class="n" data-field="likely">Likely value</th><th class="n" data-field="low">Range</th><th data-field="evidence">Why</th></tr></thead>
@@ -304,7 +312,7 @@
       <p class="stagenote">Peer gap: spending per budgeted position above three in four agencies; 5–15% of the excess is counted because agencies differ in mission. Growth above trend: spending that grew 25+ points faster than the state's from FY2022 to FY2025; 10–30% of the extra growth is counted. Tail spend: payments to vendors outside each focus area's ten largest; an assumed 3–10% from consolidation. Leverage: one vendor paid separately by ten or more agencies; an assumed 2–5% from one enterprise agreement. The same agency and code is never counted twice. All of these percentages are screening assumptions, not published rates. Findings are leads to review, not savings already found; they overlap across detectors and between budget and payments, so their values are not additive. The year filter does not apply here.</p>
     </div>
     <div class="card" id="psCard">
-      <div class="hd"><h2>Payment screen: possible duplicates and split purchases (leads)</h2></div>
+      <div class="hd"><h2 id="psH" data-ad="psH">Payment screen: possible duplicates and split purchases (leads)</h2></div>
       <p class="insight" id="psFind" data-source="d_payment_screen_summary">—</p>
       <p class="note" id="psChartNote">Review dollars by year, FY2022–FY2026: for a possible duplicate or a line repeated in one year, every copy after the first. A flag is a lead to review, not an error. Click a year to filter the list.</p>
       <div class="legend" id="psLegend"></div>
@@ -317,21 +325,21 @@
       <p class="stagenote" id="psStatus">—</p>
     </div>
     <div class="card issues" id="psIssues">
-      <div class="hd"><h2>Data-quality issues in the source <span class="tag2">(not leads, never counted)</span></h2></div>
+      <div class="hd"><h2 id="psIssH" data-ad="psIssH">Data-quality issues in the source <span class="tag2">(not leads, never counted)</span></h2></div>
       <p class="note" id="psIssNote" data-source="d_source_issues">—</p>
       <div class="tbl"><table data-source="d_source_issues" data-row-key="issue_id">
         <thead><tr><th data-field="issue">Issue</th><th class="n" data-field="fiscal_year">Year</th><th data-field="agency">Agency</th><th class="n" data-field="records">Records</th><th class="n" data-field="amount">Amount</th><th data-field="evidence">Evidence</th><th data-field="verified_against">Verified against</th><th data-field="status">Status</th></tr></thead>
         <tbody id="psIssBody"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="pcaH">Agencies by what they buy</h2></div>
+      <div class="hd"><h2 id="pcaH" data-ad="pcaH">Agencies by what they buy</h2></div>
       <p class="note" id="pcaNote">—</p>
       <p class="insight" id="pcaIns"></p>
       <div class="legend" id="pcaLegend"></div>
       <div class="chart" id="pcaChart" data-source="f_area agency_clusters" style="min-height:380px"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="olaH">Audit findings that keep coming back</h2></div>
+      <div class="hd"><h2 id="olaH" data-ad="olaH">Audit findings that keep coming back</h2></div>
       <p class="note" id="olaNote">—</p>
       <p class="insight" id="olaIns"></p>
       <div class="tbl"><table data-source="ola_findings" data-row-key="agency_code">
@@ -339,7 +347,7 @@
         <tbody id="olaBody"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="anH">Anomaly audit queue</h2></div>
+      <div class="hd"><h2 id="anH" data-ad="anH">Anomaly audit queue</h2></div>
       <p class="note" id="anNote">—</p>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Source <select id="anSrc" aria-label="Anomaly source"><option value="">Both sources</option><option>Vendor-agency payments</option><option>Agency spending code</option></select></span><span id="anCount"></span><button class="lnk" id="anExp" title="Download the flags in this view, with their review status, as a CSV file">Export CSV</button></div>
       <div class="tbl"><table data-source="review_queue" data-row-key="flag_id">
@@ -347,13 +355,36 @@
         <tbody id="anBody"></tbody></table></div>
       <p class="stagenote">Review status is saved in this browser only — the published page has no backend, so nothing is sent anywhere. The year filter does not apply here; the agency filter does.</p>
     </div>
+    <div class="card" id="dbCard">
+      <div class="hd"><h2 id="dbH" data-ad="dbH">Do the detectors find something real? Backtest, FY2022–FY2024</h2></div>
+      <p class="note" id="dbNote" data-source="d_detector_backtest">—</p>
+      <p class="insight" id="dbIns"></p>
+      <div class="legend" id="dbLegend"></div>
+      <div class="chart" id="dbChart" data-source="d_detector_backtest" style="min-height:300px" role="img" aria-label="Share of units flagged again the next year, flagged versus not flagged, by detector and year"></div>
+      <h3 id="dvH" data-ad="dvH" style="margin-top:var(--cds-gap-md)">What flagged spending did the next year</h3>
+      <p class="note" id="dvNote">Median change in each unit's spending from the as-of year to the next, averaged over the three backtest years. Flagged units against like-sized units that were not flagged.</p>
+      <div class="chart" id="dvChart" data-source="d_detector_backtest" style="min-height:200px" role="img" aria-label="Median next-year spending change, flagged versus not flagged, by detector"></div>
+      <div class="tbl"><table data-source="d_detector_backtest" data-row-key="detector">
+        <thead><tr><th data-field="detector">Detector</th><th class="n" data-field="as_of_fy">As of</th><th data-field="cohort">Cohort</th><th class="n" data-field="units">Units</th><th class="n" data-field="flagged_next_share">Flagged again next year</th><th class="n" data-field="median_change">Median change next year</th><th class="n" data-field="pooled_change">Pooled change</th></tr></thead>
+        <tbody id="dbBody"></tbody></table></div>
+      <p class="stagenote">Each detector was rerun on the data up to the as-of year only, with today's thresholds, then followed one year. Not flagged means like-sized units that passed the same size filters. Descriptive: a fall the next year is not evidence of a saving.</p>
+    </div>
+    <div class="card" id="auCard">
+      <div class="hd"><h2 id="auH" data-ad="auH">Audit and recoupment lifecycle <span class="tag2">(amounts reported, not savings)</span></h2></div>
+      <p class="note" id="auNote" data-source="d_audit_findings">—</p>
+      <p class="insight" id="auIns"></p>
+      <div class="tbl"><table data-source="d_audit_findings" data-row-key="finding_id">
+        <thead><tr><th data-field="finding">Finding</th><th data-field="agency">Agency and program</th><th data-field="period">Period</th><th class="n" data-field="amount_identified">Identified</th><th class="n" data-field="amount_recouped">Recouped</th><th data-field="recoupment_status">Recoupment</th><th data-field="waiver">Waiver</th><th data-field="legal_opinion_status">Legal opinion</th><th data-field="fund_source">Fund source</th><th data-field="confirmation">Confirmed by</th><th data-field="source_url">Source</th></tr></thead>
+        <tbody id="auBody"></tbody></table></div>
+      <p class="stagenote" id="auStage">A blank field means the public record does not say, never zero. The Office of Legislative Audits findings in the card above are part of the same register (mart.d_audit_findings); OLA reports do not publish recoupment status.</p>
+    </div>
   </section>
   <section class="panel" id="p-calc" role="tabpanel" aria-labelledby="t-calc" hidden>
     <p class="lede" id="caLede" data-source="f_forecast d_forecast_model">—</p>
     <div class="tiles" id="caTiles"></div>
     <div class="grid">
       <div class="card">
-        <h2>Levers</h2>
+        <h2 id="caLevH" data-ad="caLevH">Levers</h2>
         <p class="note">Recurring savings rate each area reaches, as a share of its forecast spending. Defaults are the rates GMI itself reported for FY2026 (its January 2026 report); the marker shows that rate. Areas where GMI reported no recurring saving start at 0%.</p>
         <div id="caLevers" style="display:grid;gap:10px"></div>
         <div style="display:grid;gap:8px;margin-top:12px;font-size:var(--cds-font-size-caption)">
@@ -363,37 +394,37 @@
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px" id="caPresets"></div>
       </div>
       <div class="card">
-        <h2 id="caYearH">Savings by year</h2>
-        <p class="note">Bars: likely net savings. Lines: indicative range of simulated outcomes (10th to 90th percentile, not a calibrated 80% interval).<span class="covn"></span> FY2026 is GMI's reported result; FY2027–FY2031 are forecast. Dashed line: the $50M target.</p>
+        <h2 id="caYearH" data-ad="caYearH">Savings by year</h2>
+        <p class="note">Bars: likely net savings. Lines: indicative range of simulated outcomes (10th to 90th percentile, from conformally calibrated forecast ranges).<span class="covn"></span> FY2026 is GMI's reported result; FY2027–FY2031 are forecast. Dashed line: the $50M target.</p>
         <div class="chart" id="caYears" style="min-height:240px"></div>
       </div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="caFcH">Spending forecast, with and without savings</h2></div>
-      <p class="note" id="caFcNote">Actual spending FY2017–FY2025 (solid), the forecast to FY2031 (dashed, shaded band = indicative range: the 10th to 90th percentile of the bootstrap paths), the state's own FY2026 working budget and FY2027 Legislative Appropriation (dots), and spending after savings at the current levers (green). Follows the focus-area filter.<span class="covn"></span></p>
+      <div class="hd"><h2 id="caFcH" data-ad="caFcH">Spending forecast, with and without savings</h2></div>
+      <p class="note" id="caFcNote">Actual spending FY2017–FY2025 (solid), the forecast to FY2031 (dashed, shaded band = indicative range: the bootstrap 10th to 90th percentile, widened by a split-conformal factor so it covers past outcomes as often as it claims), the state's own FY2026 working budget and FY2027 Legislative Appropriation (dots), and spending after savings at the current levers (green). Follows the focus-area filter.<span class="covn"></span></p>
       <div class="legend" id="caFcLegend"></div>
       <div class="chart" id="caFc" style="min-height:300px"></div>
     </div>
     <div class="grid">
       <div class="card">
-        <h3>Where the FY2027 savings come from</h3>
+        <h3 id="caWhereH" data-ad="caWhereH">Where the FY2027 savings come from</h3>
         <p class="note">Likely savings by area. Click a bar for its page: every year and agency, line by line, with the calculation.</p>
         <div class="chart" id="caBars" style="min-height:200px"></div>
       </div>
       <div class="card">
-        <h3>What moves the result most</h3>
+        <h3 id="caSensH" data-ad="caSensH">What moves the result most</h3>
         <p class="note">Change in FY2027 net savings if each area's rate is half or one and a half times the current setting.</p>
         <div class="chart" id="caTornado" style="min-height:200px"></div>
       </div>
     </div>
     <div class="card">
-      <div class="hd"><h2>A conditional path to GMI's $50M target, projected for FY2027 (recommendation 4)</h2></div>
+      <div class="hd"><h2 id="caPathH" data-ad="caPathH">A conditional path to GMI's $50M target, projected for FY2027 (recommendation 4)</h2></div>
       <p class="insight" id="planFind"></p>
       <p class="note">GMI's current pace from the forecast, then statewide contracts for the largest shared vendors at an assumed 3.5% (the middle of an assumed 2–5% range, not a published rate), added until the total reaches $50M. Click a step for its evidence.</p>
       <div class="tbl"><table data-source="d_plan50"><thead><tr><th class="n">Step</th><th>Action</th><th>Basis</th><th class="n">Savings a year</th><th class="n">Running total</th></tr></thead><tbody id="planBody"></tbody></table></div>
     </div>
     <div class="card" id="caPR">
-      <div class="hd"><h2>Payment recovery review (leads)</h2></div>
+      <div class="hd"><h2 id="caRecH" data-ad="caRecH">Payment recovery review (leads)</h2></div>
       <p class="note" id="caPRNote" data-source="d_payment_screen_summary">—</p>
       <div style="display:flex;gap:var(--cds-gap-md);flex-wrap:wrap;align-items:center;font-size:var(--cds-font-size-caption);margin-bottom:var(--cds-gap-sm)">
         <label>Flagged dollars from <select id="caPRBasis" aria-label="Payment screen basis"><option value="fy">the lever year</option><option value="avg">the yearly average of the screened years</option></select></label>
@@ -402,12 +433,12 @@
       <div class="tiles" id="caPRTiles"></div>
     </div>
     <div class="card">
-      <h3>Forecast models and their accuracy</h3>
-      <p class="note">For each area, three models were fit to FY2017–FY2022 and scored on how far off they were for FY2023–FY2025. The most accurate one is used for the forecast.</p>
+      <h3 id="caModelsH" data-ad="caModelsH">Forecast models and their accuracy</h3>
+      <p class="note">For each area, three models (trend, naive, drift) were refitted at four rolling forecast origins, FY2021–FY2024, and scored against actual spending by mean absolute scaled error (MASE); the lowest is used, a tie going to naive. The error columns below are the legacy single test (fit FY2017–FY2022, score FY2023–FY2025), kept for comparison.</p>
       <div class="tbl"><table data-source="d_forecast_model" data-row-key="area">
         <thead><tr><th data-field="area">Area</th><th data-field="method">Model used</th><th class="n" data-field="backtest_mape">Backtest error</th><th class="n" data-field="trend_mape">Trend</th><th class="n" data-field="naive_mape">Naive</th><th class="n" data-field="drift_mape">Drift</th><th class="n">FY2027 forecast</th><th class="n">FY2027 appropriation</th><th class="n" data-field="gf_share">General Fund share</th></tr></thead>
         <tbody id="caModelBody"></tbody></table></div>
-      <p class="stagenote">Backtest error = average gap between each model's FY2023–FY2025 prediction and actual spending. The band comes from 4,000 bootstrap paths. Savings uncertainty: each simulated year also draws how fully each rate is delivered (50–125% of the setting). Agency filter does not apply: forecasts are statewide by area. Illustrative, for discussion; every default is sourced on the area's page.</p>
+      <p class="stagenote">Backtest error = the legacy average gap between each model's FY2023–FY2025 prediction and actual spending; the model choice uses the rolling-origin MASE in the <a href="models.html#forecast">forecast model card</a>. The band is the bootstrap 10th–90th percentile, conformally calibrated. Savings uncertainty: each simulated year also draws how fully each rate is delivered (50–125% of the setting). Agency filter does not apply: forecasts are statewide by area. Illustrative, for discussion; every default is sourced on the area's page.</p>
     </div>
   </section>
 
@@ -415,19 +446,19 @@
   <section class="panel" id="p-fcast" role="tabpanel" aria-labelledby="t-fcast" hidden>
     <p class="lede" id="fcLede" data-source="f_revenue f_challenger results_trend">—</p>
     <div class="card">
-      <div class="hd"><h2 id="fcRevH">General Fund revenue: actuals and the FY2027 corridor</h2></div>
+      <div class="hd"><h2 id="fcRevH" data-ad="fcRevH">General Fund revenue: actuals and the FY2027 corridor</h2></div>
       <p class="note" id="fcRevNote">—</p>
       <div class="chart" id="fcRev" data-source="f_revenue" style="min-height:270px"></div>
       <p class="stagenote" id="fcRevStats"></p>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="fcSpendH">Controllable purchases: actuals and the FY2026 risk corridor</h2></div>
+      <div class="hd"><h2 id="fcSpendH" data-ad="fcSpendH">Controllable purchases: actuals and the FY2026 risk corridor</h2></div>
       <p class="note" id="fcSpendNote">—</p>
       <div class="chart" id="fcSpend" data-source="f_challenger f_scope" style="min-height:270px"></div>
       <p class="stagenote" id="fcSpendStats"></p>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="resH">Spending to results (recommendation 6)</h2></div>
+      <div class="hd"><h2 id="resH" data-ad="resH">Spending to results (recommendation 6)</h2></div>
       <p class="note">Each row is one Managing for Results performance measure with at least three actual years, next to the change in its agency's whole budget in today's dollars over the same window. Side by side, not cause and effect: the budget is the agency's entire budget, so this is not a unit cost. The last column is the outcome change minus the real budget change — green and up means results grew faster than real spending. Follows the agency filter.</p>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Show <select id="resDir" aria-label="Which measures to show"><option value="ahead">Results ahead of spending</option><option value="behind">Results behind spending</option><option value="all">All measures</option></select></span><span id="resCount"></span></div>
       <div class="tbl"><table data-source="results_trend" data-row-key="measure">
@@ -440,27 +471,27 @@
   <section class="panel" id="p-agency" role="tabpanel" aria-labelledby="t-agency" hidden>
     <p class="lede find" id="agLede" data-source="f_agency f_scope f_object">—</p>
     <div class="card">
-      <div class="hd"><h2 id="agChartH">Highest controllable purchases per position</h2></div>
+      <div class="hd"><h2 id="agChartH" data-ad="agChartH">Highest controllable purchases per position</h2></div>
       <p class="note" id="agChartNote"></p>
       <div class="legend" id="agLegend"></div>
       <div class="chart" id="agChart" data-source="f_agency" style="min-height:0"></div>
     </div>
     <div class="grid">
       <div class="card">
-        <div class="hd"><h2 id="agScH">Per position vs its change</h2></div>
+        <div class="hd"><h2 id="agScH" data-ad="agScH">Per position vs its change</h2></div>
         <p class="note" id="agScNote">—</p>
         <p class="insight" id="agScIns"></p>
         <div class="chart" id="agScatter" data-source="f_agency"></div>
       </div>
       <div class="card">
-        <div class="hd"><h2 id="agHiH">How agencies spread out</h2></div>
+        <div class="hd"><h2 id="agHiH" data-ad="agHiH">How agencies spread out</h2></div>
         <p class="note" id="agHiNote">—</p>
         <p class="insight" id="agHiIns"></p>
         <div class="chart" id="agHist" data-source="f_agency"></div>
       </div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="agH">Controllable purchases per position</h2><button class="xp" data-expand="agency">Expand</button></div>
+      <div class="hd"><h2 id="agH" data-ad="agH">Controllable purchases per position</h2><button class="xp" data-expand="agency">Expand</button></div>
       <p class="note" id="agNote">Selected years combined: each agency's spending divided by its budgeted position-years, so larger agencies weigh more. Agencies averaging fewer than 50 positions are left out, since one contract swings their figure. Click a row for the agency's page.</p>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Search <input type="search" id="agQ" placeholder="Agency name" aria-label="Search agencies"></span><span id="agCount"></span></div>
       <div class="tbl"><table data-source="f_agency f_area" data-row-key="agency_code">
@@ -480,7 +511,7 @@
       <div class="tile"><span class="k">Companies paid under 2+ names</span><span class="v" id="vvF" data-source="d_families">—</span><span class="d" id="vsF"></span></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="vmH">One vendor, dozens of buyers</h2></div>
+      <div class="hd"><h2 id="vmH" data-ad="vmH">One vendor, dozens of buyers</h2></div>
       <p class="note" id="vmNote">Private vendors paid separately by 15 or more agencies: each a candidate for one statewide contract. Click a column to sort, a row for the vendor's page.</p>
       <p class="insight" id="vmIns"></p>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Area <select id="vAreaSel" aria-label="Area"><option value="">All areas</option></select></span>
@@ -492,27 +523,27 @@
     </div>
     <div class="grid">
       <div class="card">
-        <div class="hd"><h2 id="vcH">How concentrated is each area?</h2></div>
+        <div class="hd"><h2 id="vcH" data-ad="vcH">How concentrated is each area?</h2></div>
         <p class="note">Bar: share of the area's spend held by its five largest vendors. Herfindahl-Hirschman Index (HHI, 0–10,000): above 1,800 counts as highly concentrated under the 2023 U.S. DOJ/FTC Merger Guidelines. Concentrated areas call for tougher negotiation with a few suppliers; spread-out areas call for consolidating many small contracts.</p>
         <p class="insight" id="vcIns"></p>
         <div class="chart" id="vcChart" data-source="f_concentration" style="min-height:250px"></div>
       </div>
       <div class="card">
-        <div class="hd"><h2 id="vtrH">Concentration over time</h2></div>
+        <div class="hd"><h2 id="vtrH" data-ad="vtrH">Concentration over time</h2></div>
         <p class="note">HHI by area, FY2008 to the selected year; the dashed line is the 1,800 threshold. Click an area's chart to filter by it.</p>
         <div class="sm" id="vcTrend" data-source="f_concentration"></div>
       </div>
     </div>
     <div class="grid">
       <div class="card">
-        <div class="hd"><h2 id="vaH">Largest vendors in each area</h2></div>
+        <div class="hd"><h2 id="vaH" data-ad="vaH">Largest vendors in each area</h2></div>
         <p class="note">The six largest private vendors per area; follows the Area choice above. Click a row for the vendor's page.</p>
         <div class="tbl"><table data-source="d_area_top" data-row-key="area,vendor">
           <thead><tr><th data-field="area">Area</th><th data-field="vendor">Vendor</th><th class="n" data-field="agencies">Agencies</th><th class="n" data-field="spend">Spend</th><th class="n">Share of area</th></tr></thead>
           <tbody id="vaBody"></tbody></table></div>
       </div>
       <div class="card">
-        <div class="hd"><h2 id="vcfH">One company, many payee records</h2></div>
+        <div class="hd"><h2 id="vcfH" data-ad="vcfH">One company, many payee records</h2></div>
         <p class="note" id="vcfNote">The same company paid under several names splits its spend in reports and hides its buying power. Largest companies first; search for any.</p>
         <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Search <input type="search" id="vcfQ" placeholder="Company or payee name" aria-label="Search companies"></span><span id="vcfCount"></span></div>
         <div class="tbl"><table data-source="d_families" data-row-key="family,payee_name">
@@ -520,30 +551,39 @@
           <tbody id="vcfBody"></tbody></table></div>
       </div>
     </div>
-    <div class="card"><h3>What the data shows, and what to do</h3><ul class="ins" id="vIns"></ul></div>
+    <div class="card"><h3 id="vdoH" data-ad="vdoH">What the data shows, and what to do</h3><ul class="ins" id="vIns"></ul></div>
     <details class="card" id="vLedger"><summary><b>Full vendor ledger</b>: every payee by type since FY2008, and every vendor paid $1M or more in a year since FY2022</summary>
       <div class="grid" style="margin-top:var(--cds-gap-md)">
-        <div><h3 id="vtH">All payments by who was paid</h3><p class="note" id="vtNote">Every payment in the state's payments data, by payee type.</p><div class="legend" id="vtLegend"></div><div class="chart" id="vtChart" data-source="f_payee_type"></div></div>
-        <div><h3 id="vbH">Largest payees</h3><p class="note" id="vbNote"></p><div class="chart" id="vbChart" data-source="d_vendors f_vendor_pay"></div></div>
+        <div><h3 id="vtH" data-ad="vtH">All payments by who was paid</h3><p class="note" id="vtNote">Every payment in the state's payments data, by payee type.</p><div class="legend" id="vtLegend"></div><div class="chart" id="vtChart" data-source="f_payee_type"></div></div>
+        <div><h3 id="vbH" data-ad="vbH">Largest payees</h3><p class="note" id="vbNote"></p><div class="chart" id="vbChart" data-source="d_vendors f_vendor_pay"></div></div>
       </div>
       <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Payee type <select id="vType" aria-label="Payee type"><option value="">All non-government types</option></select></span><span class="lab">Search <input type="search" id="vlQ" placeholder="Vendor name" aria-label="Search the ledger"></span><span id="vlCount"></span></div>
       <div class="tbl"><table data-source="d_vendors f_vendor_pay" data-row-key="vendor">
         <thead><tr><th data-field="vendor">Vendor</th><th data-field="payee_type">Type</th><th data-field="main_function">Main function</th><th class="n">Paid</th><th class="n">Change</th><th class="n">Agencies</th><th class="n" data-field="payee_names">Payee names</th></tr></thead>
         <tbody id="vlBody"></tbody></table></div>
     </details>
+    <div class="card" id="vqCard">
+      <div class="hd"><h2 id="vqH" data-ad="vqH">Payee names: alias review queue <span class="tag2">(leads for a reviewer, no mapping changes by itself)</span></h2></div>
+      <p class="note" id="vqNote" data-source="d_vendor_alias_review">—</p>
+      <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Kind <select id="vqKind" aria-label="Review kind"><option value="">Both kinds</option><option>ZIPs disagree</option><option>Possible missed merge</option></select></span><span class="lab"><input type="search" id="vqQ" placeholder="Company name" aria-label="Filter the alias review queue by company"></span><span id="vqCount"></span></div>
+      <div class="tbl"><table data-source="d_vendor_alias_review" data-row-key="company">
+        <thead><tr><th data-field="kind">Kind</th><th data-field="company">Company</th><th data-field="other_company">Other company</th><th class="n" data-field="names">Spellings</th><th class="n" data-field="zip3s">ZIP areas</th><th data-field="evidence">Evidence</th><th class="n" data-field="paid">Paid, all years</th></tr></thead>
+        <tbody id="vqBody"></tbody></table></div>
+      <p class="stagenote">The payments data has no vendor number or tax ID, so a payee name and its ZIP are the only keys the public data offers. A reviewed decision is recorded in reference/vendor_families.csv. Government payees are left out.</p>
+    </div>
   </section>
 
   <!-- BUDGET -->
   <section class="panel" id="p-budget" role="tabpanel" aria-labelledby="t-budget" hidden>
     <div class="card">
-      <div class="hd"><h2 id="budH">Operating budget by function</h2><button class="xp" data-expand="budget">Expand</button></div>
+      <div class="hd"><h2 id="budH" data-ad="budH">Operating budget by function</h2><button class="xp" data-expand="budget">Expand</button></div>
       <p class="note" id="budNote">All funds.</p>
       <p class="insight" id="budInsight"></p>
       <div class="legend" id="budLegend"></div>
       <div class="chart" id="budChart" data-source="f_function"></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="ovlH">Budget, payments and grants by year</h2></div>
+      <div class="hd"><h2 id="ovlH" data-ad="ovlH">Budget, payments and grants by year</h2></div>
       <p class="note">How the three sources line up. The budget is all funds at its latest stage; payments are cash paid to payees (no payroll, but capital and pass-through money); grants and loans are the state's award list. Grants are mostly paid out through payments, so the last column shows the share of grant dollars whose grantee is also a payee that year (exact name match, so a minimum). Statewide; the agency filter does not apply.</p>
       <p class="insight" id="ovlFind"></p>
       <div class="tbl"><table data-source="f_overlap">
@@ -551,19 +591,19 @@
         <tbody id="ovlBody"></tbody></table></div>
     </div>
     <div class="grid">
-      <div class="card"><div class="hd"><h2 id="fsH">How it's funded</h2></div><p class="note" id="fsNote">Budget by fund type and year (chart), then by named fund source (table). Federal sources carry their federal Assistance Listing number.</p><p class="insight" id="fsFind"></p><div class="legend" id="fsLegend"></div><div class="chart" id="fsChart" data-source="f_fund" style="min-height:0"></div>
+      <div class="card"><div class="hd"><h2 id="fsH" data-ad="fsH">How it's funded</h2></div><p class="note" id="fsNote">Budget by fund type and year (chart), then by named fund source (table). Federal sources carry their federal Assistance Listing number.</p><p class="insight" id="fsFind"></p><div class="legend" id="fsLegend"></div><div class="chart" id="fsChart" data-source="f_fund" style="min-height:0"></div>
         <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><select id="fsType" aria-label="Fund type"><option value="">All fund types</option></select> <input id="fsQ" type="search" placeholder="Search fund sources" aria-label="Search fund sources"></div>
         <div class="tbl"><table data-source="f_fund_source">
           <thead><tr><th>Fund source</th><th>Code</th><th>Type</th><th class="n">Amount</th><th class="n">Change</th><th class="n">Share</th></tr></thead>
           <tbody id="fsBody"></tbody></table></div><p class="note" id="fsCount"></p></div>
-      <div class="card"><div class="hd"><h2 id="pgH">Where it's going</h2></div><p class="note" id="pgNote">Budget by agency program.</p><p class="insight" id="pgFind"></p>
+      <div class="card"><div class="hd"><h2 id="pgH" data-ad="pgH">Where it's going</h2></div><p class="note" id="pgNote">Budget by agency program.</p><p class="insight" id="pgFind"></p>
         <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><input id="pgQ" type="search" placeholder="Search programs or agencies" aria-label="Search programs"></div>
         <div class="tbl"><table data-source="f_program">
           <thead><tr><th>Program</th><th>Agency</th><th class="n">Amount</th><th class="n">Change</th><th class="n">Share</th></tr></thead>
           <tbody id="pgBody"></tbody></table></div><p class="note" id="pgCount"></p></div>
     </div>
     <div class="card">
-      <div class="hd"><h2 id="pgTreeH">The budget map</h2></div>
+      <div class="hd"><h2 id="pgTreeH" data-ad="pgTreeH">The budget map</h2></div>
       <p class="note" id="pgTreeNote">—</p>
       <p class="insight" id="pgTreeFind"></p>
       <div class="legend" id="pgTreeLegend"></div>
@@ -578,7 +618,7 @@
     </div>
     <div id="prgTable" style="min-width:0"></div>
     <div class="card">
-      <div class="hd"><h2 id="grH">Grants and loans, as listed</h2></div>
+      <div class="hd"><h2 id="grH" data-ad="grH">Grants and loans, as listed</h2></div>
       <p class="note" id="grNote">Every row as the state publishes it (grants and loans dataset, absk-avps), with no grouping. Grantor names are free text, so one agency can appear under several spellings. FY2009–FY2025; the agency filter does not apply. Descriptions are cut to one line; hover for the full text.</p><p class="insight" id="grFind"></p>
       <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><select id="grCat" aria-label="Grant or loan"><option value="">Grants and loans</option><option>Grant</option><option>Loan</option></select> <select id="grPay" aria-label="Also a payee"><option value="">All grantees</option><option value="1">Also a payee that year</option><option value="0">Not found in payments</option></select> <input id="grQ" type="search" placeholder="Search grantor, grantee or description" aria-label="Search grants"></div>
       <div class="tbl"><table data-source="f_grants">
@@ -587,20 +627,42 @@
       <p class="note" id="grCount"></p>
     </div>
     <div class="grid">
-      <div class="card"><div class="hd"><h2 id="fnH">By function</h2><button class="xp" data-expand="budget">Expand</button></div><p class="note" id="fnNote">All funds.</p><p class="insight" id="fnFind"></p>
+      <div class="card"><div class="hd"><h2 id="fnH" data-ad="fnH">By function</h2><button class="xp" data-expand="budget">Expand</button></div><p class="note" id="fnNote">All funds.</p><p class="insight" id="fnFind"></p>
         <div class="tbl"><table data-source="f_function" data-row-key="category_title">
           <thead><tr><th data-field="category_title">Function</th><th class="n" data-field="budget">Amount</th><th class="n">Change</th><th class="n">Share</th></tr></thead>
           <tbody id="fnBody"></tbody></table></div></div>
-      <div class="card"><div class="hd"><h2 id="fundH">By fund type</h2><button class="xp" data-expand="funds">Expand</button></div><p class="note">General, federal and special funds.</p><p class="insight" id="fundFind"></p>
+      <div class="card"><div class="hd"><h2 id="fundH" data-ad="fundH">By fund type</h2><button class="xp" data-expand="funds">Expand</button></div><p class="note">General, federal and special funds.</p><p class="insight" id="fundFind"></p>
         <div class="tbl"><table data-source="f_fund" data-row-key="fund_type_name">
           <thead><tr><th data-field="fund_type_name">Fund</th><th class="n" data-field="budget">Amount</th><th class="n">Change</th><th class="n">Share</th></tr></thead>
           <tbody id="fundBody"></tbody></table></div></div>
-      <div class="card"><div class="hd"><h2 id="objH">By type of spending</h2><button class="xp" data-expand="controllable">Expand</button></div><p class="note">Comptroller object, with the controllable part.</p><p class="insight" id="objFind"></p>
+      <div class="card"><div class="hd"><h2 id="objH" data-ad="objH">By type of spending</h2><button class="xp" data-expand="controllable">Expand</button></div><p class="note">Comptroller object, with the controllable part.</p><p class="insight" id="objFind"></p>
         <div class="tbl"><table data-source="f_object" data-row-key="object_name">
           <thead><tr><th data-field="object_name">Object</th><th class="n" data-field="budget">Amount</th><th class="n">Change</th><th class="n" data-field="controllable">Controllable</th></tr></thead>
           <tbody id="objBody"></tbody></table></div></div>
     </div>
     <p class="stagenote" id="budPair"></p>
+
+    <div class="card" id="fhCard">
+      <div class="hd"><h2 id="fhH" data-ad="fhH">Who pays for each program: shifts to the General Fund</h2></div>
+      <p class="note" id="fhNote" data-source="d_fund_shift">—</p>
+      <p class="insight" id="fhIns"></p>
+      <div class="legend" id="fhLegend"></div>
+      <div class="chart" id="fhChart" data-source="d_fund_shift" style="min-height:200px" role="img" aria-label="General Fund share two years before and in the flagged year, largest programs"></div>
+      <div class="tbl"><table data-source="d_fund_shift" data-row-key="program_code">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="agency">Agency</th><th data-field="program_name">Program</th><th class="n" data-field="program_budget">Budget, all funds</th><th class="n" data-field="general_share_2y_before">General Fund share 2 years before</th><th class="n" data-field="general_share">General Fund share</th><th class="n" data-field="general_share_change">Change</th><th class="n" data-field="federal_share">Federal share (before → now)</th></tr></thead>
+        <tbody id="fhBody"></tbody></table></div>
+    </div>
+    <div class="card" id="fxCard">
+      <div class="hd"><h2 id="fxH" data-ad="fxH">Federal programs: the State budget next to federal obligations</h2></div>
+      <p class="note" id="fxNote" data-source="d_federal_crosswalk">—</p>
+      <div class="filters" style="padding:var(--cds-gap-sm) 0"><span class="lab">Federal program <select id="fxL" aria-label="Federal program (Assistance Listing)"></select></span></div>
+      <div class="legend" id="fxLegend"></div>
+      <div class="chart" id="fxChart" data-source="d_federal_crosswalk" style="min-height:240px" role="img" aria-label="State budget federal funds and federal obligations by year for the selected program"></div>
+      <div class="tbl"><table data-source="d_federal_crosswalk" data-row-key="fiscal_year">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="stage">State budget stage</th><th class="n" data-field="state_federal_budget">State budget, federal funds (State FY, Jul–Jun)</th><th class="n" data-field="federal_obligated">Federal obligations to Maryland governments (federal FY, Oct–Sep)</th><th class="n" data-field="agencies">State agencies</th></tr></thead>
+        <tbody id="fxBody"></tbody></table></div>
+      <p class="stagenote">The two years overlap by nine months and are set side by side, never added or netted. Obligations are USAspending awards to government recipients in Maryland (award types 02–05); a federal year still in progress is marked partial.</p>
+    </div>
   </section>
 
   <!-- DATA & PIPELINE -->
@@ -613,7 +675,7 @@
       <div class="tile"><span class="k">Runs recorded</span><span class="v" data-source="c_run" data-field="runs">—</span><span class="d" data-source="c_run" data-field="repairs">—</span></div>
     </div>
     <div class="card">
-      <h2 id="srcH">Data sources</h2>
+      <h2 id="srcH" data-ad="srcH">Data sources</h2>
       <p class="note">Six state datasets on opendata.maryland.gov, each downloaded in full through the SODA API and matched year by year to the portal's own row counts and totals. Payments are matched again to vendorpayments.maryland.gov and the budget to operatingbudget.maryland.gov.</p>
       <div class="tbl"><table data-source="sources" data-row-key="dataset_id">
         <thead><tr><th data-field="title">Dataset</th><th data-field="dataset_id">ID</th><th data-field="use">What it holds</th><th data-field="years">Years</th><th class="n" data-field="rows_downloaded">Rows</th><th data-field="reconciled">Matches portal</th><th data-field="portal_updated">Portal updated</th><th data-field="mismatch_notes">Notes on the source</th></tr></thead>
@@ -621,14 +683,14 @@
     </div>
     <div class="grid">
       <div class="card">
-        <h2 id="runsH">Pipeline runs</h2>
+        <h2 id="runsH" data-ad="runsH">Pipeline runs</h2>
         <p class="note">Every run is recorded, including failed ones. A run with a failed check publishes nothing; the last good version stays live.</p>
         <div class="tbl"><table data-source="runs" data-row-key="run_id">
           <thead><tr><th data-field="started_utc">Started (UTC)</th><th data-field="status">Result</th><th class="n" data-field="passed">Passed</th><th class="n" data-field="warnings">Warnings</th><th class="n" data-field="repairs">Repairs</th><th data-field="mode">Mode</th></tr></thead>
           <tbody id="runsBody"></tbody></table></div>
       </div>
       <div class="card">
-        <h2 id="checksH">Checks in the latest run</h2>
+        <h2 id="checksH" data-ad="checksH">Checks in the latest run</h2>
         <div class="filters" style="padding:0 0 var(--cds-gap-sm)"><span class="lab">Stage <select id="ckStage" aria-label="Check stage"><option value="">All stages</option><option value="raw">Download</option><option value="staged">Master lists</option><option value="model">Model</option><option value="cross-check">Cross-check</option><option value="publish">Publish</option><option value="page">Dashboard tests</option></select></span>
           <span class="lab">Show <select id="ckStatus" aria-label="Check status"><option value="">All</option><option value="pass">Passed</option><option value="warn">Warnings</option><option value="fail">Failed</option></select></span></div>
         <div class="tbl"><table data-source="checks" data-row-key="check">
@@ -637,34 +699,34 @@
       </div>
     </div>
     <div class="card">
-      <h2 id="stageH">Budget stages: how each year was confirmed</h2>
+      <h2 id="stageH" data-ad="stageH">Budget stages: how each year was confirmed</h2>
       <p class="note">FY2017–FY2025 actual, FY2026 working budget, FY2027 Legislative Appropriation. Where the budget file's own label disagrees, the year was checked against DBM's published documents.</p>
       <div class="tbl"><table data-source="stage_evidence" data-row-key="fiscal_year,evidence">
         <thead><tr><th data-field="fiscal_year">Year</th><th data-field="file_label">File's label</th><th data-field="official_stage">Confirmed stage</th><th data-field="evidence">Evidence</th><th class="n" data-field="programs_compared">Programs compared</th><th class="n" data-field="programs_exact">Match to the dollar</th></tr></thead>
         <tbody id="stBody"></tbody></table></div>
     </div>
     <div class="card">
-      <h2 id="measH">How numbers combine across filters</h2>
+      <h2 id="measH" data-ad="measH">How numbers combine across filters</h2>
       <p class="note">Every card uses the same rules, defined once in the page and in the pipeline (and shipped as DAX for a Power BI build). Totals are the sum of the selected years, agencies and areas. Per-position figures are total spending divided by total position-years. Changes: one year is compared with the year before; several back-to-back years with the same number of years just before; other selections compare the last selected year with the first. A card that mixes actual spending with budgets says so. ▲ up, ▼ down, ■ flat; for costs, red means up and green means down.</p>
       <div class="tbl"><table data-source="measures" data-row-key="table,measure">
         <thead><tr><th data-field="measure">Pipeline measure</th><th data-field="table">Table</th><th data-field="grouped_by">For each</th><th data-field="higher_is">Higher is</th><th data-field="definition">Definition</th></tr></thead>
         <tbody id="measBody"></tbody></table></div>
     </div>
     <div class="card">
-      <div class="hd"><h2>Master list quality (recommendation 5)</h2></div>
+      <div class="hd"><h2 id="mqH" data-ad="mqH">Master list quality (recommendation 5)</h2></div>
       <p class="note">Checked on every run; a run fails if less than 99% of FY2026 payments match a budget agency.</p>
       <div class="tbl"><table data-source="d_master_quality"><thead><tr><th>Measure</th><th>Value</th><th>Result</th></tr></thead><tbody id="mqBody"></tbody></table></div>
     </div>
     <div class="grid" data-report="skip">
       <div class="card">
-        <h2 id="amH">Agency master list</h2>
+        <h2 id="amH" data-ad="amH">Agency master list</h2>
         <p class="note">Payment agency names mapped to budget agencies across years, so the payments and the budget can be read together.</p>
         <div class="tbl"><table data-source="agency_master" data-row-key="agency_code">
           <thead><tr><th data-field="agency_code">Code</th><th data-field="agency">Agency</th><th class="n" data-field="payment_names">Payment names</th><th data-field="how_matched">How matched</th></tr></thead>
           <tbody id="amBody"></tbody></table></div>
       </div>
       <div class="card">
-        <h2 id="vfH">Vendor master list: companies under several names</h2>
+        <h2 id="vfH" data-ad="vfH">Vendor master list: companies under several names</h2>
         <p class="note">FY2026 private vendors paid under two or more payee names, merged into one vendor so their spend and buying leverage show in full.</p>
         <div class="tbl"><table data-source="vendor_families" data-row-key="family">
           <thead><tr><th data-field="family">Vendor</th><th class="n" data-field="payee_names">Payee names</th><th class="n" data-field="agencies">Agencies</th><th class="n" data-field="spend">FY2026 spend</th></tr></thead>
@@ -672,13 +734,50 @@
       </div>
     </div>
     <div class="card method" id="method">
-      <h2>Method</h2>
+      <h2 id="methH" data-ad="methH">Method</h2>
       <p><b>Controllable purchases</b> are operating spending an agency can renegotiate or reduce: contractual services, supplies, equipment, vehicles, fuel and utilities, communications, travel, rent and insurance. Left out: salaries, contractual payroll, grants, capital, client and provider payments (Medicaid, purchase of care, other fee-for-service, and pass-through programs such as the Benefit Exchange's reinsurance, provider reimbursements, foster care maintenance and energy assistance), debt service, and charges between state agencies (DoIT and in-state allocations, rent paid to DGS).</p>
       <p><b>Focus areas</b> are GMI's six spending areas, defined two ways. By spending code: Comptroller sub-objects for motor vehicle operation; data processing, software and computer services; communications other than postage; postage and printing; fuel and utilities; and non-DGS rent, within controllable purchases. By payee name: payments to vendors whose names identify the area, with pass-through payments removed. Spending codes are the firmer measure; payee names show which vendors.</p>
       <p><b>Spending type.</b> FY2017–FY2025 are actual spending, FY2026 is the working budget and FY2027 is the Legislative Appropriation, as DBM's Operating Budget site states; the pipeline reads that statement on every run. Actual spending and budgets are kept apart by default, as finance reporting practice recommends, so totals never add a plan to what was spent unless you choose "Actual and budgets". Payments to vendors are always actual spending, so FY2026 payments count as actual even though the FY2026 budget is still a working budget. The main views start at FY2017; each payments detail page shows the full history from FY2008.</p>
       <p><b>Filters.</b> Every filter starts at All. Years, focus areas and agencies take several values at once; the cards add up the selection. Clicking a bar for an area or agency filters the page by it; clicking a year adds or removes that year, and time charts keep every year on screen with the selection highlighted. A check beside the filters confirms that the parts on screen add up to the totals on screen.</p>
       <p><b>Master lists.</b> Payments carry an agency code from FY2020; earlier names are mapped by that code, then by hand for renamed agencies, and capital-budget accounts are grouped as capital. MDOT's modal administrations roll up to the Department of Transportation. Payee names are grouped when they differ only by suffix or spacing, and known company families are merged.</p>
       <p><b>Built by</b> Sierra Napier with Python. The pipeline runs monthly, checks itself and the dashboard before publishing, and can also be deployed on AWS or Google Cloud.</p>
+    </div>
+    <div class="card" id="rcCard">
+      <div class="hd"><h2 id="rcH" data-ad="rcH">Reconciled with the State's own documents, every year</h2></div>
+      <p class="note" id="rcNote" data-source="d_book_reconciliation d_site_reconciliation">—</p>
+      <p class="insight" id="rcIns"></p>
+      <div class="legend" id="rcLegend"></div>
+      <div class="chart" id="rcChart" data-source="d_book_reconciliation d_site_reconciliation" style="min-height:170px" role="img" aria-label="Which fiscal years reconcile with each source"></div>
+      <div class="tbl"><table data-source="d_book_reconciliation" data-row-key="fiscal_year">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="stage">Stage</th><th data-field="basis" title="All funds = operating budget plus public higher education, less reimbursable and non-budgeted funds">Basis</th><th data-field="source_document">DBM document</th><th class="n" data-field="book_side">DBM figure</th><th class="n" data-field="data_total">Open data</th><th class="n" data-field="difference">Difference</th><th class="n" data-field="exact_share">Programs equal to the dollar</th><th data-field="status">Status</th></tr></thead>
+        <tbody id="rcBody"></tbody></table></div>
+      <h3 id="rdH" data-ad="rdH" style="margin-top:var(--cds-gap-md)">Every program that differs</h3>
+      <div class="tbl"><table data-source="d_book_program_differences" data-row-key="program">
+        <thead><tr><th class="n" data-field="fiscal_year">Year</th><th data-field="program">Program</th><th data-field="program_name">Name</th><th class="n" data-field="book">DBM</th><th class="n" data-field="data">Open data</th><th class="n" data-field="difference">Difference</th><th data-field="reason">Reason</th></tr></thead>
+        <tbody id="rdBody"></tbody></table></div>
+      <p class="stagenote">The books print each program's total expenditure; reimbursable funds (paid by one agency to another) and non-budgeted funds (MDTA, MES, the Stadium Authority, State Retirement investments) are taken out because the State budget does not appropriate them and the open data does not carry them. Budget books: <a href="https://dbm.maryland.gov/budget/Pages/operbudget/historical-operbud-docs.aspx" target="_blank" rel="noopener">dbm.maryland.gov archive</a>. Thresholds were set before the comparison was run (config/assumptions.yaml, books).</p>
+    </div>
+    <div class="card" id="mrCard">
+      <div class="hd"><h2 id="mrH" data-ad="mrH">Model registry: every model against its baseline</h2></div>
+      <p class="note" id="mrNote" data-source="d_model_registry">—</p>
+      <div class="tbl"><table data-source="d_model_registry" data-row-key="model">
+        <thead><tr><th data-field="model">Model</th><th data-field="method">Method</th><th data-field="baseline">Baseline</th><th data-field="training_window">Learned from</th><th data-field="metric">Judged on</th><th class="n" data-field="model_score">Model</th><th class="n" data-field="baseline_score">Baseline</th><th data-field="decision">Decision</th><th data-field="model_card">Model card</th></tr></thead>
+        <tbody id="mrBody"></tbody></table></div>
+    </div>
+    <div class="card" id="drCard">
+      <div class="hd"><h2 id="drH" data-ad="drH">Data drift between fiscal years</h2></div>
+      <p class="note" id="drNote" data-source="d_drift">—</p>
+      <p class="insight" id="drIns"></p>
+      <div class="legend" id="drLegend"></div>
+      <div class="chart" id="drChart" data-source="d_drift" style="min-height:260px" role="img" aria-label="Population stability index between consecutive fiscal years, three measures"></div>
+    </div>
+    <div class="card" id="faCard">
+      <div class="hd"><h2 id="faH" data-ad="faH">What an audit-grade tracker needs, and what the open data holds</h2></div>
+      <p class="note" id="faNote" data-source="d_field_availability">—</p>
+      <div class="meter" id="faMeter" role="img" aria-label="Share of needed fields in the open data"></div>
+      <div class="tbl"><table data-source="d_field_availability" data-row-key="field">
+        <thead><tr><th data-field="improvement">Area</th><th data-field="field">Field</th><th data-field="in_open_data">In the open data?</th><th data-field="where_it_exists">Where it exists</th><th data-field="plan">Plan</th></tr></thead>
+        <tbody id="faBody"></tbody></table></div>
     </div>
   </section>
 
@@ -718,7 +817,9 @@ const AREAS = ['IT hardware, software & services','Fleet & fuel','Utilities & fa
 const SCOPES = ['Controllable purchases','Charges between agencies','Client payments and debt service','Staff, grants and capital'];
 const areaColor = a => dash.colors[AREAS.indexOf(a) % dash.colors.length];
 const cache = {}; // parsed datasets, re-parsed only when the dataset changes
-const ok = id => { const d = dash.data(id); if (!d || d.status !== 'ok') return null; if (cache[id] && cache[id].src === d.data) return cache[id].rows; const rows = num(d.data); cache[id] = {src: d.data, rows}; return rows; };
+const ok = id => { const d = dash.data(id); if (!d || d.status !== 'ok') return null; if (cache[id] && cache[id].src === d.data) return cache[id].rows; const rows = num(d.data);
+  if (id === 'f_forecast') rows.forEach(r => { if (r.p10_cal != null && r.p90_cal != null) { r.p10_raw = r.p10; r.p90_raw = r.p90; r.p10 = r.p10_cal; r.p90 = r.p90_cal; } }); // the published ranges are the calibrated ones; raw kept as p10_raw / p90_raw
+  cache[id] = {src: d.data, rows}; return rows; };
 const setText = (id,t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
 const setChg = (id,c,good) => { const e = document.getElementById(id); if (!e) return; e.textContent = c && c.change != null ? ARROW(c.change) + ' ' + c.label : c && c.small ? SMALL_TXT + ': no percent change' : (c && c.n ? 'no earlier years to compare' : ''); e.className = 'd chg ' + toneOf(c ? c.change : null, good); };
 
@@ -963,10 +1064,13 @@ function payments(p){ // payments to vendors: statewide totals, by agency, or by
 const who = p => !p.agencies.length ? 'Maryland' : p.agencies.length === 1 ? agName(p.agencies[0]) : `${p.agencies.length} selected agencies`;
 
 /* forecast ranges: indicative, with the coverage the pipeline measured on its rolling backtest (a check in the checks dataset) */
-function fcCov(){ const ck = ok('checks'); if (!ck) return null; const r = ck.find(c => /forecast ranges cover/i.test(c.check)); if (!r) return null;
-  const m = String(r.detail).match(/([\d.]+)% of (\d+) forecasts.*nominal (\d+)%/); if (!m) return null;
-  const pct = Math.round(+m[1]) + '%', nominal = m[3] + '%';
-  return {pct, nominal, n: +m[2], text: `Measured on the pipeline's rolling backtest, ${pct} of ${m[2]} past forecasts fell inside such a range, against the nominal ${nominal}; read the ranges as indicative, likely too narrow.`}; }
+function fcCov(){ const c = ok('d_range_coverage'); const pick = k => c && c.find(x => x.source === 'bootstrap' && x.area === 'All areas' && +x.horizon === 0 && x.scope === 'out_of_sample' && +x.calibrated === k);
+  const cal = pick(1), raw = pick(0);
+  if (cal && raw) { const pct = Math.round(cal.coverage * 100) + '%', nominal = '80%';
+    return {pct, nominal, n: cal.n, text: `The ranges are calibrated (split conformal): with each outcome year held out, ${cal.hits} of ${cal.n} past forecasts fell inside such a range (${pct}; 95% interval ${Math.round(cal.cov_lo * 100)}–${Math.round(cal.cov_hi * 100)}%), against the nominal ${nominal}. The model's raw ranges held ${raw.hits} of ${raw.n} (${Math.round(raw.coverage * 100)}%). Read the ranges as indicative.`}; }
+  const ck = ok('checks'); if (!ck) return null; const q = ck.find(x => /forecast ranges cover/i.test(x.check)); if (!q) return null;
+  const m = String(q.detail).match(/([\d.]+)% of (\d+) forecasts.*nominal (\d+)%/); if (!m) return null;
+  return {pct: Math.round(+m[1]) + '%', nominal: m[3] + '%', n: +m[2], text: `Measured on the pipeline's rolling backtest, ${Math.round(+m[1])}% of ${m[2]} past forecasts fell inside such a range, against the nominal ${m[3]}%; read the ranges as indicative.`}; }
 /* ======================= path to $50M: conditional wording, from the data ======================= */
 function planFacts(){ const pl = ok('d_plan50'); if (!pl || !pl.length) return null;
   const tot = d3.max(pl, r => r.cumulative), lo = sum(pl, 'low'), hi = sum(pl, 'high');
@@ -1054,17 +1158,166 @@ function drawOver(p){
   { const mo = document.getElementById('ovMethod'); if (mo) { mo.textContent = '';
     const h = document.createElement('h2'); h.textContent = 'Analyst detail'; mo.appendChild(h);
     const add = (b, t) => { const pp = document.createElement('p'); const bb = document.createElement('b'); bb.textContent = b; pp.append(bb, document.createTextNode(' ' + t)); mo.appendChild(pp); };
-    const fm2 = (ok('d_forecast_model') || []).filter(m => m.backtest_mape != null);
-    if (fm2.length) add('Spending forecasts (Calculator tab):', 'for each area, whichever of trend, naive or drift predicted FY2023–FY2025 best. Backtest errors and models: ' + fm2.map(m => `${m.area} ${PCT(m.backtest_mape)} (${String(m.method).toLowerCase()})`).join('; ') + '.');
+    const fm2 = ok('d_forecast_model') || [], rg2 = (ok('d_model_registry') || []).find(r => r.model === 'Spending forecast');
+    if (fm2.length) add('Spending forecasts (Calculator tab):', 'for each area, whichever of trend, naive or drift had the lowest mean absolute scaled error (MASE) over four rolling forecast origins, FY2021–FY2024, against actual spending: ' + fm2.map(m => `${m.area} ${String(m.method).toLowerCase()}`).join('; ') + '.' + (rg2 ? ` Across areas the kept models average MASE ${d3.format('.2f')(rg2.model_score)} against ${d3.format('.2f')(rg2.baseline_score)} for naive everywhere: growth models rarely beat standing still on this data.` : ''));
     const cv2 = fcCov(); if (cv2) add('Range coverage:', cv2.text);
     const ct2 = (ok('d_challenger_total') || [])[0], ch2 = ok('f_challenger') || [];
-    if (ct2) { const ad2 = ch2.filter(r => String(r.adopted).toLowerCase() === 'true'); add('FY2026 risk corridor (Forecasts tab):', `a LightGBM quantile model for each agency–code series where it beat the naive last-actual forecast in its rolling-origin backtest (${N(ad2.length)} of ${N(ch2.length)} series), the naive forecast elsewhere; the series are combined over ${N(ct2.bootstrap_paths)} simulated paths, because per-series bands cannot simply be added.`); }
+    if (ct2) { const ad2 = ch2.filter(r => String(r.adopted).toLowerCase() === 'true'); add('FY2026 risk corridor (Forecasts tab):', `a LightGBM quantile model for each agency–code series where it beat the naive last-actual forecast in its rolling-origin backtest (${N(ad2.length || ct2.n_adopted)} of ${N(ch2.length || ct2.n_series)} series), the naive forecast elsewhere. The corridor is the sum of the series medians with a band from the statewide total's own backtest miss (log sigma ${d3.format('.2f')(ct2.common_shock_sigma)}, three origins), because per-series bands cannot simply be added.`); }
     const rq2 = ok('review_queue'); if (rq2) add('Anomaly queue (Opportunities tab):', `an isolation forest scores every vendor–agency payment year and every agency spending code; ${N(rq2.length)} outliers are flagged this run, as leads for review, not findings of error.`);
     const cl2 = ok('agency_clusters'); if (cl2 && cl2.length) add('Agency peer groups (Focus areas tab):', `K-Means on each agency's FY${cl2[0].fiscal_year} spending mix across the six focus areas; k = ${cl2[0].k_chosen} chosen by silhouette score (${d3.format('.2f')(cl2[0].silhouette)}).`);
     const so2 = ok('sources') || [];
     if (so2.length) { const lr = (ok('runs') || []).slice().sort((a,b) => d3.ascending(a.started_utc, b.started_utc)).slice(-1)[0] || {}; const built = String(lr.started_utc || '').slice(0, 10);
       add('Data vintages:', so2.map(s => `${s.title}, portal updated ${s.portal_updated}`).join('; ') + (built ? `. Pipeline last built ${built}.` : '.')); } } }
 }
+/* ======================= analyst detail: one panel per visual (what, method, how to read it, caveats, data) =======================
+   Every figure below is read from the published tables of this build when the panel opens; nothing is typed in. */
+const AD_SRC = {payments:'7syw-q4cy', budget:'yu65-jmmv', fund:'gy87-e27x', grants:'absk-avps', fte:'x8qy-486w', highered:'4mca-332u'};
+const adVint = keys => { const so = ok('sources') || []; return keys.map(k => { if (!AD_SRC[k]) return k; const s = so.find(r => r.dataset_id === AD_SRC[k] || r.source === k);
+  return s ? `${s.title} (${AD_SRC[k]}, portal updated ${s.portal_updated})` : AD_SRC[k]; }).join('; '); };
+const adReg = name => (ok('d_model_registry') || []).find(r => r.model === name);
+const adCov = () => { const c = ok('d_range_coverage'); const pick = k => c && c.find(x => x.source === 'bootstrap' && x.area === 'All areas' && +x.horizon === 0 && x.scope === 'out_of_sample' && +x.calibrated === k); return [pick(0), pick(1)]; };
+const adFc = () => { const m = ok('d_forecast_model') || []; if (!m.length) return ''; const r = adReg('Spending forecast');
+  return `Each focus area's model is the one with the lowest mean absolute scaled error (MASE) over four rolling forecast origins, FY2021–FY2024, scored against actual spending: ${m.map(x => `${x.area}: ${String(x.method).toLowerCase()}`).join('; ')}.` + (r ? ` Across areas the chosen models average MASE ${d3.format('.2f')(r.model_score)} against ${d3.format('.2f')(r.baseline_score)} for the naive last-actual forecast (below 1 would mean better than a one-step naive guess inside the training years).` : ''); };
+const adRange = () => { const [raw, cal] = adCov(); return cal && raw ? `Ranges are bootstrap 10th–90th percentiles widened by a split-conformal factor. With each outcome year held out, ${cal.hits} of ${cal.n} past forecasts (${PCT(cal.coverage)}, 95% interval ${PCT(cal.cov_lo)}–${PCT(cal.cov_hi)}) fell inside the calibrated range, against the nominal 80%; the raw bootstrap range held ${raw.hits} of ${raw.n}.` : 'Range coverage is not in this build.'; };
+const AD = {
+  // ---------------- Overview
+  ovBPH: {what:'The operating budget at its latest stage (bars) and payments to all payees (line), by Maryland fiscal year.',
+    method:'Budget: the sum of all funds in the operating budget, at the stage confirmed for each year (actual through FY2025, FY2026 working budget, FY2027 legislative appropriation). Payments: every payment to every payee, summed per year.',
+    read:'The two measure different things: the budget includes payroll and is an authority to spend; payments are cash paid out to outside payees, including capital and pass-through money. Read the gap as scope, not as savings or overspending.',
+    caveat:'The latest payments year is partial until it closes.', data:['budget','payments']},
+  ovFundH: {card:'payee_classifier', what:'For one year: the budget by fund type, and payments by type of payee.', method:'Fund types from the budget data; payee types from the reviewed name rules (reference/payee_type_rules.csv).',
+    read:'The fund mix shows who carries the cost (General Fund versus federal and special funds); the payee mix shows where cash goes. Only the controllable, private-vendor part of payments is in reach of procurement savings.',
+    caveat:'Payee types come from name rules: "Business or other" is the default and holds payees the rules could not place.', data:['budget','payments']},
+  ov50H: {card:'recommendations', what:'Yearly savings from the steps on the Calculator and Opportunities tabs, against GMI\'s $50M FY2026 target.',
+    method:'Step 1 applies each area\'s GMI-reported saving rate to its forecast spending; further steps add statewide contracts for the largest shared vendors at an assumed 3.5% (the middle of 2–5%) until the total reaches $50M.',
+    read:'A conditional path, not a forecast of savings: each step holds only if its assumption holds. The share with payment evidence says how much of the path is already visible in the State\'s payments.',
+    caveat:'The 2–5% contract rate is a screening assumption, not a published rate.', data:['budget','payments']},
+  overAreasH: {what:'Spending in the six GMI focus areas for the selected years.', method:'Solid bars: the State\'s own spending codes mapped to each area (reference/focus_area_rules.csv). Thin bars: the part that payee names alone can find.',
+    read:'Where the two differ widely, the area is bought through codes the name rules miss, or the reverse; the spending-code figure is the baseline used for savings.', caveat:'Focus-area mapping is a reviewed rule set, not an official State classification.', data:['budget','payments']},
+  ovNext: {card:'recommendations', what:'The six recommendations, each with one number re-computed on every build.', method:'Each number is read from its own table (bid list, savings checks, the path to $50M, master-list match rate, results measures).',
+    read:'A step\'s status changes only when its number changes between builds; open a step for its evidence.', caveat:'Recommendations are for discussion, drawn from this tracker\'s findings.', data:['budget','payments']},
+  // ---------------- Focus areas
+  areasTrendH: {what:'Spending in each focus area by fiscal year, FY2017–FY2027.', method:'The State\'s spending codes mapped to the six areas; budget years (FY2026 working budget, FY2027 legislative appropriation) are outlined.',
+    read:'Compare actual years with each other; outlined budget years are plans, not results, so a jump into them is a plan, not growth.', caveat:'Nominal dollars; the real-dollar toggle deflates by CPI-U to FY2026 dollars.', data:['budget']},
+  areasTblH: {what:'Each area for the selected years: spending, change, share of the six areas, agencies spending, and what payee names alone find.', method:'Changes compare the selection with the same number of years just before it.',
+    read:'A high payee-name share means the area is visible vendor by vendor in payments, so contract work can be targeted; a low share means it runs through codes or purchasing cards.', caveat:'Purchasing-card spending does not appear in the payments data.', data:['budget','payments']},
+  scopeH: {what:'The operating budget split by what an agency can change.', method:'Comptroller object codes classified as controllable purchases or not (reference/controllable_rules.csv).',
+    read:'Controllable purchases are the base GMI\'s target is measured against: the $50M target as a share of this base shows how hard it is.', caveat:'The classification is a reviewed rule set; payroll, debt service and aid to others are not controllable here.', data:['budget']},
+  consolH: {card:'clustering', what:'Agencies sized by controllable spending and colored by their spending-mix peer group.', method:() => { const r = adReg('Agency peer groups'); const c = (ok('agency_clusters') || [])[0]; return `K-Means on each agency's FY${c ? c.fiscal_year : 2025} spending mix across the focus areas (shares, z-scored), k chosen by silhouette score${c ? ` (k = ${c.k_chosen}, silhouette ${d3.format('.2f')(c.silhouette)})` : ''}.`; },
+    read:'Agencies in the same group buy the same mix, so they can share contracts; a silhouette near 0.3 means the groups are real but overlap.', caveat:'One year\'s mix; groups can move between years.', data:['budget']},
+  hhiAreaH: {what:'Vendor concentration (HHI) of payments in each area, latest full payments year.', method:'Herfindahl–Hirschman Index of vendor shares, 0–10,000.',
+    read:'Above 1,800 a market counts as highly concentrated (2023 DOJ/FTC Merger Guidelines): negotiate with the few suppliers or bring in bidders. Low values mean many small contracts to consolidate.', caveat:'Payee names, merged into company families where reviewed.', data:['payments']},
+  // ---------------- Savings tracker
+  trFitH: {card:'savings', what:'GMI\'s reported items, grouped by how the January 26, 2026 report words them: saved, under way, projected.', method:'Each item is quoted from the report with its page; groups are never added into one total.',
+    read:'Only "saved" items add up to the report\'s $29M FY2026 figure; under-way and projected items are yearly savings still building or only expected.', caveat:'The tracker does not re-estimate GMI\'s figures; it checks them against payments where it can.', data:['payments']},
+  trChartH: {card:'savings', what:'For each check: the saving GMI reports as saved or under way (thick bar) next to how far payments to the matching vendors fell (thin bar).', method:'FY2025 versus FY2026 payments, summed over the payees each check names (reference/gmi_reported_savings.csv).',
+    read:'Seen: payments fell by at least half the reported saving. Partly seen: they fell by less. Not seen yet: they did not fall. Direction and size, not proof.', caveat:'A saving measured against a plan (avoided cost) may never show as a fall in payments.', data:['payments']},
+  trTblH: {card:'savings', what:'Every reported item, its payment check and its status, with the change since the last build.', method:'Status rules as in the chart; the previous status comes from the last build that passed its checks.',
+    read:'A changed status is the signal to look at; an unchanged "Not seen yet" after a full year is a question for GMI.', caveat:'Projected items are not checked: they are not expected in payments yet.', data:['payments']},
+  trSrcH: {what:'The documents every reported figure is quoted from.', method:'Each figure links to its page; hover a Source cell for the exact words.', read:'Use these to verify any figure on the tab.', caveat:'', data:[]},
+  trMovesH: {what:'Vendors paid by five or more agencies whose operating payments fell most from FY2025 to FY2026.', method:'Payments by vendor family; construction, health plans, schools, banks, governments and service providers left out.',
+    read:'Context for the renegotiated-contracts item: large, broad falls are where a renegotiation would show. Not a match to GMI\'s list.', caveat:'The payments data does not flag non-profits, so that filter goes by name and may miss some.', data:['payments']},
+  // ---------------- Opportunities
+  bidH: {card:'opportunities', what:'Commercial vendors paid separately by ten or more agencies in FY2026, largest first.', method:'Private vendors with $5M+ in FY2026 payments across 10+ agencies, regulated utilities and service providers left out; savings at an assumed 2–5%.',
+    read:'Each row is a candidate for one statewide agreement; the more agencies, the more leverage.', caveat:'2–5% is a screening assumption, not a published rate.', data:['payments']},
+  detH: {card:'opportunities', what:'The likely value of each detector\'s leads, with the high end as a thin bar.', method:'Four rule detectors on FY2025 controllable spending and FY2026 vendor payments: peer gap, growth above trend, tail spend, leverage (docs/models/opportunities.md).',
+    read:'Leads to review, sized with stated rates; the detectors overlap, so the bars are never added.', caveat:() => { const r = adReg('Opportunity detectors'); return r ? `Backtest: ${PCT(r.model_score)} of flagged units were flagged again the next year, against ${PCT(r.baseline_score)} of like-sized unflagged units: the flags persist, but persistence is not a saving.` : 'Rates are carried over from the legacy pipeline and untested.'; }, data:['budget','payments','fte']},
+  opTblH: {card:'opportunities', what:'Every finding, largest first.', method:'One row per agency and spending code (the larger kept where two detectors overlap).', read:'Sort by detector or agency; open a row for its evidence.', caveat:'A finding is a lead to ask about, not a number to bank.', data:['budget','payments']},
+  psH: {card:'payment_screen', what:'Groups of payments that could be a duplicate, a line published twice, or a split purchase.', method:'SQL screen on full payment years FY2022–FY2026: same agency, vendor and exact amount within 7 days (duplicate), or the same annual amount twice in a year (repeated line).',
+    read:'Review dollars count every copy after the first. A flag is a lead to review; no confirmation rate can be measured on this data.', caveat:'Payments are yearly totals per payee, not individual payments, so the split-purchase rule cannot run.', data:['payments']},
+  psIssH: {what:'Problems in the published data itself, such as a year published twice.', method:'Each issue verified against the State sites named in the table, on the date shown.',
+    read:'These are kept out of the leads, the totals and the calculator; they are reported to the publisher, not counted.', caveat:'', data:['payments']},
+  pcaH: {card:'clustering', what:'Agencies placed by what they buy (their focus-area spending mix).', method:'The same spending-mix shares as the peer groups, reduced to two dimensions for display.', read:'Agencies close together buy alike; outliers buy an unusual mix and are worth a separate look.', caveat:'A two-dimensional picture of a higher-dimensional mix: distances are approximate.', data:['budget']},
+  olaH: {what:'The Office of Legislative Audits\' latest report for each agency: findings and repeat findings.', method:'Read from the audit reports (reference/ola_findings.csv) with their dates and links.',
+    read:'Repeat findings mean an earlier fix did not hold; next to an opportunity, they strengthen the case to look.', caveat:'OLA reports do not publish recoupment status.', data:['OLA audit reports']},
+  anH: {card:'anomaly', what:'Unusual vendor–agency payment years and agency spending codes, ranked by anomaly score.', method:() => { const r = adReg('Anomaly flags'); return `Isolation forest on robustly scaled features (amount, year-over-year change, share of the agency's payments)${r ? `; ${PCT(r.model_score)} of flags are also found by a rule detector or the bid list` : ''}.`; },
+    read:'A flag means "worth a look", never "wrong"; triage with the status column.', caveat:'Yearly totals cannot show duplicate invoices or off-cycle payments.', data:['payments','budget']},
+  dbH: {card:'opportunities', what:'Whether flagged units are flagged again the next year, flagged against like-sized unflagged units.', method:'Each detector rerun as of FY2022, FY2023 and FY2024 on data up to that year only, then followed one year.',
+    read:'A detector that finds something real flags the same units again; a large gap between the dots is evidence of signal, not noise.', caveat:'Descriptive: flagged and unflagged units differ in more than the flag.', data:['budget','payments','fte']},
+  dvH: {card:'opportunities', what:'Median next-year change in spending, flagged against unflagged units, by detector.', method:'Per-unit change from the as-of year to the next, averaged over the three backtest years.',
+    read:'Growth flags that fall back mean part of a spike was one year; read it as a lead to check, not a trend to bank.', caveat:'Not causal, and a fall is not evidence of a saving.', data:['budget','payments']},
+  auH: {what:'Public findings with their follow-through: identified, recouped, waived and by whom, legal opinion.', method:'Seeded only from public documents, each row with its source and the date it was last checked (reference/audit_findings.csv).',
+    read:'"Confirmed by" says whether an audit document confirms the row or it rests on a press or agency report; amounts that may overlap are not added.', caveat:'A blank field is unknown, never zero.', data:['public documents (see Source)']},
+  // ---------------- Calculator
+  caLevH: {what:'The recurring savings rate each area reaches, as a share of its forecast spending.', method:'Defaults are the rates GMI reported for FY2026; the marker shows that rate.', read:'Move a lever to see what rate an area must reach; compare with the rate GMI has shown it can reach.', caveat:'Rates are inputs, not estimates.', data:['budget']},
+  caYearH: {card:'forecast', what:'Likely net savings by year at the current levers, with the indicative range.', method:() => `Savings = forecast spending × rate, net of the fee; the range is the 10th–90th percentile of simulated outcomes from the calibrated forecast ranges. ${adRange()}`,
+    read:'Bars above the dashed line reach the $50M target in that year; a range crossing it means the target is uncertain at these settings.', caveat:'FY2026 is GMI\'s reported result; FY2027–FY2031 are forecast.', data:['budget']},
+  caFcH: {card:'forecast', what:'Actual spending, the forecast to FY2031 with its range, the State\'s own budget years, and spending after savings.', method:() => `${adFc()} ${adRange()}`,
+    read:'Where the State\'s working budget or appropriation (dots) sits inside the range, the plan is in line with history; outside it, the plan departs from the trend.', caveat:'Indicative: four forecast origins and 63 scored outcomes sit behind the calibration.', data:['budget']},
+  caWhereH: {card:'forecast', what:'FY2027 likely savings by area.', method:'Forecast FY2027 spending × the area\'s rate, net of the fee.', read:'The largest bars are where the levers matter most; open one for every year and agency line by line.', caveat:'', data:['budget']},
+  caSensH: {what:'How much FY2027 net savings move if each area\'s rate is half or one and a half times the current setting.', method:'One-at-a-time sensitivity on the rate, all else held.', read:'The widest bars are the assumptions to get right first.', caveat:'Rates interact with forecast uncertainty, which this chart holds fixed.', data:['budget']},
+  caPathH: {card:'recommendations', what:'Step by step to $50M a year in FY2027.', method:'GMI\'s current pace from the forecast, then statewide contracts for the largest shared vendors at an assumed 3.5%, until the total reaches $50M.', read:'Each step lists its evidence; the share with payment evidence is how much of the path is already visible.', caveat:'Conditional on reported savings recurring and on the assumed contract rate.', data:['budget','payments']},
+  caRecH: {card:'payment_screen', what:'A lever for recovering payments from the payment screen\'s leads.', method:'Review dollars from the payment screen at a confirmation rate.', read:'Kept at zero until a review confirms leads: no confirmation rate can be measured on yearly totals.', caveat:'', data:['payments']},
+  caModelsH: {card:'forecast', what:'For each area, the forecast models scored and the one kept.', method:() => adFc(), read:'A chosen model with MASE close to the naive baseline adds little over "next year looks like this year"; the naive model is often the honest choice for volatile spending.', caveat:'The single FY2023–FY2025 error shown is the legacy score, kept for comparison; the choice uses the rolling-origin score.', data:['budget']},
+  // ---------------- Forecasts & results
+  fcRevH: {card:'revenue', what:'General Fund revenue: actuals and the FY2027 corridor.', method:() => { const r = adReg('General Fund revenue'); const m = (ok('d_revenue_model') || [])[0]; return `${m ? m.method : 'The kept model'} chosen by lowest mean MASE over rolling origins from sourced closeout history (reference/gf_revenue_history.csv)${r ? `: MASE ${d3.format('.2f')(r.model_score)} against ${d3.format('.2f')(r.baseline_score)} for naive` : ''}; seeded residual bootstrap band.`; },
+    read:'The corridor is the range revenue would fall in if the past pattern holds; a budget planned near its bottom edge has room, near its top it does not.', caveat:() => { const m = (ok('d_revenue_model') || [])[0]; return `Only ${m ? m.n_actual : 'a few'} years of sourced history${m && m.coverage_80 !== '' && m.coverage_80 != null ? `; in the backtest ${PCT(+m.coverage_80)} of outcomes fell inside the 80% band, so it runs narrow` : ''}. Totals include one-time items as reported.`; }, data:['Comptroller closeouts and Board of Revenue Estimates']},
+  fcSpendH: {card:'challenger', what:'Controllable purchases: actuals and the FY2026 risk corridor.', method:() => { const t = (ok('d_challenger_total') || [])[0]; const r = adReg('Spending challenger'); return `Per agency–spending-code series, a LightGBM quantile model where it beat the naive forecast in its rolling-origin backtest${r ? ` (${r.decision.replace(/^Adopted per series where it beats naive: /, '')} series)` : ''}, the naive forecast elsewhere. The statewide corridor is the sum of the series medians with a band set by the statewide total's own miss in the backtest${t ? ` (log sigma ${d3.format('.3f')(t.common_shock_sigma)})` : ''}.`; },
+    read:'Where the working budget sits against the corridor says whether the plan is in line with how agencies have spent.', caveat:'Per-series bands are not summed: a few very volatile series would dominate the total. Three backtest origins sit behind the band.', data:['budget']},
+  resH: {what:'Managing for Results measures next to the change in their agency\'s whole budget in real dollars.', method:'Measures with at least three actual years, from each agency\'s MFR plan; budget changes deflated by CPI-U.',
+    read:'Side by side, not cause and effect: green and up means results grew faster than real spending.', caveat:'The budget is the agency\'s whole budget, so this is not a unit cost.', data:['budget','DBM Managing for Results plans']},
+  // ---------------- Agencies
+  agChartH: {what:'Agencies with the highest controllable purchases per budgeted position.', method:'Spending divided by budgeted position-years for the selection; agencies under 50 positions left out.', read:'High values are where the peer-gap detector looks first; compare with agencies of the same peer group.', caveat:'Positions are budgeted FTEs, not filled jobs.', data:['budget','fte']},
+  agScH: {what:'Each agency\'s spending per position against its change.', method:'Same measure as the bar chart, against the change over the selection.', read:'Top right (high and rising) is the corner to look at; high and falling may already be correcting.', caveat:'', data:['budget','fte']},
+  agHiH: {what:'How spending per position is distributed across agencies.', method:'Histogram of the per-position measure.', read:'A long right tail means a few agencies sit far from the rest; those are outliers to explain, not necessarily waste.', caveat:'', data:['budget','fte']},
+  agH: {what:'Controllable purchases per position, every agency.', method:'Selection totals divided by position-years.', read:'Sort to compare; open an agency for its page.', caveat:'Agencies averaging fewer than 50 positions are left out.', data:['budget','fte']},
+  // ---------------- Vendors
+  vmH: {what:'Private vendors paid separately by 15 or more agencies.', method:'Payments by vendor family, counting distinct paying agencies.', read:'Each is a candidate for one statewide contract; the number of buyers is the leverage.', caveat:'', data:['payments']},
+  vcH: {what:'How concentrated each area\'s vendor spending is.', method:'Top-five share and HHI (0–10,000) by area.', read:'Above 1,800 counts as highly concentrated: negotiate. Spread out: consolidate small contracts.', caveat:'', data:['payments']},
+  vtrH: {what:'Concentration by area over time.', method:'HHI by year, FY2008 to the selected year; dashed line at 1,800.', read:'A rising line means fewer suppliers are taking more of the spend.', caveat:'Company families merge payee names only where reviewed.', data:['payments']},
+  vaH: {what:'The six largest private vendors in each area.', method:'Payments by vendor family for the area.', read:'Who to talk to first for each area.', caveat:'', data:['payments']},
+  vcfH: {what:'Companies paid under several payee names.', method:'Reviewed company families (reference/vendor_families.csv).', read:'Split names hide a company\'s full spend and buying power; merged, its leverage shows.', caveat:'Only reviewed families are merged.', data:['payments']},
+  vdoH: {what:'The vendor findings in words, with what to do.', method:'Computed from the tables on this tab.', read:'', caveat:'', data:['payments']},
+  vtH: {card:'payee_classifier', what:'All payments by type of payee, by year.', method:'Payee types from reviewed name rules.', read:'The private-vendor share is the part procurement can act on.', caveat:'"Business or other" is the rules\' default.', data:['payments']},
+  vbH: {what:'The largest payees.', method:'Payments by payee, selected years.', read:'', caveat:'', data:['payments']},
+  vqH: {what:'Possible misreadings of payee identity: one company paid in several ZIP areas, or two names that may be one company.', method:'Name and ZIP evidence (mart.d_vendor_alias): same first three words and ZIP, or a family spread over several 3-digit ZIP areas; companies paid $100K+ only.',
+    read:'Each row is a question for a reviewer; a decision goes into reference/vendor_families.csv.', caveat:'The payments data has no vendor number or tax ID; name and ZIP are the only keys.', data:['payments']},
+  // ---------------- Budget
+  budH: {what:'The operating budget by function, all funds.', method:'Budget by government function code.', read:'Where the State\'s money goes at the highest level; GMI\'s controllable base is a small slice of it.', caveat:'', data:['budget']},
+  ovlH: {what:'Budget, payments and grants by year, side by side.', method:'Budget at its latest stage; payments to payees; grants and loans as listed; the last column is the share of grant dollars whose grantee is also a payee (exact name match).', read:'The three overlap but are not the same money; never add them.', caveat:'The grant match is a minimum (exact names).', data:['budget','payments','grants']},
+  fsH: {what:'The budget by fund type and year, then by named fund source.', method:'Funding-sources data; federal sources carry their Assistance Listing number.', read:'A rising General Fund share means the State is taking over costs other funds used to carry.', caveat:'', data:['fund']},
+  pgH: {what:'The budget by agency program.', method:'Program codes from the budget data.', read:'', caveat:'', data:['budget']},
+  pgTreeH: {what:'The budget as a map: agencies and their programs, sized by dollars.', method:'Treemap of the program table.', read:'Area is dollars: the largest tiles dominate any statewide total.', caveat:'', data:['budget']},
+  grH: {what:'Grants and loans exactly as the State publishes them.', method:'Every row of the grants dataset, no grouping.', read:'Look up an award; grantor names are free text.', caveat:'One agency can appear under several spellings; the agency filter does not apply.', data:['grants']},
+  fnH: {what:'The budget by function.', method:'All funds.', read:'', caveat:'', data:['budget']},
+  fundH: {what:'The budget by fund type.', method:'General, federal and special funds.', read:'', caveat:'', data:['budget']},
+  objH: {what:'The budget by type of spending (Comptroller object), with the controllable part.', method:'Object codes with the controllable classification.', read:'Contractual services and supplies are where procurement savings live.', caveat:'', data:['budget']},
+  fhH: {what:'Programs whose General Fund share rose 20+ points in two years (budget $10M+).', method:'Funding-sources data by program; thresholds set before the results were looked at (config/assumptions.yaml).',
+    read:'A shift is a cost the State took over, often when federal relief ends; it is not a saving or an overrun.', caveat:'FY2026 is the working budget and FY2027 the appropriation.', data:['fund']},
+  fxH: {what:'For one federal program: the State budget\'s federal funds next to federal obligations to Maryland governments.', method:'Federal fund source codes are Assistance Listing numbers; obligations from USAspending (award types 02–05).',
+    read:'A gap is a question, not an error: the State budgets in its own fiscal year and may carry money over; obligations count new awards only.', caveat:'State FY (Jul–Jun) and federal FY (Oct–Sep) are side by side, never added.', data:['fund','USAspending']},
+  // ---------------- Data & pipeline
+  srcH: {what:'The six State datasets, each matched to the portal.', method:'Downloaded in full through the SODA API; row counts and yearly totals checked against the portal on every run.', read:'"Matches portal" is the first gate: nothing is built from a dataset that does not match.', caveat:'', data:['payments','budget','fund','grants','fte','highered']},
+  runsH: {what:'Every pipeline run, including failed ones.', method:'Run log with check counts.', read:'A run with a failed stop check publishes nothing; the last good version stays live.', caveat:'', data:[]},
+  checksH: {what:'Every check in the latest run.', method:() => { const ck = ok('checks') || []; return `${ck.length} checks across extract, warehouse, marts and models; stop checks block publishing, warnings are reported.`; }, read:'All pass means every total, tie-out and model gate held on this build.', caveat:'', data:[]},
+  stageH: {what:'How each year\'s budget stage was confirmed.', method:'Against DBM\'s published documents where the portal\'s own label disagrees.', read:'The stage decides whether a year is an outcome (actual) or a plan.', caveat:'', data:['budget']},
+  mqH: {what:'How well payments map to budget agencies and payees to companies.', method:'Checked on every run; a run fails if under 99% of the latest year\'s payments match a budget agency.', read:'', caveat:'', data:['payments','budget']},
+  amH: {what:'Payment agency names mapped to budget agencies across years.', method:'Reviewed mapping (reference/payment_agency_rules.csv).', read:'This is what lets payments and the budget be read together.', caveat:'', data:['payments','budget']},
+  vfH: {what:'Private vendors paid under two or more names, merged into one.', method:'Reviewed families (reference/vendor_families.csv).', read:'', caveat:'', data:['payments']},
+  rcH: {what:'Every year reconciled with DBM\'s budget books, the Fiscal Digest and the Open Finance sites.', method:'Book Total Expenditure less reimbursable and non-budgeted funds against the operating budget plus higher education; the enacted FY2027 budget against the Fiscal Digest by fund; yearly totals against the sites.',
+    read:() => { const r = ok('d_book_reconciliation') || [], st = ok('d_site_reconciliation') || []; const rec = r.filter(x => x.kind === 'reconcile'); return `${rec.filter(x => x.status === 'Reconciles').length} of ${rec.length} comparisons reconcile and ${st.filter(x => Math.abs(x.difference) <= 10).length} of ${st.length} site totals match: the numbers on every tab tie to the State's own documents.`; },
+    caveat:'FY2026 is bridged until the FY2028 books print its working appropriation.', data:['budget','highered','payments','DBM budget books','FY2027 Fiscal Digest']},
+  rdH: {what:'Every program whose amount differs from DBM\'s figure, with the reason.', method:'Programs differing by $0.50 or more.', read:'Small programs not printed in the books and rounding account for nearly all differences.', caveat:'', data:['budget','DBM budget books']},
+  mrH: {what:'Every model, its baseline and its held-out score.', method:'Read from each model\'s own evaluation table on every build.', read:'A model that does not beat its baseline is never shown as a result: the payee classifier is kept for review only.', caveat:'For MASE lower is better; for F1, silhouette and persistence higher is better.', data:[]},
+  drH: {what:'How much each fiscal year\'s data differs from the year before.', method:'Population stability index (PSI) and Kolmogorov–Smirnov statistic for payment amounts, the agency mix of payments and of controllable spending.',
+    read:'Below 0.10 stable, 0.10–0.25 moderate, above 0.25 major: years past a major shift are where model errors should be read with care.', caveat:'A shift is not an error; the latest payments year is partial.', data:['payments','budget']},
+  faH: {what:'The fields an audit-grade tracker needs, and which the open data publishes.', method:'Checked against the extract of this run (reference/field_availability.csv).', read:'Fields marked No need a Public Information Act request; the schema for them is ready.', caveat:'', data:['payments','budget','fund']}
+};
+function adText(v){ try { return typeof v === 'function' ? v() : (v || ''); } catch (e) { return ''; } }
+function adPanel(key){ const e = AD[key]; const box = document.createElement('div'); box.className = 'ad'; box.setAttribute('role', 'region'); box.setAttribute('aria-label', 'Analyst detail'); box.id = 'ad-' + key; box.hidden = true;
+  const rows = [['What it shows', e.what], ['Method', e.method], ['How to read it', e.read], ['Caveats', e.caveat], ['Data', () => adVint(e.data || [])]];
+  const dl = document.createElement('dl'); rows.forEach(([k, v]) => { const t = adText(v); if (!t) return; const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = t; dl.append(dt, dd); });
+  if (e.card) { const dt = document.createElement('dt'); dt.textContent = 'Model card'; const dd = document.createElement('dd'); const a = document.createElement('a'); a.href = 'models.html#' + e.card; a.textContent = 'How this model was built and validated'; dd.appendChild(a);
+    const r = (ok('d_model_registry') || []).find(x => String(x.model_card || '').endsWith('/' + e.card + '.md')); if (r) dd.appendChild(document.createTextNode(` · ${r.decision}`)); dl.append(dt, dd); }
+  box.appendChild(dl); return box; }
+function adFill(box, key){ const fresh = adPanel(key); box.replaceChildren(...fresh.childNodes); }
+function adInit(){ Object.keys(AD).forEach(key => { const h = document.querySelector(`[data-ad="${key}"]`); if (!h || h._ad) return; h._ad = 1;
+    let head = h.closest('.hd'); if (!head) { head = document.createElement('div'); head.className = 'hd'; h.replaceWith(head); head.appendChild(h); } const b = document.createElement('button'); b.type = 'button'; b.className = 'adBtn'; b.textContent = 'Analyst detail'; b.setAttribute('aria-expanded', 'false'); b.setAttribute('aria-controls', 'ad-' + key);
+    const box = adPanel(key); head.insertAdjacentElement('afterend', box);
+    const xp = head.querySelector(':scope > .xp'); let grp = xp; if (xp) { grp = document.createElement('span'); grp.className = 'adGrp'; xp.replaceWith(grp); grp.append(b, xp); } else head.appendChild(b);
+    b.addEventListener('click', () => { const open = box.hidden; if (open) adFill(box, key); box.hidden = !open; b.setAttribute('aria-expanded', String(open)); }); }); }
+function adAll(open){ document.querySelectorAll('.adBtn').forEach(b => { const box = document.getElementById(b.getAttribute('aria-controls')); if (!box) return; if (open) adFill(box, box.id.slice(3)); box.hidden = !open; b.setAttribute('aria-expanded', String(open)); }); }
+
 function drawAreas(p){
   const fa = ok('f_area'); if (!fa) return; const base = fa.filter(r => r.spend != null); const ys = yearsFor(base, p);
   const per = AREAS.map(a => ({area:a, m: measure(base.filter(r => r.area === a), 'spend', p, {ignoreArea:true, years:ys})}));
@@ -1546,6 +1799,158 @@ function drawPayScreen(p){ const g = ok('d_payment_screen'), s = ok('d_payment_s
     {key:'review_status',cls:'c-conf',pill:() => 'rv',fmt:v => v ? String(v).replace(/_/g, ' ') : 'not reviewed',title:r => r.review_note || ''}], {bar:'review_amount', click:r => r.agency_code && openDetail('agency:' + r.agency_code)});
   setText('psStatus', `Rules (config/assumptions.yaml, payment_screen): possible duplicate = same agency, vendor and exact amount ($1,000 or more) with record dates within 7 days; repeated annual line = the same in one fiscal year with record dates further apart; possible split purchase = 2+ payments within 14 days, each under the small-procurement limit in force on its record date ($50,000, then $100,000 from Oct 1, 2023, Ch. 161 of 2023), together above it. ${split ? 'Split purchases: ' + split.status.toLowerCase() + '.' : ''} The payments data are ${grain === 'annual' ? 'one row per agency, payee and year with a record date, not dated payments, so the screen cannot see duplicates inside an annual total' : 'dated payments'}. Government, health-plan, debt-service, payroll-like and pass-through payees are left out; payees that may be individuals are not named. ${conf ? 'Confidence and review status come with each group; hover a review chip for its note. ' : ''}The year and area filters do not apply here; the agency filter does.`);
   drawSourceIssues(); }
+const repoUrl = () => { const a = [...document.querySelectorAll('a[href^="https://github.com/"]')].map(x => x.href.match(/^https:\/\/github\.com\/[^/]+\/[^/#?]+/)).find(Boolean); return a ? a[0] : 'https://github.com/EVO3-Ecosystem/gmi-savings-tracker'; }; // the site shell links the repository
+function svgIn(box, H){ box.textContent = ''; const W = Math.max(280, box.clientWidth || 700); return {W, H, svg: d3.select(box).append('svg').attr('width', W).attr('height', H).attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block')}; }
+const MUTED = 'var(--cds-chart-muted)', FG2 = 'var(--color-fg-muted)';
+function dumbbell(box, rows){ // rows: {label, a, b, hi}; a = before, b = after, shares 0-1. Narrow: label above each row
+  if (!rows.length) { box.textContent = ''; emptyMsg(box); return; }
+  const narrow = (box.clientWidth || 700) < 560, rh = narrow ? 40 : 26, H = rows.length * rh + 30, {W, svg} = svgIn(box, H), m = {l: narrow ? 8 : 260, r: 58, t: 8, b: 22};
+  const x = d3.scaleLinear([0, 1], [m.l, W - m.r]), y = (i) => m.t + i * rh + (narrow ? 27 : 13);
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(narrow ? 3 : 5, '%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  rows.forEach((r, i) => { const c = r.hi ? dash.colors[1] : dash.colors[0], max = narrow ? Math.floor((W - 16) / 6.6) : 42;
+    svg.append('text').attr('x', narrow ? m.l : m.l - 8).attr('y', narrow ? y(i) - 14 : y(i)).attr('dy', '.32em').attr('text-anchor', narrow ? 'start' : 'end').attr('font-size', 12).attr('fill', 'currentColor').attr('font-weight', r.hi ? 600 : 400)
+      .text(r.label.length > max ? r.label.slice(0, max - 1) + '…' : r.label).append('title').text(r.label);
+    svg.append('line').attr('x1', x(r.a)).attr('x2', x(r.b)).attr('y1', y(i)).attr('y2', y(i)).attr('stroke', c).attr('stroke-width', 3).attr('opacity', .45);
+    svg.append('circle').attr('cx', x(r.a)).attr('cy', y(i)).attr('r', 5).attr('fill', 'var(--color-panel)').attr('stroke', c).attr('stroke-width', 2);
+    svg.append('circle').attr('cx', x(r.b)).attr('cy', y(i)).attr('r', 5.5).attr('fill', c);
+    svg.append('text').attr('x', x(r.b) + 9).attr('y', y(i)).attr('dy', '.32em').attr('font-size', 11).attr('fill', FG2).text('+' + Math.round((r.b - r.a) * 100) + ' pts'); }); }
+function lines2(box, rows, series, o={}){ // rows: [{x, ...}], series: [{key, label, color, dash}]
+  const H = o.h || 240, {W, svg} = svgIn(box, H), m = {l: 56, r: 12, t: 12, b: 24};
+  const vals = rows.flatMap(r => series.map(s => r[s.key])).filter(v => v != null);
+  if (!vals.length) { box.textContent = ''; emptyMsg(box); return; }
+  const x = d3.scaleLinear(d3.extent(rows, r => r.x), [m.l, W - m.r]), y = d3.scaleLinear([Math.min(0, d3.min(vals)), d3.max(vals) * 1.08], [H - m.b, m.t]).nice();
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.min(rows.length, W < 520 ? 4 : 10)).tickFormat(v => o.xfmt ? o.xfmt(v) : v)).call(g => g.select('.domain').attr('stroke', MUTED)).selectAll('text').attr('fill', FG2);
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(o.yfmt || M)).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  (o.rules || []).forEach(([v, lab]) => { svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', MUTED).attr('stroke-dasharray', '4 3');
+    svg.append('text').attr('x', W - m.r).attr('y', y(v) - 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', FG2).text(lab); });
+  series.forEach(s => { const pts = rows.filter(r => r[s.key] != null);
+    svg.append('path').datum(pts).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-dasharray', s.dash || null).attr('d', d3.line().x(r => x(r.x)).y(r => y(r[s.key])));
+    svg.selectAll(null).data(pts).join('circle').attr('cx', r => x(r.x)).attr('cy', r => y(r[s.key])).attr('r', 3.2).attr('fill', s.color)
+      .append('title').text(r => `${o.xfmt ? o.xfmt(r.x) : r.x} · ${s.label}: ${(o.yfmt || M)(r[s.key])}`); });
+  if (o.after) o.after(svg, x, y); }
+function drawDetectorBacktest(){ const d = ok('d_detector_backtest'); if (!d) { setText('dbNote', 'The detector backtest is not in this build.'); return; }
+  const dets = [...new Set(d.map(r => r.detector))];
+  const avg = (det, c, k) => d3.mean(d.filter(r => r.detector === det && r.cohort === c), r => r[k]);
+  setText('dbNote', `Four opportunity detectors, each rerun as of FY2022, FY2023 and FY2024 on the data available then, and followed into the next year. A detector that finds something real flags the same units again; one that finds noise does not. The chart shows the share flagged again the next year, flagged units against like-sized units that were not flagged.`);
+  const g = avg('Growth above trend', 'Flagged', 'median_change'), gn = avg('Growth above trend', 'Not flagged', 'median_change');
+  setText('dbIns', dets.map(t => `${t}: ${PCT(avg(t, 'Flagged', 'flagged_next_share'))} of flagged units flagged again, vs ${PCT(avg(t, 'Not flagged', 'flagged_next_share'))} of the rest`).join('; ') + '.' +
+    (g != null ? ` Growth flags also fell back the next year (median ${d3.format('+.1%')(g)}, vs ${d3.format('+.1%')(gn)} for unflagged codes): part of a growth flag is a one-year spike, so it is a lead to check, not a trend to bank.` : ''));
+  legend('dbLegend', [['Flagged at the as-of year', dash.colors[0]], ['Not flagged (like-sized)', MUTED]]);
+  const box = document.getElementById('dbChart'), narrow = (box.clientWidth || 700) < 560, rowH = 22, H = dets.length * (3 * rowH + 18) + 26, {W, svg} = svgIn(box, H), m = {l: narrow ? 92 : 170, r: 16, t: 6, b: 22};
+  const x = d3.scaleLinear([0, 1], [m.l, W - m.r]);
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5, '%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+  dets.forEach((t, j) => { const y0 = m.t + j * (3 * rowH + 18);
+    svg.append('text').attr('x', 0).attr('y', y0 + 12).attr('font-size', 12).attr('font-weight', 600).attr('fill', 'currentColor').text(narrow ? t.split(' ')[0] : t);
+    [2022, 2023, 2024].forEach((yr, i) => { const yy = y0 + 22 + i * rowH; const f = d.find(r => r.detector === t && r.as_of_fy === yr && r.cohort === 'Flagged'), n = d.find(r => r.detector === t && r.as_of_fy === yr && r.cohort === 'Not flagged'); if (!f || !n) return;
+      svg.append('text').attr('x', m.l - 8).attr('y', yy).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', FG2).text('FY' + yr);
+      svg.append('line').attr('x1', x(n.flagged_next_share)).attr('x2', x(f.flagged_next_share)).attr('y1', yy).attr('y2', yy).attr('stroke', MUTED).attr('stroke-width', 2);
+      svg.append('circle').attr('cx', x(n.flagged_next_share)).attr('cy', yy).attr('r', 5).attr('fill', MUTED).append('title').text(`Not flagged: ${N(n.units)} units, ${PCT(n.flagged_next_share)} flagged next year`);
+      svg.append('circle').attr('cx', x(f.flagged_next_share)).attr('cy', yy).attr('r', 5.5).attr('fill', dash.colors[0]).append('title').text(`Flagged: ${N(f.units)} units, ${PCT(f.flagged_next_share)} flagged again`); }); });
+  { const bx = document.getElementById('dvChart'), nar = (bx.clientWidth || 700) < 560, rh = 46, H2 = dets.length * rh + 28, {W: W2, svg: s2} = svgIn(bx, H2), mm = {l: nar ? 92 : 170, r: 56, t: 6, b: 22};
+    const vals = dets.flatMap(t => ['Flagged', 'Not flagged'].map(c => avg(t, c, 'median_change'))), lim = Math.max(0.05, d3.max(vals, v => Math.abs(v || 0))) * 1.15;
+    const xx = d3.scaleLinear([-lim, lim], [mm.l, W2 - mm.r]);
+    s2.append('g').attr('transform', `translate(0,${H2 - mm.b})`).call(d3.axisBottom(xx).ticks(nar ? 3 : 6, '+.0%')).call(g => g.select('.domain').remove()).selectAll('text').attr('fill', FG2);
+    s2.append('line').attr('x1', xx(0)).attr('x2', xx(0)).attr('y1', mm.t).attr('y2', H2 - mm.b).attr('stroke', FG2);
+    dets.forEach((t, j) => { const y0 = mm.t + j * rh;
+      s2.append('text').attr('x', mm.l - 8).attr('y', y0 + rh / 2 - 2).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'currentColor').text(nar ? t.split(' ')[0] : t);
+      [['Flagged', dash.colors[0], 0], ['Not flagged', MUTED, 1]].forEach(([c, col, k]) => { const v = avg(t, c, 'median_change'); if (v == null) return; const yy = y0 + 6 + k * 17;
+        s2.append('rect').attr('x', Math.min(xx(0), xx(v))).attr('width', Math.max(1, Math.abs(xx(v) - xx(0)))).attr('y', yy).attr('height', 13).attr('rx', 2).attr('fill', col).append('title').text(`${t}, ${c.toLowerCase()}: median ${d3.format('+.1%')(v)} next year`);
+        s2.append('text').attr('x', v >= 0 ? xx(v) + 5 : xx(v) - 5).attr('y', yy + 7).attr('dy', '.32em').attr('text-anchor', v >= 0 ? 'start' : 'end').attr('font-size', 11).attr('fill', FG2).text(d3.format('+.1%')(v)); }); }); }
+  table('dbBody', d.slice().sort((a, b) => a.detector.localeCompare(b.detector) || a.as_of_fy - b.as_of_fy || a.cohort.localeCompare(b.cohort)), [{key:'detector'},{key:'as_of_fy',n:1,fmt:v => 'FY' + v},{key:'cohort'},{key:'units',n:1,fmt:N},
+    {key:'flagged_next_share',n:1,fmt:PCT},{key:'median_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)},{key:'pooled_change',n:1,fmt:v => v == null ? '—' : d3.format('+.1%')(v)}]); }
+const USD = v => v == null ? '—' : (v < 0 ? '−$' : '$') + d3.format(',.0f')(Math.abs(v));
+function drawReconciliation(){ const r = ok('d_book_reconciliation'), st = ok('d_site_reconciliation'); if (!r || !st) { setText('rcNote', 'The reconciliation is not in this build.'); return; }
+  const rec = r.filter(x => x.kind === 'reconcile'), good = rec.filter(x => x.status === 'Reconciles'), sOk = st.filter(x => Math.abs(x.difference) <= 10);
+  const yrs = d3.extent(rec, x => x.fiscal_year);
+  setText('rcNote', `Three independent checks. The open data's yearly totals against the State's Open Finance sites (budget FY2017–FY2027, payments FY2008–FY2027), to the cent. Every actual year's programs against DBM's printed actuals in the Governor's budget books two years later. The enacted FY2027 budget against DBM's Fiscal Digest, fund by fund. A year reconciles when the statewide total is within 0.01% and 99% or more of programs are equal to the dollar.`);
+  const wk = r.filter(x => x.kind !== 'reconcile');
+  setText('rcIns', `${N(good.length)} of ${N(rec.length)} comparisons with DBM's documents reconcile (FY${yrs[0]}–FY${yrs[1]}), and ${N(sOk.length)} of ${N(st.length)} yearly site totals match to the cent. ` +
+    wk.map(x => x.kind === 'bridge' ? `FY${x.fiscal_year}'s working budget is ${M(x.difference)} above its appropriation plus enacted deficiencies: budget amendments, which DBM prints in the FY${x.fiscal_year + 2} books.` :
+      x.basis === 'General funds' ? `The FY${x.fiscal_year} general fund walk (allowance, both supplementals, and the Legislature's cuts and additions as DLS reports them, rounded to $0.1M) lands within ${M(Math.abs(x.difference))} of the enacted figure.` :
+      `FY${x.fiscal_year}: the enacted budget is ${M(-x.difference)} below the allowance plus supplementals, the Legislature's net reductions.`).join(' '));
+  legend('rcLegend', [['Reconciles / matches', 'var(--color-ok)'], ['Bridged: remainder explained', 'var(--color-warn)'], ['Not checked (no source for that year)', 'var(--color-border-line)']]);
+  const box = document.getElementById('rcChart'), y0 = 2008, y1 = 2027, rowsDef = [['Payments site', y => st.find(x => x.dataset === 'payments' && x.fiscal_year === y)], ['Budget site', y => st.find(x => x.dataset === 'budget' && x.fiscal_year === y)],
+    ['DBM budget books', y => r.find(x => x.fiscal_year === y && x.kind !== 'walk' && /All funds/.test(x.basis))], ['Fiscal Digest', y => r.find(x => x.fiscal_year === y && x.kind === 'reconcile' && /General funds/.test(x.basis))]];
+  const narrow = (box.clientWidth || 700) < 560, lw = narrow ? 78 : 130, cw = Math.max(10, ((box.clientWidth || 700) - lw - 8) / (y1 - y0 + 1)), H = rowsDef.length * 30 + 24, {svg} = svgIn(box, H);
+  rowsDef.forEach(([lab, get], i) => { svg.append('text').attr('x', lw - 8).attr('y', i * 30 + 16).attr('dy', '.32em').attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'currentColor').text(narrow ? lab.replace('DBM budget ', '').replace(' site', '') : lab);
+    d3.range(y0, y1 + 1).forEach((y, j) => { const x = get(y); const okv = x && (x.status ? x.status === 'Reconciles' : Math.abs(x.difference) <= 10), br = x && x.status === 'Explained remainder';
+      svg.append('rect').attr('x', lw + j * cw + 1).attr('y', i * 30 + 4).attr('width', cw - 2).attr('height', 24).attr('rx', 3)
+        .attr('fill', okv ? 'var(--color-ok)' : br ? 'var(--color-warn)' : x ? 'var(--color-bad)' : 'var(--color-border-line)').attr('opacity', x ? .85 : .5)
+        .append('title').text(`${lab}, FY${y}: ` + (!x ? 'no source for this year' : x.status ? `${x.status}; difference ${M(x.difference)}` : `difference $${d3.format(',.2f')(x.difference)}`)); }); });
+  d3.range(y0, y1 + 1).forEach((y, j) => { if (narrow && y % 4) return; svg.append('text').attr('x', lw + j * cw + cw / 2).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 10).attr('fill', FG2).text("'" + String(y).slice(2)); });
+  table('rcBody', r, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'stage'},{key:'basis',fmt:v => String(v).replace('All funds, operating + higher education', 'All funds')},{key:'source_document'},{key:'book_side',n:1,fmt:M},{key:'data_total',n:1,fmt:M},
+    {key:'difference',n:1,fmt:v => Math.abs(v) < 1e5 ? USD(v) : M(v)},{key:'exact_share',n:1,fmt:(v, x) => v == null ? '—' : `${PCT(v)} (${N(x.programs_exact)} of ${N(x.programs_in_both)})`},{key:'status'}]);
+  const d = ok('d_book_program_differences') || [];
+  table('rdBody', d, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'program'},{key:'program_name',fmt:v => v || ''},{key:'book',n:1,fmt:USD},{key:'data',n:1,fmt:USD},
+    {key:'difference',n:1,fmt:USD},{key:'reason'}]); }
+function drawRegistry(){ const r = ok('d_model_registry'); if (!r) { setText('mrNote', 'The model registry is not in this build.'); return; }
+  const ad = r.filter(x => /^Adopted|^Shown/.test(x.decision)).length;
+  setText('mrNote', `${N(r.length)} models. Each is judged on held-out data against a simple baseline it has to beat before anything it produces is shown; ${N(ad)} are in use, the payee classifier is kept for review because it does not beat the name rules, and the rest produce leads only, never savings. Every number is read from the model's own evaluation in this build. For MASE lower is better; for F1, silhouette and persistence higher is better.`);
+  const f3 = v => v == null ? '—' : d3.format('.3~f')(v);
+  table('mrBody', r, [{key:'model'},{key:'method'},{key:'baseline'},{key:'training_window'},{key:'metric'},{key:'model_score',n:1,fmt:(v, x) => (/share|persistence/i.test(x.metric) ? (v == null ? '—' : PCT(v)) : f3(v))},
+    {key:'baseline_score',n:1,fmt:(v, x) => (/share|persistence/i.test(x.metric) ? (v == null ? '—' : PCT(v)) : f3(v))},{key:'decision'},{key:'model_card',fmt:v => v || ''}]);
+  [...document.querySelectorAll('#mrBody tr')].forEach((tr, i) => { const x = r[i], td = tr && tr.children[8]; if (!td || !x || !x.model_card) return; td.textContent = '';
+    const a = document.createElement('a'); a.href = repoUrl() + '/blob/main/' + x.model_card; a.target = '_blank'; a.rel = 'noopener'; a.textContent = x.model_card.split('/').pop(); td.appendChild(a); }); }
+function drawDrift(){ const d = ok('d_drift'); if (!d) { setText('drNote', 'The drift monitor is not in this build.'); return; }
+  const fy0 = 2017, ms = [['Payment amount (log scale)', dash.colors[0]], ['Agency mix of payments', dash.colors[1]], ['Agency mix of controllable spending (actual)', dash.colors[2]]];
+  setText('drNote', `Population stability index (PSI) between each Maryland fiscal year and the one before, for what the models learn from. Below 0.10 is stable, 0.10–0.25 a moderate shift, above 0.25 a major shift. A shift is not an error: it marks the years whose patterns differ from the training years, so model errors there are read with care. FY${fy0} onward shown; the latest payments year is partial.`);
+  const major = d.filter(r => r.level === 'Major shift' && !TRUE(r.partial_year)).sort((a, b) => b.psi - a.psi);
+  setText('drIns', major.length ? major.map(r => `${r.measure}, FY${r.from_fy}→FY${r.to_fy}: PSI ${d3.format('.2f')(r.psi)}`).join('; ') + '. This is the federal relief period, and the year the payment screen found MDTA and MES payments published twice (Opportunities tab, data-quality issues).' : 'No major shift between consecutive years.');
+  legend('drLegend', ms.map(([l, c]) => [l, c, 1]));
+  const ys = d3.range(fy0 + 1, d3.max(d, r => r.to_fy) + 1);
+  const rows = ys.map(y => Object.fromEntries([['x', y], ...ms.map(([l], i) => ['s' + i, (d.find(r => r.measure === l && r.to_fy === y) || {}).psi ?? null])]));
+  lines2(document.getElementById('drChart'), rows, ms.map(([l, c], i) => ({key: 's' + i, label: l, color: c})), {yfmt: d3.format('.2f'), xfmt: v => 'FY' + String(v).slice(2), rules: [[0.10, 'moderate 0.10'], [0.25, 'major 0.25']]}); }
+const TRUE = v => v === true || v === 1 || String(v).toLowerCase() === 'true'; // exported booleans arrive as text
+function drawFundShift(p){ const s = ok('d_fund_shift'); if (!s) { setText('fhNote', 'The fund-mix table is not in this build.'); return; }
+  const f = s.filter(r => TRUE(r.shift_to_general) && (!p.agencies.length || p.agencies.includes(r.agency_code)) && (!p.years.length || p.years.includes(r.fiscal_year)));
+  setText('fhNote', `Programs whose General Fund share of the budget rose at least 20 points in two years, with a budget of $10M or more (config/assumptions.yaml, fund_hierarchy). From the funding-sources data (gy87-e27x), by Maryland fiscal year; FY2026 is the working budget and FY2027 the legislative appropriation. A shift is a cost the State took over from federal or special funds, often when federal relief ends; it is not a saving or an overrun.`);
+  const cc = s.filter(r => r.agency_code === 'R00' && /Child Care Assistance/i.test(r.program_name || '')).sort((a, b) => a.fiscal_year - b.fiscal_year);
+  const c25 = cc.find(r => r.fiscal_year === 2025), c23 = cc.find(r => r.fiscal_year === 2023);
+  setText('fhIns', `${N(f.length)} program-years flagged in this view.` + (c25 && c23 ? ` MSDE Child Care Assistance Grants went from ${PCT(c23.general_share)} General Fund in FY2023 to ${PCT(c25.general_share)} in FY2025 (${M(c25.program_budget)} all funds), as federal relief money ran out; DLS reports about 78% for FY2025.` : ''));
+  table('fhBody', f.slice().sort((a, b) => b.program_budget - a.program_budget), [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'agency',fmt:v => TITLE(v || '')},{key:'program_name'},{key:'program_budget',n:1,fmt:M},
+    {key:'general_share_2y_before',n:1,fmt:PCT},{key:'general_share',n:1,fmt:PCT},{key:'general_share_change',n:1,fmt:v => (v > 0 ? '+' : '') + d3.format('.0f')(v * 100) + ' pts'},
+    {key:'federal_share',n:1,fmt:(v, r) => PCT(r.federal_share_2y_before) + ' → ' + PCT(v)}]);
+  legend('fhLegend', [['General Fund share two years before (open circle)', MUTED], ['General Fund share in the year', dash.colors[0]], ['MSDE child care', dash.colors[1]]]);
+  const top = f.slice().sort((a, b) => b.program_budget - a.program_budget).slice(0, 12);
+  dumbbell(document.getElementById('fhChart'), top.map(r => ({label: `${r.program_name} (${r.agency_code}, FY${r.fiscal_year})`, a: r.general_share_2y_before, b: r.general_share, hi: r.agency_code === 'R00' && /Child Care/i.test(r.program_name || '')}))); }
+function drawFederalCrosswalk(){ const x = ok('d_federal_crosswalk'); const sel = document.getElementById('fxL'); if (!x || !sel) { setText('fxNote', 'The federal cross-check is not in this build.'); return; }
+  const LK = r => typeof r.listing === 'number' ? r.listing.toFixed(3) : String(r.listing); // 10.550 is read as a number; keep three decimals
+  if (!sel.options.length) { const tot = d3.rollups(x, v => d3.sum(v, r => r.state_federal_budget), LK).sort((a, b) => b[1] - a[1]).slice(0, 60);
+    const nm = new Map(x.map(r => [LK(r), r.listing_name]));
+    tot.forEach(([l]) => { const o = document.createElement('option'); o.value = l; o.textContent = `${l} ${nm.get(l) || ''}`; sel.appendChild(o); });
+    if ([...sel.options].some(o => o.value === '93.575')) sel.value = '93.575'; sel.addEventListener('change', drawFederalCrosswalk); }
+  const rows = x.filter(r => LK(r) === sel.value).sort((a, b) => a.fiscal_year - b.fiscal_year);
+  setText('fxNote', `In the State's funding-sources data the fund source code of federal money is the federal Assistance Listing number, so each budget line can be matched to the federal program that pays for it (93.575 is the Child Care and Development Block Grant). The 60 largest programs by State budget are listed. A gap between the two columns is a question to ask, not an error: the State budgets in its own year and may carry money over, and obligations count new awards only.`);
+  table('fxBody', rows, [{key:'fiscal_year',n:1,fmt:v => 'FY' + v},{key:'stage'},{key:'state_federal_budget',n:1,fmt:M},
+    {key:'federal_obligated',n:1,fmt:(v, r) => v == null ? (TRUE(r.federal_reported) ? '$0' : 'not reported') : M(v) + (v < 0 ? ' (net deobligation)' : '') + (TRUE(r.federal_partial) ? ' (partial year)' : '')},{key:'agencies',n:1,fmt:v => v == null ? '' : N(v)}]);
+  legend('fxLegend', [['State budget, federal funds (State FY)', dash.colors[0], 1], ['Federal obligations (federal FY)', dash.colors[1], 1]]);
+  lines2(document.getElementById('fxChart'), rows.map(r => ({x: r.fiscal_year, st: r.state_federal_budget, fed: r.federal_obligated})),
+    [{key: 'st', label: 'State budget', color: dash.colors[0]}, {key: 'fed', label: 'Federal obligations', color: dash.colors[1], dash: '5 3'}], {xfmt: v => 'FY' + String(v).slice(2)}); }
+
+function drawAliasReview(){ const a = ok('d_vendor_alias_review'); if (!a) { setText('vqNote', 'The alias review queue is not in this build.'); return; }
+  const k = document.getElementById('vqKind'), q = document.getElementById('vqQ');
+  if (!k._w) { k._w = 1; k.addEventListener('change', drawAliasReview); q.addEventListener('input', drawAliasReview); }
+  const z = a.filter(r => r.kind === 'ZIPs disagree').length, mm = a.length - z;
+  setText('vqNote', `${N(z)} companies whose spellings were paid at ZIPs in more than one 3-digit ZIP area (a branch, a remittance address, a subsidiary or a wrong merge), and ${N(mm)} pairs of companies whose names share their first three words and a ZIP but are kept apart (a family the reference file may lack). Only companies paid $100K or more over all years. For a possible missed merge, Paid is the smaller company's total: the most a merge could move.`);
+  const t = (q.value || '').toLowerCase(), f = a.filter(r => (!k.value || r.kind === k.value) && (!t || String(r.company).toLowerCase().includes(t) || String(r.other_company || '').toLowerCase().includes(t)));
+  setText('vqCount', `${N(f.length)} items${f.length > 300 ? ', the largest 300 shown' : ''}`);
+  table('vqBody', f.slice().sort((a, b) => b.paid - a.paid).slice(0, 300), [{key:'kind'},{key:'company',fmt:v => TITLE(v || '')},{key:'other_company',fmt:v => v ? TITLE(v) : ''},{key:'names',n:1,fmt:v => v == null ? '' : N(v)},{key:'zip3s',n:1,fmt:v => v == null ? '' : N(v)},{key:'evidence'},{key:'paid',n:1,fmt:M}]); }
+function drawAuditLifecycle(p){ const a = ok('d_audit_findings'); if (!a) { setText('auNote', 'The audit register is not in this build.'); return; }
+  const f = a.filter(r => r.source_type !== 'OLA audit report' && (!p.agencies.length || p.agencies.includes(r.agency_code)));
+  const asof = d3.max(f, r => r.as_of);
+  setText('auNote', `Findings with their follow-through: the amount identified, what was recouped, whether repayment was waived and by whom, and whether a legal opinion was asked for. Seeded only from public documents, each row with its source and the date it was last checked${asof ? ' (latest ' + asof + ')' : ''}. "Confirmed by" says whether an audit document confirms the row or it rests on a press or agency report.`);
+  const big = f.slice().sort((a, b) => (b.amount_identified || 0) - (a.amount_identified || 0))[0], wv = f.filter(r => r.waiver === 'Yes').sort((a, b) => (b.amount_identified || 0) - (a.amount_identified || 0))[0];
+  setText('auIns', f.length ? `Largest reported finding: ${M(big.amount_identified)} (${big.finding.toLowerCase()}, ${big.period}).` + (wv ? ` ${M(wv.amount_identified)} was overpaid through agency error and ${wv.waiver_decided_by} decided not to seek repayment.` : '') + ` The sources do not say whether the second amount is part of the first, so they are not added. The fund that paid the money (federal CCDF or General Fund) is not stated in any public source; payment-level records would answer it.` : '');
+  table('auBody', f, [{key:'finding'},{key:'agency',fmt:(v, r) => [TITLE(v || ''), r.program].filter(Boolean).join(': ')},{key:'period'},{key:'amount_identified',n:1,fmt:v => v == null ? '' : M(v)},{key:'amount_recouped',n:1,fmt:v => v == null ? '' : M(v)},
+    {key:'recoupment_status',fmt:v => v || ''},{key:'waiver',fmt:(v, r) => [v, r.waiver_decided_by ? 'by ' + r.waiver_decided_by : ''].filter(Boolean).join(' ')},{key:'legal_opinion_status',fmt:(v, r) => [r.legal_opinion, v].filter(Boolean).join('. ')},
+    {key:'fund_source',fmt:v => v || 'Not stated'},{key:'confirmation'},{key:'source_url',fmt:(v, r) => 'checked ' + r.as_of}]);
+  [...document.querySelectorAll('#auBody tr')].forEach((tr, i) => { const r = f[i], td = tr && tr.children[10]; if (!td || !r || !/^https:\/\//.test(r.source_url || '')) return;
+    td.textContent = ''; const l = document.createElement('a'); l.href = r.source_url; l.target = '_blank'; l.rel = 'noopener'; l.textContent = 'Source'; td.appendChild(l); td.appendChild(document.createTextNode(', checked ' + r.as_of)); }); }
+function drawFieldAvail(){ const a = ok('d_field_availability'); if (!a) { setText('faNote', 'The field-availability table is not in this build.'); return; }
+  const n = a.length ? a[0].transaction_rows : 0, yes = a.filter(r => /^Yes/.test(r.in_open_data)).length;
+  setText('faNote', `${N(yes)} of ${N(a.length)} fields are in the State's open data. Payment number, invoice number and date, payment date and the fund on each payment exist in FMIS, the State's financial system, and MD-VIEW shows them one search at a time with no download; they need a Public Information Act request. The schema for those records is ready (src/pipeline/txn.py); ${n ? N(n) + ' payment-level rows are loaded' : 'no payment-level rows are loaded yet'}.`);
+  const mt = document.getElementById('faMeter'); if (mt) { mt.textContent = ''; const i = document.createElement('i'); i.style.width = (100 * yes / Math.max(1, a.length)) + '%'; mt.appendChild(i); mt.setAttribute('aria-label', `${yes} of ${a.length} needed fields are in the open data`); }
+  table('faBody', a, [{key:'improvement'},{key:'field'},{key:'in_open_data'},{key:'where_it_exists',fmt:v => v || ''},{key:'plan'}]); }
 function drawSourceIssues(){ const card = document.getElementById('psIssues'); if (!card) return; const iss = ok('d_source_issues');
   if (!iss) { setText('psIssNote', 'No data-quality issues in the source have been published for this build.'); document.getElementById('psIssBody').textContent = ''; return; }
   const scr = hasCol(iss, 'screen_review_amount'), moved = scr ? d3.sum(iss, r => r.screen_review_amount) : null, pairs = scr ? d3.sum(iss, r => r.screen_groups) : null;
@@ -1675,7 +2080,7 @@ function drawCalc(p){
   tile('FY2027 net savings, likely', M(net(2027) + (prIn ? PR.likely : 0)), prIn ? `includes ${M(PR.likely)} of payment recovery leads (one-time, not additive with other findings); savings alone ${M(net(2027))}` : `indicative range: ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}`);
   drawPayLever(PR, prIn); tile('Chance FY2027 reaches $50M (indicative)', d3.format('.0%')(pHit), 'share of 2,000 simulated years; the ranges run narrow');
   tile('Five years, FY2027–FY2031', M(cum), `indicative range: ${M(qt(cumS, .1))}–${M(qt(cumS, .9))}`); tile('General Fund share, FY2027', g27 ? PCT(gf27 / g27) : '—', `${M(gf27)} of gross savings`);
-  setText('caLede', `At these settings, the six focus areas and other controllable purchases would save about ${M(net(2027))} in FY2027 (indicative range ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}${fcCov() ? `; such ranges held ${fcCov().pct} of actuals in the backtest, not ${fcCov().nominal}` : ''}), net of the fee, and ${M(cum)} over FY2027–FY2031. Spending baselines are forecasts from the state's own FY2017–FY2025 actuals, using whichever model predicted FY2023–FY2025 best; savings rates default to what GMI reported achieving. Use "Reach $50M" to see the extra rate it takes.`);
+  setText('caLede', `At these settings, the six focus areas and other controllable purchases would save about ${M(net(2027))} in FY2027 (indicative range ${M(qt(S[0], .1))}–${M(qt(S[0], .9))}${fcCov() ? `; such calibrated ranges held ${fcCov().pct} of actuals out of sample, nominal ${fcCov().nominal}` : ''}), net of the fee, and ${M(cum)} over FY2027–FY2031. Spending baselines are forecasts from the state's own FY2017–FY2025 actuals, using whichever model predicted FY2023–FY2025 best; savings rates default to what GMI reported achieving. Use "Reach $50M" to see the extra rate it takes.`);
   // savings by year
   const yrs = [{year:2026, a:29e6, lo:29e6, hi:29e6, note:'GMI reported'}].concat(FY.map((y, k) => ({year:y, a:net(y), lo:qt(S[k], .1), hi:qt(S[k], .9)})));
   { const box = document.getElementById('caYears'); box.textContent = ''; const W = box.clientWidth || 500, H = 240, m = {l:48, r:10, t:12, b:24}; const x = d3.scaleBand(yrs.map(d => d.year), [m.l, W - m.r]).padding(.3), y = d3.scaleLinear([0, Math.max(60e6, d3.max(yrs, d => d.hi))], [H - m.b, m.t]).nice();
@@ -1717,13 +2122,13 @@ function drawSource(p, src){
   setText('dCrumb', ['Calculator', p.areas.length ? (p.areas.length === 1 ? p.areas[0] : p.areas.length + ' areas') : null].filter(Boolean).join(' · '));
   const L = caPath(p);
   if (src.startsWith('area:')) { const area = src.slice(5); const m = ok('d_forecast_model').find(r => r.area === area); const rows = L.filter(l => l.area === area);
-    setText('dTitle', area); setText('dLede', `How the calculator gets ${area.toLowerCase()} savings: the forecast spending each year × the savings rate that year. Forecast model: ${m.method.toLowerCase()}, chosen because it predicted FY2023–FY2025 within ${PCT(m.backtest_mape)} on average. Default rate: ${m.gmi_rate ? PCT(m.gmi_rate) + ' — ' + m.gmi_note + ' (GMI report, Jan 26, 2026), divided by FY2025 actual spending of ' + M(m.baseline_fy2025) : 'none, because GMI reported no recurring saving here'}.`);
+    setText('dTitle', area); setText('dLede', `How the calculator gets ${area.toLowerCase()} savings: the forecast spending each year × the savings rate that year. Forecast model: ${m.method.toLowerCase()}, chosen by the lowest mean scaled error (MASE) over rolling forecast origins FY2021–FY2024 (its legacy FY2023–FY2025 error: ${PCT(m.backtest_mape)}). Default rate: ${m.gmi_rate ? PCT(m.gmi_rate) + ' — ' + m.gmi_note + ' (GMI report, Jan 26, 2026), divided by FY2025 actual spending of ' + M(m.baseline_fy2025) : 'none, because GMI reported no recurring saving here'}.`);
     dTile('FY2025 actual spending', M(m.baseline_fy2025), null, null, `average yearly growth FY2017–FY2025: ${d3.format('+.1%')(m.growth)}`); dTile('Rate now set', PCT(CA.rates[area]), null, null, m.gmi_rate ? `GMI reported ${PCT(m.gmi_rate)}` : 'GMI reported none');
     dTile('FY2027 savings, likely', M(rows.find(r => r.year === 2027).saving), null, null, `General Fund share ${PCT(m.gf_share)}`); dTile('Five years, FY2027–FY2031', M(d3.sum(rows, r => r.saving)), null, null, `${CA.ramp} year${CA.ramp > 1 ? 's' : ''} to reach the rate`);
     setText('dChartH', 'Forecast spending and savings by year'); setText('dChartNote', 'Bars: likely forecast spending. Line: savings at the current rate (right scale shown in the table).');
     barsLine(box, rows.map(r => ({year:r.year, a:r.base, b:r.saving})), {aLabel:'Forecast spending (likely)', bLabel:'Savings'});
     dIns([`Calculation each year: forecast spending (likely) × rate = savings. FY2027: ${M(rows[0].base)} × ${PCT(rows[0].rate)} = ${M(rows[0].saving)}.`, `The rate moves from GMI's ${PCT(m.gmi_rate || 0)} to the ${PCT(CA.rates[area])} set here over ${CA.ramp} year${CA.ramp > 1 ? 's' : ''}.`, `The state's FY2027 Legislative Appropriation for this area is ${M(rows[0].plan)}, ${rows[0].plan ? d3.format('+.1%')(rows[0].plan / rows[0].base - 1) : '—'} against the forecast.`, `General Fund share ${PCT(m.gf_share)}: each agency's FY2025 General Fund share, weighted by its spending in this area.`]);
-    newTable(tb, 'Every year, line by line', 'Likely forecast with its indicative range (10th to 90th percentile; not a calibrated interval); savings = likely forecast × rate.' + (fcCov() ? ' ' + fcCov().text : ''), [['Year'],['Forecast low',1],['Forecast likely',1],['Forecast high',1],['State plan',1],['Rate',1],['Savings',1],['General Fund',1]],
+    newTable(tb, 'Every year, line by line', 'Likely forecast with its indicative range (10th to 90th percentile, conformally calibrated); savings = likely forecast × rate.' + (fcCov() ? ' ' + fcCov().text : ''), [['Year'],['Forecast low',1],['Forecast likely',1],['Forecast high',1],['State plan',1],['Rate',1],['Savings',1],['General Fund',1]],
       rows.map(r => ({...r, fy:'FY' + r.year})), [{key:'fy'},{key:'p10',n:1,fmt:M},{key:'base',n:1,fmt:M},{key:'p90',n:1,fmt:M},{key:'plan',n:1,fmt:v => v ? M(v) : '—'},{key:'rate',n:1,fmt:v => PCT(v)},{key:'saving',n:1,fmt:M},{key:'gf',n:1,fmt:M}]);
     addTotals(tb, [['FY2027–FY2031', 0], ['', 1], [M(d3.sum(rows, r => r.base)), 1], ['', 1], ['', 1], ['', 1], [M(d3.sum(rows, r => r.saving)), 1], [M(d3.sum(rows, r => r.gf)), 1]]);
     const fc0 = (ok('f_code') || []).filter(r => r.area === area && r.fiscal_year === 2025); const ag = area === 'Other controllable purchases' ? [] : d3.rollups(fc0, v => d3.sum(v, r => r.spend), r => r.agency_code).map(([c, v]) => ({agency:agName(c), code:c, spend:v, saving:v * rows[0].rate})).sort((a, b) => b.spend - a.spend);
@@ -1905,7 +2310,7 @@ function drawFcast(p){
   const rows2 = actYears.map(y => ({year:y, actual: byY.get(y)})).concat([band26, {year: 2027}]);  // trailing empty year keeps the FY2027 appropriation dot on the scale
   const dots = [2026, 2027].filter(y => STAGE_OF[y] && STAGE_OF[y] !== 'Actual' && byY.get(y)).map(y => ({year:y, value: byY.get(y), label: y === 2027 ? 'FY27 approp.' : 'FY26 working'}));
   corridor(document.getElementById('fcSpend'), rows2, {color: dash.colors[0], dots, aria:'Controllable purchases: actuals and the FY2026 forecast corridor', h:270});
-  setText('fcSpendNote', `Controllable purchases, FY${actYears[0]}\u2013FY${actYears[actYears.length-1]} actual (line) and the FY2026 corridor (bar): every agency\u2013code series forecast one year ahead, then simulated together over ${tot ? N(tot.bootstrap_paths) : '4,000'} paths, because per-series bands cannot simply be added. Each series uses the LightGBM challenger where it beat the naive last-actual forecast in its own backtest (${N(ad.length)} of ${N(ch.length)} series) and the naive forecast elsewhere. Circles mark the state's own FY2026 working budget and FY2027 Legislative Appropriation for the same scope. Filters do not apply: the corridor is statewide.`);
+  setText('fcSpendNote', `Controllable purchases, FY${actYears[0]}\u2013FY${actYears[actYears.length-1]} actual (line) and the FY2026 corridor (bar): every agency\u2013code series forecast one year ahead; the corridor is the sum of the series medians, with a band set by the statewide total's own miss in the rolling-origin backtest${tot && +tot.common_shock_sigma ? ` (log sigma ${d3.format('.2f')(tot.common_shock_sigma)}, three origins: indicative)` : ''}, because per-series bands cannot simply be added. Each series uses the LightGBM challenger where it beat the naive last-actual forecast in its own backtest (${N(ad.length)} of ${N(ch.length)} series) and the naive forecast elsewhere. Circles mark the state's own FY2026 working budget and FY2027 Legislative Appropriation for the same scope. Filters do not apply: the corridor is statewide.`);
   const lg = bt.filter(r => String(r.model).indexOf('LightGBM') >= 0), nv = bt.filter(r => String(r.model).indexOf('Naive') >= 0);
   setText('fcSpendStats', lg.length && nv.length ? `Rolling-origin backtest on ${N(lg[0].series_scored)} series per origin (${lg.map(r => 'FY' + r.origin_fy).join(', ')}): challenger mean scaled error ${d3.format('.2f')(d3.mean(lg, r => r.mean_mase))} vs ${d3.format('.2f')(d3.mean(nv, r => r.mean_mase))} naive; 80% band coverage ${d3.format('.0%')(d3.min(lg, r => r.coverage_80))}\u2013${d3.format('.0%')(d3.max(lg, r => r.coverage_80))} vs ${d3.format('.0%')(d3.min(nv, r => r.coverage_80))}\u2013${d3.format('.0%')(d3.max(nv, r => r.coverage_80))} naive. Adopted for ${N(ad.length)} of ${N(ch.length)} series (${PCT(ad.length / (ch.length || 1))}); the rest keep the naive forecast.` : '');
   const rt = ok('results_trend') || [];
@@ -2138,13 +2543,13 @@ dash.calc('c_run',{inputs:['runs','checks'],title:'Pipeline status',description:
       pill:n('fail')?`Data checks: ${n('fail')} failed`:`Data checks passed: ${n('pass')} of ${checks.length}`,state:n('fail')?'fail':(n('warn')?'warn':'pass')}];}});
 function drawReport(){ const r = ok('reports'), a = document.getElementById('repLink'); if (!r || !r.length) { a.hidden = true; return; } const l = r.slice().sort((x,y) => d3.descending(x.run_date, y.run_date))[0]; a.href = l.url; a.textContent = 'Download PDF report (' + l.run_date + ')'; a.hidden = false; }
 function fillMarks(){ const d = dash.data('c_run'); document.querySelectorAll('[data-source="c_run"][data-field]').forEach(el => { el.textContent = (d.status === 'ok' && d.data[0]) ? d.data[0][el.dataset.field] : '—'; }); document.getElementById('runPill').className = 'st ' + (d.status === 'ok' && d.data[0] ? d.data[0].state : ''); }
-const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:drawVendors, budget:drawBudget, data:drawData, fcast:drawFcast};
+const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawReconciliation(); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));
     if (healParams()) { again = true; return; }   // a repaired filter re-renders through setParams
     const p = prm(); fillFilters(p); document.getElementById('filterBar').style.opacity = (tab === 'data' && !detail) ? .5 : 1;
-    if (detail) drawDetail(p); else (DRAW[tab] || (() => {}))(p); notice = ''; }
+    if (detail) drawDetail(p); else (DRAW[tab] || (() => {}))(p); notice = ''; adInit(); }
   catch (e) { console.error(e); const ch = document.getElementById('chips'); if (ch) { const s = document.createElement('span'); s.className = 'st fail'; s.textContent = 'This view hit an error and was reset to All.'; ch.appendChild(s); }
     if (!healedOnError) { healedOnError = true; rendering = false; detail = null; setP({stage:'actual', years:[], areas:[], agencies:[]}); return; } }
   finally { rendering = false; if (again) setTimeout(render, 0); } }
@@ -2164,7 +2569,7 @@ document.getElementById('anSrc').addEventListener('change', () => drawAnomalies(
 document.getElementById('anExp').addEventListener('click', exportReviewQueue);
 document.getElementById('corGo').addEventListener('click', () => showTab('fcast'));
 document.getElementById('revGo').addEventListener('click', () => { showTab('opp'); document.getElementById('anH').scrollIntoView({block:'start'}); });
-document.getElementById('ovAnalyst').addEventListener('change', e => { document.getElementById('ovMethod').hidden = !e.target.checked; });
+document.getElementById('ovAnalyst').addEventListener('change', e => { document.getElementById('ovMethod').hidden = !e.target.checked; adAll(e.target.checked); });
 document.getElementById('resDir').addEventListener('change', () => drawFcast(prm()));
 window.__gst = {measure, prm, reconcile, ok, yearsFor, AREAS, render, get STAGE_OF(){ return STAGE_OF; }}; // used by the pipeline's dashboard tests
 { const h = location.hash.slice(1); if (h.startsWith('t-') && TABS.includes(h.slice(2))) tab = h.slice(2); }
