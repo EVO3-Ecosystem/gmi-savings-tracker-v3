@@ -270,7 +270,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
 - Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
 - January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
-- Run the Extract and build workflow once the Socrata app token is replaced (the portal rejected `MD_SODA_APP_TOKEN` when the program screen was merged). `mart.d_program_screen` and the program-screen card reach the site only after a pipeline run.
+- Run the Extract and build workflow. It needs no token: the datasets are public, a valid `MD_SODA_APP_TOKEN` only raises the request limits, and a rejected one is dropped with a warning. `mart.d_program_screen` and the program-screen card reach the site once a build has been published.
 - Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
 
 Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
