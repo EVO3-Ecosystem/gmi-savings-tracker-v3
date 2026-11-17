@@ -46,3 +46,30 @@ def test_rendered_walkthrough_loads_nothing_from_another_host():
 @pytest.mark.parametrize("name", ["forecast_fan", "range_coverage", "spending_base", "savings_status", "opportunities", "checks"])
 def test_overview_figures_exist(name):
     assert (ROOT / "docs" / "figures" / "overview" / f"{name}.png").stat().st_size > 10_000
+
+
+def test_rendered_walkthrough_passes_its_accessibility_checks():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("render_notebook", ROOT / "scripts" / "render_notebook.py")
+    rn = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rn)
+    html = (ROOT / "notebooks" / "walkthrough.html").read_text()
+    assert rn.validate(html) == []
+    assert "No description has been provided" not in html and html.count('<figure class="chart"') >= 6
+
+
+def test_validate_catches_the_nbconvert_defaults():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("render_notebook", ROOT / "scripts" / "render_notebook.py")
+    rn = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rn)
+    bad = rn.validate('<html><head><title>Notebook</title></head><body><img alt="No description has been provided for this image" src="x.png">'
+                      '<table class="dataframe"><thead><tr><th>a</th></tr></thead><tbody><tr><td>1</td></tr></tbody></table><a href="#nowhere">x</a></body></html>')
+    assert {"no lang on <html>", "missing or generic <title>", "an image without alt text", "a data table without a <caption>",
+            "a table header cell without scope", "broken in-page link #nowhere"} <= set(bad)
+
+
+def test_money_labels_never_turn_into_mathtext_and_keep_their_sign():
+    from src.pipeline import overview_figures as V
+    assert V.STYLE["text.parse_math"] is False
+    assert (V.money(45.4e6), V.money(-5.5e6), V.signed_money(10.1e6), V.money(4.1e9)) == ("$45.4M", "-$5.5M", "+$10.1M", "$4.1B")
