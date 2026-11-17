@@ -62,3 +62,17 @@ d_payee_class: d_payee_class    # payee type per payee name: rule label, model l
 d_payee_class_eval: d_payee_class_eval    # rules vs model vs combined on the hand-labeled sample (reference/payee_labels_sample.csv)
 d_grant_groups: d_grant_groups    # grant descriptions grouped by meaning; groups funded by 2+ grantor agencies are possible overlap leads (not savings, not additive)
 d_grant_groups_sensitivity: d_grant_groups_sensitivity    # grant groups and leads at cosine thresholds 0.80 / 0.85 / 0.90
+# ---- v3.1 audit depth (docs/strategy-v3.1.md): fund hierarchy, federal cross-check, payee aliases, audit lifecycle, field availability
+d_fund_shift: d_fund_shift    # program fund mix by year with the two-year change in General Fund share; shift_to_general flags (Budget tab)
+d_federal_crosswalk: d_federal_crosswalk    # State budget federal funds by Assistance Listing next to USAspending obligations (State FY and federal FY side by side)
+d_vendor_alias_review: d_vendor_alias_review    # payee alias review queue: ZIPs disagree within a family; possible missed merges (leads)
+d_audit_findings: d_audit_findings    # audit and recoupment lifecycle register: public findings with recoupment, waiver and legal-opinion status, plus OLA rows
+d_field_availability: d_field_availability    # fields an audit-grade tracker needs, whether the open data has them, and the plan
+d_detector_backtest: d_detector_backtest    # opportunity detectors rerun as of FY2022-FY2024 and followed one year: flagged vs like-sized unflagged units
+d_model_registry: d_model_registry    # every model: task, method, baseline, training window, score vs baseline, decision, model card
+d_drift: d_drift    # PSI and KS between consecutive fiscal years for payment amounts, payment agency mix and budget agency mix
+d_range_coverage: d_range_coverage    # forecast range coverage, raw and calibrated, in sample and out of sample, with Wilson intervals
+# ---- v3.2 reconciliation with DBM's documents (src/pipeline/books.py)
+d_book_reconciliation: d_book_reconciliation    # every year against DBM's budget books and the FY2027 Fiscal Digest; FY2026 bridge and FY2027 walk
+d_site_reconciliation: d_site_reconciliation    # every yearly budget and payments total against the State's Open Finance sites
+d_book_program_differences: d_book_program_differences    # every program that differs from DBM's figure, with the reason

@@ -41,13 +41,16 @@ forecasts, compared with the calibrated bootstrap range at horizon 1 under the r
 (`calibration.adopt_rule`). **Result: pending the next pipeline run.**
 
 ## Statewide corridor (`mart.d_challenger_total`)
-Per-series p10/p90 are not additive — every series does not hit its own tail in the same year — so the statewide
-corridor is simulated: each series is drawn log-normally around its median with the log sigma of its calibrated band,
-times one shock shared by every series in the path, and the draws are summed path by path (4,000 paths, seeded).
-The shared shock's log sigma is the root mean square of the statewide miss over the backtest origins
-(`common_shock_sigma` in the table). Until Nov 15, 2026 the draws were independent and clamped to each band's edges,
-which removed both tails and left out the year-wide shock, so the corridor was too narrow. The published corridor
-predates this change and will move on the next pipeline run.
+Per-series p10/p90 are not additive, so the statewide band is measured on the statewide total itself: p50 is the sum
+of the series medians, and p10 / p90 are p50 x exp(-/+ 1.2816 x sigma), where sigma (`common_shock_sigma`) is the
+root-mean-square log miss of the actual statewide total against the sum of the series medians over the backtest
+origins. Three origins sit behind sigma, so the corridor is indicative.
+
+Why not sum per-series draws (decision, Nov 16, 2026, first real run of the calibrated bands): 154 of 2,609 series
+have a calibrated p90 more than 20 times their median (pandemic-era swings, such as Labor's unemployment codes). Any
+sum of draws, clamped to the bands (median $6.1B) or not ($9.1B to $9.7B), put the statewide median 48% to 137% above
+the $4.1B last actual and the $4.3B sum of medians, which no series median supports. Until Nov 15, 2026 the draws were
+clamped to the raw bands ($5.0B median). The per-series calibrated bands stay published in `f_challenger`.
 One row per build: fiscal_year, p10/p50/p90, n_series, n_adopted, common_shock_sigma. A stop check verifies the band
 is ordered, covers every series, and sits within 0.5x-2x of the last actual controllable total.
 

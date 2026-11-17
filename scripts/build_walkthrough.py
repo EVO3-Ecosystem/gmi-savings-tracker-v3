@@ -167,7 +167,7 @@ V.show("range_coverage", "Dots: share of past outcomes inside the range; bars: 9
 display(Markdown(f\"\"\"**Reading it.** Tested on held-out years, the calibrated range covers about what it claims, and its 95% interval includes 80%. It is one pooled correction, so areas differ: {worst.area} stays under-covered ({int(worst.hits)} of {int(worst.n)}) because its model misses by more than a wider range can absorb. With {int(cal.n)} forecasts across {rc.area.nunique()} areas that share economic shocks, treat the calibrated range as a better-supported indication, not a guarantee.\"\"\"))
 """)
 md("""
-**Would a machine-learning model give better ranges?** A LightGBM quantile model (a gradient-boosted model trained across all areas) was backtested as a challenger on many agency-level spending series (so its figures are not comparable with the area table above). On that test its 80% ranges come closer to 80% than the naive model's raw ranges, but still fall short, so it is not swapped in.
+**Would a machine-learning model give better ranges?** A LightGBM quantile model (a gradient-boosted model trained across all areas) was backtested as a challenger on many agency-level spending series (so its figures are not comparable with the area table above). On that test its 80% ranges come closer to 80% than the naive model's raw ranges, but still fall short, so they are not simply swapped in: the tracker adopts LightGBM per agency–code series only where it beats naive in that series' own backtest, and the registry and the Forecasts tab show the adopted count.
 """)
 code("""
 cb0 = P.load("d_challenger_backtest")
@@ -176,7 +176,6 @@ cb = cb.rename(columns={"origin_fy": "Forecast made in FY"})
 cb.insert(1, "Series scored", cb0.groupby("origin_fy").series_scored.max().to_numpy())
 display(V.table(cb, "Share of outcomes inside the 80% range, by model and forecast year", ints=["Series scored"], pct=[c for c in cb.columns[2:]]))
 """)
-md("A conformal adjustment for the LightGBM ranges, and the rule for adopting them in the first forecast year, are coded; their results need a full pipeline run and are not yet in the published tables.")
 
 md("""
 ## 6. Opportunities: leads, not savings
@@ -223,7 +222,7 @@ display(Markdown(f\"\"\"
 - **Small calibration sample.** The ranges are calibrated on {int(cal.n)} pooled forecasts; coverage by area is uneven (section 5).
 - **No hit rate for leads.** No review outcome has been recorded for any lead, so no claim is made about how many become savings.
 - **Payments are a partial view.** Purchasing-card spending and savings measured against plans or appropriations do not appear in payments (section 4).
-- **Not yet published.** LightGBM conformal ranges, revenue calibration and the extended detector backtest need a full pipeline run.
+- **Indicative bands.** The LightGBM corridor rests on three backtest origins and the revenue band on few years of history: both are indicative (see the model cards on the site's models page).
 \"\"\"))
 """)
 

@@ -133,6 +133,22 @@ core.fact_payment_mapped,partial_year,BOOLEAN,412880,True for the latest payment
 core.fact_payment_mapped,record_date,DATE,412880,"The portal's date column as a date: a record date (Jan 1 of a year, sometimes of the next year), not the payment date; used only by the payment screen's windows",portal
 core.fact_payment_mapped,agency_code,VARCHAR,412880,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 core.fact_payment_mapped,matched_by,VARCHAR,412880,Rule that mapped the payment agency name to a code,derived
+core.fact_payment_txn,source_file,VARCHAR,0,File in data/txn the row came from (one per records-request response),source
+core.fact_payment_txn,fiscal_year,INTEGER,0,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+core.fact_payment_txn,agency_code,VARCHAR,0,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+core.fact_payment_txn,payment_number,VARCHAR,0,Payment or voucher number,source
+core.fact_payment_txn,payment_date,DATE,0,Date the payment was issued,source
+core.fact_payment_txn,invoice_number,VARCHAR,0,Vendor invoice number,source
+core.fact_payment_txn,invoice_date,DATE,0,Vendor invoice date,source
+core.fact_payment_txn,vendor_number,VARCHAR,0,State vendor number,source
+core.fact_payment_txn,payee_name,VARCHAR,0,Payee name as entered,source
+core.fact_payment_txn,payee_zip,VARCHAR,0,Payee ZIP,source
+core.fact_payment_txn,fund_type,VARCHAR,0,"Fund type (General, Special, Federal, Reimbursable and so on)",derived
+core.fact_payment_txn,fund_source_code,VARCHAR,0,Fund source code within a fund type,portal
+core.fact_payment_txn,program_code,VARCHAR,0,"Budget program code, two digits in core",portal
+core.fact_payment_txn,object_code,VARCHAR,0,"Comptroller object code, two digits (for example 08 Contractual services)",portal
+core.fact_payment_txn,line_description,VARCHAR,0,Line or payment description,source
+core.fact_payment_txn,amount,DOUBLE,0,"Dollars paid, awarded or reported on the row; nominal dollars",portal
 core.fact_population,calendar_year,BIGINT,16,Calendar year of the Census population estimate,source
 core.fact_population,fiscal_year,BIGINT,16,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 core.fact_population,population,BIGINT,16,Maryland resident population (Census Population Estimates),source
@@ -300,6 +316,27 @@ mart.d_area_top,vendor,VARCHAR,175,Company name after grouping payee names,deriv
 mart.d_area_top,agencies,BIGINT,175,Agencies paying the vendor (or with payments in the year),derived
 mart.d_area_top,spend,DOUBLE,175,Dollars spent (budget actuals or payments),derived
 mart.d_area_top,rank,BIGINT,175,Rank of the vendor within its area and year by spend,derived
+mart.d_audit_findings,finding_id,VARCHAR,19,"Finding id: agency, program and year for a public finding; OLA- plus the agency code for an OLA report row",reference
+mart.d_audit_findings,agency_code,VARCHAR,19,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+mart.d_audit_findings,agency,VARCHAR,19,Agency name shown on the dashboard,derived
+mart.d_audit_findings,program,VARCHAR,19,Program or audit unit the finding is about,reference
+mart.d_audit_findings,source_type,VARCHAR,19,"Kind of source: OLA audit report, internal audit reported by the press, agency statement reported by the press",reference
+mart.d_audit_findings,document,VARCHAR,19,"The document the finding comes from, as named by its source",reference
+mart.d_audit_findings,document_date,VARCHAR,19,Date of that document (blank when the source does not give one),reference
+mart.d_audit_findings,period,VARCHAR,19,"Years the finding covers, as the source states them",reference
+mart.d_audit_findings,finding,VARCHAR,19,"What was found, in the source's terms",reference
+mart.d_audit_findings,amount_identified,DOUBLE,19,"Dollars the source says were identified (overpaid, questioned); blank when not stated, never 0. Not savings",reference
+mart.d_audit_findings,amount_recouped,DOUBLE,19,"Dollars recovered, as reported; blank when not stated",reference
+mart.d_audit_findings,recoupment_status,VARCHAR,19,"Whether the money is being, or will be, recovered, as reported",reference
+mart.d_audit_findings,waiver,VARCHAR,19,"Whether repayment was waived: Yes, No or Unknown",reference
+mart.d_audit_findings,waiver_decided_by,VARCHAR,19,Who decided the waiver,reference
+mart.d_audit_findings,legal_opinion,VARCHAR,19,"Legal opinion requested about the finding or the waiver, and by whom",reference
+mart.d_audit_findings,legal_opinion_status,VARCHAR,19,Status of that legal opinion as of the as_of date,reference
+mart.d_audit_findings,fund_source,VARCHAR,19,Fund that paid the money in question (federal or General Fund); blank when no source states it,reference
+mart.d_audit_findings,confirmation,VARCHAR,19,"Whether an audit document confirms the row, or it rests on a press or agency report",reference
+mart.d_audit_findings,as_of,VARCHAR,19,Calendar date the source was last checked for this row,reference
+mart.d_audit_findings,source_url,VARCHAR,19,Link to the citation,source
+mart.d_audit_findings,note,VARCHAR,19,Explanation of the rule or row,reference
 mart.d_bid_list,rank,BIGINT,27,Rank by FY2026 payments,derived
 mart.d_bid_list,vendor,VARCHAR,27,Company name after grouping payee names,derived
 mart.d_bid_list,fy2025,DOUBLE,27,Payments in FY2025,derived
@@ -308,12 +345,52 @@ mart.d_bid_list,agencies,DOUBLE,27,Agencies paying the vendor (or with payments 
 mart.d_bid_list,low,DOUBLE,27,Low end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_bid_list,high,DOUBLE,27,High end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_bid_list,top_agencies,VARCHAR,27,Three agencies paying the vendor most in FY2026,derived
+mart.d_book_program_differences,fiscal_year,INTEGER,13,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_book_program_differences,program,VARCHAR,13,"Program code (agency, unit, program)",derived
+mart.d_book_program_differences,agency,VARCHAR,13,Agency name in the open data,derived
+mart.d_book_program_differences,program_name,VARCHAR,13,Program name,derived
+mart.d_book_program_differences,book,DOUBLE,13,The document's comparable amount for the program,derived
+mart.d_book_program_differences,data,DOUBLE,13,The open data's amount,derived
+mart.d_book_program_differences,difference,DOUBLE,13,data - book,derived
+mart.d_book_program_differences,reason,VARCHAR,13,"Why it differs: not printed in the book, rounding, or amount differs",derived
+mart.d_book_program_differences,source,VARCHAR,13,Document compared,derived
+mart.d_book_reconciliation,fiscal_year,INTEGER,15,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_book_reconciliation,stage,VARCHAR,15,"Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance)",derived
+mart.d_book_reconciliation,basis,VARCHAR,15,What is summed: all funds (operating + higher education) or one fund type,derived
+mart.d_book_reconciliation,kind,VARCHAR,15,"reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action)",derived
+mart.d_book_reconciliation,source_document,VARCHAR,15,DBM (or DLS) document and column the figure is read from,derived
+mart.d_book_reconciliation,url,VARCHAR,15,URL(s) of the document(s) read,derived
+mart.d_book_reconciliation,book_total_expenditure,DOUBLE,15,"The documents' Total Expenditure for the year, summed over programs",derived
+mart.d_book_reconciliation,book_reimbursable,DOUBLE,15,Reimbursable funds in that total (not appropriated in the State budget),derived
+mart.d_book_reconciliation,book_non_budgeted,DOUBLE,15,"Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget)",derived
+mart.d_book_reconciliation,book_comparable,DOUBLE,15,Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data,derived
+mart.d_book_reconciliation,bridge_items,DOUBLE,15,"Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk)",derived
+mart.d_book_reconciliation,book_side,DOUBLE,15,book_comparable + bridge_items,derived
+mart.d_book_reconciliation,data_total,DOUBLE,15,"The open data for the same year and basis, from this build",derived
+mart.d_book_reconciliation,difference,DOUBLE,15,data_total - book_side,derived
+mart.d_book_reconciliation,difference_share,DOUBLE,15,difference / book_side,derived
+mart.d_book_reconciliation,programs_in_both,DOUBLE,15,Programs found in both the document and the open data,derived
+mart.d_book_reconciliation,programs_exact,DOUBLE,15,"Of those, programs equal to the dollar",derived
+mart.d_book_reconciliation,exact_share,DOUBLE,15,programs_exact / programs_in_both,derived
+mart.d_book_reconciliation,programs_differing,BIGINT,15,Programs differing by more than rounding (mart.d_book_program_differences),derived
+mart.d_book_reconciliation,status,VARCHAR,15,"Reconciles, Does not reconcile, or Explained remainder (bridge and walk rows)",derived
+mart.d_book_reconciliation,checked_on,VARCHAR,15,Date the documents were read,derived
 mart.d_challenger_backtest,origin_fy,BIGINT,6,Rolling-validation origin: models trained through this fiscal year predicted the next,derived
 mart.d_challenger_backtest,model,VARCHAR,6,Forecasting model that produced the row,derived
 mart.d_challenger_backtest,series_scored,BIGINT,6,Agency x spending-code series scored at that origin,derived
 mart.d_challenger_backtest,mean_mase,DOUBLE,6,Mean absolute scaled error over every series scored at that origin,derived
 mart.d_challenger_backtest,coverage_80,DOUBLE,6,Share of outcomes inside the model's p10-p90 band (nominal 80%),derived
 mart.d_challenger_backtest,mean_width_log,DOUBLE,6,Mean width of the p10-p90 band in log points (narrower is better at equal coverage),derived
+mart.d_challenger_series_backtest,origin_fy,BIGINT,6512,Rolling-validation origin: models trained through this fiscal year predicted the next,derived
+mart.d_challenger_series_backtest,agency_code,VARCHAR,6512,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+mart.d_challenger_series_backtest,code,VARCHAR,6512,Comptroller sub-object code of the series,derived
+mart.d_challenger_series_backtest,last,DOUBLE,6512,Last actual of the series at the origin,derived
+mart.d_challenger_series_backtest,outcome,DOUBLE,6512,Actual spending in the forecast year,derived
+mart.d_challenger_series_backtest,naive_p10,DOUBLE,6512,Naive band p10 at the origin,derived
+mart.d_challenger_series_backtest,naive_p90,DOUBLE,6512,Naive band p90 at the origin,derived
+mart.d_challenger_series_backtest,lgbm_p10,DOUBLE,6512,LightGBM quantile p10 at the origin,derived
+mart.d_challenger_series_backtest,lgbm_p50,DOUBLE,6512,LightGBM quantile median at the origin,derived
+mart.d_challenger_series_backtest,lgbm_p90,DOUBLE,6512,LightGBM quantile p90 at the origin,derived
 mart.d_challenger_total,fiscal_year,BIGINT,1,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.d_challenger_total,p10,BIGINT,1,10th percentile of the simulated statewide total (path-by-path sums; per-series quantiles are not additive),derived
 mart.d_challenger_total,p50,BIGINT,1,Median of the simulated statewide total,derived
@@ -321,6 +398,7 @@ mart.d_challenger_total,p90,BIGINT,1,90th percentile of the simulated statewide 
 mart.d_challenger_total,n_series,BIGINT,1,Agency x spending-code series in the statewide simulation,derived
 mart.d_challenger_total,n_adopted,BIGINT,1,Series using the challenger (the rest use the naive last-actual forecast),derived
 mart.d_challenger_total,bootstrap_paths,BIGINT,1,Simulated paths behind an uncertainty band,derived
+mart.d_challenger_total,common_shock_sigma,DOUBLE,1,Root-mean-square log miss of the statewide total against the sum of series medians over the backtest origins; sets the corridor width,derived
 mart.d_challenger_total,note,VARCHAR,1,Explanation of the rule or row,reference
 mart.d_deflator,fiscal_year,INTEGER,20,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.d_deflator,cpi_index,DOUBLE,20,"Average of the monthly CPI-U (U.S. city average, all items, not seasonally adjusted, BLS CUUR0000SA0) over the Maryland fiscal year (July-June)",source
@@ -340,6 +418,43 @@ mart.d_detector_backtest,spend_next,DOUBLE,24,"The same units' spending in the n
 mart.d_detector_backtest,pooled_change,DOUBLE,24,"spend_next / spend_as_of - 1 over the cohort (blank when spend_as_of is zero); descriptive, not a saving",derived
 mart.d_detector_backtest,median_change,DOUBLE,24,"Median of the per-unit change from the as-of year to the next, over units with spending in the as-of year",derived
 mart.d_detector_backtest,units_zero_next,BIGINT,24,Units with no spending in the next year (dropped or re-coded lines),derived
+mart.d_detector_lift,detector,VARCHAR,45,Opportunity detector (or the bid list),derived
+mart.d_detector_lift,horizon,BIGINT,45,Years followed after the as-of year,derived
+mart.d_detector_lift,outcome,VARCHAR,45,"Pre-registered outcome: flagged_again, fell, grew_slower_than_peers",derived
+mart.d_detector_lift,as_of_years,BIGINT,45,As-of years pooled,derived
+mart.d_detector_lift,flagged_units,BIGINT,45,Flagged unit-years scored,derived
+mart.d_detector_lift,flagged_hits,BIGINT,45,Flagged unit-years with the outcome,derived
+mart.d_detector_lift,flagged_rate,DOUBLE,45,Share of flagged units with the outcome,derived
+mart.d_detector_lift,base_units,BIGINT,45,Not-flagged eligible unit-years scored,derived
+mart.d_detector_lift,base_hits,BIGINT,45,Not-flagged unit-years with the outcome,derived
+mart.d_detector_lift,base_rate,DOUBLE,45,Share of not-flagged units with the outcome,derived
+mart.d_detector_lift,lift,DOUBLE,45,flagged_rate / base_rate (blank below min_units_for_rate),derived
+mart.d_detector_lift,lift_lo,DOUBLE,45,"Katz 95% interval, low",derived
+mart.d_detector_lift,lift_hi,DOUBLE,45,"Katz 95% interval, high",derived
+mart.d_detector_lift,rate_diff,DOUBLE,45,flagged_rate minus base_rate,derived
+mart.d_detector_outcomes,detector,VARCHAR,621,Opportunity detector (or the bid list),derived
+mart.d_detector_outcomes,as_of_fy,BIGINT,621,Maryland fiscal year the detector was rerun as of,derived
+mart.d_detector_outcomes,horizon,BIGINT,621,Years followed,derived
+mart.d_detector_outcomes,follow_fy,BIGINT,621,The fiscal year followed into,derived
+mart.d_detector_outcomes,cohort,VARCHAR,621,Flagged or Not flagged,derived
+mart.d_detector_outcomes,units,BIGINT,621,Units in the cohort,derived
+mart.d_detector_outcomes,outcome,VARCHAR,621,Pre-registered outcome,derived
+mart.d_detector_outcomes,hits,BIGINT,621,Units with the outcome,derived
+mart.d_detector_outcomes,rate,DOUBLE,621,Share of units with the outcome (blank below min_units_for_rate),derived
+mart.d_detector_outcomes,rate_lo,DOUBLE,621,"Wilson 95% interval, low",derived
+mart.d_detector_outcomes,rate_hi,DOUBLE,621,"Wilson 95% interval, high",derived
+mart.d_detector_outcomes,spend_as_of,DOUBLE,621,Cohort spending at the as-of year,derived
+mart.d_detector_outcomes,spend_follow,DOUBLE,621,Cohort spending at follow_fy,derived
+mart.d_detector_outcomes,pooled_change,DOUBLE,621,Change in the cohort total,derived
+mart.d_detector_outcomes,median_change,DOUBLE,621,Median per-unit change,derived
+mart.d_drift,dataset,VARCHAR,46,Payments or Budget,derived
+mart.d_drift,measure,VARCHAR,46,Distribution compared,derived
+mart.d_drift,from_fy,INTEGER,46,Earlier Maryland fiscal year (the reference),derived
+mart.d_drift,to_fy,INTEGER,46,Later Maryland fiscal year,derived
+mart.d_drift,psi,DOUBLE,46,"Population stability index of to_fy against from_fy (below 0.10 stable, 0.10-0.25 moderate, above 0.25 major)",derived
+mart.d_drift,ks,DOUBLE,46,Two-sample Kolmogorov-Smirnov statistic (amount distributions only),derived
+mart.d_drift,level,VARCHAR,46,"Stable, Moderate shift or Major shift from the PSI",derived
+mart.d_drift,partial_year,BOOLEAN,46,True when to_fy is still in progress,derived
 mart.d_econ,fiscal_year,INTEGER,11,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.d_econ,cpi_avg,DOUBLE,11,Average CPI-U over the fiscal year's months,derived
 mart.d_econ,employment_thousands,DOUBLE,11,"Calendar-year average Maryland total nonfarm employment, thousands (BLS SMU24000000000000001), on the fiscal year the calendar year mostly overlaps",source
@@ -350,6 +465,23 @@ mart.d_families,family,VARCHAR,1257,Company that several payee names belong to,r
 mart.d_families,payee_name,VARCHAR,1257,One payee name grouped into the vendor,derived
 mart.d_families,agencies,BIGINT,1257,Agencies paying the vendor (or with payments in the year),derived
 mart.d_families,spend,DOUBLE,1257,Dollars spent (budget actuals or payments),derived
+mart.d_federal_crosswalk,fiscal_year,INTEGER,4063,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_federal_crosswalk,stage,VARCHAR,4063,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+mart.d_federal_crosswalk,listing,VARCHAR,4063,"Federal Assistance Listing number (formerly CFDA), e.g. 93.575 Child Care and Development Block Grant",derived
+mart.d_federal_crosswalk,listing_name,VARCHAR,4063,Assistance Listing program title,source
+mart.d_federal_crosswalk,agencies,BIGINT,4063,Agencies paying the vendor (or with payments in the year),derived
+mart.d_federal_crosswalk,programs,BIGINT,4063,State budget programs funded under the listing in the year,derived
+mart.d_federal_crosswalk,state_federal_budget,DOUBLE,4063,"State budget federal funds under the listing in the Maryland fiscal year (July-June), from gy87-e27x",derived
+mart.d_federal_crosswalk,federal_obligated,DOUBLE,4063,"Federal obligations under the listing in the federal fiscal year of the same number (October-September), set beside the State figure and never added to it; negative is a net deobligation",source
+mart.d_federal_crosswalk,federal_reported,BOOLEAN,4063,"True when USAspending has the federal year at all (false: not reported, shown blank, not zero)",derived
+mart.d_federal_crosswalk,federal_partial,BOOLEAN,4063,True when the federal fiscal year is still in progress,derived
+mart.d_federal_crosswalk,budget_to_obligated,DOUBLE,4063,"State budget federal funds divided by federal obligations: a ratio to question, not a reconciliation",derived
+mart.d_field_availability,improvement,VARCHAR,13,"Area of the v3.1 strategy: transaction-level, fund hierarchy, entity resolution, audit lifecycle",reference
+mart.d_field_availability,field,VARCHAR,13,Field an audit-grade tracker needs,reference
+mart.d_field_availability,in_open_data,VARCHAR,13,"Whether the State's open data publishes the field, with the detail",reference
+mart.d_field_availability,where_it_exists,VARCHAR,13,"Where the field exists otherwise (FMIS, MD-VIEW, agency systems)",reference
+mart.d_field_availability,plan,VARCHAR,13,"What is built from it, or the records request that would supply it",reference
+mart.d_field_availability,transaction_rows,BIGINT,13,Payment-level rows loaded into core.fact_payment_txn in this build (0 until a records request is answered),derived
 mart.d_forecast_backtest,area,VARCHAR,392,One of GMI's six focus areas,derived
 mart.d_forecast_backtest,method,VARCHAR,392,"Forecast model scored: log-linear trend, naive (last actual), drift (average yearly growth) or the equal-weight combination of those three (scored only, never kept)",derived
 mart.d_forecast_backtest,origin_fy,BIGINT,392,Last fiscal year of actual spending the model was allowed to see (the forecast origin),derived
@@ -384,6 +516,37 @@ mart.d_forecast_model,gmi_recurring,DOUBLE,7,Recurring savings GMI reported for 
 mart.d_forecast_model,gmi_rate,DOUBLE,7,gmi_recurring divided by baseline_fy2025,derived
 mart.d_forecast_model,gmi_note,VARCHAR,7,Which reported items make up gmi_recurring,source
 mart.d_forecast_model,gf_share,DOUBLE,7,General Fund share of the area's FY2025 spending,derived
+mart.d_fund_hierarchy,fiscal_year,INTEGER,25931,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_fund_hierarchy,stage,VARCHAR,25931,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+mart.d_fund_hierarchy,agency_code,VARCHAR,25931,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+mart.d_fund_hierarchy,agency,VARCHAR,25931,Agency name shown on the dashboard,derived
+mart.d_fund_hierarchy,program_code,VARCHAR,25931,"Budget program code, two digits in core",portal
+mart.d_fund_hierarchy,program_name,VARCHAR,25931,Budget program name,portal
+mart.d_fund_hierarchy,fund_group,VARCHAR,25931,"General, Special, Federal or Federal relief (ARPA, CARES and other pandemic relief sources)",derived
+mart.d_fund_hierarchy,fund_type,VARCHAR,25931,"Fund type (General, Special, Federal, Reimbursable and so on)",derived
+mart.d_fund_hierarchy,fund_source_code,VARCHAR,25931,Fund source code within a fund type,portal
+mart.d_fund_hierarchy,fund_source_name,VARCHAR,25931,Fund source name,portal
+mart.d_fund_hierarchy,assistance_listing,VARCHAR,25931,The fund source code when it is an Assistance Listing number (federal funds); blank otherwise,derived
+mart.d_fund_hierarchy,budget,DOUBLE,25931,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
+mart.d_fund_hierarchy,program_budget,DOUBLE,25931,"Program budget, all funds, in the year",derived
+mart.d_fund_hierarchy,share_of_program,DOUBLE,25931,The fund line's share of the program's budget in the year,derived
+mart.d_fund_shift,fiscal_year,INTEGER,6453,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_fund_shift,stage,VARCHAR,6453,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+mart.d_fund_shift,agency_code,VARCHAR,6453,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+mart.d_fund_shift,agency,VARCHAR,6453,Agency name shown on the dashboard,derived
+mart.d_fund_shift,program_code,VARCHAR,6453,"Budget program code, two digits in core",portal
+mart.d_fund_shift,program_name,VARCHAR,6453,Budget program name,portal
+mart.d_fund_shift,program_budget,DOUBLE,6453,"Program budget, all funds, in the year",derived
+mart.d_fund_shift,general,DOUBLE,6453,General Fund dollars for the program in the year,derived
+mart.d_fund_shift,federal,DOUBLE,6453,Federal fund dollars (not relief),derived
+mart.d_fund_shift,federal_relief,DOUBLE,6453,"Federal relief dollars (ARPA, CARES and similar)",derived
+mart.d_fund_shift,special,DOUBLE,6453,Special fund dollars,derived
+mart.d_fund_shift,general_share,DOUBLE,6453,General Fund share of the program budget,derived
+mart.d_fund_shift,federal_share,DOUBLE,6453,"Federal share, relief included",derived
+mart.d_fund_shift,general_share_2y_before,DOUBLE,6453,General Fund share two fiscal years earlier,derived
+mart.d_fund_shift,federal_share_2y_before,DOUBLE,6453,Federal share two fiscal years earlier,derived
+mart.d_fund_shift,general_share_change,DOUBLE,6453,Change in General Fund share against two years earlier (0.20 = 20 points),derived
+mart.d_fund_shift,shift_to_general,BOOLEAN,6453,True when the General Fund share rose at least fund_hierarchy.shift_pp points and the budget is at least fund_hierarchy.min_program (config/assumptions.yaml),derived
 mart.d_grant_group_members,description_key,VARCHAR,5008,Description in lower case with spaces collapsed: the unit that is embedded and clustered,derived
 mart.d_grant_group_members,description,VARCHAR,5008,Grant description as published,portal
 mart.d_grant_group_members,group_id,VARCHAR,5008,Grant group identifier: hash of the group's member description keys (stable while the members are),derived
@@ -433,6 +596,18 @@ mart.d_grant_groups_sensitivity,fiscal_year,BIGINT,3,"Maryland fiscal year (July
 mart.d_master_quality,measure,VARCHAR,5,Name of the quality measure,reference
 mart.d_master_quality,value,VARCHAR,5,Measured value,derived
 mart.d_master_quality,ok,BIGINT,5,True when the measure meets its target,derived
+mart.d_model_registry,model,VARCHAR,8,Model name,derived
+mart.d_model_registry,task,VARCHAR,8,What the model predicts or labels,derived
+mart.d_model_registry,method,VARCHAR,8,Method,derived
+mart.d_model_registry,baseline,VARCHAR,8,The baseline it must beat,derived
+mart.d_model_registry,training_window,VARCHAR,8,Data it learned from and the origins it was scored at,derived
+mart.d_model_registry,metric,VARCHAR,8,Score it is judged on,derived
+mart.d_model_registry,model_score,DOUBLE,8,The model's score,derived
+mart.d_model_registry,baseline_score,DOUBLE,8,The baseline's score on the same test,derived
+mart.d_model_registry,beats_baseline,VARCHAR,8,True when the model beats the baseline (direction per metric); blank when there is no baseline score,derived
+mart.d_model_registry,decision,VARCHAR,8,"Adopted, shown, not promoted, or leads only",derived
+mart.d_model_registry,shown_as,VARCHAR,8,Where the model appears on the dashboard,derived
+mart.d_model_registry,model_card,VARCHAR,8,Model card in docs/models,derived
 mart.d_multi,fiscal_year,INTEGER,216,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.d_multi,vendor,VARCHAR,216,Company name after grouping payee names,derived
 mart.d_multi,area,VARCHAR,216,One of GMI's six focus areas,derived
@@ -521,6 +696,20 @@ mart.d_plan50,low,DOUBLE,30,Low end of the estimated saving; uses a screening as
 mart.d_plan50,high,DOUBLE,30,High end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_plan50,tab,VARCHAR,30,Dashboard tab the row links to,derived
 mart.d_plan50,cumulative,DOUBLE,30,Running total of savings,derived
+mart.d_range_coverage,source,VARCHAR,59,"Range source: bootstrap (area forecasts), lightgbm (challenger) or revenue",derived
+mart.d_range_coverage,area,VARCHAR,59,One of GMI's six focus areas,derived
+mart.d_range_coverage,horizon,BIGINT,59,Forecast horizon in years; 0 = all horizons pooled,derived
+mart.d_range_coverage,scope,VARCHAR,59,Spending scope bucket on the dashboard (controllable purchases or staff/grants/capital and so on),derived
+mart.d_range_coverage,calibrated,BIGINT,59,"1 = conformally widened range, 0 = raw range",derived
+mart.d_range_coverage,n,BIGINT,59,Forecasts scored,derived
+mart.d_range_coverage,hits,BIGINT,59,Outcomes inside the range,derived
+mart.d_range_coverage,coverage,DOUBLE,59,hits / n,derived
+mart.d_range_coverage,cov_lo,DOUBLE,59,"Wilson 95% interval, low",derived
+mart.d_range_coverage,cov_hi,DOUBLE,59,"Wilson 95% interval, high",derived
+mart.d_range_coverage,mean_interval_score,DOUBLE,59,Mean interval score in dollars (width plus penalty for misses; lower is better),derived
+mart.d_range_coverage,relative_interval_score,DOUBLE,59,Mean interval score as a share of the outcome,derived
+mart.d_range_coverage,factor,DOUBLE,59,Mean conformal widening factor applied,derived
+mart.d_range_coverage,adopted,BIGINT,59,Whether the challenger beat the naive baseline for this series in rolling validation,derived
 mart.d_rec_status,rec,BIGINT,6,Recommendation number (1-6),derived
 mart.d_rec_status,title,VARCHAR,6,Recommendation title,derived
 mart.d_rec_status,status,VARCHAR,6,Status of the recommendation,derived
@@ -573,6 +762,15 @@ mart.d_savings_status,after,DOUBLE,12,Matching payments in FY2026,derived
 mart.d_savings_status,status,VARCHAR,12,"Whether the reported saving is seen in payments (Seen, Partly seen, Not seen yet, Payments fell, Payments did not fall)",derived
 mart.d_savings_status,previous_status,"""NULL""",12,Status in the previous run,ops
 mart.d_savings_status,changed,BOOLEAN,12,True when the status changed since the previous run,ops
+mart.d_site_reconciliation,dataset,VARCHAR,31,budget or payments,source
+mart.d_site_reconciliation,fiscal_year,INTEGER,31,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+mart.d_site_reconciliation,host,VARCHAR,31,State Open Finance site,source
+mart.d_site_reconciliation,url,VARCHAR,31,API URL read,source
+mart.d_site_reconciliation,site_total,DOUBLE,31,The site's total for the fiscal year,source
+mart.d_site_reconciliation,data_total,DOUBLE,31,The open data's total for the year from this build,derived
+mart.d_site_reconciliation,difference,DOUBLE,31,data_total - site_total,derived
+mart.d_site_reconciliation,partial_year,BOOLEAN,31,True for a year still in progress (the site can move ahead of the extract),derived
+mart.d_site_reconciliation,checked_on,VARCHAR,31,Date the site was read,source
 mart.d_source_issues,issue_id,VARCHAR,2,Source issue identifier: 'SRC-<fiscal year>-<agency code>',derived
 mart.d_source_issues,issue,VARCHAR,2,Short description of the data-publication issue,derived
 mart.d_source_issues,fiscal_year,INTEGER,2,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
@@ -595,6 +793,23 @@ mart.d_state_plan,agency_name,VARCHAR,51,Agency name as published; in core the c
 mart.d_state_plan,priority_number,INTEGER,51,"Moore-Miller State Plan priority (1-10 from the 2024 State Plan; 11 = government modernization and cost savings, Executive Order 01.01.2025.08)",reference
 mart.d_state_plan,priority_area,VARCHAR,51,State Plan priority area name,reference
 mart.d_state_plan,citation_url,VARCHAR,51,Link to the source for the priority mapping,reference
+mart.d_vendor_alias,vendor,VARCHAR,37897,Company name after grouping payee names,derived
+mart.d_vendor_alias,payee_type,VARCHAR,37897,"Payee type from reference/payee_type_rules.csv: Government, Health care organization, Education institution, Financial institution, Utility, Non-profit (grants data) or Business or other",derived
+mart.d_vendor_alias,payee_name,VARCHAR,37897,Payee name exactly as an agency entered it,portal
+mart.d_vendor_alias,zip,VARCHAR,37897,Payee ZIP as entered; (none) when blank,portal
+mart.d_vendor_alias,rule,VARCHAR,37897,Name of the mapping or scope rule,reference
+mart.d_vendor_alias,agencies,BIGINT,37897,Agencies paying the vendor (or with payments in the year),derived
+mart.d_vendor_alias,first_fy,INTEGER,37897,First fiscal year the code appears,derived
+mart.d_vendor_alias,last_fy,INTEGER,37897,Last fiscal year the code appears,derived
+mart.d_vendor_alias,paid,DOUBLE,37897,Payments in dollars,derived
+mart.d_vendor_alias,records,BIGINT,37897,Payment records (agency x payee x ZIP x year) behind the row,derived
+mart.d_vendor_alias_review,kind,VARCHAR,3178,ZIPs disagree (one company family paid at more than one 3-digit ZIP area) or Possible missed merge (two companies with the same first words and ZIP),derived
+mart.d_vendor_alias_review,company,VARCHAR,3178,Company (normalized vendor) the item is about,derived
+mart.d_vendor_alias_review,other_company,VARCHAR,3178,"For a possible missed merge, the other company",derived
+mart.d_vendor_alias_review,names,BIGINT,3178,Spellings of the company's name in the payments (ZIPs disagree only),derived
+mart.d_vendor_alias_review,zip3s,BIGINT,3178,3-digit ZIP areas the spellings were paid at (ZIPs disagree only),derived
+mart.d_vendor_alias_review,evidence,VARCHAR,3178,"The ZIP areas, or the shared first words and ZIP",derived
+mart.d_vendor_alias_review,paid,DOUBLE,3178,Payments in dollars,derived
 mart.d_vendor_moves,vendor,VARCHAR,40,Company name after grouping payee names,derived
 mart.d_vendor_moves,fy2024,DOUBLE,40,Payments in FY2024,derived
 mart.d_vendor_moves,fy2025,DOUBLE,40,Payments in FY2025,derived
@@ -653,6 +868,8 @@ mart.f_challenger,model,VARCHAR,2609,Forecasting model that produced the row,der
 mart.f_challenger,adopted,BOOLEAN,2609,Whether the challenger beat the naive baseline for this series in rolling validation,derived
 mart.f_challenger,naive_mase,DOUBLE,2609,Mean absolute scaled error of the naive forecast over the rolling origins,derived
 mart.f_challenger,challenger_mase,DOUBLE,2609,Mean absolute scaled error of the challenger over the rolling origins,derived
+mart.f_challenger,p10_cal,DOUBLE,2609,Calibrated p10: the raw range widened by the conformal factor (src/models/calibration.py),derived
+mart.f_challenger,p90_cal,DOUBLE,2609,Calibrated p90: the raw range widened by the conformal factor,derived
 mart.f_code,fiscal_year,INTEGER,14744,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.f_code,stage,VARCHAR,14744,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 mart.f_code,agency_code,VARCHAR,14744,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -670,10 +887,13 @@ mart.f_forecast,area,VARCHAR,105,One of GMI's six focus areas,derived
 mart.f_forecast,fiscal_year,BIGINT,105,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.f_forecast,kind,VARCHAR,105,"Actual, forecast or plan",derived
 mart.f_forecast,value,DOUBLE,105,Actual or forecast spending in dollars,derived
-mart.f_forecast,p10,DOUBLE,105,10th percentile of the bootstrap forecast,derived
+mart.f_forecast,p10,DOUBLE,105,10th percentile of the bootstrap forecast (raw; the page shows p10_cal),derived
 mart.f_forecast,p50,DOUBLE,105,Median of the bootstrap forecast,derived
-mart.f_forecast,p90,DOUBLE,105,90th percentile of the bootstrap forecast,derived
+mart.f_forecast,p90,DOUBLE,105,90th percentile of the bootstrap forecast (raw; the page shows p90_cal),derived
 mart.f_forecast,plan,DOUBLE,105,Spending after GMI's reported savings rate,derived
+mart.f_forecast,p10_cal,DOUBLE,105,Calibrated p10: the raw range widened by the conformal factor (src/models/calibration.py),derived
+mart.f_forecast,p90_cal,DOUBLE,105,Calibrated p90: the raw range widened by the conformal factor,derived
+mart.f_forecast,range_source,VARCHAR,105,"Where the published calibrated range comes from: bootstrap, or lightgbm where the pre-registered adoption rule chose it",derived
 mart.f_function,fiscal_year,INTEGER,795,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.f_function,stage,VARCHAR,795,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 mart.f_function,agency_code,VARCHAR,795,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -744,6 +964,8 @@ mart.f_revenue,value,DOUBLE,11,"General Fund revenue in dollars (actual years; b
 mart.f_revenue,p10,DOUBLE,11,10th percentile of the FY2027 revenue band (bootstrap over backtest residuals),derived
 mart.f_revenue,p50,DOUBLE,11,Median of the FY2027 revenue band,derived
 mart.f_revenue,p90,DOUBLE,11,90th percentile of the FY2027 revenue band,derived
+mart.f_revenue,p10_cal,DOUBLE,11,Calibrated p10: the raw range widened by the conformal factor (src/models/calibration.py),derived
+mart.f_revenue,p90_cal,DOUBLE,11,Calibrated p90: the raw range widened by the conformal factor,derived
 mart.f_savings_check,check_id,VARCHAR,1618,Reported saving whose payments are checked,derived
 mart.f_savings_check,fiscal_year,INTEGER,1618,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.f_savings_check,agency_code,VARCHAR,1618,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -838,11 +1060,11 @@ mart.review_queue,rule_detector_overlap,VARCHAR,2459,"Rule detector that already
 mart.review_queue,status,VARCHAR,2459,"Review state of the flag (Under review, Approved variance, Refer to OLA)",derived
 mart.review_queue_scored,source,VARCHAR,2,Which model grain was scored (Vendor-agency payments or Agency spending code),derived
 mart.review_queue_scored,scored,BIGINT,2,Rows the isolation forest scored in that grain,derived
-mart.run_checks,run_id,VARCHAR,132,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-mart.run_checks,stage,VARCHAR,132,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-mart.run_checks,check,VARCHAR,132,Check description,ops
-mart.run_checks,status,VARCHAR,132,"pass, warn or fail",ops
-mart.run_checks,detail,VARCHAR,132,Numbers behind the check result,ops
+mart.run_checks,run_id,VARCHAR,143,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+mart.run_checks,stage,VARCHAR,143,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+mart.run_checks,check,VARCHAR,143,Check description,ops
+mart.run_checks,status,VARCHAR,143,"pass, warn or fail",ops
+mart.run_checks,detail,VARCHAR,143,Numbers behind the check result,ops
 mart.sources,source,VARCHAR,6,Short name of the source dataset,derived
 mart.sources,dataset_id,VARCHAR,6,Portal four-by-four identifier,ops
 mart.sources,title,VARCHAR,6,Dataset title used on the dashboard,derived
@@ -952,22 +1174,22 @@ mart.vendor_type,payee_type,VARCHAR,56789,"Payee type from reference/payee_type_
 mart.vendor_type,type_basis,VARCHAR,56789,"How the payee type was assigned: name rule, grants data nonprofit = Y, or default",derived
 mart.vendor_type,payee_names,BIGINT,56789,Distinct payee names grouped into the vendor,derived
 mart.vendor_type,focus_area,VARCHAR,56789,One of GMI's six focus areas assigned by reference/focus_area_rules.csv; empty when none,derived
-ops.check_coverage,check,VARCHAR,132,Check description,ops
-ops.check_coverage,layer,VARCHAR,132,"Database layer the check ran on (raw, core, ref, mart)",ops
-ops.check_coverage,tables,VARCHAR,132,"Warehouse tables the check's queries read (recorded by src/pipeline/checks.py), space-separated",derived
-ops.check_result,run_id,VARCHAR,132,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-ops.check_result,layer,VARCHAR,132,"Database layer the check ran on (raw, core, ref, mart)",ops
-ops.check_result,check,VARCHAR,132,Check description,ops
-ops.check_result,severity,VARCHAR,132,Stop (blocks the run) or Warn,ops
-ops.check_result,result,VARCHAR,132,"pass, warn or fail",ops
-ops.check_result,detail,VARCHAR,132,Numbers behind the check result,ops
-ops.enrichment,run_id,VARCHAR,6,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-ops.enrichment,source,VARCHAR,6,Source name or URL the data came from,ops
-ops.enrichment,status,VARCHAR,6,Run or source status,ops
-ops.enrichment,rows,BIGINT,6,Row count,ops
-ops.enrichment,detail,VARCHAR,6,Numbers behind the check result,ops
-ops.lineage,table_name,VARCHAR,323,Warehouse table (schema.name) created by the build,derived
-ops.lineage,depends_on,VARCHAR,323,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
+ops.check_coverage,check,VARCHAR,143,Check description,ops
+ops.check_coverage,layer,VARCHAR,143,"Database layer the check ran on (raw, core, ref, mart)",ops
+ops.check_coverage,tables,VARCHAR,143,"Warehouse tables the check's queries read (recorded by src/pipeline/checks.py), space-separated",derived
+ops.check_result,run_id,VARCHAR,143,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+ops.check_result,layer,VARCHAR,143,"Database layer the check ran on (raw, core, ref, mart)",ops
+ops.check_result,check,VARCHAR,143,Check description,ops
+ops.check_result,severity,VARCHAR,143,Stop (blocks the run) or Warn,ops
+ops.check_result,result,VARCHAR,143,"pass, warn or fail",ops
+ops.check_result,detail,VARCHAR,143,Numbers behind the check result,ops
+ops.enrichment,run_id,VARCHAR,7,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+ops.enrichment,source,VARCHAR,7,Source name or URL the data came from,ops
+ops.enrichment,status,VARCHAR,7,Run or source status,ops
+ops.enrichment,rows,BIGINT,7,Row count,ops
+ops.enrichment,detail,VARCHAR,7,Numbers behind the check result,ops
+ops.lineage,table_name,VARCHAR,407,Warehouse table (schema.name) created by the build,derived
+ops.lineage,depends_on,VARCHAR,407,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
 ops.payee_name_seen,payee_name,VARCHAR,62022,"Payee name exactly as paid (ref.map_payee_vendor.payee), one row per name ever seen by a passing build",ops
 ops.payee_name_seen,first_seen_run_id,VARCHAR,62022,Extract run of the first build that passed its stop checks and saw this payee name,ops
 ops.payee_name_seen,first_seen_date,VARCHAR,62022,UTC date of that extract run (YYYY-MM-DD),ops
@@ -1032,6 +1254,12 @@ raw.federal_awards,amount,DOUBLE,20,"Dollars paid, awarded or reported on the ro
 raw.federal_awards,partial,BOOLEAN,20,True when the year is not finished,derived
 raw.federal_awards,reporting_incomplete,BOOLEAN,20,True when a federal-award year is under 60% of the prior year (reporting lag),derived
 raw.federal_awards,_run_id,VARCHAR,20,Extract run that produced the row,ops
+raw.federal_by_listing,federal_fy,BIGINT,3781,Federal fiscal year (October to September) from USAspending,source
+raw.federal_by_listing,listing,VARCHAR,3781,"Federal Assistance Listing number (formerly CFDA), e.g. 93.575 Child Care and Development Block Grant",derived
+raw.federal_by_listing,listing_name,VARCHAR,3781,Assistance Listing program title,source
+raw.federal_by_listing,obligated,DOUBLE,3781,"Federal obligations in the federal fiscal year (October-September) to government recipients in Maryland, award types 02-05; net of deobligations, so it can be negative",source
+raw.federal_by_listing,partial,BOOLEAN,3781,True when the year is not finished,derived
+raw.federal_by_listing,_run_id,VARCHAR,3781,Extract run that produced the row,ops
 raw.fte,agency_code,VARCHAR,6026,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 raw.fte,unit_code,VARCHAR,6026,Budget unit code within an agency,portal
 raw.fte,program_code,VARCHAR,6026,"Budget program code, two digits in core",portal
@@ -1110,16 +1338,60 @@ raw.population,year,BIGINT,16,Calendar year,source
 raw.population,population,BIGINT,16,Maryland resident population (Census Population Estimates),source
 raw.population,vintage,BIGINT,16,Census estimate vintage (release year),source
 raw.population,_run_id,VARCHAR,16,Extract run that produced the row,ops
+ref.audit_findings,finding_id,VARCHAR,2,"Finding id: agency, program and year for a public finding; OLA- plus the agency code for an OLA report row",reference
+ref.audit_findings,agency_code,VARCHAR,2,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+ref.audit_findings,agency,VARCHAR,2,Agency name shown on the dashboard,derived
+ref.audit_findings,program,VARCHAR,2,Program or audit unit the finding is about,reference
+ref.audit_findings,source_type,VARCHAR,2,"Kind of source: OLA audit report, internal audit reported by the press, agency statement reported by the press",reference
+ref.audit_findings,document,VARCHAR,2,"The document the finding comes from, as named by its source",reference
+ref.audit_findings,document_date,VARCHAR,2,Date of that document (blank when the source does not give one),reference
+ref.audit_findings,period,VARCHAR,2,"Years the finding covers, as the source states them",reference
+ref.audit_findings,finding,VARCHAR,2,"What was found, in the source's terms",reference
+ref.audit_findings,amount_identified,VARCHAR,2,"Dollars the source says were identified (overpaid, questioned); blank when not stated, never 0. Not savings",reference
+ref.audit_findings,amount_recouped,VARCHAR,2,"Dollars recovered, as reported; blank when not stated",reference
+ref.audit_findings,recoupment_status,VARCHAR,2,"Whether the money is being, or will be, recovered, as reported",reference
+ref.audit_findings,waiver,VARCHAR,2,"Whether repayment was waived: Yes, No or Unknown",reference
+ref.audit_findings,waiver_decided_by,VARCHAR,2,Who decided the waiver,reference
+ref.audit_findings,legal_opinion,VARCHAR,2,"Legal opinion requested about the finding or the waiver, and by whom",reference
+ref.audit_findings,legal_opinion_status,VARCHAR,2,Status of that legal opinion as of the as_of date,reference
+ref.audit_findings,fund_source,VARCHAR,2,Fund that paid the money in question (federal or General Fund); blank when no source states it,reference
+ref.audit_findings,confirmation,VARCHAR,2,"Whether an audit document confirms the row, or it rests on a press or agency report",reference
+ref.audit_findings,as_of,VARCHAR,2,Calendar date the source was last checked for this row,reference
+ref.audit_findings,source_url,VARCHAR,2,Link to the citation,source
+ref.audit_findings,note,VARCHAR,2,Explanation of the rule or row,reference
 ref.baseline_quality,measure,VARCHAR,7,Name of the quality measure,reference
 ref.baseline_quality,value,VARCHAR,7,Baseline value recorded from the legacy dashboard,reference
 ref.baseline_quality,source,VARCHAR,7,Where the reference value is documented,reference
+ref.book_program_differences,fiscal_year,VARCHAR,13,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.book_program_differences,program,VARCHAR,13,"Program code (agency, unit, program)",derived
+ref.book_program_differences,agency,VARCHAR,13,Agency name in the open data,derived
+ref.book_program_differences,program_name,VARCHAR,13,Program name,derived
+ref.book_program_differences,book,VARCHAR,13,The document's comparable amount for the program,derived
+ref.book_program_differences,data,VARCHAR,13,The open data's amount,derived
+ref.book_program_differences,difference,VARCHAR,13,data - book,derived
+ref.book_program_differences,reason,VARCHAR,13,"Why it differs: not printed in the book, rounding, or amount differs",derived
+ref.book_program_differences,source,VARCHAR,13,Document compared,derived
+ref.book_reconciliation,fiscal_year,VARCHAR,15,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.book_reconciliation,stage,VARCHAR,15,"Budget stage compared (Actual, Legislative appropriation, Working budget, or the walk from the allowance)",reference
+ref.book_reconciliation,basis,VARCHAR,15,What is summed: all funds (operating + higher education) or one fund type,reference
+ref.book_reconciliation,source_document,VARCHAR,15,DBM (or DLS) document and column the figure is read from,reference
+ref.book_reconciliation,url,VARCHAR,15,URL(s) of the document(s) read,reference
+ref.book_reconciliation,book_total_expenditure,VARCHAR,15,"The documents' Total Expenditure for the year, summed over programs",reference
+ref.book_reconciliation,book_reimbursable,VARCHAR,15,Reimbursable funds in that total (not appropriated in the State budget),reference
+ref.book_reconciliation,book_non_budgeted,VARCHAR,15,"Non-budgeted funds in that total (MDTA, MES, Stadium Authority and others; not appropriated in the State budget)",reference
+ref.book_reconciliation,book_comparable,VARCHAR,15,Total expenditure less reimbursable and non-budgeted funds: the figure comparable with the open data,reference
+ref.book_reconciliation,bridge_items,VARCHAR,15,"Items added to bridge to the data: enacted deficiencies (FY2026), supplementals (FY2027 walk), supplementals and legislative actions (general fund walk)",reference
+ref.book_reconciliation,programs_in_both,VARCHAR,15,Programs found in both the document and the open data,reference
+ref.book_reconciliation,programs_exact,VARCHAR,15,"Of those, programs equal to the dollar",reference
+ref.book_reconciliation,kind,VARCHAR,15,"reconcile (must agree), bridge (FY2026: remainder is budget amendments) or walk (FY2027 from the allowance: remainder is legislative action)",reference
+ref.book_reconciliation,checked_on,VARCHAR,15,Date the documents were read,reference
 ref.budget_stage,fiscal_year,VARCHAR,11,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 ref.budget_stage,stage,VARCHAR,11,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 ref.budget_stage,source,VARCHAR,11,Where the reference value is documented,reference
-ref.column_dictionary,column,VARCHAR,612,Column name being defined,reference
-ref.column_dictionary,applies_to,VARCHAR,612,"Tables the definition applies to (comma-separated, wildcards allowed); blank for all",reference
-ref.column_dictionary,origin,VARCHAR,612,"Where the column comes from: portal, source, reference, derived or ops",reference
-ref.column_dictionary,definition,VARCHAR,612,What the column means,reference
+ref.column_dictionary,column,VARCHAR,826,Column name being defined,reference
+ref.column_dictionary,applies_to,VARCHAR,826,"Tables the definition applies to (comma-separated, wildcards allowed); blank for all",reference
+ref.column_dictionary,origin,VARCHAR,826,"Where the column comes from: portal, source, reference, derived or ops",reference
+ref.column_dictionary,definition,VARCHAR,826,What the column means,reference
 ref.controllable_rule,rule,VARCHAR,17,Name of the mapping or scope rule,reference
 ref.controllable_rule,value,VARCHAR,17,The code or pattern the rule matches,reference
 ref.controllable_rule,note,VARCHAR,17,Explanation of the rule or row,reference
@@ -1141,6 +1413,11 @@ ref.dim_stage,source,VARCHAR,11,Where the reference value is documented,referenc
 ref.dim_subobject,subobject_code,VARCHAR,377,Comptroller sub-object code without leading zeros,derived
 ref.dim_subobject,subobject_name,VARCHAR,377,Comptroller sub-object name,derived
 ref.dim_subobject,object_code,VARCHAR,377,"Comptroller object code, two digits (for example 08 Contractual services)",portal
+ref.field_availability,improvement,VARCHAR,13,"Area of the v3.1 strategy: transaction-level, fund hierarchy, entity resolution, audit lifecycle",reference
+ref.field_availability,field,VARCHAR,13,Field an audit-grade tracker needs,reference
+ref.field_availability,in_open_data,VARCHAR,13,"Whether the State's open data publishes the field, with the detail",reference
+ref.field_availability,where_it_exists,VARCHAR,13,"Where the field exists otherwise (FMIS, MD-VIEW, agency systems)",reference
+ref.field_availability,plan,VARCHAR,13,"What is built from it, or the records request that would supply it",reference
 ref.focus_area_rule,area,VARCHAR,7,One of GMI's six focus areas,derived
 ref.focus_area_rule,rule,VARCHAR,7,Name of the mapping or scope rule,reference
 ref.focus_area_rule,value,VARCHAR,7,The code or pattern the rule matches,reference
@@ -1236,6 +1513,12 @@ ref.payment_agency_rule,rule,VARCHAR,21,Name of the mapping or scope rule,refere
 ref.payment_agency_rule,payment_name_pattern,VARCHAR,21,Regular expression matching payment agency names,reference
 ref.payment_agency_rule,target,VARCHAR,21,Agency code the rule maps to,reference
 ref.payment_agency_rule,note,VARCHAR,21,Explanation of the rule or row,reference
+ref.site_totals,dataset,VARCHAR,31,budget or payments,source
+ref.site_totals,fiscal_year,VARCHAR,31,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+ref.site_totals,site_total,VARCHAR,31,The site's total for the fiscal year,source
+ref.site_totals,host,VARCHAR,31,State Open Finance site,source
+ref.site_totals,url,VARCHAR,31,API URL read,source
+ref.site_totals,checked_on,VARCHAR,31,Date the site was read,source
 ref.source_notes,dataset,VARCHAR,8,"Short dataset key, as in config/datasets.yaml",reference
 ref.source_notes,note,VARCHAR,8,A reviewed note about where the source differs from what its portal page says,reference
 ref.source_notes,checked_on,VARCHAR,8,Date the note was checked,reference

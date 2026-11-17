@@ -13,8 +13,8 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
-from ..models import anomaly, backtest, challenger, clustering, forecast, grant_groups, opportunities, payee_classifier, recommendations, revenue, savings
-from . import checks, facts, marts, reference
+from ..models import anomaly, backtest, registry, challenger, clustering, forecast, grant_groups, opportunities, payee_classifier, recommendations, revenue, savings
+from . import checks, facts, marts, reference, txn
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
@@ -38,7 +38,7 @@ def build(run_id):
     # ---- raw: portal rows exactly as delivered, plus the run ID; and the context sources
     for d in man["datasets"]:
         con.execute(f"CREATE TABLE raw.{d['dataset']} AS SELECT *, '{run_id}' AS _run_id FROM read_parquet('{raw}/{d['dataset']}.parquet')")
-    for name in ("cpi", "federal_awards", "population", "mfr_index", "bls_employment", "bea_md_gdp"):
+    for name in ("cpi", "federal_awards", "population", "mfr_index", "bls_employment", "bea_md_gdp", "federal_by_listing"):
         if (raw / f"{name}.parquet").exists():
             con.execute(f"CREATE TABLE raw.{name} AS SELECT *, '{run_id}' AS _run_id FROM read_parquet('{raw}/{name}.parquet')")
 
@@ -148,6 +148,7 @@ def build(run_id):
         con.execute("""CREATE TABLE core.mfr_document AS SELECT fiscal_year, agency_file,
           replace(replace(agency_file, '-MFR.pdf', ''), '-', ' ') AS agency_title, url, bytes, last_modified FROM raw.mfr_index""")
 
+    txn.build(con)  # v3.1: payment-level records from records requests (data/txn), empty until one is answered
     reference.build(con, raw)  # Phase 3: reference CSVs -> ref layer, mapped payments, budget scope, MFR measures
     marts.build(con)  # Phase 4: sql/mart/*.sql -> mart layer
     forecast.write(con)  # Phase 5: forecasts and their rolling-origin backtest, built on the marts
@@ -161,6 +162,7 @@ def build(run_id):
     payee_classifier.write(con)  # ML layer: payee type labels vs the name rules (docs/models/payee_classifier.md)
     grant_groups.write(con)  # ML layer: grant descriptions grouped across grantor agencies, overlap leads (docs/models/grant_groups.md)
     anomaly.write(con)  # Phase 5 (from v2): isolation-forest flags and the review queue (needs d_opps and d_bid_list)
+    registry.write(con)  # Phase 5 closure: model registry (every model vs its baseline) and PSI/KS drift by fiscal year
     res = checks.run(con._con, run_id, man)  # the checks record their own reads (ops.check_coverage), outside the lineage
     facts.build(con, run_id, man, DATA, checks.HIST)  # Data & pipeline tab: sources, runs, checks, master-list quality
     if res:
