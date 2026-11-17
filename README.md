@@ -156,11 +156,24 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
 | Rules | `reference/` (<!-- n:reference_files -->28<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
 | Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
-| Models | `src/models/` (14 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
+| Models | `src/models/` (16 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
 Quality bar: every one of the <!-- n:documented_columns -->2,319<!-- /n --> columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+
+## Tech stack
+
+The architecture is the diagram and step table above. This is what it is built with.
+
+- **Language and environment:** Python 3.12 with dependencies locked by `uv` (`uv.lock`, exported to `requirements.lock.txt`); a Make target for every step; Docker and `compose.yaml` build the same locked environment.
+- **Extraction and data handling:** `sodapy` (the Socrata SODA 2.1 client), pandas, PyArrow, `pdfplumber` (DBM's budget books), PyYAML and requests.
+- **Storage:** Parquet (one file per dataset per run, and the published tables in `site_data/`) and DuckDB with the layers `raw`, `ref`, `core`, `mart` and `ops`. DVC is configured for an optional local store (`dvc.yaml`); it is not a locked dependency.
+- **Models:** scikit-learn (K-Means, TF-IDF, Isolation Forest, logistic regression), LightGBM quantile regression, and split-conformal calibration (`src/models/calibration.py`). The model registry and the PSI and KS drift monitor are in `src/models/registry.py`. Sentence embeddings for grant groups are an optional extra; TF-IDF is the default.
+- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->28<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
+- **Presentation:** a static site built by `src/pipeline/site.py` and served from GitHub Pages. D3.js is inlined in the page, so the dashboard loads nothing from another host; the SQL explorer loads DuckDB-WASM from jsDelivr (the one external request, with a plain JavaScript fallback). Figures come from matplotlib, the walkthrough notebook is executed with nbclient, and Playwright drives the page tests and the README screenshots.
+- **AI access:** a read-only Model Context Protocol server over stdio (`src/mcp/`), and one-line briefs with a number guardrail (`src/briefs/`). The template backend needs nothing; the optional Gemini backend uses `google-genai`.
+- **Delivery:** GitHub Actions runs CI (lint, compile check, tests, the forecast rebuild check, the notebook check and a container test), the Pages deploy, the data release to GitHub and Hugging Face, a monthly extract and build (the 3rd), and weekly freshness alerts (Mondays). A branch ruleset requiring the `test` check on `main` is defined in `.github/rulesets/main.json`, and Dependabot keeps the Actions and pip dependencies current.
 
 ## AI layer
 
@@ -256,6 +269,8 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
 - Merge the open pull requests in order: #5 (walkthrough report), then #6 (program screen) after its audit findings are folded into `reference/audit_findings.csv`.
 - Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
+
+Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
 
 History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md).
 
