@@ -177,7 +177,7 @@ def savings_status():
     with plt.rc_context(STYLE):
         fig, ax = plt.subplots(figsize=(10, 3.2 + .35 * len(g)))
         done = set()
-        for i, (status, r) in enumerate(g.iterrows()):
+        for i, (_status, r) in enumerate(g.iterrows()):
             ax.barh(i, r["items"], height=.6, label=None if r.group in done else r.group, **styles.get(r.group, dict(color=BLUE)))
             done.add(r.group)
             rep = r.reported
