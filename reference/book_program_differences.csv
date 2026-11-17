@@ -1,0 +1,14 @@
+fiscal_year,program,agency,program_name,book,data,difference,reason,source
+2021,C80B00.01,Office of the Public Defender,General Administration,10920677.0,10920678.0,1.0,Rounding (under $100),FY2023 Governor's budget books
+2021,C80B00.02,Office of the Public Defender,District Operations,91531472.0,91531488.0,16.0,Rounding (under $100),FY2023 Governor's budget books
+2021,C80B00.03,Office of the Public Defender,Appellate and Inmate Services,7642118.0,7642121.0,3.0,Rounding (under $100),FY2023 Governor's budget books
+2021,C80B00.04,Office of the Public Defender,Involuntary Institutionalization Services,2092616.0,2092614.0,-2.0,Rounding (under $100),FY2023 Governor's budget books
+2021,C94I00.01,Subsequent Injury Fund,General Administration,2445028.0,2445027.0,-1.0,Rounding (under $100),FY2023 Governor's budget books
+2023,R30B30.01,University System of Maryland,Instruction,107052697.0,107061697.0,9000.0,Amount differs,FY2025 Governor's budget books
+2024,C00A00.13,Judiciary,ARP: Pre-Trial Home Detention,0.0,1167486.0,1167486.0,"In the open data, not printed as a program in the book",FY2026 Governor's budget books
+2024,E20B01.02,State Treasurer's Office,Major Information Technology Development Projects,0.0,2164856.0,2164856.0,"In the open data, not printed as a program in the book",FY2026 Governor's budget books
+2025,C00A00.13,Judiciary,ARP: Pre-Trial Home Detention,0.0,3424213.0,3424213.0,"In the open data, not printed as a program in the book",FY2027 Governor's budget books
+2025,C96J00.01,Uninsured Employers' Fund,General Administration,4650796.0,4650795.0,-1.0,Rounding (under $100),FY2027 Governor's budget books
+2025,D23A01.04,Maryland Cannabis Administration,Capital Appropriation,0.0,2000000.0,2000000.0,"In the open data, not printed as a program in the book",FY2027 Governor's budget books
+2025,M00L01.02,Maryland Department of Health,Community Services,492001382.0,492001379.0,-3.0,Rounding (under $100),FY2027 Governor's budget books
+2025,M00L01.03,Maryland Department of Health,Community Services for Medicaid State Fund Recipients,76411921.0,76411923.0,2.0,Rounding (under $100),FY2027 Governor's budget books

@@ -11,9 +11,9 @@ identifiers:
     value: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3
 repository-code: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3
 url: https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/
-license: MIT
-version: 2.0.0
-date-released: 2026-11-10
+license-url: "https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/blob/main/LICENSE"
+version: 3.2.0
+date-released: 2026-11-16
 keywords:
   - open data
   - government transparency
@@ -25,9 +25,11 @@ keywords:
   - anomaly detection
 abstract: >-
   An independent savings tracker for Maryland's Government Modernization
-  Initiative (GMI). A free, local pipeline (SODA API -> Parquet -> DuckDB ->
+  Initiative (GMI). A local pipeline (SODA API -> Parquet -> DuckDB ->
   dashboard CSVs) checks reported savings against the state's own payments,
   budgets, staffing and grants data, and quantifies the path to the state's
   $50M annual savings target. Includes LightGBM quantile forecast corridors,
   an isolation-forest anomaly review queue, spending-mix agency clustering,
-  and grant-text program families. Not an official State of Maryland product.
+  and grant-text program families. Every year reconciles with DBM's budget
+  books, the Fiscal Digest and the State's Open Finance sites. Proprietary,
+  all rights reserved. Not an official State of Maryland product.

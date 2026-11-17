@@ -35,6 +35,7 @@ Context source pulled: population,raw,
 Context source pulled: mfr,raw,
 Context source pulled: bls_employment,raw,
 Context source pulled: bea_md_gdp,raw,
+Context source pulled: federal_by_listing,raw,
 FY2026 payment dollars matched to a budget agency,ref,core.fact_payment core.fact_payment_mapped ref.baseline_quality
 FY2027 (partial year) payment dollars matched,ref,core.fact_payment core.fact_payment_mapped
 Payment agency names mapped,ref,ref.map_payment_agency
@@ -69,7 +70,7 @@ Forecast actuals add up to controllable purchases (every actual year),mart,mart.
 Every forecast area has nine actual years and six forecast years,mart,mart.d_forecast_model mart.f_forecast
 Backtest ranges are ordered (p10 <= p50 <= p90),mart,mart.d_forecast_backtest
 Every forecast area is also scored against the State's plan for FY2026 and FY2027,mart,mart.d_forecast_backtest mart.d_forecast_model
-Published forecast ranges cover about their nominal share on the rolling backtest,mart,mart.d_forecast_calibration
+Published forecast ranges cover about their nominal share out of sample (conformal calibration),mart,mart.d_range_coverage mart.f_forecast
 Chosen forecast model is no worse than the naive baseline in the rolling-origin backtest,mart,mart.d_forecast_backtest mart.d_forecast_model
 Challenger forecast bands are ordered (p10 <= p50 <= p90) and non-negative,mart,mart.f_challenger
 Challenger adopted only where it beat the naive baseline in rolling validation,mart,mart.f_challenger
@@ -131,3 +132,13 @@ Grant groups: sensitivity reported at every threshold (leads are not savings),ma
 Payment screen vs source issues: no record is both a lead and a source issue; leads + source issues = every flagged record,mart,mart.d_payment_screen mart.d_source_issues mart.v_payment_screen_rows
 Source issues: verified issues still in the data with the dollars verified at the source on 2026-11-10,mart,mart.d_source_issues
 "Payment leads: confidence, review status and note set; measured rate NULL (lever 0) unless the review confirms a lead",mart,mart.d_payment_screen mart.d_payment_screen_summary
+Fund hierarchy: every year ties to the funding-sources data; four fund groups; each program's funds add up,mart,core.fact_fund mart.d_fund_hierarchy mart.d_fund_shift
+"Federal cross-check: every row is an Assistance Listing; State and federal years side by side, never summed",mart,mart.d_federal_crosswalk
+Payee aliases: no government payee in the evidence; review queue is two kinds of lead only,mart,mart.d_vendor_alias mart.d_vendor_alias_review
+"Audit register: every row has a public https source, an as-of date and a confirmation level; recouped <= identified; a waiver names who decided",mart,mart.d_audit_findings
+Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema,mart,core.fact_payment_txn mart.d_field_availability
+Model registry: every model listed with its baseline; no model adopted that does not beat it,mart,mart.d_model_registry
+Drift: PSI between every pair of consecutive fiscal years; major shifts reported,mart,mart.d_drift
+"Every actual year and the enacted FY2027 budget reconcile with DBM's budget books and Fiscal Digest (within 0.01%, 99%+ programs exact)",mart,mart.d_book_reconciliation
+Book bridges reported: FY2026 working budget (budget amendments) and the FY2027 walk from the allowance (legislative action),mart,mart.d_book_reconciliation
+Every yearly budget and payments total matches the State's Open Finance sites (within $10),mart,mart.d_site_reconciliation

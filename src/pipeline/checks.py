@@ -129,6 +129,9 @@ def run(con, run_id, manifest):
     phase5_deflator(con, check, one)
     phase5_payment_screen(con, check, one)
     phase5_source_issues(con, check, one)
+    phase5_audit_depth(con, check, one)
+    phase5_registry(con, check, one)
+    phase5_books(con, check, one)
     con = real
     df = pd.DataFrame(out)
     while hasattr(con, "_con"):  # the DuckDB connection itself (build.py may pass a recording wrapper): replacement scans look in this frame
@@ -281,12 +284,19 @@ def phase5(con, check, one):
     unplanned = one("""SELECT count(*) FROM (SELECT area FROM mart.d_forecast_backtest WHERE target = 'plan' GROUP BY area
         HAVING count(DISTINCT forecast_fy) < 2)""") + one("SELECT count(*) FROM mart.d_forecast_model WHERE area NOT IN (SELECT area FROM mart.d_forecast_backtest WHERE target = 'plan')")
     check("mart", "Every forecast area is also scored against the State's plan for FY2026 and FY2027", unplanned == 0, f"{unplanned} areas without both plan years")
-    cov = con.execute("SELECT covered_share, scored, nominal, widen_by FROM mart.d_forecast_calibration WHERE area = 'All areas'").fetchone()
-    if cov:
-        share, scored, nominal, widen = cov
-        check("mart", "Published forecast ranges cover about their nominal share on the rolling backtest", abs(share - nominal) <= 0.10,
-              f"{share:.1%} of {scored} forecasts of actual spending fell inside the p10-p90 range (nominal {nominal:.0%}); "
-              f"about {widen:.2f}x wider ranges would have been needed (in-sample, a handful of points)", "warn")
+    has = one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_range_coverage'")
+    cov = con.execute("""SELECT calibrated, n, hits, coverage, cov_lo, cov_hi, factor FROM mart.d_range_coverage
+                         WHERE source = 'bootstrap' AND area = 'All areas' AND horizon = 0 AND scope = 'out_of_sample' ORDER BY calibrated""").fetchall() if has else []
+    if len(cov) == 2:
+        nominal = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["calibration"]["nominal"]
+        raw, cal = cov
+        bad = one("""SELECT count(*) FROM mart.f_forecast WHERE kind = 'Forecast' AND (range_source = 'bootstrap'
+                     AND NOT (p10_cal <= p10 AND p10 <= p50 AND p50 <= p90 AND p90 <= p90_cal) OR NOT (p10_cal <= p50 AND p50 <= p90_cal))""")
+        check("mart", "Published forecast ranges cover about their nominal share out of sample (conformal calibration)",
+              abs(cal[3] - nominal) <= 0.10 and bad == 0,
+              f"calibrated ranges held {int(cal[2])} of {int(cal[1])} past outcomes ({cal[3]:.1%}, 95% Wilson {cal[4]:.0%}-{cal[5]:.0%}) "
+              f"with each outcome year held out, against the nominal {nominal:.0%}; the raw bootstrap ranges held {int(raw[2])} of {int(raw[1])} ({raw[3]:.1%}); "
+              f"mean widening {cal[6]:.2f}x; {bad} published rows out of order (a bootstrap range narrower than the raw one, or a median outside its range)", "warn")
     worse = con.execute("""SELECT m.area, avg(b.mase) FILTER (WHERE b.method = m.method) AS chosen, avg(b.mase) FILTER (WHERE b.method = 'Naive (last actual)') AS naive
         FROM mart.d_forecast_model m JOIN mart.d_forecast_backtest b USING (area) WHERE b.target = 'actual' GROUP BY m.area, m.method
         HAVING avg(b.mase) FILTER (WHERE b.method = m.method) > avg(b.mase) FILTER (WHERE b.method = 'Naive (last actual)') + 1e-9""").fetchall()
@@ -401,7 +411,7 @@ def phase5_challenger(con, check, one):
           tot is not None and 0 < tot[0] <= tot[1] <= tot[2] and tot[3] == one("SELECT count(*) FROM mart.f_challenger")
           and tot[4] == adopted and 0.5 <= tot[1] / one("SELECT sum(controllable) FROM mart.agency_year WHERE fiscal_year = (SELECT max(fiscal_year) FROM ref.dim_stage WHERE stage = 'Actual')") <= 2,
           f"FY{one('SELECT fiscal_year FROM mart.d_challenger_total')} corridor {tot[0]/1e9:.1f}B\u2013{tot[2]/1e9:.1f}B around {tot[1]/1e9:.1f}B, "
-          f"{tot[3]:,} series ({tot[4]:,} adopted), simulated path by path" if tot else "no statewide corridor row")
+          f"{tot[3]:,} series ({tot[4]:,} adopted); band from the statewide miss in the backtest" if tot else "no statewide corridor row")
 
 
 def phase5_revenue(con, check, one):
@@ -720,6 +730,91 @@ def phase5_source_issues(con, check, one):
 # earlier extract run, so an identical rerun reports the same names as its first passing build did, and none extra.
 PAYEE_HISTORY = "payee_name_seen.csv"
 PAYEE_COLUMNS = ["payee_name", "first_seen_run_id", "first_seen_date", "last_seen_run_id", "last_seen_date"]
+
+
+def phase5_audit_depth(con, check, one):
+    """v3.1 audit depth (sql/mart/52-58, docs/strategy-v3.1.md): fund mix ties to the funding data; the federal cross-check keeps
+    the two fiscal years apart; the alias evidence ties to payments; every audit-register row is sourced and dated."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_fund_hierarchy'"):
+        return  # a build whose marts stop earlier (the no-network fixture) has none of these tables
+    gap = one("""SELECT coalesce(max(abs(h - f)), 0) FROM (SELECT fiscal_year, sum(budget) AS h FROM mart.d_fund_hierarchy GROUP BY 1)
+                 JOIN (SELECT fiscal_year, sum(budget) AS f FROM core.fact_fund GROUP BY 1) USING (fiscal_year)""")
+    groups = one("SELECT count(*) FROM mart.d_fund_hierarchy WHERE fund_group NOT IN ('General', 'Special', 'Federal', 'Federal relief')")
+    share = one("""SELECT count(*) FROM mart.d_fund_shift
+                   WHERE abs(coalesce(general, 0) + coalesce(federal, 0) + coalesce(federal_relief, 0) + coalesce(special, 0) - program_budget) > 1""")
+    negs = one("SELECT count(*) FROM mart.d_fund_shift WHERE least(general, federal, federal_relief, special) < 0")  # reductions: real, reported
+    flags = one("SELECT count(*) FROM mart.d_fund_shift WHERE shift_to_general")
+    check("mart", "Fund hierarchy: every year ties to the funding-sources data; four fund groups; each program's funds add up",
+          gap <= 1.0 and groups == 0 and share == 0,
+          f"largest yearly gap ${gap:,.2f}; {groups} rows outside the four groups; {share} programs whose funds do not add up; {negs} program-years with a negative fund line (a reduction, kept); {flags} shift flags")
+    bad = one("SELECT count(*) FROM mart.d_federal_crosswalk WHERE NOT regexp_matches(listing, '^[0-9]{2}\\.[0-9]{3}[A-Z]?$')")
+    deob = one("SELECT count(*) FROM mart.d_federal_crosswalk WHERE federal_obligated < 0")  # net deobligations: real, labeled on the page
+    rows = one("SELECT count(*) FROM mart.d_federal_crosswalk")
+    check("mart", "Federal cross-check: every row is an Assistance Listing; State and federal years side by side, never summed",
+          rows > 0 and bad == 0, f"{rows:,} listing-years; {bad} not an Assistance Listing; {deob} with net deobligations (labeled)", "warn")
+    alias = one("SELECT coalesce(sum(paid), 0) FROM mart.d_vendor_alias")
+    over = one("SELECT count(*) FROM mart.d_vendor_alias WHERE payee_type = 'Government'")
+    queue = con.execute("SELECT kind, count(*) FROM mart.d_vendor_alias_review GROUP BY 1 ORDER BY 1").fetchall()
+    check("mart", "Payee aliases: no government payee in the evidence; review queue is two kinds of lead only",
+          over == 0 and {k for k, _ in queue} <= {"ZIPs disagree", "Possible missed merge"},
+          f"${alias / 1e9:,.1f}B of non-government payments as evidence; {over} government rows; queue: "
+          + "; ".join(f"{k} {n:,}" for k, n in queue))
+    unsrc = one("""SELECT count(*) FROM mart.d_audit_findings WHERE source_url IS NULL OR NOT starts_with(source_url, 'https://')
+                   OR as_of IS NULL OR confirmation IS NULL""")
+    neg = one("""SELECT count(*) FROM mart.d_audit_findings WHERE amount_identified < 0 OR amount_recouped < 0
+                 OR amount_recouped > amount_identified""")
+    waiv = one("SELECT count(*) FROM mart.d_audit_findings WHERE waiver = 'Yes' AND waiver_decided_by IS NULL")
+    n = one("SELECT count(*) FROM mart.d_audit_findings")
+    check("mart", "Audit register: every row has a public https source, an as-of date and a confirmation level; recouped <= identified; a waiver names who decided",
+          unsrc == 0 and neg == 0 and waiv == 0, f"{n} rows; {unsrc} unsourced or undated; {neg} impossible amounts; {waiv} waivers without a decider")
+    fa = one("SELECT count(*) FROM mart.d_field_availability")
+    txn = one("SELECT count(*) FROM core.fact_payment_txn")
+    check("mart", "Field availability and payment-level records: the table is complete; transaction rows load into the fixed schema",
+          fa > 0, f"{fa} fields listed; {txn:,} payment-level rows loaded (0 until a records request is answered)")
+
+
+def phase5_registry(con, check, one):
+    """Model registry and drift (src/models/registry.py): every model listed with its baseline; nothing adopted that loses
+    to its baseline; drift measured for every pair of consecutive years."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_model_registry'"):
+        return
+    n = one("SELECT count(*) FROM mart.d_model_registry")
+    built = one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_forecast_backtest'")
+    lost = con.execute("""SELECT model FROM mart.d_model_registry WHERE starts_with(decision, 'Adopted') AND beats_baseline IS NOT TRUE""").fetchall()
+    check("mart", "Model registry: every model listed with its baseline; no model adopted that does not beat it",
+          (n >= 6 or not built) and not lost, f"{n} models{'' if built else ' (model stages not run in this build)'}; adopted without beating the baseline: {', '.join(r[0] for r in lost) or 'none'}")
+    gaps = one("""SELECT count(*) FROM (SELECT dataset, measure, count(*) AS pairs, max(to_fy) - min(from_fy) AS span FROM mart.d_drift GROUP BY 1, 2)
+                  WHERE pairs <> span""")
+    major = con.execute("""SELECT measure, from_fy, to_fy, psi FROM mart.d_drift WHERE level = 'Major shift' AND NOT partial_year ORDER BY psi DESC""").fetchall()
+    check("mart", "Drift: PSI between every pair of consecutive fiscal years; major shifts reported",
+          gaps == 0, f"{gaps} series with a missing year; major shifts: " + ("; ".join(f"{m} FY{a}-FY{b} PSI {p:.2f}" for m, a, b, p in major) or "none"), "warn")
+
+
+def phase5_books(con, check, one):
+    """v3.2 reconciliation (src/pipeline/books.py, sql/mart/59 and 62): every actual year and the enacted FY2027 budget
+    agree with DBM's own documents, and every yearly total agrees with the State's Open Finance sites."""
+    if not one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_book_reconciliation'"):
+        return
+    cfg = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["books"]
+    rec = con.execute("""SELECT fiscal_year, basis, difference, difference_share, exact_share, status FROM mart.d_book_reconciliation
+                         WHERE kind = 'reconcile' ORDER BY fiscal_year, basis""").fetchall()
+    bad = [r for r in rec if r[5] != "Reconciles"]
+    years = sorted({r[0] for r in rec})
+    worst = max(rec, key=lambda r: abs(r[2] or 0)) if rec else None
+    check("mart", f"Every actual year and the enacted FY2027 budget reconcile with DBM's budget books and Fiscal Digest (within {cfg['tolerance_share']:.2%}, {cfg['min_exact']:.0%}+ programs exact)",
+          bool(rec) and not bad and years[0] <= 2017,
+          f"{len(rec) - len(bad)} of {len(rec)} comparisons reconcile, FY{years[0]}-FY{years[-1]}" + (f"; largest difference FY{worst[0]} {worst[1]} ${worst[2]:,.0f}" if worst else "")
+          + ("; not reconciling: " + "; ".join(f"FY{r[0]} {r[1]} ${r[2]:,.0f}" for r in bad) if bad else ""))
+    rest = con.execute("SELECT fiscal_year, kind, basis, difference FROM mart.d_book_reconciliation WHERE kind <> 'reconcile' ORDER BY fiscal_year, basis").fetchall()
+    check("mart", "Book bridges reported: FY2026 working budget (budget amendments) and the FY2027 walk from the allowance (legislative action)",
+          len(rest) >= 2, "; ".join(f"FY{y} {k} ({b}): remainder ${d / 1e6:,.1f}M" for y, k, b, d in rest), "warn")
+    site = con.execute("SELECT dataset, fiscal_year, difference, partial_year FROM mart.d_site_reconciliation").fetchall()
+    off = [r for r in site if r[2] is None or (abs(r[2]) > cfg["site_tolerance"] and not r[3])]
+    moved = [r for r in site if r[2] is not None and abs(r[2]) > cfg["site_tolerance"] and r[3]]
+    check("mart", f"Every yearly budget and payments total matches the State's Open Finance sites (within ${cfg['site_tolerance']})",
+          bool(site) and not off, f"{len(site) - len(off) - len(moved)} of {len(site)} years match"
+          + ("; partial year moved since the site was read: " + ", ".join(f"{d} FY{y}" for d, y, _, _ in moved) if moved else "")
+          + ("; not matching: " + ", ".join(f"{d} FY{y} ${x:,.0f}" if x is not None else f"{d} FY{y} missing" for d, y, x, _ in off) if off else ""))
 
 
 def _run_date(run_id):
