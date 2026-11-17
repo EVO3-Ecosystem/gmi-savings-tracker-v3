@@ -46,12 +46,30 @@ def client():
     return Socrata(CFG["domain"], os.environ.get("MD_SODA_APP_TOKEN") or None, timeout=300)
 
 
+def token_rejected(e):
+    """True when the portal refused the app token itself (HTTP 401 or 403 naming app_token): retrying cannot fix that."""
+    r = getattr(e, "response", None)
+    return r is not None and r.status_code in (401, 403) and "app_token" in (r.text or "").lower()
+
+
 def call(fn, what, tries=None):
-    """Run one SODA call with exponential backoff (self-healing for dropped connections and throttling)."""
+    """Run one SODA call with exponential backoff (self-healing for dropped connections and throttling).
+    A rejected app token is not retried: it stops at once and says how to fix it."""
     tries = tries or CFG["retries"]
     for i in range(tries):
         try:
             return fn()
+        except requests.exceptions.HTTPError as e:
+            if token_rejected(e):
+                raise RuntimeError(
+                    f"The portal rejected the Socrata app token on {what} (HTTP {e.response.status_code}: {e.response.text.strip()[:120]}). Not retrying. "
+                    "Create an app token (the App Token, not the Secret Token; no spaces or newline) in your Socrata developer settings "
+                    "(https://dev.socrata.com/docs/app-tokens) and update the MD_SODA_APP_TOKEN secret.") from e
+            if i == tries - 1:
+                raise RuntimeError(f"gave up on {what} after {tries} tries: {type(e).__name__}: {e}") from e
+            wait = CFG["backoff_seconds"] * 2 ** i
+            log(f"  retry {i + 1} {what}: {type(e).__name__}; waiting {wait}s")
+            time.sleep(wait)
         except (requests.exceptions.RequestException, ValueError) as e:
             if i == tries - 1:
                 raise RuntimeError(f"gave up on {what} after {tries} tries: {type(e).__name__}: {e}") from e
