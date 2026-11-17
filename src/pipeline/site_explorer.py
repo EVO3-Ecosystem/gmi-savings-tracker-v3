@@ -33,7 +33,8 @@ main.wide{max-width:1180px}
 .tables{list-style:none;margin:0;padding:0;max-height:26rem;overflow:auto;font-size:14px}
 .tables li{display:flex;justify-content:space-between;gap:8px;padding:3px 4px;border-radius:4px;cursor:pointer}
 .tables li:hover,.tables li:focus-visible{background:var(--s-hover);outline:none}
-.tables .n{color:var(--s-muted);font-variant-numeric:tabular-nums}
+.tables .n{color:var(--s-muted);font-variant-numeric:tabular-nums;flex:none}
+.tables li>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 textarea{width:100%;min-height:9rem;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:8px;border:1px solid var(--s-line);border-radius:6px;background:var(--s-bg);color:var(--s-fg);resize:vertical}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
 button,select,input[type=search]{font:inherit;font-size:14px;padding:4px 10px;border:1px solid var(--s-line);border-radius:6px;background:var(--s-panel);color:var(--s-fg);max-width:100%}
@@ -100,7 +101,7 @@ async function copyText(text){ const box = $('exCopyBox'); box.hidden = true; S.
   catch (e) { const t = $('exCopyText'); t.value = text; box.hidden = false; t.focus(); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
     S.copied = ok ? 'execCommand' : 'select'; $('exCopyMsg').textContent = ok ? 'Copied (CSV). The rows are also in the box below.' : 'This page cannot write to the clipboard here: the rows are selected in the box below; press Ctrl+C (or ⌘C) to copy them.'; } }
 function listTables(onPick){ const ul = $('exTables'); ul.textContent = '';
-  __EX.tables.forEach(t => { const li = document.createElement('li'); li.tabIndex = 0; li.dataset.t = t; const a = document.createElement('span'); a.textContent = t; const n = document.createElement('span'); n.className = 'n'; n.textContent = S.counts[t] != null ? Number(S.counts[t]).toLocaleString('en') : '';
+  __EX.tables.forEach(t => { const li = document.createElement('li'); li.tabIndex = 0; li.dataset.t = t; const a = document.createElement('span'); a.textContent = t; a.title = t; const n = document.createElement('span'); n.className = 'n'; n.textContent = S.counts[t] != null ? Number(S.counts[t]).toLocaleString('en') : '';
     li.append(a, n); li.addEventListener('click', () => onPick(t)); li.addEventListener('keydown', e => { if (e.key === 'Enter') onPick(t); }); ul.appendChild(li); });
   $('exTN').textContent = `(${__EX.tables.length})`; }
 // --- CSV fallback (plain JS) -------------------------------------------------------------------------------
