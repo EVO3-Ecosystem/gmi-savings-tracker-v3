@@ -77,7 +77,9 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 
 | Page | What it shows |
 |---|---|
-| Dashboard | <!-- n:tabs_Word -->Ten<!-- /n --> tabs: overview, focus areas, savings tracker, opportunities, calculator, forecasts and results, vendors, agencies, budget, data and pipeline |
+| Dashboard | <!-- n:tabs_Word -->Ten<!-- /n --> tabs: overview, focus areas, savings tracker, opportunities, calculator, forecasts and results, vendors, agencies, budget, data and pipeline; every chart has an Analyst detail panel (what it shows, method, how to read it, caveats, data vintage) |
+| Models & analysis (`models.html`) | Every model card with its live registry score, and the analysis figures |
+| Walkthrough (`walkthrough.html`) | The analysis notebook, rendered |
 | AI layer (`ai.html`) | Payment screen, payee classifier, grant overlap, MCP server and briefs, each with its baseline and limits |
 | Data explorer (`explorer.html`) | SQL in the browser (DuckDB-WASM) over every published table |
 | Database catalog (`catalog.html`) | Every table's layer, rows, columns, checks and lineage |

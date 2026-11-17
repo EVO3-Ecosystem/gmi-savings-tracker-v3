@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Added
 - Reconciliation with the State's own documents for every year (`src/pipeline/books.py`, `mart.d_book_reconciliation`, `d_site_reconciliation`, `d_book_program_differences`, Data & pipeline tab): FY2017-FY2025 program actuals against DBM's Governor's budget books (9 of 9 years reconcile, 99.3-100% of programs equal to the dollar); the enacted FY2027 budget against the Fiscal Digest by fund (to the dollar); yearly totals against the Open Finance sites (31 of 31 to the cent); an FY2026 working-budget bridge and an FY2027 general fund walk with labelled remainders.
 - Stop checks re-test the warehouse against the stored DBM and site figures on every build; thresholds pre-registered in `config/assumptions.yaml` (`books`).
+- Analyst detail on every chart (73 panels): what it shows, method, how to read it, caveats, and data sources with portal vintage; model figures are read live from the build, and model-backed charts link their model card. The Overview checkbox opens them all.
+- Models & analysis page (`models.html`): all 12 model cards, each headed by its registry score, and the analysis figures; linked from the dashboard and every page. The walkthrough now ships in every build.
 
 Changed
 - License: proprietary, all rights reserved (was MIT). Copies obtained under the earlier license keep those terms.
@@ -18,6 +20,7 @@ Changed
 
 Fixed
 - The site copies figure subfolders, so the about page's README figures resolve.
+- Page text now matches the pipeline: forecast models are chosen by rolling-origin MASE (origins FY2021-FY2024), ranges are conformally calibrated, and the FY2026 corridor note describes the statewide-miss band (it had read "0 paths"). Two stale lines in the walkthrough corrected.
 
 ## [3.1.0] - 2026-11-16
 
