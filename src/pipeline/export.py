@@ -36,7 +36,7 @@ PARTIAL = {"totals_by_fy": "drop", "f_vendor": "drop", "f_payee_type": "drop", "
 # mart exists, flagged in the manifest.
 EXTRA = ("ola_findings", "d_state_plan", "d_econ",
          # November 2026 review: how the ranges and the detectors performed on past years
-         "d_range_coverage", "d_detector_backtest", "d_detector_outcomes", "d_detector_lift")
+         "d_range_coverage", "d_detector_backtest", "d_detector_outcomes", "d_detector_lift", "d_program_screen")
 
 
 def _round(df):

@@ -154,7 +154,7 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
 | Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
 | Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
-| Rules | `reference/` (<!-- n:reference_files -->27<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Rules | `reference/` (<!-- n:reference_files -->28<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
 | Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (14 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |

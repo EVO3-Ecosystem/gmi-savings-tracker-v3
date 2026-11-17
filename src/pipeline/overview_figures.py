@@ -11,12 +11,14 @@ contrast or more against the background (WCAG 1.4.11), no pie charts, no mathtex
 from pathlib import Path
 
 import matplotlib
+import matplotlib.patches
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .. import published as P
 from ..models import calibration as C
 from ..models import forecast_published as FP
+from ..models import program_screen as PS
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "docs" / "figures" / "overview"
@@ -308,8 +310,67 @@ def show(name, caption=""):
     display({"text/html": body, "image/png": b64, "text/plain": f"<figure: {title}>"}, raw=True, metadata={"image/png": {"alt": alt}})
 
 
+def childcare_program():
+    """Child care program spending at the State Department of Education, by fiscal year (a reported finding the tracker did not find)."""
+    p = P.load("f_program")
+    p = p[(p.agency_code == "R00") & p.program_name.str.contains("Child Care", case=False)].groupby(["fiscal_year", "stage"], as_index=False).budget.sum()
+    with plt.rc_context(STYLE):
+        fig, ax = plt.subplots(figsize=(10, 4.6))
+        act = p.stage == "Actual"
+        ax.axvspan(2022.5, 2025.5, color=ORANGE, alpha=.10, lw=0)
+        ax.text(2024, p.budget.max() * 1.13, "period of the reported internal audits", ha="center", fontsize=8.5, color=ORANGE)
+        ax.bar(p[act].fiscal_year, p[act].budget, color=BLUE, width=.7, label="Actual")
+        ax.bar(p[~act].fiscal_year, p[~act].budget, color=SURF, edgecolor=BLUE, hatch="///", width=.7, label="Budget (plan, not an outcome)")
+        for _, r in p.iterrows():
+            ax.text(r.fiscal_year, r.budget, money(r.budget), ha="center", va="bottom", fontsize=8.5, color=MUTED)
+        ax.set_ylim(0, p.budget.max() * 1.22)
+        ax.yaxis.set_major_formatter(money)
+        ax.set_ylabel("Program spending, nominal dollars")
+        ax.set_xlabel("Fiscal year (ends June 30)")
+        ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
+        ax.legend(frameon=False, loc="upper left")
+        a = p[act].set_index("fiscal_year").budget
+        return _finish(fig, f"Child care program spending rose from {money(a.iloc[0])} in FY{int(a.index[0])} to {money(a.iloc[-1])} in FY{int(a.index[-1])}",
+                       "State Department of Education, Aid To Education, program 59 (named Child Care Subsidy, Scholarship, then Assistance Grants). "
+                       "The tracker confirms the program's size; it cannot see provider-level overpayments.")
+
+
+def program_screen_table():
+    """The statewide program screen computed from the published program table and the reference files."""
+    names = P.load("d_agency").set_index("agency_code").agency.to_dict()
+    return PS.screen(P.load("f_program"), *PS.reference(), agencies=names)
+
+
+def program_screen():
+    """The largest programs that both grew fast and swung sharply, every agency screened the same way."""
+    cfg = PS.assumptions()
+    d = program_screen_table()
+    top = d[d.signals == 2].head(cfg["top_n"]).iloc[::-1]
+    with plt.rc_context(STYLE):
+        fig, ax = plt.subplots(figsize=(11, 3 + .36 * len(top)))
+        y = np.arange(len(top))
+        audited = top.ola_findings.notna()
+        ax.barh(y, top.spend_last, color=[BLUE if a else MUTED for a in audited], height=.62)
+        for i, r in enumerate(top.itertuples()):
+            note = f"  {money(r.spend_last)}, {r.growth_multiple:.1f}x since FY{r.first_fy}, largest swing {r.largest_swing:+.0%} (FY{r.swing_fy})"
+            if r.reported_findings:
+                note += f"; reported finding {money(r.reported_amount)}"
+            ax.text(r.spend_last, i, note, va="center", fontsize=8.5, color=ORANGE if r.reported_findings else MUTED)
+        ax.set_yticks(y, [f"{r.agency_code}  {str(r.program_name)[:46]}" for r in top.itertuples()], fontsize=8.5)
+        ax.set_xlim(0, top.spend_last.max() * 1.9)
+        ax.xaxis.set_major_formatter(money)
+        ax.set_xlabel(f"Actual spending in FY{cfg['last_actual_fy']}, nominal dollars")
+        handles = [matplotlib.patches.Patch(color=BLUE, label="Agency has an audit report on file"),
+                   matplotlib.patches.Patch(color=MUTED, label="No audit report on file")]
+        ax.legend(handles=handles, frameon=False, loc="lower right", fontsize=8.5)
+        return _finish(fig, f"{int((d.signals == 2).sum())} of {len(d)} programs both grew {cfg['fast_growth_multiple']:.0f}x or more and swung "
+                            f"{cfg['large_swing']:.0%} or more in a year: the {len(top)} largest",
+                       f"Every program of every agency with {cfg['min_years']}+ actual years and {money(cfg['min_spend'])}+ in FY{cfg['last_actual_fy']}. "
+                       "An order in which to ask questions, not a finding: programs grow and swing for ordinary reasons.")
+
+
 FIGURES = {"forecast_fan": forecast_fan, "range_coverage": range_coverage, "spending_base": spending_base, "savings_status": savings_status,
-           "opportunities": opportunities, "checks": checks}
+           "opportunities": opportunities, "checks": checks, "childcare_program": childcare_program, "program_screen": program_screen}
 
 
 def main():

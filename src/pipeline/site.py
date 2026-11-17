@@ -142,10 +142,11 @@ def header(src, sha):
             '<span id="site-status"> Loading data…</span></div>')
 
 
-def build_index(src, sha):
+def build_index(src, sha, derived=()):
+    """derived: file stems the site writes itself from reference files (not in the export)."""
     page, datasets, opt = dashboard_html(src)
     # optional datasets the export does not have are left out of the loader, so nothing requests a file that is not there
-    datasets = {k: v for k, v in datasets.items() if k not in opt or (Path(src) / f"{v}.csv").exists()}
+    datasets = {k: v for k, v in datasets.items() if k not in opt or v in derived or (Path(src) / f"{v}.csv").exists()}
     page = BANNER.sub("<body>", page, count=1)
     page = page.replace(STUB_START, LOADER.replace("__FILES__", json.dumps(datasets)).replace("__OPTIONAL__", json.dumps(sorted(opt))), 1)
     page = page.replace("<title>GMI Tracker Preview</title>",
@@ -293,8 +294,12 @@ def build(out=OUT, src=None, artifact=False):
     if out.exists():
         shutil.rmtree(out)
     (out / "data").mkdir(parents=True)
-    index, datasets = build_index(src, sha)
-    missing = sorted({f for f in datasets.values() if not (src / f"{f}.csv").exists()})
+    from ..models import program_screen  # the page's per-program audit findings: the register joined to budget programs
+    derived = {"audit_findings_by_program": program_screen.reported_findings}  # files the site writes from reference files
+    index, datasets = build_index(src, sha, derived)
+    for name, make in derived.items():
+        make().to_csv(out / "data" / f"{name}.csv", index=False)
+    missing = sorted({f for f in datasets.values() if f not in derived and not (src / f"{f}.csv").exists()})
     if missing:
         raise SystemExit(f"export is missing dashboard files: {', '.join(missing)}")
     for f in published_files(datasets):

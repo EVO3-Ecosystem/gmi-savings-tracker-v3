@@ -13,7 +13,7 @@ import duckdb
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
 TABLES = ("d_range_coverage", "f_forecast", "d_forecast_calibration", "d_challenger_backtest", "d_challenger_total", "d_revenue_model",
-          "d_detector_backtest", "d_detector_outcomes", "d_detector_lift")
+          "d_detector_backtest", "d_detector_outcomes", "d_detector_lift", "d_program_screen")
 
 
 def main(out=None):

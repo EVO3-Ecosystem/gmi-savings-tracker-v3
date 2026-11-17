@@ -13,7 +13,7 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
-from ..models import anomaly, backtest, registry, challenger, clustering, forecast, grant_groups, opportunities, payee_classifier, recommendations, revenue, savings
+from ..models import anomaly, backtest, registry, challenger, clustering, forecast, grant_groups, opportunities, payee_classifier, program_screen, recommendations, revenue, savings
 from . import checks, facts, marts, reference, txn
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -162,6 +162,7 @@ def build(run_id):
     payee_classifier.write(con)  # ML layer: payee type labels vs the name rules (docs/models/payee_classifier.md)
     grant_groups.write(con)  # ML layer: grant descriptions grouped across grantor agencies, overlap leads (docs/models/grant_groups.md)
     anomaly.write(con)  # Phase 5 (from v2): isolation-forest flags and the review queue (needs d_opps and d_bid_list)
+    program_screen.write(con)  # statewide program screen: growth and swings of every program, audit findings beside it
     registry.write(con)  # Phase 5 closure: model registry (every model vs its baseline) and PSI/KS drift by fiscal year
     res = checks.run(con._con, run_id, man)  # the checks record their own reads (ops.check_coverage), outside the lineage
     facts.build(con, run_id, man, DATA, checks.HIST)  # Data & pipeline tab: sources, runs, checks, master-list quality

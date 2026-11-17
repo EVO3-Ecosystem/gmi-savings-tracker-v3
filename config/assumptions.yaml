@@ -286,3 +286,14 @@ books:
   tolerance_share: 0.0001      # a statewide total reconciles within 0.01% of DBM's figure ...
   min_exact: 0.99              # ... with at least 99% of programs in both equal to the dollar
   site_tolerance: 10           # dollars: a yearly total against operatingbudget / vendorpayments.maryland.gov
+
+# Statewide program screen (src/models/program_screen.py): every budget program of every agency, screened the same
+# way, with audit findings beside it. Set on 2026-11-16 before the screen was run on the published data.
+program_screen:
+  first_fy: 2017
+  last_actual_fy: 2025
+  min_years: 5                 # a program needs this many actual years to be screened
+  min_spend: 10000000          # and at least this much in its last actual year
+  fast_growth_multiple: 2.0    # signal: last actual year at least this many times the first
+  large_swing: 0.30            # signal: any year-to-year change of at least this share, up or down
+  top_n: 20                    # rows drawn in the figure

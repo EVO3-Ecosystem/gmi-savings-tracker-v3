@@ -44,6 +44,8 @@ Added
 - `notebooks/walkthrough.ipynb` (reads only the published tables, committed executed), `docs/executive-overview.md`, and six figures in `docs/figures/overview/`.
 - `uv.lock`, `requirements.lock.txt`, `.python-version`, `Dockerfile`, `compose.yaml`; CI installs from the lockfile and also runs the tests inside the image.
 - `src/pipeline/doc_counts.py`: counts typed in the docs are generated from the files they describe.
+- Statewide program screen (`src/models/program_screen.py`, `mart.d_program_screen`): every program of every agency screened for fast growth and large yearly swings, with audit findings beside it. `reference/audit_finding_programs.csv` ties findings in the audit register (`reference/audit_findings.csv`) to budget programs, so the register stays the one source for a finding's amount and recoupment status; `docs/research/childcare-overpayments.md` is the first case.
+- Dashboard, Budget tab: "Programs that grew fast and swung sharply", computed in the page from the program table with the same rule and settings as the Python module (a test holds the two equal), plus a table of every screened program. Agency pages list reported findings with their recoupment status.
 
 Changed
 - Walkthrough notebook: its cells are written by `scripts/build_walkthrough.py` (edit there, not in the .ipynb); `make notebook` writes, executes and renders it.

@@ -67,7 +67,7 @@ display(Markdown(f\"\"\"
 2. **Reported savings.** {len(st)} reported savings items can be paired with payments. Of the {len(withfig)} with a dollar figure, **{len(seen)} show up in the State's payments** ({money(seen.reported.sum())} reported) and **{len(notseen)} do not yet** ({money(notseen.reported.sum())} reported). For the {len(nofig)} without a figure, the data can only say whether payments fell. Payments falling is evidence, not proof. [Section 4](#4.-Reported-savings-against-the-State's-own-payments)
 3. **Forecast ranges.** The published range was meant to hold 80% of outcomes but held only **{int(raw.hits)} of {int(raw.n)} past outcomes ({raw.coverage:.0%})**. A calibrated range published beside it held **{int(cal.hits)} of {int(cal.n)} ({cal.coverage:.0%})** when tested on years it had not seen (95% interval {cal.cov_lo:.0%} to {cal.cov_hi:.0%}). [Section 5](#5.-Forecasts,-and-how-far-to-trust-their-ranges)
 4. **Leads.** Four detectors flag **{len(opps)} leads**. Applying assumed screening rates to the flagged spending gives {money(opps.low.sum())} to {money(opps.high.sum())}; these are places to look, not savings, and the ranges must not be added. [Section 6](#6.-Opportunities:-leads,-not-savings)
-5. **The {money(target)} target.** A {len(pl)}-step path reaches **{money(pl.cumulative.iloc[-1])}** (range {money(pl.low.sum())} to {money(pl.high.sum())}); {money(pl.saving.iloc[0])} of it is GMI's own reported rates and the rest rests on assumed rates. [Section 7](#7.-The-path-to-the-target)
+5. **The {money(target)} target.** A {len(pl)}-step path reaches **{money(pl.cumulative.iloc[-1])}** (range {money(pl.low.sum())} to {money(pl.high.sum())}); {money(pl.saving.iloc[0])} of it is GMI's own reported rates and the rest rests on assumed rates. [Section 7](#8.-The-path-to-the-target)
 6. **Data quality.** {info['checks']} automated checks ran on this data: {info['passed']} passed, {info['warnings']} warned (the forecast range, finding 3) and {info['failed']} failed. [Sections 1 and 2](#1.-Where-the-data-came-from)
 \"\"\"))
 """)
@@ -195,7 +195,35 @@ display(HTML("<details><summary>The ten leads with the largest screening ranges<
              + V.table(top, "The ten leads with the largest screening ranges", money=["Screening low", "Screening high"], na="").to_html() + "</details>"))
 """)
 
-md("## 7. The path to the target")
+md("""
+## 7. Every program, screened the same way
+In November 2026 the press reported child care overpayments at the State Department of Education that the tracker had not found, and could not have: they are provider-level findings from internal audits, and the open data has one total per payee and year. But the program stood out in the budget data. This section applies that reading to every program of every agency: how many times it grew, its largest swing from one year to the next, and the audit findings on file beside it. It is an order in which to ask questions, not a finding.
+""")
+code("""
+ps = V.program_screen_table()
+both = ps[ps.signals == 2]
+print(f"{len(ps)} programs screened across {ps.agency_code.nunique()} agencies; {len(both)} crossed both thresholds, {int((ps.signals == 1).sum())} crossed one.")
+cc = ps[ps.program_name.str.contains("Child Care Assistance")].iloc[0]
+print(f"Child care grants: {V.money(cc.spend_first)} in FY{cc.first_fy} to {V.money(cc.spend_last)} in FY{cc.last_fy} ({cc.growth_multiple:.1f}x), "
+      f"largest swing {cc.largest_swing:+.0%} in FY{cc.swing_fy}; rank {list(both.index).index(cc.name) + 1} of {len(both)} by size among programs with both signals.")
+top = both.head(12)[["agency_code", "program_name", "spend_last", "growth_multiple", "largest_swing", "ola_findings", "ola_repeat_findings", "reported_amount", "recoupment_status"]]
+top.columns = ["Agency", "Program", "Spending, last year", "Growth multiple", "Largest swing", "OLA findings", "OLA repeat findings", "Reported amount", "Recoupment status"]
+display(V.table(top, "The twelve largest programs that crossed both thresholds", money=["Spending, last year", "Reported amount"], dec=["Growth multiple"], pct=["Largest swing"], ints=["OLA findings", "OLA repeat findings"]))
+V.program_screen();
+""")
+code("""
+rep = V.PS.reported_findings()
+shown = rep[["finding_id", "agency_code", "program_name", "finding", "amount", "period", "recoupment_status", "confirmation"]].copy()
+shown["amount"] = pd.to_numeric(shown.amount, errors="coerce")
+shown.columns = ["Finding", "Agency", "Program", "What was reported", "Amount", "Period", "Recoupment status", "Confirmation"]
+display(V.table(shown, "Reported findings tied to a budget program (from the audit register)", money=["Amount"]))
+V.childcare_program();
+""")
+md("""
+**Reading it.** Many of the flagged programs have ordinary explanations: federal relief money in FY2021 and FY2022, reserve accounts that are filled and emptied by design, a new law phasing in. The screen does not know which. Reported findings come from the audit register (`reference/audit_findings.csv`) and are tied to a budget program only where the source names one; two are, both for the child care program, taken from press reports because the audit documents are not public.
+""")
+
+md("## 8. The path to the target")
 code("""
 pl2 = pl.assign(kind=pl.step.map(lambda s: "1. GMI's reported rates on forecast spending" if s == 1 else None))
 pl2.loc[pl.basis.str.contains("paid by"), "kind"] = "2. Statewide contracts with vendors many agencies use (assumed 2-5%)"
@@ -213,7 +241,7 @@ display(Markdown(f"After {len(pl)} steps the central estimate is {money(pl.cumul
                  f"that no recorded outcome has yet tested."))
 """)
 
-md("## 8. Limits")
+md("## 9. Limits")
 code("""
 yrs = act.fiscal_year.nunique()
 mase = P.load("d_challenger_backtest")
@@ -227,7 +255,7 @@ display(Markdown(f\"\"\"
 """)
 
 md("""
-## 9. Reproduce and provenance
+## 10. Reproduce and provenance
 Everything above can be rerun from the repository with the locked environment:
 
 ```bash
