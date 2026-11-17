@@ -14,6 +14,7 @@ Added
 - Accessible walkthrough report: findings first, captioned tables, alt text on every chart, a skip link and table of contents; the render fails on missing alt text, captions or header scopes.
 
 Changed
+- The Socrata app token is optional. A missing token runs at the public limits; a rejected token is dropped with a warning and the run continues. The scheduled extract no longer requires it, and the raw data is cached in CI keyed on the portal's own update dates. The weekly freshness check falls back the same way. Fails fast, with a clear message, if the portal rejects a token mid-run.
 - Statewide program screen reads findings from the audit register (`reference/audit_findings.csv`), tied to budget programs by `reference/audit_finding_programs.csv`; the separate override file is removed.
 
 ## [3.2.0] - 2026-11-16

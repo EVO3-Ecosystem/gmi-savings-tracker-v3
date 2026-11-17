@@ -42,8 +42,12 @@ def log(msg):
     print(f"{dt.datetime.now(dt.timezone.utc):%H:%M:%S} {msg}", flush=True)
 
 
-def client():
-    return Socrata(CFG["domain"], os.environ.get("MD_SODA_APP_TOKEN") or None, timeout=300)
+TOKEN_USED = bool(os.environ.get("MD_SODA_APP_TOKEN"))  # whether this run sends a token; checked_client() sets it for the run
+
+
+def client(use_token=True):
+    token = os.environ.get("MD_SODA_APP_TOKEN") if use_token else None
+    return Socrata(CFG["domain"], token or None, timeout=300)
 
 
 def token_rejected(e):
@@ -76,6 +80,30 @@ def call(fn, what, tries=None):
             wait = CFG["backoff_seconds"] * 2 ** i
             log(f"  retry {i + 1} {what}: {type(e).__name__}; waiting {wait}s")
             time.sleep(wait)
+
+
+def checked_client():
+    """The portal client for a run. The token is optional: the datasets are public and SODA 2.1 serves them without one.
+    If a token is set, test it once on a cheap metadata call. A portal that rejects it also refuses the requests it
+    would have served tokenless, so the run drops the token and continues with the public limits, with a loud warning."""
+    global TOKEN_USED
+    c = client()
+    TOKEN_USED = bool(os.environ.get("MD_SODA_APP_TOKEN"))
+    if not TOKEN_USED:
+        return c
+    try:
+        c.get_metadata(next(iter(CFG["datasets"].values()))["id"])  # not via call(): a rejection must not be retried
+    except requests.exceptions.RequestException as e:
+        if not token_rejected(e):
+            return c  # some other trouble: the retrying calls that follow deal with it
+        msg = ("The portal rejected MD_SODA_APP_TOKEN, so this run continues without it at the public (throttled) limits. "
+               "Replace the secret to restore the higher limits; nothing else is needed.")
+        log("WARNING: " + msg)
+        if os.environ.get("GITHUB_ACTIONS"):
+            print(f"::warning title=Socrata app token rejected::{msg}", flush=True)
+        TOKEN_USED = False
+        return client(use_token=False)
+    return c
 
 
 def portal_facts(c, fid, spec):
@@ -124,7 +152,7 @@ def run(force=False):
     run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = RAW / run_id
     out.mkdir(parents=True)
-    c = client()
+    c = checked_client()
     prev_id = last_good_run()
     prev = json.loads((RAW / prev_id / "manifest.json").read_text()) if prev_id else {"datasets": []}
     prev_by = {d["dataset"]: d for d in prev["datasets"]}
@@ -164,7 +192,7 @@ def run(force=False):
     extra = enrich.run_all(out, (RAW / prev_id) if prev_id else None, log)
     ok = all(e["match"] for e in entries)
     manifest = {"run": run_id, "status": "passed" if ok else "failed", "forced": force, "seconds": round(time.time() - t_run, 1),
-                "domain": CFG["domain"], "page_size": CFG["page_size"], "app_token": bool(os.environ.get("MD_SODA_APP_TOKEN")), "datasets": entries, "enrichment": extra}
+                "domain": CFG["domain"], "page_size": CFG["page_size"], "app_token": TOKEN_USED, "datasets": entries, "enrichment": extra}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
     row = {"run_id": run_id, "status": manifest["status"], "forced": force, "seconds": manifest["seconds"],
            "rows": sum(e["rows"] for e in entries), "downloaded": sum(not e["source"].startswith("reused") for e in entries),
@@ -193,8 +221,11 @@ if __name__ == "__main__":
     a.add_argument("--force", action="store_true", help="download every dataset even if the portal has not changed")
     a.add_argument("--gate", action="store_true", help="check the Phase 1 gate")
     a.add_argument("--require-token", action="store_true",
-                   help="stop unless MD_SODA_APP_TOKEN is set (scheduled runs; decision D5: tokenless requests share a throttled IP pool)")
+                   help="stop unless MD_SODA_APP_TOKEN is set (opt-in; decision D5 was revised: tokenless runs are allowed, with backoff, "
+                        "because the datasets are public and a missing or rejected token only lowers the request limits)")
     args = a.parse_args()
-    if (args.require_token or os.environ.get("GMI_SCHEDULED")) and not os.environ.get("MD_SODA_APP_TOKEN"):
-        sys.exit("MD_SODA_APP_TOKEN is not set: scheduled extracts need a Socrata app token (https://dev.socrata.com/docs/app-tokens)")
+    if args.require_token and not os.environ.get("MD_SODA_APP_TOKEN"):
+        sys.exit("MD_SODA_APP_TOKEN is not set: --require-token needs a Socrata app token (https://dev.socrata.com/docs/app-tokens)")
+    if os.environ.get("GMI_SCHEDULED") and not os.environ.get("MD_SODA_APP_TOKEN"):
+        log("scheduled run without a Socrata app token: using the public limits (slower if the portal throttles; retries absorb it)")
     sys.exit(gate() if args.gate else run(args.force))

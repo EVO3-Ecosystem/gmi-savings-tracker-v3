@@ -1,7 +1,7 @@
 PY ?= python3
 extract:  ; $(PY) -m src.pipeline.extract
 extract-full: ; $(PY) -m src.pipeline.extract --force
-extract-scheduled: ; $(PY) -m src.pipeline.extract --require-token   # scheduled runs: stop without a Socrata app token (decision D5)
+extract-scheduled: ; $(PY) -m src.pipeline.extract --require-token   # opt-in: stop without a Socrata app token (decision D5 was revised: a token is optional)
 gate1:    ; $(PY) -m src.pipeline.extract --gate
 build:    ; $(PY) -m src.pipeline.build
 gate3:    ; $(PY) -m pytest -q tests/test_reference.py

@@ -90,6 +90,64 @@ def test_a_403_that_is_not_about_the_token_is_not_called_a_token_problem():
     assert extract.token_rejected(_http_error(401, "Invalid app_token specified"))
 
 
+class _FakeSocrata:
+    """Stands in for sodapy.Socrata: a token spelled 'bad' is refused with 403 invalid app_token, as the portal does."""
+    instances = []
+
+    def __init__(self, domain, token, timeout=None):
+        self.token, self.metadata_calls = token, 0
+        _FakeSocrata.instances.append(self)
+
+    def get_metadata(self, fid):
+        self.metadata_calls += 1
+        if self.token == "bad":
+            raise _http_error(403, "Invalid app_token specified")
+        if self.token == "flaky":
+            raise _http_error(500, "Server Error")
+        return {"rowsUpdatedAt": 1}
+
+
+@pytest.fixture
+def fake_portal(monkeypatch):
+    _FakeSocrata.instances = []
+    monkeypatch.setattr(extract, "Socrata", _FakeSocrata)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    return _FakeSocrata
+
+
+def test_a_rejected_token_is_dropped_and_the_run_continues_without_it(fake_portal, monkeypatch, capsys):
+    monkeypatch.setenv("MD_SODA_APP_TOKEN", "bad")
+    c = extract.checked_client()
+    assert c.token is None and extract.TOKEN_USED is False
+    assert "continues without it" in capsys.readouterr().out
+    assert [i.token for i in fake_portal.instances] == ["bad", None]  # tried once with the token, then a tokenless client
+
+
+def test_a_working_token_is_kept_and_tested_once(fake_portal, monkeypatch):
+    monkeypatch.setenv("MD_SODA_APP_TOKEN", "good")
+    c = extract.checked_client()
+    assert c.token == "good" and extract.TOKEN_USED is True and c.metadata_calls == 1
+
+
+def test_no_token_means_no_preflight_and_a_tokenless_client(fake_portal, monkeypatch):
+    monkeypatch.delenv("MD_SODA_APP_TOKEN", raising=False)
+    c = extract.checked_client()
+    assert c.token is None and extract.TOKEN_USED is False and c.metadata_calls == 0
+
+
+def test_other_preflight_trouble_keeps_the_token_for_the_retrying_calls(fake_portal, monkeypatch):
+    monkeypatch.setenv("MD_SODA_APP_TOKEN", "flaky")
+    c = extract.checked_client()
+    assert c.token == "flaky" and extract.TOKEN_USED is True  # a 500 is not a token problem
+
+
+def test_on_github_the_fallback_raises_a_warning_annotation(fake_portal, monkeypatch, capsys):
+    monkeypatch.setenv("MD_SODA_APP_TOKEN", "bad")
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    extract.checked_client()
+    assert "::warning title=Socrata app token rejected::" in capsys.readouterr().out
+
+
 def test_extract_run_end_to_end_without_network(soda_portal, extract_dirs, monkeypatch):
     def no_network(*a, **k):
         raise AssertionError("extract touched the network outside the recorded portal")
