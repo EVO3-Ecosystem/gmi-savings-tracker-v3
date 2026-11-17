@@ -1,1 +1,11 @@
 blank_issues_enabled: true
+contact_links:
+  - name: Ask a question
+    url: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions/new?category=q-a
+    about: How a number or a method works, or how to run it. Use Discussions; issues are for bugs and data problems.
+  - name: Suggest an idea
+    url: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions/new?category=ideas
+    about: A new check, model or chart you would like to see. A concrete, scoped request can also go in a feature request issue.
+  - name: Report a security problem
+    url: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/blob/main/SECURITY.md
+    about: Do not open a public issue. Follow the steps in SECURITY.md.

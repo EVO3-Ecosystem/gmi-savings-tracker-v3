@@ -5,6 +5,7 @@
 - Hand-kept lists (agency and payment-name maps, vendor map, focus-area codes, budget stages) live as CSVs in `reference/` so every change has an author and a date.
 - A pipeline run that fails any check exports nothing; the last good outputs stay live.
 - Keep `docs/checks.md` in step with the checks the code runs.
+- Questions and ideas go in [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions); bugs and data problems go in issues. See [SUPPORT.md](SUPPORT.md).
 
 ## License of contributions
 
