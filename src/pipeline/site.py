@@ -34,7 +34,7 @@ from contextlib import redirect_stdout
 from datetime import datetime, timezone
 from pathlib import Path
 
-from src.pipeline import preview, site_ai, site_catalog, site_explorer
+from src.pipeline import preview, site_ai, site_catalog, site_explorer, site_models
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPORT = ROOT / "data" / "export" / "latest"
@@ -138,7 +138,7 @@ def header(src, sha):
     return ('<div id="site-head" style="border-bottom:1px solid var(--color-border-line);padding:8px 0;font:13px/1.45 ui-sans-serif,system-ui,sans-serif;color:var(--color-fg-muted)">'
             + (f"<b>{html.escape(BUILD_LABEL)}</b> " if BUILD_LABEL else "")
             + f"<b>{html.escape(DISCLAIMER)}.</b> {when}. {html.escape(FY_NOTE)} Built from {ref} of "
-            f'<a href="{REPO}">EVO3-Ecosystem/gmi-savings-tracker-v3</a> · <a href="about.html">About the pipeline</a> · <a href="explorer.html">Data explorer</a> · <a href="catalog.html">Database catalog</a> · <a href="ai.html">AI layer</a>'
+            f'<a href="{REPO}">EVO3-Ecosystem/gmi-savings-tracker-v3</a> · <a href="models.html">Models &amp; analysis</a> · <a href="walkthrough.html">Walkthrough</a> · <a href="about.html">About the pipeline</a> · <a href="explorer.html">Data explorer</a> · <a href="catalog.html">Database catalog</a> · <a href="ai.html">AI layer</a>'
             '<span id="site-status"> Loading data…</span></div>')
 
 
@@ -161,7 +161,10 @@ def _inline(s):
 
     def link(m):
         text, url = m.group(1), m.group(2)
-        if url.startswith("#"):
+        mc = re.fullmatch(r"(?:docs/models/)?([a-z_]+)\.md(#.*)?", url)
+        if mc and (ROOT / "docs" / "models" / f"{mc.group(1)}.md").is_file():
+            url = f"models.html#{mc.group(1)}"  # another model card: open it on the site's models page
+        elif url.startswith("#"):
             url = f"{REPO}{url}"  # a README section: open it on the repository page
         elif url.startswith("docs/figures/") and url.endswith(".png"):
             url = "figures/" + url[len("docs/figures/"):]  # the site copies only the PNG figures
@@ -199,9 +202,20 @@ def md_to_html(md):
             out.append('<div class="tbl"><table><thead><tr>' + "".join(f"<th>{_inline(c)}</th>" for c in head) + "</tr></thead><tbody>"
                        + "".join("<tr>" + "".join(f"<td>{_inline(c)}</td>" for c in r) + "</tr>" for r in body) + "</tbody></table></div>")
             continue
+        elif re.match(r"(\s*)([-*]|\d+\.) ", ln):
+            tag = "ol" if re.match(r"\s*\d+\. ", ln) else "ul"
+            items = []
+            while i < len(lines) and lines[i].strip():
+                if re.match(r"\s*([-*]|\d+\.) ", lines[i]):
+                    items.append(re.sub(r"^\s*([-*]|\d+\.) ", "", lines[i]))
+                else:
+                    items[-1] += " " + lines[i].strip()  # a wrapped item
+                i += 1
+            out.append(f"<{tag}>" + "".join(f"<li>{_inline(t)}</li>" for t in items) + f"</{tag}>")
+            continue
         elif ln.strip():
             para = [ln]
-            while i + 1 < len(lines) and lines[i + 1].strip() and not re.match(r"[#|!`]", lines[i + 1]):
+            while i + 1 < len(lines) and lines[i + 1].strip() and not re.match(r"[#|!`]|\s*([-*]|\d+\.) ", lines[i + 1]):
                 i += 1
                 para.append(lines[i])
             out.append(f"<p>{_inline(' '.join(para))}</p>")
@@ -244,7 +258,7 @@ def readme_summary(readme):
     return "\n".join(intro).strip(), "\n".join(keep)
 
 
-NAV = ('<a href="./">Dashboard</a> · <a href="walkthrough.html">Walkthrough</a> · <a href="explorer.html">Data explorer</a> · '
+NAV = ('<a href="./">Dashboard</a> · <a href="models.html">Models &amp; analysis</a> · <a href="walkthrough.html">Walkthrough</a> · <a href="explorer.html">Data explorer</a> · '
        '<a href="catalog.html">Database catalog</a> · <a href="ai.html">AI layer</a> · <a href="about.html">About</a>')
 
 
@@ -308,6 +322,11 @@ def build(out=OUT, src=None, artifact=False):
                                                 "Query the GMI Savings Tracker's tables with SQL in the browser (DuckDB-WASM).", site_explorer.TOKENS, wide=True))
     (out / "catalog.html").write_text(page("GMI database catalog", site_catalog.body(src),
                                            "Every table of the GMI Savings Tracker: layer, rows, columns, checks and lineage.", site_catalog.TOKENS, wide=True))
+    (out / "models.html").write_text(page("GMI models and analysis", site_models.body(src, md_to_html),
+                                          "Every model card of the GMI Savings Tracker, with its live held-out score, and the analysis figures.", site_models.TOKENS))
+    walk = ROOT / "notebooks" / "walkthrough.html"  # rendered by scripts/render_notebook.py (make notebook)
+    if walk.is_file():
+        (out / "walkthrough.html").write_text(walk.read_text(encoding="utf-8"), encoding="utf-8")
     _, ai_body = site_ai.write(out, src)
     (out / "ai.html").write_text(page("GMI AI layer", ai_body, "The GMI Savings Tracker's AI and ML layer: payment screen, payee classifier, "
                                       "grant overlap, MCP server and Gemini briefs, with results read from the data.", site_ai.TOKENS))
@@ -318,9 +337,6 @@ def build(out=OUT, src=None, artifact=False):
         if not fixed:
             print("artifact: no U+FFFD characters found")
         return _report(out, src, pq, artifact)
-    walk = ROOT / "notebooks" / "walkthrough.html"  # rendered by scripts/render_notebook.py (make notebook)
-    if walk.is_file():
-        (out / "walkthrough.html").write_text(walk.read_text(encoding="utf-8"), encoding="utf-8")
     (out / "404.html").write_text(page("Page not found", '<h1>Page not found</h1><p>That page is not part of this site. '
                                        'Go to the <a href="/gmi-savings-tracker-v3/">dashboard</a> or the <a href="/gmi-savings-tracker-v3/about.html">pipeline notes</a>.</p>',
                                        "Page not found."))
