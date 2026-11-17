@@ -252,7 +252,10 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 | 5. Analytics and verification | Done, Nov 16, 2026: detector backtest on the page, model registry, drift monitor, conformal ranges, State-site cross-checks, published-file parity |
 | v3.1 Audit depth | Released Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema, model registry, drift monitor |
 | v3.2 Data accuracy | Released Nov 16, 2026: every year reconciled with DBM's budget books, the Fiscal Digest and the State's Open Finance sites |
-| 6. Automate | Workflows in place (weekly freshness run, Pages, ruleset, Dependabot); proven once v3 runs on GitHub |
+| Release 3.2.0 on GitHub | Published Nov 17, 2026: tags `v3.1.0` and `v3.2.0`, GitHub releases, site deployed from `main` |
+| Program screen and walkthrough | Merged Nov 17, 2026: the statewide program screen with audit findings linked through the register, and the accessible walkthrough report |
+| Community | Set up Nov 17, 2026: Discussions (Q&A and Ideas), issue chooser links, support routing, tech stack section |
+| 6. Automate | Workflows in place (weekly freshness run, monthly extract and build, Pages, ruleset, Dependabot). The monthly extract and build run has not completed yet; it needs a working Socrata token |
 | 8. AI apps | AI page, MCP server and guarded briefs built; live generation off by choice |
 
 ## Limitations
@@ -267,7 +270,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
 - Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
 - January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
-- Merge the open pull requests in order: #5 (walkthrough report), then #6 (program screen) after its audit findings are folded into `reference/audit_findings.csv`.
+- Run the Extract and build workflow once the Socrata app token is replaced (the portal rejected `MD_SODA_APP_TOKEN` when the program screen was merged). `mart.d_program_screen` and the program-screen card reach the site only after a pipeline run.
 - Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
 
 Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
