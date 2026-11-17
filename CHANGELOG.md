@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+Added
+- Tech stack and architecture section in the README, verified against the repository (no Tailwind CSS, DVC optional, D3.js inlined, DuckDB-WASM from jsDelivr for the SQL explorer).
+- GitHub Discussions (Q&A and Ideas) with links in the issue chooser; `SUPPORT.md` and `CONTRIBUTING.md` route questions there.
+- Accessible walkthrough report: findings first, captioned tables, alt text on every chart, a skip link and table of contents; the render fails on missing alt text, captions or header scopes.
+
+Changed
+- Statewide program screen reads findings from the audit register (`reference/audit_findings.csv`), tied to budget programs by `reference/audit_finding_programs.csv`; the separate override file is removed.
+
 ## [3.2.0] - 2026-11-16
 
 Added
