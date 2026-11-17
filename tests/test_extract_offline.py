@@ -12,6 +12,7 @@ import time
 import pandas as pd
 import pyarrow.parquet as pq
 import pytest
+import requests
 
 from src.pipeline import extract
 
@@ -52,6 +53,41 @@ def test_call_gives_up_after_the_configured_tries(soda_portal):
     with pytest.raises(RuntimeError, match="gave up on budget metadata after 3 tries"):
         extract.call(lambda: extract.client().get_metadata(IDS["budget"]), "budget metadata", tries=3)
     assert soda_portal.count_calls("/api/views/") == 3
+
+
+def _http_error(status, body):
+    r = requests.Response()
+    r.status_code, r._content = status, body.encode()
+    return requests.exceptions.HTTPError(f"{status} Client Error", response=r)
+
+
+def test_a_rejected_app_token_stops_at_once_and_says_how_to_fix_it(monkeypatch):
+    slept, calls = [], []
+    monkeypatch.setattr(extract.time, "sleep", slept.append)
+
+    def fn():
+        calls.append(1)
+        raise _http_error(403, "Invalid app_token specified")
+    with pytest.raises(RuntimeError, match=r"rejected the Socrata app token on budget metadata.*MD_SODA_APP_TOKEN secret"):
+        extract.call(fn, "budget metadata", tries=6)
+    assert len(calls) == 1 and slept == []  # one attempt, no waiting
+
+
+def test_other_http_errors_are_still_retried(monkeypatch):
+    slept, calls = [], []
+    monkeypatch.setattr(extract.time, "sleep", slept.append)
+
+    def fn():
+        calls.append(1)
+        raise _http_error(429, "Too Many Requests")
+    with pytest.raises(RuntimeError, match="gave up on budget metadata after 3 tries"):
+        extract.call(fn, "budget metadata", tries=3)
+    assert len(calls) == 3 and len(slept) == 2  # throttling is retried with backoff
+
+
+def test_a_403_that_is_not_about_the_token_is_not_called_a_token_problem():
+    assert not extract.token_rejected(_http_error(403, "Forbidden: dataset is private"))
+    assert extract.token_rejected(_http_error(401, "Invalid app_token specified"))
 
 
 def test_extract_run_end_to_end_without_network(soda_portal, extract_dirs, monkeypatch):

@@ -55,6 +55,7 @@ jobs:
             });
             const openTitles = new Set(openIssues.map((i) => i.title));
 
+            let failed = 0;  // portal fetches that returned an error: a bad token must not pass silently
             for (const line of lines.slice(1)) {
               const row = parseRow(line);
               const source = row[col("source")];
@@ -62,7 +63,7 @@ jobs:
               const title = row[col("title")];
               const snapshot = row[col("portal_updated")]; // YYYY-MM-DD
               const res = await fetch(`https://opendata.maryland.gov/api/views/${datasetId}.json`, { headers });
-              if (!res.ok) { core.warning(`${source}: portal metadata fetch failed (${res.status})`); continue; }
+              if (!res.ok) { failed++; core.warning(`${source}: portal metadata fetch failed (${res.status})`); continue; }
               const meta = await res.json();
               const portalDate = new Date(meta.rowsUpdatedAt * 1000).toISOString().slice(0, 10);
               core.info(`${source} (${datasetId}): portal ${portalDate}, snapshot ${snapshot}`);
@@ -85,4 +86,10 @@ jobs:
                 ].join("\n"),
               });
               core.notice(`opened issue: ${issueTitle}`);
+            }
+
+            if (failed === lines.length - 1) {
+              core.setFailed("Every portal metadata fetch failed, so nothing was checked. If the status is 403 with an invalid app_token, replace the MD_SODA_APP_TOKEN secret (https://dev.socrata.com/docs/app-tokens).");
+            } else if (failed) {
+              core.warning(`${failed} of ${lines.length - 1} sources could not be checked`);
             }
