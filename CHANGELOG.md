@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Fixed
+- The monthly Extract and build run failed `pytest` on any day after the README's as-of date, because the README facts were only regenerated after the tests. It now regenerates them from the new run first and keeps the resulting docs patch with the run evidence (found on the first run after the backtest fix: extract, build and 476 tests passed; only the README date check failed).
+
 Added
 - Opt-in `?palette=portfolio` (dark navy, gold and cyan; contrast checked in `tests/test_site_embed.py`) and `?embed=1` (hides the dashboard's own header) for embedding the dashboard in another site; a `#t-<tab>` link now switches tabs without a reload. The default look is unchanged.
 - Tech stack and architecture section in the README, verified against the repository (no Tailwind CSS, DVC optional, D3.js inlined, DuckDB-WASM from jsDelivr for the SQL explorer).
