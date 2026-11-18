@@ -62,6 +62,9 @@ jobs:
       - name: Model evaluation tables (also after a failed build)
         if: always() && steps.build.conclusion != 'skipped'
         run: python -m src.pipeline.review_tables data/review | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Regenerate the README and model-note facts from this run
+        # a new run has a new as-of date and new counts; the README test then checks the generators against this run's data
+        run: python -m src.models.doc_facts
       - run: pytest -q
       - name: Reconcile with the Transparency Portal downloads
         run: python -m src.pipeline.reconcile --strict
@@ -69,6 +72,12 @@ jobs:
       - name: Data governance (schemas, coverage, drift)
         run: python -m src.pipeline.governance --strict
         continue-on-error: true
+      - name: What this run would change in the committed docs
+        if: always()
+        run: |
+          mkdir -p data/review
+          git diff -- README.md docs/models > data/review/docs-refresh.patch || true
+          { echo "### Docs this run would change"; echo; git diff --stat -- README.md docs/models || true; echo; echo "The full patch is data/review/docs-refresh.patch in the run-evidence artifact."; } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
         with: {name: run-evidence, path: "data/review/*\ndata/raw/*/manifest.json\ndata/check_history.csv\ndata/runs.csv\ndocs/data-governance.md\ndocs/schemas/*\ndocs/reconciliation/*\ndocs/figures/*"}
