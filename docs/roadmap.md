@@ -11,7 +11,7 @@ timeline
     Phase 4 — Marts & dashboard : Complete, Nov 2, 2026 : 21 base dashboard files reproduced exactly or explained
     Phase 5 — Analytics : Mostly complete, Nov 9, 2026 : all 44 dashboard files built from marts; LightGBM challenger, review queue and revenue corridor in : still open — site cross-checks, detector backtest
     Phase 6 — Automate & document : In progress, Nov 18, 2026 : weekly freshness check and monthly Extract and build scheduled; one full green run (Nov 18); first scheduled run Dec 3 : MCP server in src/mcp
-    Phase 7 — BI as an application : Opened Nov 18, 2026 : Plotly and filters, hosted questions, metric registry, alerts (see the last section)
+    Phase 7 — BI as an application : Opened Nov 18, 2026 : metric registry merged (pillar 3, step 1; 19 metrics) : Plotly and filters, hosted questions, alerts next (see the last section)
 ```
 
 | Phase | Weeks | Build | Gate | Status |
@@ -225,6 +225,14 @@ Every year is reconciled with the State's own documents (src/pipeline/books.py; 
 - **Scheduled runs (Phase 6 gate: two clean scheduled runs with no manual steps):** the weekly freshness check ran on schedule on Nov 16 and passed. The monthly Extract and build (`23 7 3 * *`) has not run on schedule yet; its first scheduled run is Dec 3, 2026. A manual run on Nov 18 ([run 44302939674](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/runs/44302939674)) passed every step: extract (12 min 44 s), build with 143 of 143 checks, tests, strict reconcile with the portal downloads, figures, governance and the evidence artifact, and it saved the raw-data cache. The gate stays open until Dec 3 and Jan 3 are clean.
 - **Live:** the portfolio at goaiarchitect.com shows one card per dashboard tab with the tab's finding and an interactive Plotly chart, plus a full-page live demo of this dashboard.
 - **MCP server:** the maintained server is `src/mcp/` (six read-only tools, a SQL guard, `docs/mcp.md`). `mcp_server/server.py` is the earlier three-tool server; only `mcp_server/db/load_postgres.py` is still used (Makefile target `postgres`). Decision: retire `mcp_server/server.py` and move the Postgres loader when the next cleanup PR is made.
+
+## Progress log, Nov 18, 2026 (evening)
+
+- **Metric registry merged** (PR 18; decision D14, step 1): 19 headline numbers defined once in `config/metrics.yml`, README facts and `metrics.json` read from it. CI green on `main`.
+- **Portfolio deployment polish merged** (portfolio PRs 3 to 5, goaiarchitect.com): metric tiles at the top, iframe titles and sandbox, SEO files, Plotly 4.3.0 with an integrity hash, an offline site check that gates each Pages deploy, scheduled link and uptime checks, a documented Cloudflare `_headers` file (untested), and cards for GenAI Engineering and Mobility (Mobility marked refresh pending; no figures until its data is re-downloaded). UI_INDEX stays in development.
+- **CI:** the red run seen on Nov 18 was a re-run of an old commit on the merged walkthrough branch; the lint fix is on `main` and `ruff check src tests` passes.
+- **Walkthrough freshness review:** re-executing the walkthrough notebook from the published tables reproduces every committed figure and text output, so the walkthrough matches the Nov 16 snapshot. Gaps found: nothing fails when committed figures differ from the data; the Nov 18 extract is not yet published to `site_data`; the top-level `docs/figures/*.png` were last committed Nov 13 and were not re-checked; figures carry no as-of date. Review and gap analysis: `docs/research/walkthrough-review.md`.
+- **Still open:** Cloudflare connector needs read scopes for the inventory; Phase 6 gate waits on the Dec 3 and Jan 3 scheduled runs; the data-refresh PR (publish the Nov 18 extract to `site_data`) is paused; alerts channel undecided.
 
 ## Phase 7: BI as an application (opened Nov 18, 2026)
 
