@@ -78,3 +78,4 @@ d_state_plan,mart,51,True
 d_econ,mart,11,True
 d_detector_outcomes,mart,621,True
 d_detector_lift,mart,45,True
+d_reported_claims,mart,38,True

@@ -37,6 +37,7 @@ PY = {  # tables written by the Python models and fact builders (descriptions; t
     "d_detector_backtest": "The detectors rerun as of FY2022-FY2024, flags followed one year (src/models/backtest.py).",
     "d_savings": "GMI's reported savings items with page and quote (src/models/savings.py).",
     "f_savings_check": "Payments paired with each reported saving (src/models/savings.py).",
+    "d_reported_claims": "Every reported savings figure by source and date: the January 2026 report and the Governor's page, with the words quoted (src/models/claims.py).",
     "d_savings_status": "Status of each savings check: Seen, Partly seen, Not seen yet (src/models/savings.py).",
     "d_vendor_moves": "Largest payment decreases by vendors many agencies pay (src/models/savings.py).",
     "d_plan50": "The conditional path to $50M a year, step by step (src/models/recommendations.py).",

@@ -7,7 +7,7 @@ possible, with the payments to vendors that would show the saving: payee names t
 carriers for phone plans, dealers for vehicle purchases, and so on). The check compares FY2025 with FY2026 payments.
 It shows direction and size, not proof: payee names miss some spending and contracts change for other reasons.
 
-Builds four dashboard files:
+Builds four dashboard files (and d_reported_claims, every reported figure by source and date: src/models/claims.py):
   d_savings         the 18 reported items and how each is checked
   f_savings_check   matching payments by check, fiscal year and agency
   d_savings_status  per check: reported saving, payments before and after, a status, and the previous run's status
@@ -155,7 +155,9 @@ def write(con, run_id, data, cfg=None):
     payments = con.execute("SELECT fiscal_year, agency_code, vendor, vendor_name, area, amount, is_government, passthrough FROM mart.payment_area").df()
     cfg = cfg or assumptions()
     d, f = check_payments(payments, cfg=cfg)
-    tables = {"d_savings": d, "f_savings_check": f, "d_vendor_moves": vendor_moves(payments, cfg), "d_savings_status": status(d, f, run_id, read_history(data), cfg)}
+    from . import claims
+    tables = {"d_savings": d, "f_savings_check": f, "d_vendor_moves": vendor_moves(payments, cfg), "d_savings_status": status(d, f, run_id, read_history(data), cfg),
+              "d_reported_claims": claims.build()}
     for name, df in tables.items():
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")

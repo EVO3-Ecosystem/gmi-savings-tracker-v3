@@ -134,7 +134,9 @@ def readme_facts(con):
     other = len(sv) - len(gmi)
     return "\n".join([
         f"- **Reported savings:** GMI's January 26, 2026 report lists {len(gmi)} items" + ((" (plus a separate DGS facility estimate)" if other == 1 else f" (plus {other} separate DGS estimates)") if other else "")
-        + f". The {len(saved)} it describes as saved in FY2026 add up to {mm(v('reported_saved_fy2026_usd'))}, its own FY2026 total; the rest are yearly savings under way or projected and are not added to it.",
+        + f". The {len(saved)} it describes as saved in FY2026 add up to {mm(v('reported_saved_fy2026_usd'))}, its own FY2026 total; the rest are yearly savings under way or projected and are not added to it. "
+        f"The Governor's Government Modernization Initiative page (status as of June 2026) says GMI has implemented actions to save {mm(v('reported_actions_june_2026_usd'))}. "
+        "The two totals count different things and the tracker has verified neither; every figure is kept by source and date in `d_reported_claims`.",
         f"- **Payment evidence:** about {ev:.0%} of the path to {mm(tot)} has payment evidence; the path is conditional on reported savings recurring"
         + (f" and an assumed {rate.iloc[0]}% from statewide contracts" if len(rate) else "")
         + f" ({mm(v('path_low_usd'))}–{mm(v('path_high_usd'))} across the assumed ranges).",

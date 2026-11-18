@@ -6,7 +6,7 @@
 # published snapshot. To change a definition, change it here, never in a second place.
 metrics:
   - id: reported_saved_fy2026_usd
-    name: GMI saved in FY2026, as reported
+    name: GMI saved in FY2026, as reported in the January 2026 report
     definition: Sum of the items GMI's January 26, 2026 report describes as saved in FY2026 (low end of each reported figure). The report's own total; yearly savings under way or projected are not added.
     unit: usd
     grain: one row per reported GMI item
@@ -16,6 +16,17 @@ metrics:
     sql: >
       SELECT sum(reported_low) FROM mart.d_savings
       WHERE source LIKE '%Government Modernization Initiative Final Report%' AND status = 'Saved in FY2026'
+
+  - id: reported_actions_june_2026_usd
+    name: Savings from implemented actions, as stated on the Governor's page (June 2026)
+    definition: The headline total on the Governor's Government Modernization Initiative page, "GMI has implemented actions to save $50 million as of June 2026". It is a different count from the January 2026 report's FY2026 total (the page broadened the goal to a variety of fund sources and gives no split between one-time and yearly savings), and the tracker has verified neither.
+    unit: usd
+    grain: one row per reported figure, tagged with its source and date
+    tables: [d_reported_claims]
+    owner: Sierra Napier
+    shown_in: [README What it found, Walkthrough]
+    sql: >
+      SELECT amount_low FROM mart.d_reported_claims WHERE claim_id = 'GOVPAGE_2026_06-G00'
 
   - id: gmi_reported_items
     name: Items in GMI's report
