@@ -138,10 +138,18 @@ md("""
 ## 4. Reported savings against the State's own payments
 GMI reported savings items. For each, the tracker sums payments to the vendors that sell the thing being cut and compares the year before with the year after.
 
-**How savings are counted here.** The tracker measures *payments*, meaning money that actually went out. It cannot see *cost avoidance* (a cost that would have grown but did not) or savings measured against a plan or appropriation; those need the agency's own baseline. The year-before against year-after comparison is a simple baseline: price changes, volume changes and one-time items can move payments for other reasons. The tracker cannot tell whether two reported items overlap. Where this page adds up dollars, they are the amounts GMI reported, and a sum of them is not a verified total.
-
-How each status is assigned:
+**How savings are counted here.** The tracker measures *payments*, meaning money that actually went out. It cannot see *cost avoidance* (a cost that would have grown but did not) or savings measured against a plan or appropriation; those need the agency's own baseline. The year-before against year-after comparison is a simple baseline: price changes, volume changes and one-time items can move payments for other reasons.
 """)
+code("""
+ds = P.load("d_savings")
+shared = ds[ds.check_id.notna() & (ds.check_id != ds.saving_id)]
+parts = ds[ds.type.str.startswith("Part of")]
+groups = "; ".join(f"{c} also covers {', '.join(g.saving_id)}" for c, g in shared.groupby("check_id"))
+display(Markdown(f\"\"\"
+**Items that overlap.** GMI's report says {len(parts)} items ({', '.join(parts.saving_id)}) are parts of one $18M figure, so they carry no dollar figure of their own. {len(shared)} more items act on spending that another item also acts on, so the tracker checks them together against one set of payments ({groups}) and adds their reported amounts in that one row. That treats them as separate savings on the same spending. The tracker cannot see how GMI estimated each amount, so it cannot confirm that. It also has no test for whether the payee-name patterns of two different checks match the same payments. Where this page adds up dollars, they are amounts GMI reported, and the sum is not a verified total.
+\"\"\"))
+""")
+md("How each status is assigned:")
 code("""
 sc = cfg["savings"]
 display(Markdown(f\"\"\"
