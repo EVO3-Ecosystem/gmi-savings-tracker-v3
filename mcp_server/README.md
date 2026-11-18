@@ -1,5 +1,7 @@
 # MCP server and Postgres loader (decision register #15 and #12)
 
+> **Note (Nov 18, 2026):** the maintained MCP server is `src/mcp/` (six read-only tools and a SQL guard; see `docs/mcp.md`). The three-tool `server.py` described below is the earlier version and is slated for retirement; `db/load_postgres.py` is still used by `make postgres`.
+
 ## `server.py` — read-only MCP server over the marts
 
 A small [MCP](https://modelcontextprotocol.io) stdio server that lets an assistant explore
