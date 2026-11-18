@@ -20,6 +20,7 @@ md("""
 **What this is.** Maryland's Government Modernization Initiative (GMI) reported savings and set a yearly savings target. This page checks those reports against the State's own payment records. It shows what the data supports, what it does not, and where to look next. It is also a worked example of how any government or school system could check its own savings claims. You do not need to read code to follow it.
 
 **How to read it.**
+- For a one-page path from the data to the decision, open the dashboard's *Executive walkthrough* tab. This page is the detailed evidence behind it.
 - Start with *At a glance* and the key findings below; each section after them gives the evidence for one finding.
 - Every number in the text is computed from the published tables in `site_data/` (the same files as the dashboard and the data release), so the text cannot drift from the data. The code for each step is folded under *Show the code*.
 - Three kinds of figure are kept apart throughout: **reported** savings (GMI's own figures), what is **observed in payment data** (evidence, not verification), and **leads** (places worth a look, not savings).
