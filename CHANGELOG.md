@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 Added
+- Opt-in `?palette=portfolio` (dark navy, gold and cyan; contrast checked in `tests/test_site_embed.py`) and `?embed=1` (hides the dashboard's own header) for embedding the dashboard in another site; a `#t-<tab>` link now switches tabs without a reload. The default look is unchanged.
 - Tech stack and architecture section in the README, verified against the repository (no Tailwind CSS, DVC optional, D3.js inlined, DuckDB-WASM from jsDelivr for the SQL explorer).
 - GitHub Discussions (Q&A and Ideas) with links in the issue chooser; `SUPPORT.md` and `CONTRIBUTING.md` route questions there.
 - Accessible walkthrough report: findings first, captioned tables, alt text on every chart, a skip link and table of contents; the render fails on missing alt text, captions or header scopes.

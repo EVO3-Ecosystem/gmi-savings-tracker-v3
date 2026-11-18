@@ -2574,5 +2574,7 @@ document.getElementById('resDir').addEventListener('change', () => drawFcast(prm
 window.__gst = {measure, prm, reconcile, ok, yearsFor, AREAS, render, get STAGE_OF(){ return STAGE_OF; }}; // used by the pipeline's dashboard tests
 { const h = location.hash.slice(1); if (h.startsWith('t-') && TABS.includes(h.slice(2))) tab = h.slice(2); }
 showTab(tab);
+// a link to another tab (#t-vend) switches tabs without reloading the page, so the portfolio's embed can follow its own tab chips
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (h.startsWith('t-') && TABS.includes(h.slice(2)) && h.slice(2) !== tab) showTab(h.slice(2)); });
 dash.onData(render);
 </script>
