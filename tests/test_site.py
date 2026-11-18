@@ -236,3 +236,14 @@ def test_every_page_is_theme_aware(built):
     index = (built / "index.html").read_text()
     assert "colors:['var(--series-1)'" in index and "--series-1:#3987e5" in index  # d3 series read CSS variables; dark steps defined
     assert "#fff7e0" not in index and "border-bottom:1px solid #e4e3de" not in index
+
+
+def test_executive_walkthrough_tab_and_data(built):
+    """The dashboard has an 11th tab, right after Overview, and the site writes the table it draws (src/models/exec_walkthrough.py)."""
+    page = (built / "index.html").read_text()
+    assert re.search(r'<button role="tab" id="t-exec" data-tab="exec"[^>]*>Executive walkthrough</button>', page)
+    assert 'id="p-exec" role="tabpanel" aria-labelledby="t-exec"' in page
+    assert "const TABS = ['over','exec'," in page
+    assert page.index('id="t-over"') < page.index('id="t-exec"') < page.index('id="t-areas"')
+    rows = (built / "data" / "exec_walkthrough.csv").read_text().splitlines()
+    assert len(rows) == 1 + 8 + 3  # header, eight steps, three asks

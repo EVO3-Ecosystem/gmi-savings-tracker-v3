@@ -35,11 +35,12 @@ DATASETS = {  # dataset id on the dashboard -> published table
     "results_trend": "results_trend", "agency_clusters": "agency_clusters", "ola_findings": "ola_findings",
     "d_fund_shift": "d_fund_shift", "d_federal_crosswalk": "d_federal_crosswalk", "d_vendor_alias_review": "d_vendor_alias_review",
     "audit_findings": "audit_findings_by_program",  # the register joined to budget programs (src/models/program_screen.py reported_findings)
+    "exec_walkthrough": "exec_walkthrough",  # the executive walkthrough tab (src/models/exec_walkthrough.py), written by the site build
     "d_audit_findings": "d_audit_findings", "d_field_availability": "d_field_availability",
     "d_detector_backtest": "d_detector_backtest", "d_model_registry": "d_model_registry", "d_drift": "d_drift", "d_range_coverage": "d_range_coverage",
     "d_book_reconciliation": "d_book_reconciliation", "d_site_reconciliation": "d_site_reconciliation", "d_book_program_differences": "d_book_program_differences",
 }
-OPTIONAL = {"d_source_issues", "audit_findings"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
+OPTIONAL = {"d_source_issues", "audit_findings", "exec_walkthrough"}  # drawn when published; the page says so when they are not (the site's loader skips them if missing)
 AREAS = ['IT hardware, software & services', 'Fleet & fuel', 'Utilities & facility energy', 'Real estate & leases', 'Print, copy & mail', 'Telecom']
 
 CSS = (":root{--color-bg:#fafafa;--color-panel:#fff;--color-border-line:#ddd;--color-fg:#111;--color-fg-muted:#666;--color-ok:#2a7;--color-warn:#c80;"

@@ -27,7 +27,7 @@ def test_statuses_sources_and_verification_flags():
 
 
 def test_every_tab_exists_on_the_dashboard():
-    assert len(TABS) == 10
+    assert len(TABS) == 11
     assert {r["v3_tab"] for r in ROWS if r["v3_tab"]} <= TABS
 
 

@@ -294,8 +294,9 @@ def build(out=OUT, src=None, artifact=False):
     if out.exists():
         shutil.rmtree(out)
     (out / "data").mkdir(parents=True)
-    from ..models import program_screen  # the page's per-program audit findings: the register joined to budget programs
-    derived = {"audit_findings_by_program": program_screen.reported_findings}  # files the site writes from reference files
+    from ..models import exec_walkthrough, program_screen  # the page's per-program audit findings; the executive walkthrough's steps
+    derived = {"audit_findings_by_program": program_screen.reported_findings,  # files the site writes from reference files
+               "exec_walkthrough": lambda: exec_walkthrough.build(src)}  # eight steps and three asks, every number from the registry and the tables
     index, datasets = build_index(src, sha, derived)
     for name, make in derived.items():
         make().to_csv(out / "data" / f"{name}.csv", index=False)

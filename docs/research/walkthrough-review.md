@@ -64,3 +64,7 @@ Priority: P1 do before the next briefing, P2 next, P3 later.
 ## Sources and confidence
 
 All links above were returned by web search. Pages were not opened in full. The Yellow Book chapter, the 2025 Green Book numbering (GAO-25-107721), the 2023 OECD savings text, the exact US reading-grade target, Maryland plain-language standards and the ADA Title II dates for smaller governments are *unverified*.
+
+## Update, Nov 18, 2026 (night): what the Executive walkthrough tab closes
+
+The dashboard's new **Executive walkthrough** tab (11th tab, right after Overview) is the one-page entry point this review asked for. It closes G1 (three decisions or asks, with owners left for GMI and the Governor's office to name), G2 (a standalone page that prints as a one-page brief, generated from the metric registry so numbers cannot drift), G3 (short plain-language sentences, checked by a test), G4 (reported, supported and assumed amounts kept apart, with the two reported totals shown separately) and the as-of and version line of G6. **Still open:** the owner for each ask; the CI check that fails when committed figures differ from the data, and file checksums (rest of G6); the audit-style framing (G5); the data-reliability statement (G7); the WCAG 2.2 AA pass on the PDF and the DoIT answer (G8, G9); linking each number to its metric id on the notebook (G10). This notebook is now the detailed evidence behind the tab.

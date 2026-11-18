@@ -61,6 +61,19 @@
 .gs .tile .xp{position:absolute;top:var(--cds-pad-md);right:var(--cds-pad-md)}
 .gs .xp:hover{border-color:var(--color-fg-muted)}
 .gs .note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:var(--cds-gap-xs) 0 var(--cds-gap-md);max-width:92ch}
+.gs .ex-bottom{font-size:1.05rem;font-weight:600;margin:var(--cds-gap-xs) 0;max-width:80ch}
+.gs .ex-steps{list-style:none;margin:0;padding:0;display:grid;gap:var(--cds-gap-md)}
+.gs .ex-steps>li{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);display:grid;gap:var(--cds-gap-xs);min-width:0}
+.gs .ex-steps h3{margin:0;font-size:1.05rem}
+.gs .ex-steps p{margin:0;max-width:80ch}
+.gs .ex-asks{margin:0;padding-left:1.2rem;display:grid;gap:var(--cds-gap-xs);max-width:80ch}
+.gs .ex-viz{display:grid;gap:.35rem;margin:.25rem 0}
+.gs .ex-bar{display:grid;grid-template-columns:minmax(7rem,16rem) 1fr 5rem;gap:.6rem;align-items:center;font-size:var(--cds-font-size-caption)}
+.gs .ex-bar>span:last-child{text-align:right}
+@media (max-width:40rem){.gs .ex-bar{grid-template-columns:1fr auto}.gs .ex-bar .ex-track{grid-column:1/-1;order:3}}
+.gs .ex-track{background:var(--color-border-line);height:.65rem;border-radius:.35rem;overflow:hidden}
+.gs .ex-fill{display:block;height:100%;background:#1f5fbf}
+@media print{.gs #tabs,.gs #filterBar,.gs .ex-hide,.gs .ex-detail{display:none!important}.gs .ex-steps>li,.gs .card{break-inside:avoid}}
 .gs .insight{font-size:var(--cds-font-size-body);line-height:1.45;margin:0 0 var(--cds-gap-sm);max-width:92ch}
 .gs ul.ins{margin:0;padding-left:1.1rem;display:grid;gap:6px;font-size:var(--cds-font-size-body);line-height:1.45}
 .gs .chart{position:relative;min-height:280px}
@@ -139,6 +152,7 @@
   <div class="bar-top">
     <nav role="tablist" aria-label="Pages" id="tabs">
       <button role="tab" id="t-over" data-tab="over" aria-selected="true">Overview</button>
+      <button role="tab" id="t-exec" data-tab="exec" aria-selected="false">Executive walkthrough</button>
       <button role="tab" id="t-areas" data-tab="areas" aria-selected="false">Focus areas</button>
       <button role="tab" id="t-track" data-tab="track" aria-selected="false">Savings tracker</button>
       <button role="tab" id="t-opp" data-tab="opp" aria-selected="false">Opportunities</button>
@@ -205,6 +219,21 @@
   </section>
 
   <!-- FOCUS AREAS -->
+  <section class="panel" id="p-exec" role="tabpanel" aria-labelledby="t-exec" hidden>
+    <p class="note ex-hide" style="margin:0">This page tells the whole story in eight steps, so the filters above do not apply to it.</p>
+    <div class="card">
+      <h2 id="exH">Executive walkthrough: from the data to the decision</h2>
+      <p class="ex-bottom" id="exBottom">—</p>
+      <p class="note" id="exAsOf">—</p>
+      <p class="ex-hide"><button type="button" class="lnk" id="exPrint">Print this page</button></p>
+    </div>
+    <div class="card" id="exAskCard" hidden>
+      <h2 id="exAskH">Decisions and asks</h2>
+      <p class="note">Three things that would let the State confirm the savings. Owners are for GMI and the Governor's office to name.</p>
+      <ul class="ex-asks" id="exAsks"></ul>
+    </div>
+    <ol class="ex-steps" id="exSteps" aria-label="The eight steps"></ol>
+  </section>
   <section class="panel" id="p-areas" role="tabpanel" aria-labelledby="t-areas" hidden>
     <p class="lede" id="areasLede" data-source="f_area">—</p>
     <div class="areas" id="areaCards" data-source="f_area"></div>
@@ -938,7 +967,7 @@ document.getElementById('fStage').addEventListener('change', e => { notice = '';
 document.getElementById('fReset').addEventListener('click', () => { notice = ''; setP({stage:'actual', years:[], areas:[], agencies:[]}); });
 
 /* ======================= tabs, detail pages ======================= */
-const TABS = ['over','areas','track','opp','calc','fcast','vend','agency','budget','data'];
+const TABS = ['over','exec','areas','track','opp','calc','fcast','vend','agency','budget','data'];
 let tab = 'over', detail = null, from = 'over';
 function showTab(t){ tab = t; detail = null; document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
   TABS.forEach(x => document.getElementById('p-'+x).hidden = (x !== t)); document.getElementById('p-detail').hidden = true; try { dash.setLink && dash.setLink('t-'+t); } catch(e) {} render(); }
@@ -2543,12 +2572,38 @@ dash.calc('c_run',{inputs:['runs','checks'],title:'Pipeline status',description:
       pill:n('fail')?`Data checks: ${n('fail')} failed`:`Data checks passed: ${n('pass')} of ${checks.length}`,state:n('fail')?'fail':(n('warn')?'warn':'pass')}];}});
 function drawReport(){ const r = ok('reports'), a = document.getElementById('repLink'); if (!r || !r.length) { a.hidden = true; return; } const l = r.slice().sort((x,y) => d3.descending(x.run_date, y.run_date))[0]; a.href = l.url; a.textContent = 'Download PDF report (' + l.run_date + ')'; a.hidden = false; }
 function fillMarks(){ const d = dash.data('c_run'); document.querySelectorAll('[data-source="c_run"][data-field]').forEach(el => { el.textContent = (d.status === 'ok' && d.data[0]) ? d.data[0][el.dataset.field] : '—'; }); document.getElementById('runPill').className = 'st ' + (d.status === 'ok' && d.data[0] ? d.data[0].state : ''); }
-const DRAW = {opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawReconciliation(); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
+/* ======================= executive walkthrough ======================= */
+function drawExec(){ const rows = ok('exec_walkthrough'), steps = document.getElementById('exSteps'); steps.textContent = '';
+  if (!rows || !rows.length) { setText('exBottom', 'The executive walkthrough is not in this build.'); setText('exAsOf', ''); document.getElementById('exAskCard').hidden = true; return; }
+  const S = rows.filter(r => r.kind === 'step').sort((a, b) => a.step - b.step), A = rows.filter(r => r.kind === 'ask');
+  const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  const bar = (label, frac, text) => { const d = el('div', null, 'ex-bar'), t = el('span', null, 'ex-track'), f = el('span', null, 'ex-fill'); f.style.width = Math.max(0, Math.min(1, frac)) * 100 + '%'; t.appendChild(f); d.append(el('span', label), t, el('span', text)); return d; };
+  const viz = n => { const box = el('div', null, 'ex-viz'); box.setAttribute('role', 'img'); let any = false;
+    if (n === 3) { const c = ok('checks') || []; if (c.length) { const pass = c.filter(r => r.status === 'pass').length; box.appendChild(bar('Stop checks passed', pass / c.length, `${pass} of ${c.length}`)); box.setAttribute('aria-label', `Stop checks passed: ${pass} of ${c.length}`); any = true; } }
+    if (n === 6) { const st = (ok('d_savings_status') || []).filter(r => r.before > 0 && (r.status === 'Payments fell' || r.status === 'Seen')).map(r => ({l: String(r.item).split(' (')[0], c: r.after / r.before - 1})).sort((a, b) => a.c - b.c);
+      if (st.length) { st.forEach(x => box.appendChild(bar(x.l, -x.c, d3.format('.0%')(x.c)))); box.setAttribute('aria-label', 'Change in payments to the matching vendors: ' + st.map(x => `${x.l} ${d3.format('.0%')(x.c)}`).join('; ')); any = true; } }
+    if (n === 7) { const p = ok('d_plan50') || []; if (p.length) { const last = p[p.length - 1].cumulative, first = p[0].saving; box.appendChild(bar('Reported rates carried forward', first / 60e6, '$' + d3.format('.1f')(first / 1e6) + 'M')); box.appendChild(bar('Conditional path', last / 60e6, '$' + d3.format('.1f')(last / 1e6) + 'M')); box.appendChild(bar('GMI yearly goal', 50e6 / 60e6, '$50M'));
+      box.setAttribute('aria-label', `Savings a year against the $50M goal: carried forward $${d3.format('.1f')(first / 1e6)}M, conditional path $${d3.format('.1f')(last / 1e6)}M`); any = true; } }
+    if (n === 8) { const c = (ok('d_range_coverage') || []).filter(r => r.source === 'bootstrap' && r.area === 'All areas' && r.horizon === 0 && r.scope === 'out_of_sample');
+      const raw = c.find(r => !r.calibrated), cal = c.find(r => r.calibrated); if (raw && cal) { box.appendChild(bar('Before calibration', raw.hits / raw.n, `${raw.hits} of ${raw.n}`)); box.appendChild(bar('After calibration', cal.hits / cal.n, `${cal.hits} of ${cal.n}`)); box.appendChild(bar('Aim: 8 in 10', 0.8, '80%'));
+        box.setAttribute('aria-label', `Outcomes inside the range: ${raw.hits} of ${raw.n} before calibration, ${cal.hits} of ${cal.n} after, aim 80%`); any = true; } }
+    return any ? box : null; };
+  const head = S[0] || {};
+  setText('exBottom', head.finding || '');
+  setText('exAsOf', `Data as of ${head.as_of || ''} · version ${head.version || ''} · Independent prototype by Sierra Napier, built from Maryland's open data; not an official State of Maryland product.`);
+  const ask = document.getElementById('exAsks'); ask.textContent = ''; document.getElementById('exAskCard').hidden = !A.length;
+  A.forEach(a => { const li = el('li'); li.append(el('strong', a.title + '. '), document.createTextNode(a.finding + ' '), el('span', 'Owner: ' + a.owner + '.', 'note')); ask.appendChild(li); });
+  S.forEach(r => { const li = el('li'); li.append(el('h3', `${r.step}. ${r.title}`), el('p', r.finding)); const v = viz(r.step); if (v) li.appendChild(v);
+    if (r.evidence) li.appendChild(el('p', r.evidence, 'note')); if (r.caveat) li.appendChild(el('p', 'Limit: ' + r.caveat, 'note'));
+    if (r.tab_link && TABS.includes(r.tab_link)) { const b = el('button', 'See the detail: ' + r.tab_label, 'lnk ex-detail'); b.type = 'button'; b.addEventListener('click', () => showTab(r.tab_link)); const w = el('p'); w.appendChild(b); li.appendChild(w); }
+    steps.appendChild(li); }); }
+document.getElementById('exPrint').addEventListener('click', () => window.print());
+const DRAW = {exec:drawExec, opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawReconciliation(); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));
     if (healParams()) { again = true; return; }   // a repaired filter re-renders through setParams
-    const p = prm(); fillFilters(p); document.getElementById('filterBar').style.opacity = (tab === 'data' && !detail) ? .5 : 1;
+    const p = prm(); fillFilters(p); document.getElementById('filterBar').style.opacity = ((tab === 'data' || tab === 'exec') && !detail) ? .5 : 1;
     if (detail) drawDetail(p); else (DRAW[tab] || (() => {}))(p); notice = ''; adInit(); }
   catch (e) { console.error(e); const ch = document.getElementById('chips'); if (ch) { const s = document.createElement('span'); s.className = 'st fail'; s.textContent = 'This view hit an error and was reset to All.'; ch.appendChild(s); }
     if (!healedOnError) { healedOnError = true; rendering = false; detail = null; setP({stage:'actual', years:[], areas:[], agencies:[]}); return; } }
