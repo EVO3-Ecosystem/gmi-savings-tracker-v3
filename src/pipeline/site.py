@@ -306,6 +306,9 @@ def build(out=OUT, src=None, artifact=False):
         if (src / f"{f}.csv").exists():
             shutil.copy(src / f"{f}.csv", out / "data" / f"{f}.csv")
     (out / "index.html").write_text(index)
+    if not artifact:  # the metric registry with current values: one definition per number, readable by the dashboard, agents and alerts
+        from ..models import metrics as metric_registry
+        metric_registry.write_json(src, out / "metrics.json")
     pq = [] if artifact else parquet_files(src)
     if pq:
         (out / "parquet").mkdir()

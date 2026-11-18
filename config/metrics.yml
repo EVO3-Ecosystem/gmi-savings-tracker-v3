@@ -1,0 +1,215 @@
+# Metric registry: every headline number the tracker shows is defined once, here (decision D14, roadmap Phase 7 pillar 3).
+# Each entry: id (snake_case, unique), name, definition (plain words), unit (usd | count | ratio), grain (what one row is
+# before the SQL reduces it to one number), tables (marts the SQL reads, schema `mart`), owner, shown_in (where a reader sees
+# it), and sql (one read-only SELECT returning one value; checked by src/mcp/guard.py).
+# src/models/metrics.py evaluates this file against the marts; tests/test_metrics.py checks it against the README facts and the
+# published snapshot. To change a definition, change it here, never in a second place.
+metrics:
+  - id: reported_saved_fy2026_usd
+    name: GMI saved in FY2026, as reported
+    definition: Sum of the items GMI's January 26, 2026 report describes as saved in FY2026 (low end of each reported figure). The report's own total; yearly savings under way or projected are not added.
+    unit: usd
+    grain: one row per reported GMI item
+    tables: [d_savings]
+    owner: Sierra Napier
+    shown_in: [README What it found, Savings tracker tab]
+    sql: >
+      SELECT sum(reported_low) FROM mart.d_savings
+      WHERE source LIKE '%Government Modernization Initiative Final Report%' AND status = 'Saved in FY2026'
+
+  - id: gmi_reported_items
+    name: Items in GMI's report
+    definition: Count of savings items listed in GMI's January 26, 2026 report (the separate DGS facility estimate is not counted).
+    unit: count
+    grain: one row per reported GMI item
+    tables: [d_savings]
+    owner: Sierra Napier
+    shown_in: [README What it found, Savings tracker tab]
+    sql: >
+      SELECT count(*) FROM mart.d_savings WHERE source LIKE '%Government Modernization Initiative Final Report%'
+
+  - id: path_total_usd
+    name: Conditional path to the target, likely total
+    definition: Cumulative annual savings at the end of the stepwise path (GMI's reported rates, then assumed savings from statewide contracts). Conditional on reported savings recurring and on the stated assumptions.
+    unit: usd
+    grain: one row per step of the path
+    tables: [d_plan50]
+    owner: Sierra Napier
+    shown_in: [README What it found, Calculator tab]
+    sql: SELECT max(cumulative) FROM mart.d_plan50
+
+  - id: path_low_usd
+    name: Conditional path, low end of the assumed ranges
+    definition: Sum of the low end of every step's assumed range.
+    unit: usd
+    grain: one row per step of the path
+    tables: [d_plan50]
+    owner: Sierra Napier
+    shown_in: [README What it found]
+    sql: SELECT sum(low) FROM mart.d_plan50
+
+  - id: path_high_usd
+    name: Conditional path, high end of the assumed ranges
+    definition: Sum of the high end of every step's assumed range.
+    unit: usd
+    grain: one row per step of the path
+    tables: [d_plan50]
+    owner: Sierra Napier
+    shown_in: [README What it found]
+    sql: SELECT sum(high) FROM mart.d_plan50
+
+  - id: opportunity_findings
+    name: Opportunity findings
+    definition: Count of places where spending looks higher than it needs to be, across all detectors. Leads for review; they overlap and are not additive.
+    unit: count
+    grain: one row per finding
+    tables: [d_opps]
+    owner: Sierra Napier
+    shown_in: [README What it found, Opportunities tab]
+    sql: SELECT count(*) FROM mart.d_opps
+
+  - id: opportunity_high_usd
+    name: Opportunity leads, high end per year
+    definition: Sum of the high-end yearly value of every finding. Not additive across overlapping findings and not a forecast of savings.
+    unit: usd
+    grain: one row per finding
+    tables: [d_opps]
+    owner: Sierra Napier
+    shown_in: [README What it found, Opportunities tab]
+    sql: SELECT sum(high) FROM mart.d_opps
+
+  - id: opportunity_likely_usd
+    name: Opportunity leads, likely value per year
+    definition: Sum of the likely yearly value of every finding. Not additive across overlapping findings and not a forecast of savings.
+    unit: usd
+    grain: one row per finding
+    tables: [d_opps]
+    owner: Sierra Napier
+    shown_in: [README What it found, Opportunities tab]
+    sql: SELECT sum(likely) FROM mart.d_opps
+
+  - id: possible_duplicate_groups
+    name: Possible duplicate payment groups
+    definition: Count of payment groups the screen flags as possible duplicates. None can be confirmed without payment records.
+    unit: count
+    grain: one row per screen rule and status
+    tables: [d_payment_screen_summary]
+    owner: Sierra Napier
+    shown_in: [README What it found, Payment screen card]
+    sql: SELECT sum(groups) FROM mart.d_payment_screen_summary WHERE rule = 'Possible duplicate'
+
+  - id: possible_duplicate_review_usd
+    name: Possible duplicate payments, amount to review
+    definition: Dollar amount in the possible-duplicate groups that is worth reviewing.
+    unit: usd
+    grain: one row per screen rule and status
+    tables: [d_payment_screen_summary]
+    owner: Sierra Napier
+    shown_in: [README What it found, Payment screen card]
+    sql: SELECT sum(review_amount) FROM mart.d_payment_screen_summary WHERE rule = 'Possible duplicate'
+
+  - id: source_issue_amount_usd
+    name: Source data issue, amount listed twice
+    definition: Dollar amount of published records the State's own sites confirm are listed twice in the payments data. Reported as a source issue, never as a lead.
+    unit: usd
+    grain: one row per source issue
+    tables: [d_source_issues]
+    owner: Sierra Napier
+    shown_in: [README What it found, Data & pipeline tab]
+    sql: SELECT sum(amount) FROM mart.d_source_issues
+
+  - id: controllable_fy2026_usd
+    name: Controllable purchases, FY2026 working budget
+    definition: Purchases agencies can control (excluding client payments, debt service, staff, grants and capital), FY2026 working budget.
+    unit: usd
+    grain: one row per agency, fiscal year and budget stage
+    tables: [f_agency]
+    owner: Sierra Napier
+    shown_in: [Overview tab]
+    sql: SELECT sum(controllable) FROM mart.f_agency WHERE fiscal_year = 2026 AND stage = 'Working budget'
+
+  - id: controllable_fy2025_usd
+    name: Controllable purchases, FY2025 actual
+    definition: Purchases agencies can control, FY2025 actual spending.
+    unit: usd
+    grain: one row per agency, fiscal year and budget stage
+    tables: [f_agency]
+    owner: Sierra Napier
+    shown_in: [Overview tab]
+    sql: SELECT sum(controllable) FROM mart.f_agency WHERE fiscal_year = 2025 AND stage = 'Actual'
+
+  - id: controllable_yoy_ratio
+    name: Controllable purchases, change FY2025 actual to FY2026 working budget
+    definition: (FY2026 working budget minus FY2025 actual) divided by FY2025 actual, for controllable purchases.
+    unit: ratio
+    grain: one row per agency, fiscal year and budget stage
+    tables: [f_agency]
+    owner: Sierra Napier
+    shown_in: [Overview tab]
+    sql: >
+      SELECT (sum(controllable) FILTER (WHERE fiscal_year = 2026 AND stage = 'Working budget')
+              - sum(controllable) FILTER (WHERE fiscal_year = 2025 AND stage = 'Actual'))
+             / sum(controllable) FILTER (WHERE fiscal_year = 2025 AND stage = 'Actual')
+      FROM mart.f_agency
+
+  - id: operating_spending_fy2026_usd
+    name: Operating spending, FY2026 working budget
+    definition: Operating spending of all agencies, FY2026 working budget (one year, not a sum across years).
+    unit: usd
+    grain: one row per agency, fiscal year and budget stage
+    tables: [f_agency]
+    owner: Sierra Napier
+    shown_in: [Overview tab]
+    sql: SELECT sum(operating_spending) FROM mart.f_agency WHERE fiscal_year = 2026 AND stage = 'Working budget'
+
+  - id: controllable_share_of_operating_ratio
+    name: Controllable purchases as a share of operating spending, FY2026
+    definition: Controllable purchases divided by operating spending, FY2026 working budget.
+    unit: ratio
+    grain: one row per agency, fiscal year and budget stage
+    tables: [f_agency]
+    owner: Sierra Napier
+    shown_in: [Overview tab]
+    sql: >
+      SELECT sum(controllable) / sum(operating_spending) FROM mart.f_agency
+      WHERE fiscal_year = 2026 AND stage = 'Working budget'
+
+  - id: payments_latest_fy_usd
+    name: State payments, latest fiscal year in the data
+    definition: Total payments by State agencies to payees in the latest fiscal year of the payments data, nominal dollars.
+    unit: usd
+    grain: one row per fiscal year
+    tables: [totals_by_fy]
+    owner: Sierra Napier
+    shown_in: [portfolio payments chart]
+    sql: SELECT total_payments FROM mart.totals_by_fy ORDER BY fiscal_year DESC LIMIT 1
+
+  - id: rows_checked_against_portal
+    name: Rows checked against the portal
+    definition: Rows downloaded across the six State datasets, each matched to the portal on row count and yearly totals.
+    unit: count
+    grain: one row per source dataset
+    tables: [sources]
+    owner: Sierra Napier
+    shown_in: [Data & pipeline tab, portfolio]
+    sql: SELECT sum(rows_downloaded) FROM mart.sources
+
+  - id: checks_passed
+    name: Data checks passed
+    definition: Number of stop checks that passed in the latest build.
+    unit: count
+    grain: one row per check
+    tables: [run_checks]
+    owner: Sierra Napier
+    shown_in: [Data & pipeline tab, portfolio]
+    sql: SELECT count(*) FILTER (WHERE status = 'pass') FROM mart.run_checks
+
+  - id: checks_total
+    name: Data checks in the latest build
+    definition: Number of stop checks in the latest build.
+    unit: count
+    grain: one row per check
+    tables: [run_checks]
+    owner: Sierra Napier
+    shown_in: [Data & pipeline tab, portfolio]
+    sql: SELECT count(*) FROM mart.run_checks

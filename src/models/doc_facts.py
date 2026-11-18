@@ -15,6 +15,8 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
+from src.models import metrics as M
+
 ROOT = Path(__file__).resolve().parents[2]
 DB = ROOT / "data" / "md_transparency.duckdb"
 OPPS = ROOT / "docs" / "models" / "opportunities.md"
@@ -114,6 +116,8 @@ def mm(v):
 
 def readme_facts(con):
     """The README's "What it found" bullets, computed from the marts."""
+    reg = M.load()
+    v = lambda mid: M.value(con, mid, reg)  # noqa: E731  every headline number comes from config/metrics.yml
     sv = con.execute("select * from mart.d_savings").df()
     gmi = sv[sv.source.str.contains("Government Modernization Initiative Final Report", na=False)]
     saved = gmi[gmi.status == "Saved in FY2026"]
@@ -121,19 +125,19 @@ def readme_facts(con):
     pl = con.execute("select * from mart.d_plan50").df()
     seen = set(st[st.status == "Seen"].check_id)
     rec = sv[sv.check_id.isin(seen) & sv.type.str.contains("Recurring|Year over year", na=False)]
-    tot = pl.cumulative.max()
+    tot = v("path_total_usd")
     ev = ((rec.reported_low.fillna(0) + rec.reported_high.fillna(0)) / 2).sum() / tot
     rate = pl.basis.str.extract(r"assumed ([\d.]+)%")[0].dropna()
-    op = con.execute("select count(*), sum(high), sum(likely) from mart.d_opps").fetchone()
-    ps = con.execute("select sum(groups), sum(review_amount) from mart.d_payment_screen_summary where rule = 'Possible duplicate'").fetchone()
-    si = con.execute("select sum(amount), max(verified_on), string_agg(agency, ' and ' order by agency) from mart.d_source_issues").fetchone()
+    op = (v("opportunity_findings"), v("opportunity_high_usd"), v("opportunity_likely_usd"))
+    ps = (v("possible_duplicate_groups"), v("possible_duplicate_review_usd"))
+    si = (v("source_issue_amount_usd"), *con.execute("select max(verified_on), string_agg(agency, ' and ' order by agency) from mart.d_source_issues").fetchone())
     other = len(sv) - len(gmi)
     return "\n".join([
         f"- **Reported savings:** GMI's January 26, 2026 report lists {len(gmi)} items" + ((" (plus a separate DGS facility estimate)" if other == 1 else f" (plus {other} separate DGS estimates)") if other else "")
-        + f". The {len(saved)} it describes as saved in FY2026 add up to {mm(saved.reported_low.sum())}, its own FY2026 total; the rest are yearly savings under way or projected and are not added to it.",
+        + f". The {len(saved)} it describes as saved in FY2026 add up to {mm(v('reported_saved_fy2026_usd'))}, its own FY2026 total; the rest are yearly savings under way or projected and are not added to it.",
         f"- **Payment evidence:** about {ev:.0%} of the path to {mm(tot)} has payment evidence; the path is conditional on reported savings recurring"
         + (f" and an assumed {rate.iloc[0]}% from statewide contracts" if len(rate) else "")
-        + f" ({mm(pl.low.sum())}–{mm(pl.high.sum())} across the assumed ranges).",
+        + f" ({mm(v('path_low_usd'))}–{mm(v('path_high_usd'))} across the assumed ranges).",
         f"- **Opportunities:** {op[0]} findings worth up to {mm(op[1])} a year ({mm(op[2])} likely). They are leads to review; they overlap and are not additive.",
         f"- **Payment screen:** {int(ps[0])} possible duplicate payment groups ({mm(ps[1])} to review). None can be confirmed without payment records.",
         f"- **Source data issue:** the published FY2022 payments data lists a second block of {mm(si[0])} for {si[2].title()}, confirmed on both State sites on "
