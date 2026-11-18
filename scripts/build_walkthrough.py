@@ -17,10 +17,10 @@ code = lambda s: cells.append(nbf.v4.new_code_cell(s.strip()))
 md("""
 # GMI Savings Tracker: a walkthrough of the evidence
 
-**What this is.** Maryland's Government Modernization Initiative (GMI) reported savings and set a yearly savings target. This walkthrough checks those reported savings against the State's own payment records, forecasts the spending the savings come from, and lists leads for further savings. It is written for budget analysts, auditors and interested residents; you do not need to read code to follow it.
+**What this is.** Maryland's Government Modernization Initiative (GMI) reported savings and set a yearly savings target. This page checks those reports against the State's own payment records. It shows what the data supports, what it does not, and where to look next. It is also a worked example of how any government or school system could check its own savings claims. You do not need to read code to follow it.
 
 **How to read it.**
-- Start with the key findings below; each section after them gives the evidence for one finding.
+- Start with *At a glance* and the key findings below; each section after them gives the evidence for one finding.
 - Every number in the text is computed from the published tables in `site_data/` (the same files as the dashboard and the data release), so the text cannot drift from the data. The code for each step is folded under *Show the code*.
 - Three kinds of figure are kept apart throughout: **reported** savings (GMI's own figures), what is **observed in payment data** (evidence, not verification), and **leads** (places worth a look, not savings).
 - Fiscal years run July 1 to June 30 (FY2026 is July 2025 to June 2026). Budget years are plans, not outcomes.
@@ -43,6 +43,36 @@ cfg = yaml.safe_load((root / "config" / "assumptions.yaml").read_text())
 info = P.run_info()
 money = V.money
 pct = lambda x: f"{x:.0%}"
+""")
+
+md("""
+## At a glance
+""")
+code("""
+st0 = P.load("d_savings_status")
+wf0 = st0[st0.reported.notna()]
+seen0, not0, none0 = wf0[wf0.status == "Seen"], wf0[wf0.status == "Not seen yet"], st0[st0.reported.isna()]
+pl0 = P.load("d_plan50")
+tgt0 = cfg["recommendations"]["target_saving"]
+cov0 = V.coverage_summary().set_index(["scope", "calibrated"])
+raw0 = cov0.loc[("in_sample", 0)]
+ex = info["export"]
+asof = f"{ex[:4]}-{ex[4:6]}-{ex[6:8]}"
+portal = P.load("sources").portal_updated.max()
+display(Markdown(f\"\"\"
+**Data as of {asof}** (the six portal datasets were last updated on or before {portal}). Pipeline run {info['run_id']}; {info['checks']} automated checks, {info['passed']} passed.
+
+**The bottom line.**
+- Of {len(wf0)} reported savings items with a dollar figure, **{len(seen0)} show up in the State's payments** and **{len(not0)} do not yet**. Payments falling is evidence, not proof.
+- The plan to reach the {money(tgt0)} target adds up to **{money(pl0.cumulative.iloc[-1])}**, but only **{money(pl0.saving.iloc[0])}** of that uses GMI's own reported rates. The rest rests on assumed rates that no recorded outcome has tested.
+- The published forecast range was meant to hold 80% of outcomes but held **{raw0.coverage:.0%}**. A recalibrated range does better on years it had not seen (section 5).
+
+**What this evidence could help a budget office, audit team or school-system finance office do.**
+1. Ask for the dollar basis behind the {len(none0)} reported items that have no dollar figure.
+2. Treat the leads as a review list with a named owner, and record each outcome, so that a real hit rate can be measured later.
+3. Publish a checked forecast range beside every budget forecast.
+4. Repeat the reported-against-payments check every year, so claims are tested as they are made.
+\"\"\"))
 """)
 
 md("## Key findings")
@@ -106,7 +136,11 @@ V.show("spending_base", f"Actual spending to FY{int(act.fiscal_year.iloc[-1])}; 
 
 md("""
 ## 4. Reported savings against the State's own payments
-GMI reported savings items. For each, the tracker sums payments to the vendors that sell the thing being cut and compares the year before with the year after. How each status is assigned:
+GMI reported savings items. For each, the tracker sums payments to the vendors that sell the thing being cut and compares the year before with the year after.
+
+**How savings are counted here.** The tracker measures *payments*, meaning money that actually went out. It cannot see *cost avoidance* (a cost that would have grown but did not) or savings measured against a plan or appropriation; those need the agency's own baseline. The year-before against year-after comparison is a simple baseline: price changes, volume changes and one-time items can move payments for other reasons. The tracker cannot tell whether two reported items overlap. Where this page adds up dollars, they are the amounts GMI reported, and a sum of them is not a verified total.
+
+How each status is assigned:
 """)
 code("""
 sc = cfg["savings"]
@@ -239,6 +273,11 @@ display(HTML(f"<details><summary>All {len(pl)} steps</summary>" + V.table(full, 
 display(Markdown(f"After {len(pl)} steps the central estimate is {money(pl.cumulative.iloc[-1])}, of which {money(pl.saving.iloc[0])} "
                  f"({pl.saving.iloc[0] / pl.cumulative.iloc[-1]:.0%}) comes from GMI's own reported rates; the rest depends on assumed rates "
                  f"that no recorded outcome has yet tested."))
+""")
+
+md("""
+## Using this approach elsewhere
+The same method needs three things: a public source with row counts to reconcile against, a list of claimed savings, and payment or spending records that name the vendor. The steps are the ones used here: download and reconcile, run stop checks, publish tables, and write every number in the report from those tables. A city, county or school system with those inputs could run the same checks on its own claims. To discuss a pilot, contact Sierra Napier at s.napier430@gmail.com. This is an independent prototype, not an official State product.
 """)
 
 md("## 9. Limits")

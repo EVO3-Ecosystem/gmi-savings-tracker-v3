@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 Added
+- Walkthrough front matter (from `docs/research/walkthrough-review.md`, gaps G1 to G4 and the as-of line): an *At a glance* section with the data as-of date, three computed bottom-line points and four actions the evidence supports; a plain-words opening; a "How savings are counted" note (payments versus cost avoidance, the simple year-before baseline, no overlap check); and a "Using this approach elsewhere" section. Figures and findings are unchanged.
 - Metric registry (`config/metrics.yml`, `src/models/metrics.py`): 19 headline numbers (reported savings, the conditional path, opportunity leads, payment screen, source issue, controllable purchases and its change, rows checked, checks passed) each defined once with its definition, unit, grain, marts and SQL, checked by the MCP SQL guard. The README facts now read their numbers from it, and the site publishes `metrics.json` (definitions plus current values). Tests: registry shape, every metric evaluates on the published snapshot, README facts and the Overview finding equal the registry, unsafe SQL is refused. Roadmap Phase 7 pillar 3, step 1 (decision D14).
 
 Changed
