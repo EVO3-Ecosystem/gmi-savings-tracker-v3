@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Changed
+- Roadmap: status as of Nov 18, 2026 and Phase 7 (BI as an application): decisions D10 to D13, the option comparison, the four pillars with gates, and the fate of each static report. Plotly is adopted for new interactive views (reverses the earlier decline).
+
 Fixed
 - The monthly Extract and build run failed `pytest` on any day after the README's as-of date, because the README facts were only regenerated after the tests. It now regenerates them from the new run first and keeps the resulting docs patch with the run evidence (found on the first run after the backtest fix: extract, build and 476 tests passed; only the README date check failed).
 

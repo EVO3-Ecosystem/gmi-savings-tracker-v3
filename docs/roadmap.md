@@ -10,7 +10,8 @@ timeline
     Phase 3 — Reference data : Complete, Oct 29, 2026 : match rates equal the dashboard's
     Phase 4 — Marts & dashboard : Complete, Nov 2, 2026 : 21 base dashboard files reproduced exactly or explained
     Phase 5 — Analytics : Mostly complete, Nov 9, 2026 : all 44 dashboard files built from marts; LightGBM challenger, review queue and revenue corridor in : still open — site cross-checks, detector backtest
-    Phase 6 — Automate & document : Open : scheduled runs, DVC local store, optional Postgres, freshness alerts, read-only MCP server
+    Phase 6 — Automate & document : In progress, Nov 18, 2026 : weekly freshness check and monthly Extract and build scheduled; one full green run (Nov 18); first scheduled run Dec 3 : MCP server in src/mcp
+    Phase 7 — BI as an application : Opened Nov 18, 2026 : Plotly and filters, hosted questions, metric registry, alerts (see the last section)
 ```
 
 | Phase | Weeks | Build | Gate | Status |
@@ -218,3 +219,48 @@ Closed from "Remaining phases to completion": (1) detector backtest drawn on the
 
 Every year is reconciled with the State's own documents (src/pipeline/books.py; README "Data"): FY2017-FY2025 program actuals with DBM's Governor's budget books (9 of 9 years; 99.3-100% of programs equal to the dollar), the enacted FY2027 budget with DBM's Fiscal Digest by fund (to the dollar), and 31 yearly totals with the Open Finance sites (to the cent). FY2026 (working budget) is bridged and its $482.4M remainder labelled as budget amendments; it becomes an exact check when the FY2028 books print the FY2026 working appropriation (January 2027). License changed to proprietary, all rights reserved.
 
+## Status, Nov 18, 2026
+
+- **Released and published:** 3.1.0 (audit depth) and 3.2.0 (data accuracy); statewide program screen with audit findings, the accessible walkthrough report and GitHub Discussions (Q&A, Ideas) merged Nov 17; the Socrata app token is optional (tokenless runs, CI cache, fail-fast on a rejected token: PRs #12, #13); the detector backtest fix for years with no actual budget rows (#14); the opt-in `?palette=portfolio`, `?embed=1` and hash tab switching (#15); the Extract and build workflow regenerates the README facts before `pytest` and keeps the docs patch with the run evidence (#16).
+- **Scheduled runs (Phase 6 gate: two clean scheduled runs with no manual steps):** the weekly freshness check ran on schedule on Nov 16 and passed. The monthly Extract and build (`23 7 3 * *`) has not run on schedule yet; its first scheduled run is Dec 3, 2026. A manual run on Nov 18 ([run 44302939674](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/runs/44302939674)) passed every step: extract (12 min 44 s), build with 143 of 143 checks, tests, strict reconcile with the portal downloads, figures, governance and the evidence artifact, and it saved the raw-data cache. The gate stays open until Dec 3 and Jan 3 are clean.
+- **Live:** the portfolio at goaiarchitect.com shows one card per dashboard tab with the tab's finding and an interactive Plotly chart, plus a full-page live demo of this dashboard.
+- **MCP server:** the maintained server is `src/mcp/` (six read-only tools, a SQL guard, `docs/mcp.md`). `mcp_server/server.py` is the earlier three-tool server; only `mcp_server/db/load_postgres.py` is still used (Makefile target `postgres`). Decision: retire `mcp_server/server.py` and move the Postgres loader when the next cleanup PR is made.
+
+## Phase 7: BI as an application (opened Nov 18, 2026)
+
+Aim: stop shipping reports and ship an application. A reader filters, toggles nominal and real dollars, drills into the numbers behind a chart, asks a question in plain English, and is told when something breaks, without waiting for an analyst. Every number still comes from a published table.
+
+**Decisions (continuing D1 to D9):**
+- **D10, Plotly adopted for new interactive views.** This reverses the earlier decline of "switching to Seaborn or Plotly" (d3 and matplotlib used the validated palette). Conditions: Plotly uses the validated eight-colour palette (`SERIES_*` in `src/pipeline/preview.py`), every chart keeps a table equivalent, and the existing d3 tabs stay until a view is rebuilt and tested. Reversed Nov 18, 2026, like the revenue forecast on Nov 9.
+- **D11, dashboard approach: a static application on Cloudflare.** JavaScript + Plotly + DuckDB-WASM over the published Parquet, one filter bar with URL state, drill-down; Cloudflare static assets for hosting; small Workers only where a server is needed. React/Next.js and Streamlit were evaluated and not adopted for the public product (matrix below). Streamlit may be used locally as an analyst workbench, not deployed.
+- **D12, Cloudflare Workers for secrets and schedules.** A Worker holds the model key for hosted questions and runs the alert cron; the owner adds secrets, never in chat.
+- **D13, static reports become download artifacts.** Every number on a page must come from a published table and be reachable in the dashboard.
+
+**Option comparison (1 to 5, 5 best; weights: delivery 15, maintenance 15, reuse 15, interactivity 10, performance 10, accessibility 10, security and trust 10, Cloudflare fit 5, cost 5, portfolio signal 5):**
+
+| Option | Weighted score | One-line reason |
+|---|---|---|
+| A. Static app: JavaScript + Plotly + DuckDB-WASM on Cloudflare | **4.35** | Reuses the d3 tabs, tests, explorer and data; no server; cheapest; filters are hand-built |
+| B. React / Next.js front end | 2.95 | Best component model, but a full rewrite, an npm supply-chain surface and a young Next-on-Workers path for one maintainer |
+| C1. Streamlit server | 3.45 | Python-first and fast, but an always-on public service and weak linked-filter model |
+| C2. stlite (Streamlit in the browser) | 3.30 | Static and cheap, but unmeasured load time and memory |
+
+Evidence and limits found while researching (Nov 2026; Cloudflare and Streamlit pages could not be fetched from the research environment, so those claims are from search summaries and should be re-checked on the vendor pages):
+- Workers static assets can set `_headers` (CSP, `frame-ancestors`), but those headers are not applied to responses generated by a Worker.
+- Workers static assets answer `Range` requests with the whole file (200), so DuckDB-WASM reads whole files; fine for 5.4 MB of Parquet, but row-level files should go to R2 with a custom domain and CORS.
+- DuckDB-WASM is capped at 4 GB of memory and has range-request issues on Firefox and some pre-signed URLs; the explorer pins 1.32.0 (latest release is newer).
+- Plotly.js: the portfolio pins 3.5.0 (cartesian bundle about 463 to 507 kB gzipped); a newer major is out, so pin and upgrade deliberately. Plotly SVG has no roles or names by default, so table fallbacks and ARIA are ours.
+- Row-level ledger drill-down is not possible from today's published tables (they are marts). It needs new row-level published files, sized and served from R2.
+
+**Pillars, builds and gates:**
+
+| # | Pillar | Build | Gate |
+|---|---|---|---|
+| 1 | Interactive dashboards | "Explore": one filter bar (fiscal-year range, nominal or real dollars, focus area, agency, stage) with URL state; Plotly charts that all react to it; drill-down to row-level data; the d3 tabs link into it | Each tab has a filter, the real-dollar toggle and a drill-down covered by a Playwright test; palette contrast test passes; table equivalents present |
+| 2 | Conversational BI | Finish and document the read-only MCP server (`src/mcp/`); a Worker `/api/ask` that generates SQL from the question and the metric registry, checks it against an allow-list, and lets the browser run it over the public Parquet; 30-question evaluation set | At least 90% exact on numbers; no write or out-of-allow-list statement passes the guard in fault tests |
+| 3 | Metric store | `config/metrics.yml` (name, definition, grain, mart, unit, owner) compiled to SQL views and a static `metrics.json`; later evaluate dbt-duckdb or MetricFlow (62 marts, well past the 15-mart point the project noted) | One definition per metric; a test fails when two places compute it differently |
+| 4 | Exception-based alerts | `config/alerts.yml` thresholds (failed stop check, source stale over 10 days, drift PSI over 0.25, new payment-screen lead above a size, budget variance); the pipeline publishes `status.json`; a Cloudflare cron Worker posts to the chosen channel and de-duplicates; weekly digest; GitHub issues stay as the audit trail | A forced breach posts once; a quiet week posts only the digest |
+
+**Static reports, and what happens to each:** `walkthrough.html` stays as the methods read, with each figure linked to its live view; README images and `docs/figures/*.png` stay as previews labelled "static snapshot"; `docs/reconciliation/*` stays as an audit trail; the payment review sheet becomes a dashboard view plus an alert; the legacy PDF report is not built (the live dashboard and the alert digest replace it).
+
+**Open:** the alert channel (Slack, Teams or email); where the model key for hosted questions is kept (Cloudflare Worker secrets); a read-only inventory of the Cloudflare account (which account holds goaiarchitect.com, DNS, Workers, R2, KV) before any change; whether to publish row-level files.

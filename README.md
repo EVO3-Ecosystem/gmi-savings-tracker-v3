@@ -270,7 +270,9 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
 - Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
 - January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
-- Run the Extract and build workflow. It needs no token: the datasets are public, a valid `MD_SODA_APP_TOKEN` only raises the request limits, and a rejected one is dropped with a warning. `mart.d_program_screen` and the program-screen card reach the site once a build has been published.
+- Scheduled runs: the monthly Extract and build runs on the 3rd (first scheduled run Dec 3, 2026); a manual run on Nov 18 passed every step. It needs no token: the datasets are public, a valid `MD_SODA_APP_TOKEN` only raises the request limits, and a rejected one is dropped with a warning. A data-refresh PR (published `site_data/`, which would publish `mart.d_program_screen`) is the next data step.
+- Phase 7, BI as an application (see [docs/roadmap.md](docs/roadmap.md)): an Explore view with Plotly and filters, hosted questions in plain English, a metric registry and exception-based alerts, hosted on Cloudflare.
+- Live demo of the dashboard inside the portfolio: [goaiarchitect.com/demo/gmi-savings-tracker.html](https://goaiarchitect.com/demo/gmi-savings-tracker.html).
 - Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
 
 Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
