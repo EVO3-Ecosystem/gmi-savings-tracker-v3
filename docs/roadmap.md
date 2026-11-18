@@ -235,6 +235,7 @@ Aim: stop shipping reports and ship an application. A reader filters, toggles no
 - **D11, dashboard approach: a static application on Cloudflare.** JavaScript + Plotly + DuckDB-WASM over the published Parquet, one filter bar with URL state, drill-down; Cloudflare static assets for hosting; small Workers only where a server is needed. React/Next.js and Streamlit were evaluated and not adopted for the public product (matrix below). Streamlit may be used locally as an analyst workbench, not deployed.
 - **D12, Cloudflare Workers for secrets and schedules.** A Worker holds the model key for hosted questions and runs the alert cron; the owner adds secrets, never in chat.
 - **D13, static reports become download artifacts.** Every number on a page must come from a published table and be reachable in the dashboard.
+- **D14, one definition per metric.** Headline numbers are defined once in `config/metrics.yml` and evaluated by `src/models/metrics.py` (SQL checked by the MCP guard); the README facts and `metrics.json` read from it. Step 1 done Nov 18, 2026 (19 metrics); next: the dashboard and the hosted-question prompt read `metrics.json`, and a test compares each tab's text with the registry.
 
 **Option comparison (1 to 5, 5 best; weights: delivery 15, maintenance 15, reuse 15, interactivity 10, performance 10, accessibility 10, security and trust 10, Cloudflare fit 5, cost 5, portfolio signal 5):**
 

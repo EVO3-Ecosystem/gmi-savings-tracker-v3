@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Added
+- Metric registry (`config/metrics.yml`, `src/models/metrics.py`): 19 headline numbers (reported savings, the conditional path, opportunity leads, payment screen, source issue, controllable purchases and its change, rows checked, checks passed) each defined once with its definition, unit, grain, marts and SQL, checked by the MCP SQL guard. The README facts now read their numbers from it, and the site publishes `metrics.json` (definitions plus current values). Tests: registry shape, every metric evaluates on the published snapshot, README facts and the Overview finding equal the registry, unsafe SQL is refused. Roadmap Phase 7 pillar 3, step 1 (decision D14).
+
 Changed
 - Roadmap: status as of Nov 18, 2026 and Phase 7 (BI as an application): decisions D10 to D13, the option comparison, the four pillars with gates, and the fate of each static report. Plotly is adopted for new interactive views (reverses the earlier decline).
 
