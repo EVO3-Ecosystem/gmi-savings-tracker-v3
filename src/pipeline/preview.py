@@ -34,6 +34,14 @@ _DARK = {"color-bg": "#111110", "color-panel": "#1a1a19", "color-border-line": "
          "cds-border": "#3a3936", "cds-shadow-popover": "0 4px 16px rgba(0,0,0,.5)", "cds-text-secondary": "#c3c2b7", "color-link": "#7fb0ff",
          "color-focus": "#7fb0ff", "conf-low": "#8a8983", **{f"series-{i + 1}": c for i, c in enumerate(SERIES_DARK)}}
 
+# The portfolio look (opt-in with ?palette=portfolio): the dark navy, gold and cyan of the portfolio site, so the live dashboard
+# can sit beside its charts. The default look above is unchanged. Text and marks are checked for contrast in tests/test_site_embed.py.
+SERIES_PORTFOLIO = ["#f59e0b", "#06b6d4", "#34d399", "#a78bfa", "#f472b6", "#60a5fa", "#fb923c", "#f87171"]
+_PORTFOLIO = {"color-bg": "#0a0e1a", "color-panel": "#111827", "color-border-line": "#1f2d44", "color-fg": "#f0f0f0", "color-fg-muted": "#94a3b8",
+              "color-ok": "#4ade80", "color-warn": "#f59e0b", "color-bad": "#f87171", "cds-chart-muted": "#475569", "cds-surface-popover": "#1a2234",
+              "cds-border": "#1f2d44", "cds-shadow-popover": "0 4px 16px rgba(0,0,0,.5)", "cds-text-secondary": "#94a3b8", "color-link": "#22d3ee",
+              "color-focus": "#22d3ee", "conf-low": "#64748b", **{f"series-{i + 1}": c for i, c in enumerate(SERIES_PORTFOLIO)}}
+
 
 def _vars(d):
     return ";".join(f"--{k}:{v}" for k, v in d.items())
@@ -46,7 +54,16 @@ LOOK = ("<style>:root{color-scheme:light;--font-anthropic-sans:ui-sans-serif,sys
         "html,body{background:var(--color-bg);color:var(--color-fg)}body{font-family:var(--font-anthropic-sans);margin:0 16px}"
         "a{color:var(--color-link)}:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}"
         ".gs select:focus-visible,.gs a:focus-visible,.gs summary:focus-visible,.gs [tabindex]:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}"
-        "@media (max-width:480px){body{margin:0 12px}}</style>")
+        "@media (max-width:480px){body{margin:0 12px}}"
+        # opt-in portfolio palette and embed mode (?palette=portfolio, ?embed=1); both after the theme rules so they win
+        ":root[data-palette=\"portfolio\"]{color-scheme:dark;" + _vars(_PORTFOLIO) + "}"
+        "html[data-palette=\"portfolio\"]{accent-color:#f59e0b}"
+        "html[data-embed] .gs header.top{display:none}"
+        "html[data-embed] #site-head{font-size:0!important;border:0!important;padding:0!important}html[data-embed] #site-head #site-status{font-size:13px!important}"
+        "</style>"
+        "<script>(function(){var q=new URLSearchParams(location.search),d=document.documentElement;"
+        "if(q.get('palette')==='portfolio')d.setAttribute('data-palette','portfolio');"
+        "if(q.get('embed')==='1')d.setAttribute('data-embed','1');})();</script>")
 
 
 def _page_test():
