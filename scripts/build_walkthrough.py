@@ -56,6 +56,9 @@ pl0 = P.load("d_plan50")
 tgt0 = cfg["recommendations"]["target_saving"]
 cov0 = V.coverage_summary().set_index(["scope", "calibrated"])
 raw0 = cov0.loc[("in_sample", 0)]
+cl0 = P.load("d_reported_claims")
+jan_saved0 = cl0[(cl0.source_id == "JCR_2026_01") & cl0.basis.str.contains("Saved in FY2026")].amount_low.sum()
+page0 = cl0[cl0.claim_id == "GOVPAGE_2026_06-G00"].amount_low.iloc[0]
 ex = info["export"]
 asof = f"{ex[:4]}-{ex[4:6]}-{ex[6:8]}"
 portal = P.load("sources").portal_updated.max()
@@ -65,6 +68,7 @@ display(Markdown(f\"\"\"
 **The bottom line.**
 - Of {len(wf0)} reported savings items with a dollar figure, **{len(seen0)} show up in the State's payments** and **{len(not0)} do not yet**. Payments falling is evidence, not proof.
 - The plan to reach the {money(tgt0)} target adds up to **{money(pl0.cumulative.iloc[-1])}**, but only **{money(pl0.saving.iloc[0])}** of that uses GMI's own reported rates. The rest rests on assumed rates that no recorded outcome has tested.
+- **GMI reports two totals.** Its January 2026 report says {money(jan_saved0)} was saved in FY2026; its June 2026 page says it has implemented actions to save {money(page0)}. They count different things, and the tracker has verified neither (section 4).
 - The published forecast range was meant to hold 80% of outcomes but held **{raw0.coverage:.0%}**. A recalibrated range does better on years it had not seen (section 5).
 
 **What this evidence could help a budget office, audit team or school-system finance office do.**
@@ -167,6 +171,49 @@ items = st.assign(change=st["after"] - st["before"])[["check_id", "item", "repor
 items.columns = ["ID", "Reported item", "Reported saving", f"Payments FY{sc['before_fy']}", f"Payments FY{sc['after_fy']}", "Change", "Status"]
 display(V.table(items, "Each reported savings item and the matching payments", money=list(items.columns[2:5]), signed=["Change"]))
 V.show("savings_status", "Each bar counts reported savings items by what the payments show. Solid bars are items with a reported dollar figure.")
+""")
+
+md("""
+### What GMI's public page says now
+GMI's savings are reported in more than one place, and the places count different things. The tracker keeps every figure with its source and date (the published table `d_reported_claims`) and never mixes them. Two sources matter here: the January 26, 2026 report to the legislature, which this page uses for item-level checks because each item carries a page number and a quote, and the Governor's Government Modernization Initiative page, which states its status as of June 2026.
+""")
+code("""
+cl, cmp = V.claims_view()
+srcs = cl.drop_duplicates("source_id")[["source_title", "as_of", "retrieved", "url"]].copy()
+srcs["link"] = [f'<a href="{u}">{u}</a>' for u in srcs.url]
+srcs = srcs[["source_title", "as_of", "retrieved", "link"]]
+srcs.columns = ["Source", "Status as of", "Retrieved", "Link"]
+display(V.table(srcs, "The sources of reported savings figures, and their dates"))
+jan_saved = cl[(cl.source_id == "JCR_2026_01") & cl.basis.str.contains("Saved in FY2026")].amount_low.sum()
+page_total = cl[cl.claim_id == "GOVPAGE_2026_06-G00"].amount_low.iloc[0]
+head = pd.DataFrame([
+    ("January 26, 2026 report", "Saved in FY2026 (the items it describes as saved)", jan_saved, "The report's own FY2026 total; yearly savings under way or projected are not added."),
+    ("Governor's page (as of June 2026)", "Implemented actions to save", page_total, "The page broadened the goal to a variety of fund sources and does not split one-time from yearly savings."),
+], columns=["Source", "What it counts", "Amount", "Note"])
+display(V.table(head, "The two headline totals", money=["Amount"]))
+display(Markdown("The totals are different counts, not rival measurements of one thing, and **the tracker has verified neither**: payments can speak to only some items (section 4). "
+                 "This page therefore quotes both, each with its source, and does not choose between them."))
+""")
+code("""
+def amt(lo, hi):
+    if pd.isna(lo):
+        return "no figure"
+    return money(lo) if lo == hi else f"{money(lo)} to {money(hi)}"
+cmp2 = cmp.assign(
+    january=[amt(a, b) for a, b in zip(cmp.january_low, cmp.january_high)],
+    page=[money(x) for x in cmp.page_amount],
+    gap=[("no January figure" if pd.isna(lo) else ("within 6%" if abs(p - (lo + hi) / 2) < 0.06 * p else ("page higher" if p > (lo + hi) / 2 else "page lower"))) for lo, hi, p in zip(cmp.january_low, cmp.january_high, cmp.page_amount)],
+)
+cmp2["match"] = cmp2.mapping.map(lambda m: "likely the same item" if "likely" in m else "same item")
+view = cmp2[["saving_id", "item", "january", "page", "gap", "match"]]
+view.columns = ["Item", "What", "January 2026 report", "June 2026 page", "Compared", "How matched"]
+display(V.table(view, "Items that both sources describe, side by side"))
+lev = cl[(cl.source_id == "GOVPAGE_2026_06") & cl.saving_id.isin(["S02", "S03", "S04", "S05"])]
+display(Markdown(f"**Where they differ.** For the four contract types behind the report's $18M (items S02 to S05), the report gives no split; the page gives lines that add to {money(lev.amount_low.sum())} "
+                 f"({', '.join(sorted(set(lev.saving_id)))}), and a further {money(cl[cl.claim_id == 'GOVPAGE_2026_06-G11'].amount_low.iloc[0])} for IT services contracts that matches no January item. "
+                 f"Neither document says how its lines relate to the other. Differences of a few percent look like rounding; larger ones (mobile phone rates, the fleet maintenance tool) may be timing or scope. "
+                 f"**Matching a page line to a January item is this tracker's reading.** Where the table says *likely*, the page does not name the item. The page also lists lines with no January item at all "
+                 f"({len(cl[(cl.source_id == 'GOVPAGE_2026_06') & (cl.saving_id == '') & (cl.claim_id != 'GOVPAGE_2026_06-G00')])} of them, including about {money(cl[cl.claim_id == 'GOVPAGE_2026_06-G17'].amount_low.iloc[0])} projected for the Department of Information Technology)."))
 """)
 
 md("""

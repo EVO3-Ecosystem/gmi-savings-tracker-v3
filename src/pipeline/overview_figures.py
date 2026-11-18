@@ -246,6 +246,13 @@ def table(df, caption, money=(), pct=(), ints=(), dec=(), signed=(), index=False
     return st if index else st.hide(axis="index")
 
 
+def claims_view():
+    """Published reported figures (d_reported_claims) and the January report lined up with the Governor's page, item by item."""
+    from src.models import claims
+    c = P.load("d_reported_claims")
+    return c, claims.compare(c)
+
+
 def money_fmt(v):
     return money(v)
 
