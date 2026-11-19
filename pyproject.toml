@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gmi-savings-tracker"
-version = "3.2.0"
+version = "4.0.0"
 description = "GMI Savings Tracker: local SODA -> Parquet -> DuckDB pipeline that checks reported savings against Maryland's own payments and finds the next $50M"
 requires-python = ">=3.12"
 license = {text = "LicenseRef-Proprietary: all rights reserved, see LICENSE"}
