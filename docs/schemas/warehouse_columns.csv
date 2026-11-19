@@ -696,6 +696,28 @@ mart.d_plan50,low,DOUBLE,30,Low end of the estimated saving; uses a screening as
 mart.d_plan50,high,DOUBLE,30,High end of the estimated saving; uses a screening assumption (see Assumptions register),derived
 mart.d_plan50,tab,VARCHAR,30,Dashboard tab the row links to,derived
 mart.d_plan50,cumulative,DOUBLE,30,Running total of savings,derived
+mart.d_program_screen,agency_code,VARCHAR,298,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+mart.d_program_screen,agency,VARCHAR,298,Agency name shown on the dashboard,derived
+mart.d_program_screen,unit_name,VARCHAR,298,Budget unit name,portal
+mart.d_program_screen,program_code,VARCHAR,298,"Budget program code, two digits in core",portal
+mart.d_program_screen,program_name,VARCHAR,298,Budget program name,portal
+mart.d_program_screen,years,BIGINT,298,,
+mart.d_program_screen,first_fy,BIGINT,298,First fiscal year the code appears,derived
+mart.d_program_screen,last_fy,BIGINT,298,Last fiscal year the code appears,derived
+mart.d_program_screen,spend_first,DOUBLE,298,,
+mart.d_program_screen,spend_last,DOUBLE,298,,
+mart.d_program_screen,growth_multiple,DOUBLE,298,,
+mart.d_program_screen,largest_swing,DOUBLE,298,,
+mart.d_program_screen,swing_fy,BIGINT,298,,
+mart.d_program_screen,fast_growth,BOOLEAN,298,,
+mart.d_program_screen,large_swing,BOOLEAN,298,,
+mart.d_program_screen,signals,BIGINT,298,,
+mart.d_program_screen,ola_report_date,VARCHAR,298,,
+mart.d_program_screen,ola_findings,DOUBLE,298,,
+mart.d_program_screen,ola_repeat_findings,DOUBLE,298,,
+mart.d_program_screen,reported_findings,BIGINT,298,,
+mart.d_program_screen,reported_amount,DOUBLE,298,,
+mart.d_program_screen,recoupment_status,VARCHAR,298,,
 mart.d_range_coverage,source,VARCHAR,59,"Range source: bootstrap (area forecasts), lightgbm (challenger) or revenue",derived
 mart.d_range_coverage,area,VARCHAR,59,One of GMI's six focus areas,derived
 mart.d_range_coverage,horizon,BIGINT,59,Forecast horizon in years; 0 = all horizons pooled,derived
@@ -716,6 +738,21 @@ mart.d_rec_status,status,VARCHAR,6,Status of the recommendation,derived
 mart.d_rec_status,progress,VARCHAR,6,Key number showing progress,derived
 mart.d_rec_status,tab,VARCHAR,6,Dashboard tab the row links to,derived
 mart.d_rec_status,previous,"""NULL""",6,Progress text in the previous run,ops
+mart.d_reported_claims,claim_id,VARCHAR,38,,
+mart.d_reported_claims,source_id,VARCHAR,38,,
+mart.d_reported_claims,source_title,VARCHAR,38,,
+mart.d_reported_claims,source_date,VARCHAR,38,,
+mart.d_reported_claims,as_of,VARCHAR,38,,
+mart.d_reported_claims,retrieved,VARCHAR,38,,
+mart.d_reported_claims,saving_id,VARCHAR,38,Reported saving identifier (S01-S18),reference
+mart.d_reported_claims,item,VARCHAR,38,Saving as GMI describes it,reference
+mart.d_reported_claims,amount_low,DOUBLE,38,,
+mart.d_reported_claims,amount_high,DOUBLE,38,,
+mart.d_reported_claims,basis,VARCHAR,38,,
+mart.d_reported_claims,mapping,VARCHAR,38,,
+mart.d_reported_claims,quote,VARCHAR,38,,
+mart.d_reported_claims,page,VARCHAR,38,,
+mart.d_reported_claims,url,VARCHAR,38,Link to the source document,source
 mart.d_revenue_backtest,origin_fy,BIGINT,20,Rolling-validation origin: models trained through this fiscal year predicted the next,derived
 mart.d_revenue_backtest,method,VARCHAR,20,Candidate model scored at that origin (naive last value; log-linear trend; drift; trend with CPI),derived
 mart.d_revenue_backtest,forecast_fy,BIGINT,20,Fiscal year the backtest forecast was for (origin + 1),derived
@@ -1188,8 +1225,8 @@ ops.enrichment,source,VARCHAR,7,Source name or URL the data came from,ops
 ops.enrichment,status,VARCHAR,7,Run or source status,ops
 ops.enrichment,rows,BIGINT,7,Row count,ops
 ops.enrichment,detail,VARCHAR,7,Numbers behind the check result,ops
-ops.lineage,table_name,VARCHAR,407,Warehouse table (schema.name) created by the build,derived
-ops.lineage,depends_on,VARCHAR,407,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
+ops.lineage,table_name,VARCHAR,409,Warehouse table (schema.name) created by the build,derived
+ops.lineage,depends_on,VARCHAR,409,"A table the build read to create table_name (named in its CREATE statement, or read by the Python model that built it)",derived
 ops.payee_name_seen,payee_name,VARCHAR,62022,"Payee name exactly as paid (ref.map_payee_vendor.payee), one row per name ever seen by a passing build",ops
 ops.payee_name_seen,first_seen_run_id,VARCHAR,62022,Extract run of the first build that passed its stop checks and saw this payee name,ops
 ops.payee_name_seen,first_seen_date,VARCHAR,62022,UTC date of that extract run (YYYY-MM-DD),ops
@@ -1338,6 +1375,11 @@ raw.population,year,BIGINT,16,Calendar year,source
 raw.population,population,BIGINT,16,Maryland resident population (Census Population Estimates),source
 raw.population,vintage,BIGINT,16,Census estimate vintage (release year),source
 raw.population,_run_id,VARCHAR,16,Extract run that produced the row,ops
+ref.audit_finding_programs,finding_id,VARCHAR,2,,
+ref.audit_finding_programs,agency_code,VARCHAR,2,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+ref.audit_finding_programs,unit_name,VARCHAR,2,Budget unit name,portal
+ref.audit_finding_programs,program_code,VARCHAR,2,"Budget program code, two digits in core",portal
+ref.audit_finding_programs,program_name,VARCHAR,2,Budget program name,portal
 ref.audit_findings,finding_id,VARCHAR,2,"Finding id: agency, program and year for a public finding; OLA- plus the agency code for an OLA report row",reference
 ref.audit_findings,agency_code,VARCHAR,2,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 ref.audit_findings,agency,VARCHAR,2,Agency name shown on the dashboard,derived
@@ -1388,6 +1430,15 @@ ref.book_reconciliation,checked_on,VARCHAR,15,Date the documents were read,refer
 ref.budget_stage,fiscal_year,VARCHAR,11,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 ref.budget_stage,stage,VARCHAR,11,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 ref.budget_stage,source,VARCHAR,11,Where the reference value is documented,reference
+ref.claim_sources,source_id,VARCHAR,3,,
+ref.claim_sources,title,VARCHAR,3,,
+ref.claim_sources,publisher,VARCHAR,3,,
+ref.claim_sources,url,VARCHAR,3,Link to the source document,source
+ref.claim_sources,document_date,VARCHAR,3,,
+ref.claim_sources,as_of,VARCHAR,3,,
+ref.claim_sources,retrieved,VARCHAR,3,,
+ref.claim_sources,how_obtained,VARCHAR,3,,
+ref.claim_sources,note,VARCHAR,3,Explanation of the rule or row,reference
 ref.column_dictionary,column,VARCHAR,826,Column name being defined,reference
 ref.column_dictionary,applies_to,VARCHAR,826,"Tables the definition applies to (comma-separated, wildcards allowed); blank for all",reference
 ref.column_dictionary,origin,VARCHAR,826,"Where the column comes from: portal, source, reference, derived or ops",reference
@@ -1431,6 +1482,14 @@ ref.gf_revenue_history,basis,VARCHAR,10,"How the figure was obtained (closeout l
 ref.gf_revenue_history,source,VARCHAR,10,Document the figure was taken from,reference
 ref.gf_revenue_history,source_url,VARCHAR,10,Link to the citation,source
 ref.gf_revenue_history,note,VARCHAR,10,Explanation of the rule or row,reference
+ref.gmi_public_page_claims,claim_id,VARCHAR,20,,
+ref.gmi_public_page_claims,saving_id,VARCHAR,20,Reported saving identifier (S01-S18),reference
+ref.gmi_public_page_claims,item,VARCHAR,20,Saving as GMI describes it,reference
+ref.gmi_public_page_claims,amount_low,VARCHAR,20,,
+ref.gmi_public_page_claims,amount_high,VARCHAR,20,,
+ref.gmi_public_page_claims,basis,VARCHAR,20,,
+ref.gmi_public_page_claims,mapping,VARCHAR,20,,
+ref.gmi_public_page_claims,quote,VARCHAR,20,,
 ref.gmi_reported_savings,saving_id,VARCHAR,18,Reported saving identifier (S01-S18),reference
 ref.gmi_reported_savings,workstream,VARCHAR,18,GMI workstream the saving belongs to,reference
 ref.gmi_reported_savings,item,VARCHAR,18,Saving as GMI describes it,reference

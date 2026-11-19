@@ -125,7 +125,6 @@ mart.d_drift,mart.d_range_coverage
 mart.d_drift,mart.d_revenue_model
 mart.d_drift,mart.f_code
 mart.d_drift,mart.review_queue
-mart.d_drift,mart.review_queue_scored
 mart.d_econ,core.cpi_fy
 mart.d_econ,core.fact_budget
 mart.d_econ,core.fact_md_employment
@@ -177,7 +176,6 @@ mart.d_model_registry,mart.d_range_coverage
 mart.d_model_registry,mart.d_revenue_model
 mart.d_model_registry,mart.f_code
 mart.d_model_registry,mart.review_queue
-mart.d_model_registry,mart.review_queue_scored
 mart.d_multi,mart.v_purchase
 mart.d_multi,ref.map_payment_agency
 mart.d_multi_basis,mart.d_multi
@@ -208,6 +206,9 @@ mart.d_plan50,mart.f_forecast
 mart.d_plan50,mart.f_vendor
 mart.d_plan50,mart.payment_area
 mart.d_plan50,ref.map_mfr_agency
+mart.d_program_screen,mart.agency_year
+mart.d_program_screen,mart.f_program
+mart.d_program_screen,mart.review_queue_scored
 mart.d_range_coverage,mart.f_code
 mart.d_range_coverage,mart.f_fund
 mart.d_range_coverage,mart.f_scope
@@ -221,6 +222,7 @@ mart.d_rec_status,mart.f_forecast
 mart.d_rec_status,mart.f_vendor
 mart.d_rec_status,mart.payment_area
 mart.d_rec_status,ref.map_mfr_agency
+mart.d_reported_claims,mart.payment_area
 mart.d_revenue_backtest,core.cpi_fy
 mart.d_revenue_backtest,mart.d_range_coverage
 mart.d_revenue_model,core.cpi_fy
