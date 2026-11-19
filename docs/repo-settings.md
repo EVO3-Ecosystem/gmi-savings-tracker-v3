@@ -1,7 +1,7 @@
 # Repository settings (admin checklist)
 
 Settings an admin applies by hand; they cannot be committed. Decided Nov 13, 2026 (decision record D5–D7). Apply the same
-settings to both repositories: gmi-savings-tracker (flagship, v1) and gmi-savings-tracker-v3 (testing ground).
+settings to both repositories: gmi-savings-tracker-v3 (the live version) and the superseded gmi-savings-tracker (v1).
 
 | Setting | Where | Value | Why |
 |---|---|---|---|

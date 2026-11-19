@@ -2,14 +2,14 @@
 
 **An independent, audit-grade check of Maryland's Government Modernization Initiative (GMI), built entirely on the State's open data.** It tests the savings GMI reported against what the State actually paid, finds where more could be saved, and says how sure each number is. Every model has to beat a simple baseline before anything it produces is shown.
 
-> **Testing ground (v3).** Every upgrade is built, tested and scored here first. A change reaches the flagship, [gmi-savings-tracker](https://github.com/EVO3-Ecosystem/gmi-savings-tracker) ([live site](https://evo3-ecosystem.github.io/gmi-savings-tracker/)), only after it scores 5 of 5 and is approved.
+> **Live site: https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/** — v3 is the current version. The earlier repositories, gmi-savings-tracker (v1) and gmi-savings-tracker-v2, are superseded and no longer publish a site.
 
 [![CI](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml/badge.svg)](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml)
 [![Pages](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/pages.yml/badge.svg)](https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/)
 <!-- facts:badges -->
 ![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
 <!-- /facts:badges -->
-![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C319%20of%202%2C319-2da44e) ![Version](https://img.shields.io/badge/version-3.2.0-0969da)
+![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C340%20of%202%2C394-dbab09) ![Version](https://img.shields.io/badge/version-3.2.0-0969da)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
 [![License: All rights reserved](https://img.shields.io/badge/license-all%20rights%20reserved-6e7781)](LICENSE)
 
@@ -160,7 +160,7 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: every one of the <!-- n:documented_columns -->2,378<!-- /n --> columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: <!-- n:documented_columns -->2,394<!-- /n --> columns catalogued and 2,340 documented, the rest listed in `docs/data-governance.md` (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## Tech stack
 

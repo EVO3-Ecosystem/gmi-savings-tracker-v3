@@ -836,7 +836,7 @@ const ARROW = v => v==null||isNaN(v)||!isFinite(v)?'—':Math.abs(v)<=0.0005?'�
 const toneOf = (v,good) => v==null||isNaN(v)||!isFinite(v)||Math.abs(v)<=0.0005||good==='neutral'?'flat':((v>0)===(good==='higher')?'good':'bad');
 const stageShort = s => ({'Actual':'actual','Working budget':'working budget','Appropriation':'appropriation','Legislative appropriation':'Legislative Appropriation','Legislative Appropriation':'Legislative Appropriation','Payments only':'payments'})[s]||String(s||'').toLowerCase();
 const GMI_TARGET = 50e6; // GMI's yearly savings target (WYPR, Jan 10, 2025; listed under Sources on the Savings tracker tab)
-const PAY_LAST = 2026;
+let PAY_LAST = 2026, PAY_OPEN = null; // latest full payments year, and the open (partial) year's totals_by_fy row; both set from the data on load
 const SMALL_BASE = 1e6;   // no percent change from a prior-year base under $1M (mirrors the pipeline's growth-detector minimum)
 const SMALL_TXT = 'new or small base';
 const PASS_SHARE = .5;   // an agency 'mostly passes money through' when grants out or client payments are at least half its operating spending
@@ -859,7 +859,7 @@ const prm = () => { const p = Object.assign({}, DEF, dash.params() || {}); for (
 const setP = o => dash.setParams(o);
 let STAGE_OF = {}; // fiscal year -> stage, from the budget facts
 const isBudgetYear = y => !!STAGE_OF[y] && STAGE_OF[y] !== 'Actual';
-const stageOK = (y, p, payments) => payments ? p.stage !== 'budget' && y >= 2017 && y <= 2026 : (p.stage === 'all' ? !!STAGE_OF[y] : p.stage === 'actual' ? STAGE_OF[y] === 'Actual' : isBudgetYear(y));
+const stageOK = (y, p, payments) => payments ? p.stage !== 'budget' && y >= 2017 && y <= PAY_LAST : (p.stage === 'all' ? !!STAGE_OF[y] : p.stage === 'actual' ? STAGE_OF[y] === 'Actual' : isBudgetYear(y));
 function yearsFor(rows, p, payments){ const have = [...new Set(rows.map(r => r.fiscal_year))]; return have.filter(y => stageOK(y, p, payments) && (!p.years.length || p.years.includes(y))).sort((a,b) => a-b); }
 function sel(rows, p, o = {}){ // apply area, agency and (optionally) year filters
   const ys = o.years ? new Set(o.years) : null;
@@ -1093,8 +1093,8 @@ const scopeCol = k => k === 'Controllable purchases' ? dash.colors[0] : k === 'C
 /* ======================= shared figures ======================= */
 function payments(p){ // payments to vendors: statewide totals, by agency, or by focus area (payee name)
   if (p.areas.length) { const fa = ok('f_area'); return fa ? {rows: fa.filter(r => r.payee_spend != null), key: 'payee_spend', label: 'Payments in the selected areas, by payee name', area:true} : null; }
-  if (p.agencies.length) { const f = ok('f_agency'); return f ? {rows: f.filter(r => r.fiscal_year <= 2026 && r.payments != null), key: 'payments', label: 'Payments to vendors'} : null; }
-  const t = ok('totals'); return t ? {rows: t, key: 'total_payments', label: 'Payments to vendors'} : null; }
+  if (p.agencies.length) { const f = ok('f_agency'); return f ? {rows: f.filter(r => r.fiscal_year <= PAY_LAST && r.payments != null), key: 'payments', label: 'Payments to vendors'} : null; }
+  const t = ok('totals'); return t ? {rows: t.filter(r => !isTrue(r.partial_year)), key: 'total_payments', label: 'Payments to vendors'} : null; }
 const who = p => !p.agencies.length ? 'Maryland' : p.agencies.length === 1 ? agName(p.agencies[0]) : `${p.agencies.length} selected agencies`;
 
 /* forecast ranges: indicative, with the coverage the pipeline measured on its rolling backtest (a check in the checks dataset) */
@@ -1170,7 +1170,7 @@ function drawOver(p){
   sp(bud, 'spBud'); sp(ctl, 'spCtl'); sp(ar, 'spArea');
   const py = payments(p); if (py) { const pm = measure(py.rows, py.key, p, {payments:true, ignoreArea: !py.area, years:[YP]}); const ovr = (ok('f_overlap') || []).find(r => r.fiscal_year === YP);
     setText('kPay', py.label + `, FY${YP}`); setText('vPay', pm.value ? M(pm.value) : '—'); setChg('dPay', pm, 'neutral');
-    setText('sPay', pm.value ? 'payments are actual spending' + (YP < Y ? `; FY${Y} payments are not a full year yet` : '') : `no payments for FY${YP}`); chip('gPay', pm.value ? (ovr && isTrue(ovr.partial_year) ? 'partial year' : 'actual payments') : '');
+    setText('sPay', pm.value ? 'payments are actual spending' + (YP < Y ? `; FY${Y} payments are not a full year yet` : '') + (PAY_OPEN && !p.agencies.length && !p.areas.length ? `; FY${PAY_OPEN.fiscal_year} so far: ${M(PAY_OPEN.total_payments)} (partial year)` : '') : `no payments for FY${YP}`); chip('gPay', pm.value ? (ovr && isTrue(ovr.partial_year) ? 'partial year' : 'actual payments') : '');
     spark(document.getElementById('spPay'), (pm.series || []).map(d => ({x:d.year, y:d.v})), pm.years); }
   // one-sentence finding, computed from the same figures as the tiles
   const tgt = !p.agencies.length && ctl.value ? `, so GMI's ${M(GMI_TARGET)} FY2026 target is ${PCT(GMI_TARGET/ctl.value)} of them` : '';
@@ -1565,7 +1565,7 @@ function drawLedger(p, last){
   const dv = ok('d_vendors'), fp = ok('f_vendor_pay'), ft = ok('f_payee_type'); if (!dv || !fp || !ft) return; const ag = p.agencies;
   const tsel = document.getElementById('vType'); if (tsel.options.length === 1) VTYPES.filter(t => t !== 'Government').forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; tsel.appendChild(o); });
   const typ = tsel.value, q = document.getElementById('vlQ').value.trim().toLowerCase();
-  const ftA = ft.filter(r => r.fiscal_year <= 2026 && (!ag.length || ag.includes(r.agency_code))); const years = [...new Set(ftA.map(r => r.fiscal_year))].sort((a, b) => a - b);
+  const ftA = ft.filter(r => r.fiscal_year <= PAY_LAST && (!ag.length || ag.includes(r.agency_code))); const years = [...new Set(ftA.map(r => r.fiscal_year))].sort((a, b) => a - b);
   const keys = VTYPES.filter(k => ftA.some(r => r.payee_type === k)); const tcol = k => k === 'Government' ? 'var(--cds-chart-muted)' : dash.colors[VTYPES.indexOf(k) % dash.colors.length];
   const srows = years.map(yr => { const o = {year: yr, stage: 'Actual'}; keys.forEach(k => o[k] = 0); ftA.filter(r => r.fiscal_year === yr).forEach(r => { o[r.payee_type] += r.paid; }); o.total = d3.sum(keys, k => o[k]); return o; });
   stacked(document.getElementById('vtChart'), 'vtLegend', srows, keys, tcol, {actual: true, selYears: [last], click: yearClick, aria: 'Payments by payee type and year', dimKey: k => typ && k !== typ});
@@ -1625,7 +1625,7 @@ function hstack(box, bars, o={}){ box.textContent = ''; const W = box.clientWidt
         .on('mouseleave', () => tip.style('opacity',0)); }); });
   if (o.marker) { const xm = x(o.marker.v); svg.append('line').attr('x1', xm).attr('x2', xm).attr('y1', 14).attr('y2', H - 4).attr('stroke','var(--color-fg)').attr('stroke-width', 1.5);
     svg.append('text').attr('x', xm - 4).attr('y', H - 6).attr('text-anchor','end').attr('font-size', 11).attr('fill','var(--color-fg)').text(o.marker.label); } }
-function bpYear(p){ const ys = p.years.filter(y => y >= 2017 && y <= 2026); return ys.length ? ys[ys.length - 1] : 2026; }
+function bpYear(p){ const ys = p.years.filter(y => y >= 2017 && y <= PAY_LAST); return ys.length ? ys[ys.length - 1] : PAY_LAST; }
 function drawPortalOver(p){
   const bp = ok('f_budget_vs_pay'), ov = ok('f_overlap'), pl = ok('d_plan50');
   if (bp) { const base = sel(bp, p, {ignoreArea:true}); const years = d3.range(2017, 2027);
@@ -1634,7 +1634,7 @@ function drawPortalOver(p){
     legend('ovBPLegend', [['Operating budget (actual)', COL_BUD()], ['Working budget (FY2026, dashed outline)', COL_BUD()], ['Payments to all payees', COL_PAY(), true]]);
     const l = rows[rows.length - 1], a = rows.filter(r => STAGE_OF[r.year] === 'Actual' && r.a).pop();
     setText('ovBPH', `Budget and payments, FY2017–FY2026${p.agencies.length ? ' · ' + who(p) : ''}`);
-    setText('ovBPNote', `Operating budget at its latest stage (bars: actual through FY${a ? a.year : 2025}; FY2026 is the working budget until actuals are published, usually with the next Governor's budget in January) and payments to all payees (line). FY2026 payments: ${M(l.b)}${l.a ? ', ' + d3.format('.0%')(l.b / l.a) + ' of the working budget' : ''}. Payments leave out payroll but include capital and pass-through money, so the two are never added. FY2027 is left out: its budget is an appropriation and its payments are a partial year. Click a year to filter.`); }
+    setText('ovBPNote', `Operating budget at its latest stage (bars: actual through FY${a ? a.year : 2025}; FY${PAY_LAST} is the working budget until actuals are published, usually with the next Governor's budget in January) and payments to all payees (line). FY${PAY_LAST} payments: ${M(l.b)}${l.a ? ', ' + d3.format('.0%')(l.b / l.a) + ' of the working budget' : ''}. Payments leave out payroll but include capital and pass-through money, so the two are never added. FY${PAY_LAST + 1} is left out of the chart: its budget is an appropriation and its payments are a partial year${PAY_OPEN ? ` (FY${PAY_OPEN.fiscal_year} so far: ${M(PAY_OPEN.total_payments)})` : ''}. Click a year to filter.`); }
   if (ov) { const y = bpYear(p), r = ov.find(d => d.fiscal_year === y); const box = document.getElementById('ovFund');
     if (!r) { emptyMsg(box); } else {
       hstack(box, [{label:`Budget, FY${y} (${stageShort(r.stage)})`, parts:[{label:'General funds', short:'General', v:r.general_funds, color:COL_BUD()}, {label:'Special funds', short:'Special', v:r.special_funds, color:dash.colors[3]}, {label:'Federal funds', short:'Federal', v:r.federal_funds, color:dash.colors[5]}]},
@@ -1665,7 +1665,7 @@ function drawPortalBudget(p){
   const ov = ok('f_overlap'), fs = ok('f_fund_source'), pg = ok('f_program'), gr = ok('f_grants');
   const sh = v => v == null ? '—' : d3.format('.0%')(v);
   if (ov) { const g = ov.filter(d => d.grants_and_loans > 0 && d.fiscal_year <= PAY_LAST).pop(); setText('ovlFind', g ? `In FY${g.fiscal_year}, payments were ${PCT(g.payments_to_budget_share)} of the budget, and ${PCT(g.grants_in_payments_share)} of grant and loan dollars went to grantees also paid that year, so grants sit inside payments.` : ''); }
-  if (ov) table('ovlBody', ov.filter(r => r.fiscal_year <= 2026).slice().reverse().map(r => ({...r, _yr: 'FY' + r.fiscal_year})), [{key:'_yr', sort:'fiscal_year'},{key:'stage',fmt:stageShort},{key:'budget',n:1,fmt:M},{key:'general_funds',n:1,fmt:M},{key:'special_funds',n:1,fmt:M},{key:'federal_funds',n:1,fmt:M},
+  if (ov) table('ovlBody', ov.filter(r => r.fiscal_year <= PAY_LAST).slice().reverse().map(r => ({...r, _yr: 'FY' + r.fiscal_year})), [{key:'_yr', sort:'fiscal_year'},{key:'stage',fmt:stageShort},{key:'budget',n:1,fmt:M},{key:'general_funds',n:1,fmt:M},{key:'special_funds',n:1,fmt:M},{key:'federal_funds',n:1,fmt:M},
     {key:'payments',n:1,fmt:M},{key:'paid_to_government',n:1,fmt:M},{key:'paid_to_others',n:1,fmt:M},{key:'grants_and_loans',n:1,fmt:v => v ? M(v) : 'not published'},{key:'grants_in_payments_share',n:1,fmt:sh}]);
   const ys = fs ? yearsFor(fs, p) : []; const fl = fyLabel(ys);
   if (fs) { const ts = document.getElementById('fsType'); if (ts.options.length === 1) { [...new Set(fs.map(r => r.fund_type))].sort().forEach(t => { const op = document.createElement('option'); op.textContent = t; ts.appendChild(op); }); ts.addEventListener('change', () => drawPortalBudget(prm())); document.getElementById('fsQ').addEventListener('input', () => drawPortalBudget(prm())); }
@@ -2224,7 +2224,7 @@ function drawDetail(p){
     if (key === 'funds') { const br = breakdown(fu, 'fund_type_name', 'budget', p, {ignoreArea:true}); const gf = br.find(r => /general/i.test(r.fund_type_name)); if (gf) ins.push(`General funds are ${PCT(gf.share)} of the selection; savings in general-fund spending help the structural deficit most.`);
       newTable(tb, `By fund, ${fyLabel(m.years)}`, '', [['Fund'],['Amount',1],['Change',1],['Share',1]], br, [{key:'fund_type_name'},{key:'value',n:1,fmt:M},{key:'change',n:1,chg:'neutral'},{key:'share',n:1,fmt:PCT}]); }
     if (p.agencies.length !== 1) { const py = key === 'payments' ? payments(p) : null;
-      const src = key === 'budget' ? ff : key === 'funds' ? fu : key === 'payments' ? (py.area ? fa.filter(r => r.payee_spend != null) : fag.filter(r => r.fiscal_year <= 2026)) : fs.filter(r => r.scope === 'Controllable purchases');
+      const src = key === 'budget' ? ff : key === 'funds' ? fu : key === 'payments' ? (py.area ? fa.filter(r => r.payee_spend != null) : fag.filter(r => r.fiscal_year <= PAY_LAST)) : fs.filter(r => r.scope === 'Controllable purchases');
       const k = key === 'payments' ? (py.area ? 'payee_spend' : 'payments') : 'budget'; const br = breakdown(src, 'agency_code', k, p, {ignoreArea: !(py && py.area), payments: key === 'payments', years: m.years}).slice(0, 30).map(r => ({...r, agency: agName(r.agency_code)}));
       if (br[0]) ins.push(`${br[0].agency} has the most, ${M(br[0].value)} (${PCT(br[0].share)} of the listed agencies); the top three hold ${PCT(d3.sum(br.slice(0,3), r => r.share))}.`);
       newTable(tb, `Agencies with the most, ${fyLabel(m.years)}`, 'Top 30. Click an agency for its page.', [['Agency'],[name,1],['Change',1],['Share',1]], br, [{key:'agency'},{key:'value',n:1,fmt:M},{key:'change',n:1,chg:good},{key:'share',n:1,fmt:PCT}], {bar:'value', click:r => openDetail('agency:' + r.agency_code)}); }
@@ -2232,7 +2232,7 @@ function drawDetail(p){
   } else if (key === 'areas' || key.startsWith('area:')) {
     const one = key.startsWith('area:') ? key.slice(5) : null; const areas = one ? [one] : (p.areas.length ? p.areas : AREAS);
     const base = fa.filter(r => areas.includes(r.area)); const m = measure(base.filter(r => r.spend != null), 'spend', p, {ignoreArea:true}); crumb(m);
-    const pm = p.stage !== 'budget' ? measure(base.filter(r => r.payee_spend != null), 'payee_spend', p, {ignoreArea:true, years: m.years.filter(y => y <= 2026)}) : {value:null};
+    const pm = p.stage !== 'budget' ? measure(base.filter(r => r.payee_spend != null), 'payee_spend', p, {ignoreArea:true, years: m.years.filter(y => y <= PAY_LAST)}) : {value:null};
     setText('dTitle', one || (areas.length === 6 ? 'All six focus areas' : areas.join(', ')));
     setText('dLede', `${one || 'GMI focus areas'} for ${who(p)}, ${fyLabel(m.years)}${m.n > 1 ? ' combined' : ''}: spending by the state's spending codes every year, the agencies and spending codes behind it, and the largest vendors by payee name.` + (m.mixed ? ' This selection mixes actual spending and budgets.' : ''));
     dTile(`By spending code, ${fyLabel(m.years)}`, M(m.value), m, 'lower', m.n > 1 ? `${M(m.avg)} a year` : '');
@@ -2247,7 +2247,7 @@ function drawDetail(p){
     const byAg = breakdown(base.filter(r => r.spend != null), 'agency_code', 'spend', p, {ignoreArea:true, years:m.years}).map(r => ({...r, agency: agName(r.agency_code)}));
     const codeRows = fc.filter(r => areas.includes(r.area)).map(r => ({...r, ck: r.spending_code + ' (' + r.code + ')' + (one ? '' : ' · ' + r.area)}));
     const byCode = breakdown(codeRows, 'ck', 'spend', p, {ignoreArea:true, years:m.years});
-    const vrows = fv.filter(r => areas.includes(r.area)); const vys = p.stage === 'budget' ? [] : m.years.filter(y => y >= 2022 && y <= 2026);
+    const vrows = fv.filter(r => areas.includes(r.area)); const vys = p.stage === 'budget' ? [] : m.years.filter(y => y >= 2022 && y <= PAY_LAST);
     const byVen = vys.length ? breakdown(vrows, 'vendor', 'spend', p, {ignoreArea:true, years:vys}).slice(0, 25) : [];
     const ins = [m.n ? `${fyLabel(m.years)}: ${M(m.value)}${m.n > 1 ? ' (' + M(m.avg) + ' a year)' : ''}${m.change != null ? ', ' + ARROW(m.change) + ' ' + m.label : ''}.` : null,
       byAg[0] && p.agencies.length !== 1 ? `${byAg[0].agency} spends the most, ${M(byAg[0].value)} (${PCT(byAg[0].share)}); the top three agencies hold ${PCT(d3.sum(byAg.slice(0,3), r => r.share))}.` : null,
@@ -2270,7 +2270,7 @@ function drawDetail(p){
     const rank = peers.findIndex(x => x.cc === code); if (rank >= 0) dTile('Rank per position', `#${rank+1} of ${peers.length}`, null, null, `median ${M(d3.median(peers, x => x.per))}`);
     setText('dChartH', 'Controllable purchases by year'); setText('dChartNote', 'Bars: controllable purchases (selected years solid; dashed outlines mark budget years). Line: payments to vendors. Click a year to add or remove it.');
     legend('dLegend', [['Controllable purchases', dash.colors[0]], ['Payments to vendors', 'var(--color-fg-muted)', 1]]);
-    barsLine(document.getElementById('dChart'), R.slice().sort((a,b) => a.fiscal_year - b.fiscal_year).map(r => ({year:r.fiscal_year, a:r.controllable, b:r.fiscal_year <= 2026 ? r.payments : null})), {selYears:ys, aLabel:'Controllable purchases', bLabel:'Payments', click:yearClick});
+    barsLine(document.getElementById('dChart'), R.slice().sort((a,b) => a.fiscal_year - b.fiscal_year).map(r => ({year:r.fiscal_year, a:r.controllable, b:r.fiscal_year <= PAY_LAST ? r.payments : null})), {selYears:ys, aLabel:'Controllable purchases', bLabel:'Payments', click:yearClick});
     const ar = breakdown(fa.filter(r => r.agency_code === code && r.spend != null), 'area', 'spend', q, {ignoreArea:true, years:ys});
     dIns([c.n ? `${fyLabel(ys)}: ${M(c.value)} in controllable purchases${c.change != null ? ', ' + ARROW(c.change) + ' ' + c.label : ''}.` : null, rank >= 0 ? `Per position it ranks #${rank+1} of ${peers.length} agencies averaging 50 or more positions. Phase 3 compares it with similar agencies only.` : null,
       ar[0] ? `Its largest focus area is ${ar[0].area.toLowerCase()}, ${M(ar[0].value)} (${PCT(ar[0].share)} of its focus-area spending).` : null]);
@@ -2609,7 +2609,7 @@ document.getElementById('exPrint').addEventListener('click', () => window.print(
 const DRAW = {exec:drawExec, opp:p => { drawOpp(p); drawAnomalies(p); drawAgencyMap(p); drawOla(p); drawDetectorBacktest(); drawAuditLifecycle(p); }, calc:drawCalc, track:p => { drawTrack(p); drawMoves(); }, over:drawOver, areas:p => { drawAreas(p); drawConsolidation(p); }, agency:drawAgency, vend:p => { drawVendors(p); drawAliasReview(); }, budget:p => { drawBudget(p); drawFundShift(p); drawFederalCrosswalk(); }, data:p => { drawData(p); drawReconciliation(); drawRegistry(); drawDrift(); drawFieldAvail(); }, fcast:drawFcast};
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
-  try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year));
+  try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year)); const tb = ok('totals'); if (tb && tb.length) { const full = tb.filter(r => !isTrue(r.partial_year)); if (full.length) PAY_LAST = d3.max(full, r => +r.fiscal_year); PAY_OPEN = tb.find(r => isTrue(r.partial_year)) || null; }
     if (healParams()) { again = true; return; }   // a repaired filter re-renders through setParams
     const p = prm(); fillFilters(p); document.getElementById('filterBar').style.opacity = ((tab === 'data' || tab === 'exec') && !detail) ? .5 : 1;
     if (detail) drawDetail(p); else (DRAW[tab] || (() => {}))(p); notice = ''; adInit(); }

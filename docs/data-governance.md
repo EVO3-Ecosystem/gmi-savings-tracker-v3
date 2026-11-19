@@ -1,7 +1,7 @@
 # Data governance — GMI Savings Tracker
 
 <!-- gen:stamp -->
-_Generated 2026-11-19T12:29Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
+_Generated 2026-11-19T13:14Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
 <!-- /gen:stamp -->
 
 The rules for where the tracker's data comes from, what every column means, who can change what, and how every figure is backed by a source. The schema sections are rebuilt from the sources on every run (`python -m src.pipeline.governance`), so they can't fall out of date. The policy sections are written by hand.
@@ -55,7 +55,7 @@ Each issue was checked against the portal's own metadata or the data on Nov 2, 2
 | Dataset | Issue | Evidence | Handling |
 |---|---|---|---|
 | All five | The portal gives no column descriptions | Every `columns_description` is empty in the Discovery API | Definitions in `reference/column_dictionary.csv` (section 11) |
-| Payments (7syw-q4cy) | Title says "FY2008 to FY2024"; data runs through FY2027 | Portal title vs downloaded years | Years read from the data, not the title |
+| Payments (7syw-q4cy) | Title says "FY2008 to FY2024"; data runs through FY2027 (FY2027 partial: the year in progress) | Portal title vs downloaded years | Years read from the data, not the title |
 | Payments | Includes individuals, not only businesses | Portal description: "private businesses, local governments, non-profit organizations, and individuals" | See section 9 |
 | Payments | No minimum amount (an earlier version of the dashboard said "$25,000 or more", which was wrong) | 5,122 of 23,221 FY2025 payments are under $25,000; smallest is $0.33 | Description corrected Nov 2, 2026 |
 | Payments | `date` and `fiscal_period` are placeholders | Distinct values by fiscal year, Nov 10, 2026: `fiscal_period` = 1 on every row FY2008-FY2027; one `date` (Jan 1 of the year) per year except FY2008, FY2009, FY2012 (one row each) and FY2022 | Used only as a record date by the payment screen; monthly analysis is not possible (section 13) |
@@ -3360,6 +3360,26 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | tab | text | derived | Dashboard tab the row links to |
 | previous | number | ops | Progress text in the previous run |
 
+**d_reported_claims** (38 rows)
+
+| column | type | origin | definition |
+|---|---|---|---|
+| claim_id | text |  |  |
+| source_id | text |  |  |
+| source_title | text |  |  |
+| source_date | text |  |  |
+| as_of | text |  |  |
+| retrieved | text |  |  |
+| saving_id | text | reference | Reported saving identifier (S01-S18) |
+| item | text | reference | Saving as GMI describes it |
+| amount_low | number |  |  |
+| amount_high | number |  |  |
+| basis | text |  |  |
+| mapping | text |  |  |
+| quote | text |  |  |
+| page | text |  |  |
+| url | text | source | Link to the source document |
+
 **d_revenue_backtest** (20 rows)
 
 | column | type | origin | definition |
@@ -3890,7 +3910,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | dbm_actual_total | number | source | Actual total printed in DBM's budget books |
 | note | text | reference | Explanation of the rule or row |
 
-**totals_by_fy** (19 rows)
+**totals_by_fy** (20 rows)
 
 | column | type | origin | definition |
 |---|---|---|---|
@@ -3901,6 +3921,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | vendors | number | derived | Distinct payees in the year |
 | total_payments_prior | number | derived | All payments in the previous fiscal year |
 | total_payments_yoy | number | derived | Change in total payments from the previous fiscal year (share) |
+| partial_year | number |  |  |
 
 **vendor_families** (130 rows)
 
@@ -3915,7 +3936,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 ## 12. Coverage and drift
 
 <!-- gen:coverage -->
-2,337 of 2,378 columns documented (85 source, 1603 warehouse, 690 dashboard).
+2,340 of 2,394 columns documented (85 source, 1603 warehouse, 706 dashboard).
 
 Missing a definition:
 
@@ -3962,6 +3983,19 @@ Missing a definition:
 | ref.gmi_public_page_claims | basis |
 | ref.gmi_public_page_claims | mapping |
 | ref.gmi_public_page_claims | quote |
+| d_reported_claims | claim_id |
+| d_reported_claims | source_id |
+| d_reported_claims | source_title |
+| d_reported_claims | source_date |
+| d_reported_claims | as_of |
+| d_reported_claims | retrieved |
+| d_reported_claims | amount_low |
+| d_reported_claims | amount_high |
+| d_reported_claims | basis |
+| d_reported_claims | mapping |
+| d_reported_claims | quote |
+| d_reported_claims | page |
+| totals_by_fy | partial_year |
 <!-- /gen:coverage -->
 
 **Source schema changes since the last snapshot:**

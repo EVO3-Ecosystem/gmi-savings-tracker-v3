@@ -214,6 +214,14 @@ fiscal_year,stage,agency_code,scope,budget
 2022,Actual,K00,Charges between agencies,19180039.0
 2022,Actual,L00,Controllable purchases,22803115.0
 2022,Actual,L00,Charges between agencies,4110794.0
+2027,Legislative appropriation,U00,Controllable purchases,24990367.0
+2027,Legislative appropriation,U00,Charges between agencies,29284728.0
+2027,Legislative appropriation,V00,Controllable purchases,44180306.0
+2027,Legislative appropriation,V00,Charges between agencies,10847344.0
+2027,Legislative appropriation,W00,"Staff, grants and capital",589588561.0
+2027,Legislative appropriation,W00,Client payments and debt service,181250.0
+2027,Legislative appropriation,X00,Client payments and debt service,1496361462.0
+2027,Legislative appropriation,Y01,"Staff, grants and capital",153250000.0
 2018,Actual,N00,Controllable purchases,278919891.0
 2018,Actual,N00,Charges between agencies,13310004.0
 2019,Actual,D55,Controllable purchases,4372937.0
@@ -422,14 +430,6 @@ fiscal_year,stage,agency_code,scope,budget
 2020,Actual,K00,Client payments and debt service,321.0
 2020,Actual,L00,"Staff, grants and capital",112583497.0
 2020,Actual,L00,Client payments and debt service,6115.0
-2027,Legislative appropriation,U00,Controllable purchases,24990367.0
-2027,Legislative appropriation,U00,Charges between agencies,29284728.0
-2027,Legislative appropriation,V00,Controllable purchases,44180306.0
-2027,Legislative appropriation,V00,Charges between agencies,10847344.0
-2027,Legislative appropriation,W00,"Staff, grants and capital",589588561.0
-2027,Legislative appropriation,W00,Client payments and debt service,181250.0
-2027,Legislative appropriation,X00,Client payments and debt service,1496361462.0
-2027,Legislative appropriation,Y01,"Staff, grants and capital",153250000.0
 2017,Actual,M00,Controllable purchases,300460822.0
 2017,Actual,M00,Charges between agencies,319958703.0
 2017,Actual,B75,"Staff, grants and capital",72177874.0
@@ -1458,6 +1458,12 @@ fiscal_year,stage,agency_code,scope,budget
 2022,Actual,K00,Client payments and debt service,200.0
 2022,Actual,L00,"Staff, grants and capital",116525175.0
 2022,Actual,L00,Client payments and debt service,949.0
+2027,Legislative appropriation,U00,"Staff, grants and capital",584246318.0
+2027,Legislative appropriation,U00,Client payments and debt service,32170.0
+2027,Legislative appropriation,V00,"Staff, grants and capital",275414190.0
+2027,Legislative appropriation,V00,Client payments and debt service,52169229.0
+2027,Legislative appropriation,W00,Charges between agencies,7283362.0
+2027,Legislative appropriation,W00,Controllable purchases,87760521.0
 2018,Actual,N00,"Staff, grants and capital",1628974672.0
 2018,Actual,N00,Client payments and debt service,415921153.0
 2018,Actual,Q00,Client payments and debt service,179022354.0
@@ -1664,12 +1670,6 @@ fiscal_year,stage,agency_code,scope,budget
 2020,Actual,K00,Charges between agencies,15831805.0
 2020,Actual,L00,Charges between agencies,4149706.0
 2020,Actual,L00,Controllable purchases,8811353.0
-2027,Legislative appropriation,U00,"Staff, grants and capital",584246318.0
-2027,Legislative appropriation,U00,Client payments and debt service,32170.0
-2027,Legislative appropriation,V00,"Staff, grants and capital",275414190.0
-2027,Legislative appropriation,V00,Client payments and debt service,52169229.0
-2027,Legislative appropriation,W00,Charges between agencies,7283362.0
-2027,Legislative appropriation,W00,Controllable purchases,87760521.0
 2017,Actual,A15,"Staff, grants and capital",179150027.0
 2017,Actual,M00,"Staff, grants and capital",663493057.0
 2017,Actual,B75,Controllable purchases,14578803.0

@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## 2026-11-19 — Fiscal-year alignment; FY2027 payments published as partial; v3 is the live site
+
+- Fresh pipeline run 20261119T124859Z: 143 of 143 checks passed; every budget and payments year matches the State's sites.
+- FY2027 payments so far ($18.07B, the year in progress) are published in `totals_by_fy`, flagged `partial_year`, and shown on the Overview as "FY2027 so far (partial year)". The detail tables still hold the open year back; headlines stay on FY2026, the last full payments year.
+- The dashboard reads its last full payments year from the data (`PAY_LAST`) instead of a hard-coded 2026.
+- New `scripts/fy_audit.py` (`make fy-audit`): checks every tab, stand-alone page, export and doc against the fiscal-year calendar read from the data, and writes `docs/reconciliation/fy_alignment.csv` (budget, actual and payments by year, kept apart).
+- New `docs/LAUNCH_CHECKLIST.md`: the green launch checklist, numbered by folder and file.
+- The "testing ground / flagship is v1" banner and README callout are removed: v3 is the live version; v1 and v2 no longer publish a site.
+- Fixed a stale definition that called FY2026 payments part-year.
+
 ## [Unreleased]
 
 Added

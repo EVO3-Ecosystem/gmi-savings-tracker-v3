@@ -30,6 +30,7 @@ site-artifact: ; $(PY) -m src.pipeline.site --artifact $(or $(ARTIFACT_OUT),$${T
 docs-strict: ; $(PY) -m src.pipeline.governance --strict $(if $(DASH),--dashboard $(DASH))
 
 # Reproducibility and review targets (work offline, from the published tables in site_data/)
+fy-audit: ; $(PY) scripts/fy_audit.py --data $(or $(DATA),site_data) $(if $(SITE),--site $(SITE)) --out docs/reconciliation/fy_audit.md   # fiscal years on every page, tab, export and doc (docs/LAUNCH_CHECKLIST.md section 0)
 forecast-check: ; $(PY) -m src.models.forecast_published --check   # rebuild the forecast from site_data and compare with what was published
 overview-figures: ; $(PY) -m src.pipeline.overview_figures          # docs/figures/overview/*.png
 notebook: ; $(PY) scripts/build_walkthrough.py && $(PY) scripts/render_notebook.py   # write the walkthrough notebook, execute it, render it, refresh the figures
@@ -38,6 +39,6 @@ lock: ; uv lock && uv export --frozen --extra dev --extra mcp --extra notebook -
 docker-build: ; docker build -t gmi-savings-tracker:local .
 docker-test: docker-build ; docker run --rm gmi-savings-tracker:local
 
-.PHONY: forecast-check overview-figures notebook notebook-check lock docker-build docker-test
+.PHONY: fy-audit forecast-check overview-figures notebook notebook-check lock docker-build docker-test
 .PHONY: readme-shots
 .PHONY: extract extract-full gate1 build gate3 all test test-fault docs docs-strict reconcile figures diagrams parity export snapshot restore site site-snapshot site-artifact postgres extract-scheduled

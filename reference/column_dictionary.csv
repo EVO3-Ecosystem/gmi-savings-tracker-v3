@@ -318,7 +318,7 @@ description,"core.fact_grant,mart.f_grants,f_grants",portal,"Grant or loan progr
 zipcode,"core.fact_grant,mart.f_grants,f_grants",portal,Grantee ZIP code as published
 category,"mart.f_grants,f_grants",derived,"Grant or Loan, from the dataset's category code (G/L)"
 payments,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap",derived,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)"
-partial_year,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap",derived,True for the latest payments year while it is still being updated monthly
+partial_year,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap,totals_by_fy",derived,True for the latest payments year while it is still being updated monthly
 grants,"mart.f_overlap,f_overlap",derived,Grants dataset rows with category Grant
 method,mart.d_forecast_backtest,derived,"Forecast model scored: log-linear trend, naive (last actual), drift (average yearly growth) or the equal-weight combination of those three (scored only, never kept)"
 origin_fy,mart.d_forecast_backtest,derived,Last fiscal year of actual spending the model was allowed to see (the forecast origin)
@@ -578,7 +578,7 @@ p10,d_revenue_backtest,derived,10th percentile of the candidate's simulated band
 p50,d_revenue_backtest,derived,Median of the candidate's simulated band at that origin
 p90,d_revenue_backtest,derived,90th percentile of the candidate's simulated band at that origin
 payments,f_budget_vs_pay,derived,Payments to all payees that fiscal year (actual payments only)
-partial_year,f_budget_vs_pay,derived,1 when the payments year is still in progress (FY2026 payments are part-year)
+partial_year,f_budget_vs_pay,derived,1 when the payments year is still in progress (the latest payments year in the data until it closes)
 code,f_challenger,derived,Comptroller sub-object number for the spending code
 p10,f_challenger,derived,10th percentile of the one-year-ahead band from the series' kept model
 p50,f_challenger,derived,Median of the one-year-ahead band from the series' kept model
