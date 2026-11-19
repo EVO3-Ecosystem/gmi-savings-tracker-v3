@@ -8,6 +8,7 @@ The dev team's working reference for the GMI Savings Tracker (v3). Everything he
 |---|---|
 | [SODA Developers API reference](soda-developers-api.md) | The Socrata Open Data API distilled for this project: endpoint versions 2.0/2.1/3.0, SoQL clauses and functions, paging, app tokens and throttling, system fields, datatypes, output formats, the Producer (publishing) API, the Discovery API, and client libraries |
 | [Datamart map, FY2010–FY2027](datamart-map-fy2010-2027.md) | Every Maryland open-data feed that can serve as a datamart for the tracker, with its portal ID, fiscal-year coverage, grain, and status in the pipeline; built from the full portal scan |
+| [Dimensional alignment review](dimensional-model.md) | The mapping scored against the financial-dashboard dimensions — Agency, Unit, Program, Subprogram, Fund, Expenditure Type, Fiscal Year — with the grain, conformance and code-stability gaps |
 | [Gap analysis](gap-analysis.md) | Where the research and the portal scan say the tracker is short: coverage gaps, unextracted sources, unused SODA capabilities, and open process items, each with a priority and a next step |
 
 ## House rules
