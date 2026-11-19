@@ -884,7 +884,12 @@ function measure(rows, key, p, o = {}){
     else { const f = tot(ys[0]), l = tot(ys[ys.length-1]); if (f != null && !o.anyBase && Math.abs(f) < SMALL_BASE && l) { res.small = true; res.label = SMALL_TXT; } else if (f) { res.change = (l - f)/Math.abs(f); res.label = `FY${ys[0]} to FY${ys[ys.length-1]}`; } }
     const f = tot(ys[0]), l = tot(ys[ys.length-1]); if (f > 0 && l > 0) res.cagr = Math.pow(l/f, 1/(ys[ys.length-1] - ys[0])) - 1; }
   return res; }
-const tileYear = p => p.years.length ? d3.max(p.years) : (d3.max(Object.keys(STAGE_OF).map(Number).filter(y => y <= PAY_LAST)) || PAY_LAST);
+// headline year: the latest selected year that fits the spending type; with no year selected, the latest year of that type
+// (Actual spending: the latest actual year; Budgets or Actual and budgets: the latest budget, the FY2027 Legislative Appropriation)
+const tileYear = p => { const fit = Object.keys(STAGE_OF).map(Number).filter(y => stageOK(y, p, false)); const pick = p.years.filter(y => fit.includes(y));
+  return pick.length ? d3.max(pick) : (d3.max(fit) || PAY_LAST); };
+// payments year: the latest selected year with a full year of payments (FY2026 at most)
+const payYear = (p, Y) => Math.min(p.years.length ? d3.max(p.years) : p.stage === 'actual' ? PAY_LAST : Y, PAY_LAST);
 const subline = m => !m.n ? '' : (m.n > 1 ? `${fyLabel(m.years)} combined · ${M(m.avg)} a year` : fyLabel(m.years)) + (m.mixed ? ' · mixes actual spending and budgets' : '');
 
 /* ======================= self-healing state + feedback ======================= */
@@ -1145,7 +1150,7 @@ function drawOver(p){
   drawRecs(); drawPortalOver(p);
   const ff = ok('f_function'), fs = ok('f_scope'), fa = ok('f_area'); if (!ff || !fs || !fa) return;
   // tiles: one year (the latest selected, or the latest budget year with full payments) against the year before, with its stage
-  const Y = tileYear(p), YP = Math.min(Y, PAY_LAST), one = {years:[Y], ignoreArea:true};
+  const Y = tileYear(p), YP = payYear(p, Y), one = {years:[Y], ignoreArea:true};
   const bud = measure(ff, 'budget', p, one), ctl = measure(fs.filter(r => r.scope === 'Controllable purchases'), 'budget', p, one), ar = measure(fa.filter(r => r.spend != null), 'spend', p, {years:[Y]});
   const arSel = measure(fa.filter(r => r.spend != null), 'spend', p); // the selection, for the focus-area chart below
   const hasB = !!(bud.value);
@@ -1162,12 +1167,12 @@ function drawOver(p){
   sp(bud, 'spBud'); sp(ctl, 'spCtl'); sp(ar, 'spArea');
   const py = payments(p); if (py) { const pm = measure(py.rows, py.key, p, {payments:true, ignoreArea: !py.area, years:[YP]}); const ovr = (ok('f_overlap') || []).find(r => r.fiscal_year === YP);
     setText('kPay', py.label + `, FY${YP}`); setText('vPay', pm.value ? M(pm.value) : '—'); setChg('dPay', pm, 'neutral');
-    setText('sPay', pm.value ? 'payments are actual spending' + (YP !== Y ? `; FY${Y} payments are not a full year yet` : '') : `no payments for FY${YP}`); chip('gPay', pm.value ? (ovr && isTrue(ovr.partial_year) ? 'partial year' : 'actual payments') : '');
+    setText('sPay', pm.value ? 'payments are actual spending' + (YP < Y ? `; FY${Y} payments are not a full year yet` : '') : `no payments for FY${YP}`); chip('gPay', pm.value ? (ovr && isTrue(ovr.partial_year) ? 'partial year' : 'actual payments') : '');
     spark(document.getElementById('spPay'), (pm.series || []).map(d => ({x:d.year, y:d.v})), pm.years); }
   // one-sentence finding, computed from the same figures as the tiles
   const tgt = !p.agencies.length && ctl.value ? `, so GMI's ${M(GMI_TARGET)} FY2026 target is ${PCT(GMI_TARGET/ctl.value)} of them` : '';
   setText('overLede', !hasB ? `No operating budget is published for FY${Y}${p.agencies.length ? ' at ' + who(p) : ''}; choose another year or reset the filters.`
-    : `In the FY${Y} ${stg}, ${who(p)}'s purchases agencies can control are ${M(ctl.value)}${ctl.change != null ? `, ${ctl.change >= 0 ? 'up' : 'down'} ${PCT(Math.abs(ctl.change))} from the FY${Y-1} ${stageShort(STAGE_OF[Y-1])}` : ''}, ${PCT(ctl.value/bud.value)} of ${M(bud.value)} in operating spending${tgt}.`);
+    : `In the FY${Y} ${stg}, ${who(p)}'s purchases agencies can control are ${M(ctl.value)}${ctl.change != null ? (Math.abs(ctl.change) <= 0.0005 ? `, about the same as the FY${Y-1} ${stageShort(STAGE_OF[Y-1])}` : `, ${ctl.change >= 0 ? 'up' : 'down'} ${PCT(Math.abs(ctl.change))} from the FY${Y-1} ${stageShort(STAGE_OF[Y-1])}`) : ''}, ${PCT(ctl.value/bud.value)} of ${M(bud.value)} in operating spending${tgt}.`);
   const data = AREAS.map(a => { const sub = fa.filter(r => r.area === a); const m = measure(sub.filter(r => r.spend != null), 'spend', p, {ignoreArea:true, years: arSel.years}); const pm = p.stage !== 'budget' ? measure(sub.filter(r => r.payee_spend != null), 'payee_spend', p, {ignoreArea:true, years: arSel.years.filter(y => y <= PAY_LAST)}) : {value:null};
     return {label:a, a:m.value || 0, b:pm.value, chg:m.change, lab:m.label, sel:p.areas.includes(a), color: areaColor(a)}; }).sort((x,y) => y.a - x.a);
   setText('overAreasH', `Focus areas, ${fyLabel(arSel.years)}${arSel.n > 1 ? ' combined' : ''}`);
