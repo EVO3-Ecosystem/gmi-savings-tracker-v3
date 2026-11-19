@@ -1,7 +1,7 @@
 # Data governance — GMI Savings Tracker
 
 <!-- gen:stamp -->
-_Generated 2026-11-19T12:50Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
+_Generated 2026-11-19T12:29Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
 <!-- /gen:stamp -->
 
 The rules for where the tracker's data comes from, what every column means, who can change what, and how every figure is backed by a source. The schema sections are rebuilt from the sources on every run (`python -m src.pipeline.governance`), so they can't fall out of date. The policy sections are written by hand.
@@ -3360,26 +3360,6 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | tab | text | derived | Dashboard tab the row links to |
 | previous | number | ops | Progress text in the previous run |
 
-**d_reported_claims** (38 rows)
-
-| column | type | origin | definition |
-|---|---|---|---|
-| claim_id | text |  |  |
-| source_id | text |  |  |
-| source_title | text |  |  |
-| source_date | text |  |  |
-| as_of | text |  |  |
-| retrieved | text |  |  |
-| saving_id | text | reference | Reported saving identifier (S01-S18) |
-| item | text | reference | Saving as GMI describes it |
-| amount_low | number |  |  |
-| amount_high | number |  |  |
-| basis | text |  |  |
-| mapping | text |  |  |
-| quote | text |  |  |
-| page | text |  |  |
-| url | text | source | Link to the source document |
-
 **d_revenue_backtest** (20 rows)
 
 | column | type | origin | definition |
@@ -3935,7 +3915,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 ## 12. Coverage and drift
 
 <!-- gen:coverage -->
-2,340 of 2,393 columns documented (85 source, 1603 warehouse, 705 dashboard).
+2,337 of 2,378 columns documented (85 source, 1603 warehouse, 690 dashboard).
 
 Missing a definition:
 
@@ -3982,18 +3962,6 @@ Missing a definition:
 | ref.gmi_public_page_claims | basis |
 | ref.gmi_public_page_claims | mapping |
 | ref.gmi_public_page_claims | quote |
-| d_reported_claims | claim_id |
-| d_reported_claims | source_id |
-| d_reported_claims | source_title |
-| d_reported_claims | source_date |
-| d_reported_claims | as_of |
-| d_reported_claims | retrieved |
-| d_reported_claims | amount_low |
-| d_reported_claims | amount_high |
-| d_reported_claims | basis |
-| d_reported_claims | mapping |
-| d_reported_claims | quote |
-| d_reported_claims | page |
 <!-- /gen:coverage -->
 
 **Source schema changes since the last snapshot:**

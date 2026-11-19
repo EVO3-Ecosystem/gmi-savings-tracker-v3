@@ -343,21 +343,6 @@ d_rec_status,status,text,6,Status of the recommendation,derived
 d_rec_status,progress,text,6,Key number showing progress,derived
 d_rec_status,tab,text,6,Dashboard tab the row links to,derived
 d_rec_status,previous,number,6,Progress text in the previous run,ops
-d_reported_claims,claim_id,text,38,,
-d_reported_claims,source_id,text,38,,
-d_reported_claims,source_title,text,38,,
-d_reported_claims,source_date,text,38,,
-d_reported_claims,as_of,text,38,,
-d_reported_claims,retrieved,text,38,,
-d_reported_claims,saving_id,text,38,Reported saving identifier (S01-S18),reference
-d_reported_claims,item,text,38,Saving as GMI describes it,reference
-d_reported_claims,amount_low,number,38,,
-d_reported_claims,amount_high,number,38,,
-d_reported_claims,basis,text,38,,
-d_reported_claims,mapping,text,38,,
-d_reported_claims,quote,text,38,,
-d_reported_claims,page,text,38,,
-d_reported_claims,url,text,38,Link to the source document,source
 d_revenue_backtest,origin_fy,number,20,Last training year of a rolling-origin backtest run,derived
 d_revenue_backtest,method,text,20,Candidate model scored at that origin (naive last value; log-linear trend; drift; trend with CPI),derived
 d_revenue_backtest,forecast_fy,number,20,Fiscal year the backtest forecast was for (origin + 1),derived

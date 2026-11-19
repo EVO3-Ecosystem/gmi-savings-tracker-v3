@@ -60,7 +60,7 @@ Note: a confirmed_duplicate_in_source lead is a publication issue, not recoverab
 ## Results
 
 <!-- facts:payment_screen -->
-_Generated from `mart.d_payment_screen`, `mart.d_source_issues` and `mart.d_payment_screen_summary`, extract run 20261119T123559Z, by `python -m src.models.doc_facts`._
+_Generated from `mart.d_payment_screen`, `mart.d_source_issues` and `mart.d_payment_screen_summary`, extract run 20261119T115247Z, by `python -m src.models.doc_facts`._
 
 **Payment leads: 8 groups, 16 records, $3.72M in groups, $1.86M review dollars.**
 

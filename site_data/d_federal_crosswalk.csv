@@ -1344,8 +1344,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2020,Actual,16.580,Edward Byrne Memorial State and Local Law Enforcement Assistance Discretionary Grants Programs,1,1,11960.0,,False,False,
 2020,Actual,14.401C,Fair Housing Assistance Program,1,1,11180.0,,False,False,
 2020,Actual,93.687,Maternal Opioid Misuse Model,1,1,10792.0,735828.0,True,False,0.01
-2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,81.090,State Heating Oil and Propane Program,1,1,10000.0,,False,False,
+2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,93.747,Elder Abuse Prevention Interventions Program,1,2,9239.0,,False,False,
 2020,Actual,17.280,Workforce Investment Act (WIA) Dislocated Worker National Reserve Demonstration Grants,1,7,8678.0,,False,False,
 2020,Actual,16.842,Opioid Affected Youth Initiative,1,1,7017.0,,False,False,
@@ -3673,16 +3673,16 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,93.391,National Initiative to Address COVID-19 Health Disparities,1,1,125222.0,,False,False,
 2026,Working budget,10.435,State Mediation Program,1,2,123826.0,,False,False,
 2026,Working budget,93.079,Center for Disease Control and Prevention,1,1,122943.0,,False,False,
-2026,Working budget,10.678,Forest Stewardship Program,1,5,116738.0,0.0,True,False,
 2026,Working budget,10.674,Wood Utilization Assistance,1,5,116738.0,,False,False,
+2026,Working budget,10.678,Forest Stewardship Program,1,5,116738.0,0.0,True,False,
 2026,Working budget,17.277,Workforce Investment Act (WIA) National Emergency Grants,1,7,112286.0,0.0,True,False,
 2026,Working budget,10.162,Inspection Grading and Standardization,1,2,110724.0,144194.12,True,False,0.77
 2026,Working budget,16.839,STOP School Violence Prevention and Mental Health Training Program,1,1,110405.0,,False,False,
 2026,Working budget,15.808,Geological Survey-Research and Data Acquisition,1,5,106182.0,,False,False,
 2026,Working budget,16.550,State Justice Statistics Program for Statistical Analysis Centers,1,1,106125.0,,False,False,
 2026,Working budget,97.029,Flood Mitigation Assistance,1,1,101251.0,823715.28,True,False,0.12
-2026,Working budget,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,99935.0,90000.0,True,False,1.11
 2026,Working budget,16.004,Law Enforcement Assistance-Narcotics and Dangerous Drugs Training,1,1,99935.0,,False,False,
+2026,Working budget,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,99935.0,90000.0,True,False,1.11
 2026,Working budget,16.750,Support for Adam Walsh Act Implementation Grant Program,1,1,99691.0,138399.17,True,False,0.72
 2026,Working budget,15.814,National Geological and Geophysical Data Preservation Program,1,5,96748.0,,False,False,
 2026,Working budget,81.086,Conservation Research and Development,1,1,92277.0,0.0,True,False,

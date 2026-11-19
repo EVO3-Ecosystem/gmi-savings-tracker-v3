@@ -76,5 +76,5 @@ d_range_coverage: d_range_coverage    # forecast range coverage, raw and calibra
 d_book_reconciliation: d_book_reconciliation    # every year against DBM's budget books and the FY2027 Fiscal Digest; FY2026 bridge and FY2027 walk
 d_site_reconciliation: d_site_reconciliation    # every yearly budget and payments total against the State's Open Finance sites
 d_book_program_differences: d_book_program_differences    # every program that differs from DBM's figure, with the reason
-# ---- November 18, 2026 (src/models/claims.py): listed here so `site --refresh-snapshot` keeps it in site_data/
-d_reported_claims: d_reported_claims    # every reported savings figure by source and date (January 2026 report, Governor's page), words quoted
+# ---- November 18, 2026: every reported savings figure by source and date (src/models/claims.py)
+d_reported_claims: d_reported_claims    # the January 2026 report and the Governor's page, item by item, with the words quoted
