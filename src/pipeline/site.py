@@ -19,6 +19,7 @@ download buttons (a build flag, not runtime sniffing; Copy results stays). Any U
 file is replaced with '?' and reported, since the artifact host rejects or mangles it.
 """
 import argparse
+import base64
 import csv
 import html
 import io
@@ -28,6 +29,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 import sys
 import tempfile
 from contextlib import redirect_stdout
@@ -286,14 +288,33 @@ def scrub_replacement_chars(out):
     return found
 
 
+def _copy(src, dst, tries=4):
+    """shutil.copy with retries: network mounts (SSHFS, some containers) can briefly lose a file between write and chmod."""
+    for attempt in range(tries):
+        try:
+            shutil.copy(src, dst)
+            return
+        except OSError:
+            if attempt == tries - 1:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+
+
 def build(out=OUT, src=None, artifact=False):
     """Build the site into out. artifact=True builds the claude.ai artifact variant (see the module docstring)."""
     src = Path(src) if src else source_dir()
     out = Path(out)
     sha = commit_sha()
-    if out.exists():
-        shutil.rmtree(out)
-    (out / "data").mkdir(parents=True)
+    for attempt in range(4):  # network mounts can report "not empty" or lose entries mid-rmtree; retry a few times
+        try:
+            if out.exists():
+                shutil.rmtree(out)
+            break
+        except OSError:
+            if attempt == 3:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+    (out / "data").mkdir(parents=True, exist_ok=True)  # exist_ok: network mounts can lag behind rmtree
     from ..models import exec_walkthrough, program_screen  # the page's per-program audit findings; the executive walkthrough's steps
     derived = {"audit_findings_by_program": program_screen.reported_findings,  # files the site writes from reference files
                "exec_walkthrough": lambda: exec_walkthrough.build(src)}  # eight steps and three asks, every number from the registry and the tables
@@ -303,23 +324,31 @@ def build(out=OUT, src=None, artifact=False):
     missing = sorted({f for f in datasets.values() if f not in derived and not (src / f"{f}.csv").exists()})
     if missing:
         raise SystemExit(f"export is missing dashboard files: {', '.join(missing)}")
-    for f in published_files(datasets):
-        if (src / f"{f}.csv").exists():
-            shutil.copy(src / f"{f}.csv", out / "data" / f"{f}.csv")
+    for attempt in range(4):  # network mounts can briefly hide source files; never publish a partial data/ dir
+        for f in published_files(datasets):
+            if (src / f"{f}.csv").exists():
+                _copy(src / f"{f}.csv", out / "data" / f"{f}.csv")
+        skipped = [f for f in published_files(datasets)
+                   if not (out / "data" / f"{f}.csv").exists() and (src / f"{f}.csv").exists()]
+        if not skipped:
+            break
+        if attempt == 3:
+            raise SystemExit(f"site build could not copy every published table: {', '.join(skipped)}")
+        time.sleep(0.5 * (attempt + 1))
     (out / "index.html").write_text(index)
     if not artifact:  # the metric registry with current values: one definition per number, readable by the dashboard, agents and alerts
         from ..models import metrics as metric_registry
         metric_registry.write_json(src, out / "metrics.json")
     pq = [] if artifact else parquet_files(src)
     if pq:
-        (out / "parquet").mkdir()
+        (out / "parquet").mkdir(exist_ok=True)
         for f in pq:
-            shutil.copy(f, out / "parquet" / f.name)
-    (out / "figures").mkdir()
+            _copy(f, out / "parquet" / f.name)
+    (out / "figures").mkdir(exist_ok=True)
     for f in sorted(FIGURES.rglob("*.png")):  # subfolders too (readme/, overview/): the about page shows README figures from them
         dest = out / "figures" / f.relative_to(FIGURES)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(f, dest)
+        _copy(f, dest)
     intro, summary = readme_summary((ROOT / "README.md").read_text())
     (out / "about.html").write_text(page("About the GMI Savings Tracker",
                                          "<h1>GMI Savings Tracker: how it is built</h1>" + md_to_html(intro) + md_to_html(summary)
@@ -351,6 +380,12 @@ def build(out=OUT, src=None, artifact=False):
                                        "Page not found."))
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\n# {SITE_URL}\n")
     (out / ".nojekyll").write_text("")
+    # a real favicon keeps browsers from logging a 404 on every visit
+    (out / "favicon.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">'
+                                   '<rect width="16" height="16" rx="3" fill="#1b5e20"/>'
+                                   '<text x="8" y="12" font-size="10" text-anchor="middle" fill="#fff" font-family="sans-serif">G</text></svg>')
+    (out / "favicon.ico").write_bytes(base64.b64decode(
+        "AAABAAEAEBAAAAAAIAAhAQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAOhJREFUeJxjlI5T+M9AAWCiRPPgMIAFm2C0QyRDlEMEw5+/fxg+ffvEUDa/kuH5uxfEucBOx4bB08Sdwb85mMG/OZjh+I2TDD3JXThdgGFAumcaQ/faPoY/f/8wMDAwMCzau5jhx68fDMxMzMR5QV1aleH64xtw/pcfXxmSJ6bhdAGGAcxMCKE0jxQGN0MXBlF+UQb7CmfivHD/5QMGTVkNBgYGBoZZO+YwJE1MY5ARkcbpAgwDlh5YxlAaXMTAwgxxSYJLHMPff3+J98K6YxsYVKVUGPa07mB4+f4lw7pjG/AawDiaFxgA3AdGPQLWvq0AAAAASUVORK5CYII="))
     return _report(out, src, pq, artifact)
 
 
