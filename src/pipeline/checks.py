@@ -583,7 +583,7 @@ def phase5_econ(con, check, one):
     withfy = {r[0] for r in con.execute("""SELECT table_name FROM information_schema.columns
                  WHERE table_schema = 'mart' AND column_name = 'fiscal_year'""").fetchall()} & pub
     yr = lambda t: tuple(con.execute(f"SELECT min(fiscal_year)::INT, max(fiscal_year)::INT FROM mart.{t}").fetchone()) if t in withfy else None
-    gaps = coverage.problems(withfy, yr)
+    gaps = coverage.problems(withfy, yr, require_listed=False)
     check("mart", "Every published table covers every fiscal year its source has (years.history_first_fy to the open year)", not gaps,
           f"{len(withfy)} tables checked against reference/year_coverage.csv" + ("; " + "; ".join(gaps[:6]) if gaps else ""))
 

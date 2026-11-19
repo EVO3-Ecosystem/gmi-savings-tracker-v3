@@ -183,10 +183,10 @@ d_fund_shift,general_share_change,number,6453,Change in General Fund share again
 d_fund_shift,shift_to_general,boolean,6453,True when the General Fund share rose at least fund_hierarchy.shift_pp points and the budget is at least fund_hierarchy.min_program (config/assumptions.yaml),derived
 d_fytd_log,fiscal_year,number,1,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 d_fytd_log,portal_updated_utc,text,1,Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt,ops
-d_fytd_log,days_into_year,number,1,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive",mart
-d_fytd_log,year_elapsed_share,number,1,Share of the fiscal year elapsed at the State's refresh of the payments data,mart
+d_fytd_log,days_into_year,number,1,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive",derived
+d_fytd_log,year_elapsed_share,number,1,Share of the fiscal year elapsed at the State's refresh of the payments data,derived
 d_fytd_log,total_payments,number,1,All payments in the fiscal year,derived
-d_fytd_log,payment_records,number,1,Rows in the payments data for the open fiscal year at that refresh,mart
+d_fytd_log,payment_records,number,1,Rows in the payments data for the open fiscal year at that refresh,derived
 d_fytd_log,run_id,text,1,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
 d_grant_groups,group_id,text,4570,Grant group identifier: hash of the group's member description keys (stable while the members are),derived
 d_grant_groups,rank_fy,number,4570,Rank of the group by FY2025 grant dollars,derived
@@ -541,7 +541,7 @@ f_fte,stage,text,794,"Confirmed budget stage for the fiscal year (Actual, Workin
 f_fte,agency_code,text,794,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 f_fte,agency,text,794,Agency name shown on the dashboard,derived
 f_fte,fte,number,794,Budgeted full-time-equivalent positions,derived
-f_fte,in_gmi_baseline,number,794,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)",mart
+f_fte,in_gmi_baseline,number,794,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)",derived
 f_function,fiscal_year,number,795,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 f_function,stage,text,795,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 f_function,agency_code,text,795,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal

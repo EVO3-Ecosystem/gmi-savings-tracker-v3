@@ -48,7 +48,7 @@ def test_the_reference_file_still_equals_the_legacy_items():
 def test_each_kind_of_payee_check_matches_what_it_should():
     pay = _pay([
         ("D50", "FORD MOTOR CO", 100.0, 2025), ("D50", "FORD MOTOR CO", 60.0, 2026), ("D26", "TOYOTA OF BEL AIR", 10.0, 2026),   # S06, any agency
-        ("D50", "FORD MOTOR CO", 999.0, 2021),                                                                                    # before FY2022
+        ("D50", "FORD MOTOR CO", 999.0, 2009),                                                                                    # before years.history_first_fy (FY2010)
         ("D50", "FORD CREDIT GOV", 999.0, 2026, True),                                                                            # government payees never count
         ("F50", "MOTOROLA SOLUTIONS", 40.0, 2025), ("D01", "MOTOROLA SOLUTIONS", 7.0, 2025),                                     # S03 only at F50
         ("Q00", "ARAMARK CORRECTIONAL", 30.0, 2026),                                                                              # S02, so part of the S01 union
@@ -56,7 +56,7 @@ def test_each_kind_of_payee_check_matches_what_it_should():
     ])
     d, f = V.check_payments(pay)
     paid = f.groupby(["check_id", "fiscal_year"]).paid.sum()
-    assert paid[("S06", 2025)] == 100.0 and paid[("S06", 2026)] == 70.0 and ("S06", 2021) not in paid.index
+    assert paid[("S06", 2025)] == 100.0 and paid[("S06", 2026)] == 70.0 and ("S06", 2009) not in paid.index
     assert paid[("S03", 2025)] == 40.0  # the D01 Motorola payment is outside the F50 check
     assert paid[("S02", 2026)] == 30.0
     assert paid[("S01", 2025)] == 40.0 and paid[("S01", 2026)] == 30.0  # S01 is S02-S05 together (Motorola at F50 + Aramark at Q00)

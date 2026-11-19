@@ -549,8 +549,8 @@ mart.d_fund_shift,general_share_change,DOUBLE,6453,Change in General Fund share 
 mart.d_fund_shift,shift_to_general,BOOLEAN,6453,True when the General Fund share rose at least fund_hierarchy.shift_pp points and the budget is at least fund_hierarchy.min_program (config/assumptions.yaml),derived
 mart.d_fytd_log,fiscal_year,BIGINT,1,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.d_fytd_log,portal_updated_utc,VARCHAR,1,Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt,ops
-mart.d_fytd_log,days_into_year,BIGINT,1,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive",mart
-mart.d_fytd_log,year_elapsed_share,DOUBLE,1,Share of the fiscal year elapsed at the State's refresh of the payments data,mart
+mart.d_fytd_log,days_into_year,BIGINT,1,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive",derived
+mart.d_fytd_log,year_elapsed_share,DOUBLE,1,Share of the fiscal year elapsed at the State's refresh of the payments data,derived
 mart.d_fytd_log,total_payments,DOUBLE,1,All payments in the fiscal year,derived
 mart.d_fytd_log,payment_records,BIGINT,1,Payment rows in the fiscal year,derived
 mart.d_fytd_log,run_id,VARCHAR,1,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
@@ -944,7 +944,7 @@ mart.f_fte,stage,VARCHAR,794,"Confirmed budget stage for the fiscal year (Actual
 mart.f_fte,agency_code,VARCHAR,794,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 mart.f_fte,agency,VARCHAR,794,Agency name shown on the dashboard,derived
 mart.f_fte,fte,DOUBLE,794,Budgeted full-time-equivalent positions,derived
-mart.f_fte,in_gmi_baseline,BOOLEAN,794,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)",mart
+mart.f_fte,in_gmi_baseline,BOOLEAN,794,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)",derived
 mart.f_function,fiscal_year,INTEGER,795,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 mart.f_function,stage,VARCHAR,795,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 mart.f_function,agency_code,VARCHAR,795,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal

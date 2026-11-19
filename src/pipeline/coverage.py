@@ -34,7 +34,7 @@ def bounds(years_of):
             "mixed": (min(pay[0], bud[0]), max(pay[1], bud[1])) if pay and bud else None}
 
 
-def problems(tables, years_of, first=None):
+def problems(tables, years_of, first=None, require_listed=True):
     """tables: names of published tables that have a fiscal_year column. years_of(name) -> (min, max).
     Returns a list of plain-language problems; empty when every table covers its source's years."""
     first = history_first() if first is None else first
@@ -49,7 +49,8 @@ def problems(tables, years_of, first=None):
                 out.append(f"{t} is listed as narrow without a reason")
             continue
         if t not in tables:
-            out.append(f"{t} is listed ({r.family}) but not published")
+            if require_listed:  # the published snapshot must carry every listed table; a partial build checks what it has
+                out.append(f"{t} is listed ({r.family}) but not published")
             continue
         lo, hi = years_of(t)
         want = src.get(r.family)

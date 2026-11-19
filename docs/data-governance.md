@@ -1,7 +1,7 @@
 # Data governance — GMI Savings Tracker
 
 <!-- gen:stamp -->
-_Generated 2026-11-19T18:55Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
+_Generated 2026-11-19T19:05Z by `python -m src.pipeline.governance`. Source schemas from the Discovery API, read Nov 19, 2026._
 <!-- /gen:stamp -->
 
 The rules for where the tracker's data comes from, what every column means, who can change what, and how every figure is backed by a source. The schema sections are rebuilt from the sources on every run (`python -m src.pipeline.governance`), so they can't fall out of date. The policy sections are written by hand.
@@ -1133,8 +1133,8 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 |---|---|---|---|
 | fiscal_year | BIGINT | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
 | portal_updated_utc | VARCHAR | ops | Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt |
-| days_into_year | BIGINT | mart | Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive |
-| year_elapsed_share | DOUBLE | mart | Share of the fiscal year elapsed at the State's refresh of the payments data |
+| days_into_year | BIGINT | derived | Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive |
+| year_elapsed_share | DOUBLE | derived | Share of the fiscal year elapsed at the State's refresh of the payments data |
 | total_payments | DOUBLE | derived | All payments in the fiscal year |
 | payment_records | BIGINT | derived | Payment rows in the fiscal year |
 | run_id | VARCHAR | ops | Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ |
@@ -1713,7 +1713,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | agency_code | VARCHAR | portal | Three-character State budget agency code (for example D50); the key that joins budget and payments |
 | agency | VARCHAR | derived | Agency name shown on the dashboard |
 | fte | DOUBLE | derived | Budgeted full-time-equivalent positions |
-| in_gmi_baseline | BOOLEAN | mart | True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95) |
+| in_gmi_baseline | BOOLEAN | derived | True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95) |
 
 **mart.f_function** (795 rows)
 
@@ -3168,10 +3168,10 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 |---|---|---|---|
 | fiscal_year | number | portal | Maryland fiscal year (July 1 to June 30), named for the year it ends |
 | portal_updated_utc | text | ops | Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt |
-| days_into_year | number | mart | Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive |
-| year_elapsed_share | number | mart | Share of the fiscal year elapsed at the State's refresh of the payments data |
+| days_into_year | number | derived | Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive |
+| year_elapsed_share | number | derived | Share of the fiscal year elapsed at the State's refresh of the payments data |
 | total_payments | number | derived | All payments in the fiscal year |
-| payment_records | number | mart | Rows in the payments data for the open fiscal year at that refresh |
+| payment_records | number | derived | Rows in the payments data for the open fiscal year at that refresh |
 | run_id | text | ops | Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ |
 
 **d_grant_groups** (4,570 rows)
@@ -3691,7 +3691,7 @@ Also saved as CSV in `docs/schemas/` (`source_columns.csv`, `warehouse_columns.c
 | agency_code | text | portal | Three-character State budget agency code (for example D50); the key that joins budget and payments |
 | agency | text | derived | Agency name shown on the dashboard |
 | fte | number | derived | Budgeted full-time-equivalent positions |
-| in_gmi_baseline | number | mart | True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95) |
+| in_gmi_baseline | number | derived | True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95) |
 
 **f_function** (795 rows)
 
