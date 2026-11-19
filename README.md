@@ -160,7 +160,7 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: every one of the <!-- n:documented_columns -->2,319<!-- /n --> columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: every one of the <!-- n:documented_columns -->2,378<!-- /n --> columns documented (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## Tech stack
 
