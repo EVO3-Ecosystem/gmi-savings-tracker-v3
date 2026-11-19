@@ -1149,14 +1149,17 @@ function drawRecTables(){
 function drawOver(p){
   drawRecs(); drawPortalOver(p);
   const ff = ok('f_function'), fs = ok('f_scope'), fa = ok('f_area'); if (!ff || !fs || !fa) return;
-  // tiles: one year (the latest selected, or the latest budget year with full payments) against the year before, with its stage
+  // tiles: one year against the year before, with its stage: the latest selected year that fits the spending type, or with none
+  // selected the latest year of that type (tileYear); payments use the latest full payment year (payYear)
   const Y = tileYear(p), YP = payYear(p, Y), one = {years:[Y], ignoreArea:true};
   const bud = measure(ff, 'budget', p, one), ctl = measure(fs.filter(r => r.scope === 'Controllable purchases'), 'budget', p, one), ar = measure(fa.filter(r => r.spend != null), 'spend', p, {years:[Y]});
   const arSel = measure(fa.filter(r => r.spend != null), 'spend', p); // the selection, for the focus-area chart below
   const hasB = !!(bud.value);
   const chip = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t || ''; };
   const stg = STAGE_OF[Y] ? stageShort(STAGE_OF[Y]) : '';
-  const many = p.years.length > 1 ? ` · latest of ${p.years.length} selected years` : '';
+  const fitSel = p.years.filter(y => stageOK(y, p, false)), skip = p.years.filter(y => !stageOK(y, p, false)).sort((a,b) => a-b);
+  const many = (fitSel.length > 1 ? ` · latest of ${fitSel.length} selected years` : '')
+    + (skip.length ? ` · ${fyLabel(skip)} ${skip.length > 1 ? 'have' : 'has'} no ${p.stage === 'actual' ? 'actual budget yet' : 'budget'}, so ${skip.length > 1 ? 'they show' : 'it shows'} in payments only` : '');
   setText('kBud', `Operating spending, FY${Y}`);
   setText('vBud', hasB ? M(bud.value) : '—'); setChg('dBud', bud, 'neutral'); setText('sBud', hasB ? `one year, not a sum${many}` : `no operating budget for FY${Y}`); chip('gBud', hasB ? stg : '');
   setText('kCtl', `Controllable purchases, FY${Y}`);
