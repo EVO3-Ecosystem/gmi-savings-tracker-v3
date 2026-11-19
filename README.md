@@ -15,7 +15,7 @@
 
 Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov); State websites and DBM's budget books are used only to verify it.
 
-<a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/overview.png" alt="Dashboard overview: FY2026 against FY2025, with the computed finding at the top"></a>
+<a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/overview.png" alt="Dashboard overview: FY2025 actual spending against FY2024, with the computed finding at the top"></a>
 
 ## What it found
 
