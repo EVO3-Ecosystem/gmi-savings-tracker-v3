@@ -79,3 +79,4 @@ d_book_program_differences: d_book_program_differences    # every program that d
 # ---- November 18, 2026: every reported savings figure by source and date (src/models/claims.py)
 d_reported_claims: d_reported_claims    # the January 2026 report and the Governor's page, item by item, with the words quoted
 f_fte: f_fte    # budgeted FTEs exactly as published (x8qy-486w), every agency incl. public higher education; in_gmi_baseline flags it
+d_fytd_log: d_fytd_log    # payments to date in the open fiscal year at each State refresh, kept across runs (same-period comparisons once a year is logged)

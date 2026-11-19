@@ -1114,6 +1114,20 @@ function payments(p){ // payments to vendors: statewide totals, by agency, or by
   if (p.areas.length) { const fa = ok('f_area'); return fa ? {rows: fa.filter(r => r.payee_spend != null), key: 'payee_spend', label: 'Payments in the selected areas, by payee name', area:true} : null; }
   if (p.agencies.length) { const f = ok('f_budget_vs_pay'); return f ? {rows: f.filter(r => r.fiscal_year <= PAY_NOW && r.agency_code && r.payments != null), key: 'payments', label: 'Payments to vendors'} : null; }
   const t = ok('totals'); return t ? {rows: t.filter(r => r.fiscal_year <= PAY_NOW), key: 'total_payments', label: 'Payments to vendors'} : null; }
+/* live year to date: pace against the last full year at the share of the year elapsed when the State last refreshed the
+   payments data (a pace, never a forecast: payments are uneven through the year), and a same-period comparison once the
+   refresh log (d_fytd_log) holds the previous year at about the same point */
+function fytdNote(fy, paid, prevFull, statewide){
+  const so = (ok('sources') || []).find(r => r.source === 'payments'); const at = so ? String(so.portal_updated_utc || so.portal_updated || '') : '';
+  const start = Date.UTC(fy - 1, 6, 1), end = Date.UTC(fy, 6, 1), t = at ? Date.parse(at.length <= 10 ? at + 'T12:00:00Z' : at) : NaN;
+  const el = isNaN(t) ? null : Math.min(1, Math.max(0, (Math.floor((t - start) / 864e5) + 1) / ((end - start) / 864e5)));
+  const bits = [`FY${fy} so far, through the State's ${ET(at)} refresh (partial year)`];
+  if (prevFull) bits.push(`${PCT(paid / prevFull)} of FY${fy - 1}'s full-year ${M(prevFull)}` + (el != null ? ` with ${PCT(el)} of the fiscal year elapsed: a pace, not a forecast` : ''));
+  const lg = statewide ? (ok('d_fytd_log') || []) : []; const cur = lg.filter(r => +r.fiscal_year === fy).slice(-1)[0];
+  const same = cur && lg.filter(r => +r.fiscal_year === fy - 1).map(r => ({r, d: Math.abs(+r.days_into_year - +cur.days_into_year)})).filter(x => x.d <= 15).sort((a, b) => a.d - b.d)[0];
+  if (same) bits.push(`same point of FY${fy - 1} (day ${same.r.days_into_year}): ${M(+same.r.total_payments)}, ${ARROW((paid - same.r.total_payments) / Math.abs(same.r.total_payments))}`);
+  else if (statewide) bits.push(`a same-date comparison with FY${fy - 1} starts once the refresh log covers a full year`);
+  return bits.join('; '); }
 const who = p => !p.agencies.length ? 'Maryland' : p.agencies.length === 1 ? agName(p.agencies[0]) : `${p.agencies.length} selected agencies`;
 
 /* forecast ranges: indicative, with the coverage the pipeline measured on its rolling backtest (a check in the checks dataset) */
@@ -1190,7 +1204,7 @@ function drawOver(p){
   const py = payments(p); if (py) { const pm = measure(py.rows, py.key, p, {payments:true, ignoreArea: !py.area, years:[YP]}); const ovr = (ok('f_overlap') || []).find(r => r.fiscal_year === YP);
     setText('kPay', py.label + `, FY${YP}${isOpen(YP) ? ' to date' : ''}`); setText('vPay', pm.value ? M(pm.value) : '—'); setChg('dPay', pm, 'neutral');
     const pfull = (pm.series || []).find(d => d.year === YP - 1);
-    setText('sPay', !pm.value ? `no payments for FY${YP}` : isOpen(YP) ? `FY${YP} so far: payments posted to date (partial year, updates with each portal refresh)` + (pfull ? `; FY${YP - 1} full year: ${M(pfull.v)}` : '') : 'payments are actual spending' + (YP < Y ? `; FY${Y} payments are not a full year yet` : ''));
+    setText('sPay', !pm.value ? `no payments for FY${YP}` : isOpen(YP) ? fytdNote(YP, pm.value, pfull ? pfull.v : null, !p.agencies.length && !p.areas.length) : 'payments are actual spending' + (YP < Y ? `; FY${Y} payments are not a full year yet` : ''));
     chip('gPay', pm.value ? (isOpen(YP) ? 'FYTD · partial year' : 'actual payments') : '');
     spark(document.getElementById('spPay'), (pm.series || []).map(d => ({x:d.year, y:d.v})), pm.years); }
   // one-sentence finding, computed from the same figures as the tiles

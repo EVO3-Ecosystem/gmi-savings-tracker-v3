@@ -109,7 +109,9 @@ The chosen k sits inside the configured range with a positive silhouette,mart,ma
 No cluster is a singleton or holds most agencies,mart,mart.agency_clusters
 Maryland employment (BLS) covers every budget year,core,core.fact_md_employment
 Maryland GDP (BEA) covers every budget year,core,core.fact_md_gdp
-Economic context mart covers every budget year and ties to the core series,mart,core.fact_budget core.fact_md_gdp mart.d_econ
+Economic context mart covers every budget year and ties to the core series,mart,core.fact_budget core.fact_md_gdp core.fact_payment mart.d_econ
+"FTEs as published = the portal's FTEs (every year and agency, higher education included)",mart,mart.f_fte raw.fte
+Every published table covers every fiscal year its source has (years.history_first_fy to the open year),mart,mart.d_all_funds mart.d_area_top mart.d_book_reconciliation mart.d_deflator mart.d_econ mart.d_families mart.d_federal_crosswalk mart.d_fund_shift mart.d_multi mart.d_multi_basis mart.d_site_reconciliation mart.f_agency mart.f_area mart.f_budget_vs_pay mart.f_code mart.f_concentration mart.f_fte mart.f_function mart.f_fund mart.f_fund_source mart.f_grants mart.f_object mart.f_overlap mart.f_payee_type mart.f_program mart.f_revenue mart.f_savings_check mart.f_scope mart.f_vendor mart.f_vendor_detail mart.f_vendor_pay mart.f_vendor_year mart.totals_by_fy
 "State Plan map: one row per agency, known codes, numbered priorities, a citation on every row",ref,ref.dim_agency ref.state_plan_map
 State Plan mart carries every mapped agency,mart,mart.d_state_plan
 "OLA findings: 10+ agencies, well-formed rows, every row cites its ola.maryland.gov report",ref,ref.dim_agency ref.ola_findings

@@ -18,6 +18,7 @@ d_federal_crosswalk,mart,4063,True
 d_field_availability,mart,13,True
 d_forecast_model,mart,7,True
 d_fund_shift,mart,6453,True
+d_fytd_log,mart,1,True
 d_grant_groups,mart,4570,True
 d_grant_groups_sensitivity,mart,3,True
 d_master_quality,mart,5,True

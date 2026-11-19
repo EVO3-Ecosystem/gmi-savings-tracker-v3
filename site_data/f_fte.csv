@@ -1,4 +1,233 @@
 fiscal_year,stage,agency_code,agency,fte,in_gmi_baseline
+2017,Actual,D05,Board of Public Works,9.0,True
+2017,Actual,E00,Comptroller of Maryland,1114.9,True
+2017,Actual,F10,Department of Budget and Management,332.0,True
+2017,Actual,H00,Department of General Services,581.0,True
+2017,Actual,Q00,Department of Public Safety and Correctional Services,10954.4,True
+2017,Actual,U00,Department of the Environment,894.0,True
+2017,Actual,D10,Executive Department - Governor,83.5,True
+2017,Actual,D18,Governor's Office for Children,16.0,True
+2017,Actual,D27,Maryland Commission On Civil Rights,31.0,True
+2017,Actual,M00,Maryland Department of Health,6186.8,True
+2017,Actual,U10,Maryland Environmental Service,0.0,True
+2017,Actual,D78,Maryland Health Benefit Exchange,67.0,True
+2017,Actual,D53,Maryland Institute for Emergency Medical Services Systems,94.0,True
+2017,Actual,R99,Maryland School for the Deaf,330.5,True
+2017,Actual,D28,Maryland Stadium Authority,0.0,True
+2017,Actual,R11,Maryland State Library Agency,0.0,True
+2017,Actual,R13,Morgan State University,1117.0,False
+2017,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
+2017,Actual,C90,Public Service Commission,136.0,True
+2017,Actual,D60,State Archives,62.5,True
+2017,Actual,C96,Uninsured Employers' Fund,14.0,True
+2017,Actual,R30,University System of Maryland,23923.8,False
+2018,Actual,P00,Maryland Department of Labor,1475.7,True
+2018,Actual,D40,Department of Planning,129.0,True
+2018,Actual,Q00,Department of Public Safety and Correctional Services,10554.4,True
+2018,Actual,W00,Department of State Police,2435.5,True
+2018,Actual,D55,Department of Veterans and Military Families,83.0,True
+2018,Actual,R60,Maryland 529,0.0,True
+2018,Actual,D70,Maryland Automobile Insurance Fund,0.0,True
+2018,Actual,R62,Maryland Higher Education Commission,54.6,True
+2018,Actual,R15,Maryland Public Broadcasting Commission,145.0,True
+2018,Actual,C85,Maryland Tax Court,8.0,True
+2018,Actual,D50,Military Department,293.5,True
+2018,Actual,C80,Office of the Public Defender,888.5,True
+2018,Actual,R14,St. Mary's College of Maryland,418.0,False
+2018,Actual,D60,State Archives,62.5,True
+2018,Actual,E20,State Treasurer's Office,60.0,True
+2018,Actual,C96,Uninsured Employers' Fund,13.0,True
+2019,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
+2019,Actual,D26,Department of Aging,38.7,True
+2019,Actual,F10,Department of Budget and Management,334.0,True
+2019,Actual,S00,Department of Housing and Community Development,331.0,True
+2019,Actual,F50,Department of Information Technology,234.6,True
+2019,Actual,P00,Maryland Department of Labor,1451.7,True
+2019,Actual,D40,Department of Planning,129.0,True
+2019,Actual,Q00,Department of Public Safety and Correctional Services,10414.4,True
+2019,Actual,D10,Executive Department - Governor,82.5,True
+2019,Actual,R60,Maryland 529,0.0,True
+2019,Actual,D70,Maryland Automobile Insurance Fund,0.0,True
+2019,Actual,D27,Maryland Commission On Civil Rights,31.0,True
+2019,Actual,U10,Maryland Environmental Service,0.0,True
+2019,Actual,D30,Maryland Food Center Authority,0.0,True
+2019,Actual,D80,Maryland Insurance Administration,259.0,True
+2019,Actual,D28,Maryland Stadium Authority,0.0,True
+2019,Actual,D99,Office of Administrative Hearings,118.0,True
+2019,Actual,C81,Office of the Attorney General,269.5,True
+2019,Actual,D11,Office of the Deaf and Hard of Hearing,3.0,True
+2019,Actual,C90,Public Service Commission,137.0,True
+2019,Actual,D38,State Board of Elections,41.8,True
+2019,Actual,C94,Subsequent Injury Fund,17.0,True
+2020,Actual,C00,Judiciary,4048.0,True
+2020,Actual,C85,Maryland Tax Court,8.0,True
+2020,Actual,C98,Workers' Compensation Commission,115.0,True
+2020,Actual,D10,Executive Department - Governor,82.5,True
+2020,Actual,D21,Governor's Office of Crime Prevention and Policy,61.0,True
+2020,Actual,D26,Department of Aging,38.7,True
+2020,Actual,D40,Department of Planning,130.0,True
+2020,Actual,D50,Military Department,307.5,True
+2020,Actual,D80,Maryland Insurance Administration,259.0,True
+2020,Actual,E50,State Department of Assessments and Taxation,595.3,True
+2020,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
+2020,Actual,L00,Department of Agriculture,394.1,True
+2020,Actual,P00,Maryland Department of Labor,1397.2,True
+2020,Actual,R95,Baltimore City Community College,437.0,False
+2020,Actual,S00,Department of Housing and Community Development,331.0,True
+2020,Actual,U00,Department of the Environment,893.0,True
+2021,Actual,B75,Legislative Branch,767.0,True
+2021,Actual,C91,Office of People's Counsel,19.0,True
+2021,Actual,D17,Historic St. Mary's City Commission,31.0,True
+2021,Actual,D40,Department of Planning,129.0,True
+2021,Actual,D78,Maryland Health Benefit Exchange,67.0,True
+2021,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
+2021,Actual,D99,Office of Administrative Hearings,117.0,True
+2021,Actual,E00,Comptroller of Maryland,1082.9,True
+2021,Actual,H00,Department of General Services,646.0,True
+2021,Actual,L00,Department of Agriculture,412.1,True
+2021,Actual,M00,Maryland Department of Health,9902.05,True
+2021,Actual,N00,Department of Human Services,6118.05,True
+2021,Actual,R00,State Department of Education,1405.9,True
+2021,Actual,R95,Baltimore City Community College,437.0,False
+2021,Actual,R99,Maryland School for the Deaf,334.5,True
+2021,Actual,V00,Department of Juvenile Services,1995.55,True
+2022,Actual,C80,Office of the Public Defender,883.5,True
+2022,Actual,C90,Public Service Commission,138.0,True
+2022,Actual,D15,"Executive Department-Boards, Commissions and Offices",69.6,True
+2022,Actual,D16,Secretary of State,24.0,True
+2022,Actual,D26,Department of Aging,39.0,True
+2022,Actual,D60,State Archives,61.0,True
+2022,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
+2022,Actual,D99,Office of Administrative Hearings,115.0,True
+2022,Actual,E50,State Department of Assessments and Taxation,570.3,True
+2022,Actual,E75,Maryland Lottery and Gaming Control Agency,364.1,True
+2022,Actual,H00,Department of General Services,656.0,True
+2022,Actual,L00,Department of Agriculture,411.7,True
+2022,Actual,M00,Maryland Department of Health,10090.62,True
+2022,Actual,P00,Maryland Department of Labor,1355.17,True
+2022,Actual,Q00,Department of Public Safety and Correctional Services,9217.4,True
+2022,Actual,R14,St. Mary's College of Maryland,416.0,False
+2022,Actual,R62,Maryland Higher Education Commission,64.0,True
+2022,Actual,V00,Department of Juvenile Services,1995.55,True
+2023,Actual,C80,Office of the Public Defender,883.5,True
+2023,Actual,C81,Office of the Attorney General,298.5,True
+2023,Actual,C82,Office of the State Prosecutor,13.0,True
+2023,Actual,C96,Uninsured Employers' Fund,13.0,True
+2023,Actual,D05,Board of Public Works,9.0,True
+2023,Actual,D10,Executive Department - Governor,98.0,True
+2023,Actual,D11,Office of the Deaf and Hard of Hearing,3.0,True
+2023,Actual,D15,"Executive Department-Boards, Commissions and Offices",73.6,True
+2023,Actual,D16,Secretary of State,24.0,True
+2023,Actual,D17,Historic St. Mary's City Commission,32.0,True
+2023,Actual,D18,Governor's Office for Children,0.0,True
+2023,Actual,D26,Department of Aging,40.0,True
+2023,Actual,D29,Maryland Thoroughbred Racetrack Operating Authority,0.0,True
+2023,Actual,D55,Department of Veterans and Military Families,119.0,True
+2023,Actual,D91,West North Avenue Development Authority,0.0,True
+2023,Actual,E50,State Department of Assessments and Taxation,570.3,True
+2023,Actual,F50,Department of Information Technology,184.0,True
+2023,Actual,G20,Maryland State Retirement and Pension Systems,214.0,True
+2023,Actual,K00,Department of Natural Resources,1379.5,True
+2023,Actual,L00,Department of Agriculture,409.2,True
+2023,Actual,P00,Maryland Department of Labor,1356.17,True
+2023,Actual,R62,Maryland Higher Education Commission,69.0,True
+2024,Actual,C80,Office of the Public Defender,938.5,True
+2024,Actual,C81,Office of the Attorney General,360.5,True
+2024,Actual,C98,Workers' Compensation Commission,115.0,True
+2024,Actual,D13,Maryland Energy Administration,44.0,True
+2024,Actual,D18,Governor's Office for Children,8.0,True
+2024,Actual,D22,Maryland Commission on African American History and Culture,9.0,True
+2024,Actual,D25,Interagency Commission On School Construction,41.0,True
+2024,Actual,D38,State Board of Elections,51.0,True
+2024,Actual,D50,Military Department,227.5,True
+2024,Actual,D52,Maryland Department of Emergency Management,97.0,True
+2024,Actual,D53,Maryland Institute for Emergency Medical Services Systems,98.0,True
+2024,Actual,D77,Prescription Drug Affordability Board,5.0,True
+2024,Actual,D80,Maryland Insurance Administration,259.0,True
+2024,Actual,D99,Office of Administrative Hearings,117.0,True
+2024,Actual,E00,Comptroller of Maryland,1132.9,True
+2024,Actual,N00,Department of Human Services,5978.68,True
+2024,Actual,P00,Maryland Department of Labor,1440.17,True
+2024,Actual,R11,Maryland State Library Agency,32.0,True
+2024,Actual,R62,Maryland Higher Education Commission,72.0,True
+2024,Actual,S00,Department of Housing and Community Development,355.0,True
+2024,Actual,T00,Department of Commerce,189.0,True
+2025,Actual,B75,Legislative Branch,813.0,True
+2025,Actual,C90,Public Service Commission,165.0,True
+2025,Actual,C96,Uninsured Employers' Fund,13.0,True
+2025,Actual,D05,Board of Public Works,11.0,True
+2025,Actual,D10,Executive Department - Governor,121.0,True
+2025,Actual,D12,Department of Disabilities,39.0,True
+2025,Actual,D13,Maryland Energy Administration,49.0,True
+2025,Actual,D22,Maryland Commission on African American History and Culture,11.0,True
+2025,Actual,D23,Maryland Cannabis Administration,110.0,True
+2025,Actual,D24,Department of Social and Economic Mobility,0.0,True
+2025,Actual,D26,Department of Aging,49.0,True
+2025,Actual,D28,Maryland Stadium Authority,149.8,True
+2025,Actual,D74,Office of the Correctional Ombudsman,7.0,True
+2025,Actual,D80,Maryland Insurance Administration,274.0,True
+2025,Actual,E17,"Alcohol, Tobacco, and Cannabis Commission",60.0,True
+2025,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
+2025,Actual,J00,Department of Transportation,10910.5,True
+2025,Actual,K00,Department of Natural Resources,1501.0,True
+2025,Actual,R00,State Department of Education,1393.9,True
+2025,Actual,R11,Maryland State Library Agency,33.0,True
+2025,Actual,R12,Accountability and Implementation Board,16.0,True
+2025,Actual,R14,St. Mary's College of Maryland,450.0,False
+2025,Actual,R15,Maryland Public Broadcasting Commission,151.0,True
+2025,Actual,R30,University System of Maryland,26682.27,False
+2025,Actual,R62,Maryland Higher Education Commission,84.0,True
+2025,Actual,R95,Baltimore City Community College,437.0,False
+2025,Actual,R99,Maryland School for the Deaf,362.5,True
+2025,Actual,S00,Department of Housing and Community Development,446.0,True
+2026,Working budget,C00,Judiciary,4173.0,True
+2026,Working budget,C85,Maryland Tax Court,9.0,True
+2026,Working budget,C90,Public Service Commission,175.0,True
+2026,Working budget,D12,Department of Disabilities,40.0,True
+2026,Working budget,D16,Secretary of State,29.0,True
+2026,Working budget,D21,Governor's Office of Crime Prevention and Policy,104.0,True
+2026,Working budget,D23,Maryland Cannabis Administration,101.0,True
+2026,Working budget,D40,Department of Planning,142.0,True
+2026,Working budget,D60,State Archives,64.0,True
+2026,Working budget,D73,Office of the Inspector General for Education,16.0,True
+2026,Working budget,D74,Office of the Correctional Ombudsman,13.0,True
+2026,Working budget,D76,Maryland Office of the Inspector General for Health,39.0,True
+2026,Working budget,D78,Maryland Health Benefit Exchange,79.0,True
+2026,Working budget,D90,Canal Place Preservation and Development Authority,4.0,True
+2026,Working budget,E75,Maryland Lottery and Gaming Control Agency,354.75,True
+2026,Working budget,E80,Property Tax Assessment Appeals Boards,8.0,True
+2026,Working budget,F10,Department of Budget and Management,344.0,True
+2026,Working budget,F50,Department of Information Technology,262.0,True
+2026,Working budget,J00,Department of Transportation,10803.5,True
+2026,Working budget,Q00,Department of Public Safety and Correctional Services,9199.4,True
+2026,Working budget,R14,St. Mary's College of Maryland,450.0,False
+2026,Working budget,R15,Maryland Public Broadcasting Commission,151.0,True
+2026,Working budget,R62,Maryland Higher Education Commission,88.0,True
+2026,Working budget,S00,Department of Housing and Community Development,446.0,True
+2026,Working budget,V00,Department of Juvenile Services,2126.95,True
+2026,Working budget,W00,Department of State Police,2574.0,True
+2027,Legislative appropriation,C80,Office of the Public Defender,1011.5,True
+2027,Legislative appropriation,C82,Office of the State Prosecutor,18.0,True
+2027,Legislative appropriation,C85,Maryland Tax Court,9.0,True
+2027,Legislative appropriation,C90,Public Service Commission,191.0,True
+2027,Legislative appropriation,D05,Board of Public Works,11.0,True
+2027,Legislative appropriation,D17,Historic St. Mary's City Commission,40.0,True
+2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,104.0,True
+2027,Legislative appropriation,D22,Maryland Commission on African American History and Culture,11.0,True
+2027,Legislative appropriation,D25,Interagency Commission On School Construction,44.0,True
+2027,Legislative appropriation,D28,Maryland Stadium Authority,160.8,True
+2027,Legislative appropriation,D50,Military Department,167.5,True
+2027,Legislative appropriation,D91,West North Avenue Development Authority,15.0,True
+2027,Legislative appropriation,E17,"Alcohol, Tobacco, and Cannabis Commission",60.0,True
+2027,Legislative appropriation,E50,State Department of Assessments and Taxation,568.3,True
+2027,Legislative appropriation,F50,Department of Information Technology,273.0,True
+2027,Legislative appropriation,G20,Maryland State Retirement and Pension Systems,259.0,True
+2027,Legislative appropriation,Q00,Department of Public Safety and Correctional Services,9199.4,True
+2027,Legislative appropriation,R00,State Department of Education,1391.3,True
+2027,Legislative appropriation,R13,Morgan State University,1870.0,False
+2027,Legislative appropriation,S00,Department of Housing and Community Development,447.0,True
+2027,Legislative appropriation,V00,Department of Juvenile Services,2134.95,True
+2027,Legislative appropriation,W00,Department of State Police,2574.0,True
 2017,Actual,R95,Baltimore City Community College,444.0,False
 2017,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
 2017,Actual,K00,Department of Natural Resources,1314.5,True
@@ -383,235 +612,6 @@ fiscal_year,stage,agency_code,agency,fte,in_gmi_baseline
 2027,Legislative appropriation,E80,Property Tax Assessment Appeals Boards,8.0,True
 2027,Legislative appropriation,I00,Department of Service and Civic Innovation,66.0,True
 2027,Legislative appropriation,R12,Accountability and Implementation Board,16.0,True
-2017,Actual,D05,Board of Public Works,9.0,True
-2017,Actual,E00,Comptroller of Maryland,1114.9,True
-2017,Actual,F10,Department of Budget and Management,332.0,True
-2017,Actual,H00,Department of General Services,581.0,True
-2017,Actual,Q00,Department of Public Safety and Correctional Services,10954.4,True
-2017,Actual,U00,Department of the Environment,894.0,True
-2017,Actual,D10,Executive Department - Governor,83.5,True
-2017,Actual,D18,Governor's Office for Children,16.0,True
-2017,Actual,D27,Maryland Commission On Civil Rights,31.0,True
-2017,Actual,M00,Maryland Department of Health,6186.8,True
-2017,Actual,U10,Maryland Environmental Service,0.0,True
-2017,Actual,D78,Maryland Health Benefit Exchange,67.0,True
-2017,Actual,D53,Maryland Institute for Emergency Medical Services Systems,94.0,True
-2017,Actual,R99,Maryland School for the Deaf,330.5,True
-2017,Actual,D28,Maryland Stadium Authority,0.0,True
-2017,Actual,R11,Maryland State Library Agency,0.0,True
-2017,Actual,R13,Morgan State University,1117.0,False
-2017,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
-2017,Actual,C90,Public Service Commission,136.0,True
-2017,Actual,D60,State Archives,62.5,True
-2017,Actual,C96,Uninsured Employers' Fund,14.0,True
-2017,Actual,R30,University System of Maryland,23923.8,False
-2018,Actual,P00,Maryland Department of Labor,1475.7,True
-2018,Actual,D40,Department of Planning,129.0,True
-2018,Actual,Q00,Department of Public Safety and Correctional Services,10554.4,True
-2018,Actual,W00,Department of State Police,2435.5,True
-2018,Actual,D55,Department of Veterans and Military Families,83.0,True
-2018,Actual,R60,Maryland 529,0.0,True
-2018,Actual,D70,Maryland Automobile Insurance Fund,0.0,True
-2018,Actual,R62,Maryland Higher Education Commission,54.6,True
-2018,Actual,R15,Maryland Public Broadcasting Commission,145.0,True
-2018,Actual,C85,Maryland Tax Court,8.0,True
-2018,Actual,D50,Military Department,293.5,True
-2018,Actual,C80,Office of the Public Defender,888.5,True
-2018,Actual,R14,St. Mary's College of Maryland,418.0,False
-2018,Actual,D60,State Archives,62.5,True
-2018,Actual,E20,State Treasurer's Office,60.0,True
-2018,Actual,C96,Uninsured Employers' Fund,13.0,True
-2019,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
-2019,Actual,D26,Department of Aging,38.7,True
-2019,Actual,F10,Department of Budget and Management,334.0,True
-2019,Actual,S00,Department of Housing and Community Development,331.0,True
-2019,Actual,F50,Department of Information Technology,234.6,True
-2019,Actual,P00,Maryland Department of Labor,1451.7,True
-2019,Actual,D40,Department of Planning,129.0,True
-2019,Actual,Q00,Department of Public Safety and Correctional Services,10414.4,True
-2019,Actual,D10,Executive Department - Governor,82.5,True
-2019,Actual,R60,Maryland 529,0.0,True
-2019,Actual,D70,Maryland Automobile Insurance Fund,0.0,True
-2019,Actual,D27,Maryland Commission On Civil Rights,31.0,True
-2019,Actual,U10,Maryland Environmental Service,0.0,True
-2019,Actual,D30,Maryland Food Center Authority,0.0,True
-2019,Actual,D80,Maryland Insurance Administration,259.0,True
-2019,Actual,D28,Maryland Stadium Authority,0.0,True
-2019,Actual,D99,Office of Administrative Hearings,118.0,True
-2019,Actual,C81,Office of the Attorney General,269.5,True
-2019,Actual,D11,Office of the Deaf and Hard of Hearing,3.0,True
-2019,Actual,C90,Public Service Commission,137.0,True
-2019,Actual,D38,State Board of Elections,41.8,True
-2019,Actual,C94,Subsequent Injury Fund,17.0,True
-2020,Actual,C00,Judiciary,4048.0,True
-2020,Actual,C85,Maryland Tax Court,8.0,True
-2020,Actual,C98,Workers' Compensation Commission,115.0,True
-2020,Actual,D10,Executive Department - Governor,82.5,True
-2020,Actual,D21,Governor's Office of Crime Prevention and Policy,61.0,True
-2020,Actual,D26,Department of Aging,38.7,True
-2020,Actual,D40,Department of Planning,130.0,True
-2020,Actual,D50,Military Department,307.5,True
-2020,Actual,D80,Maryland Insurance Administration,259.0,True
-2020,Actual,E50,State Department of Assessments and Taxation,595.3,True
-2020,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
-2020,Actual,L00,Department of Agriculture,394.1,True
-2020,Actual,P00,Maryland Department of Labor,1397.2,True
-2020,Actual,R95,Baltimore City Community College,437.0,False
-2020,Actual,S00,Department of Housing and Community Development,331.0,True
-2020,Actual,U00,Department of the Environment,893.0,True
-2021,Actual,B75,Legislative Branch,767.0,True
-2021,Actual,C91,Office of People's Counsel,19.0,True
-2021,Actual,D17,Historic St. Mary's City Commission,31.0,True
-2021,Actual,D40,Department of Planning,129.0,True
-2021,Actual,D78,Maryland Health Benefit Exchange,67.0,True
-2021,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
-2021,Actual,D99,Office of Administrative Hearings,117.0,True
-2021,Actual,E00,Comptroller of Maryland,1082.9,True
-2021,Actual,H00,Department of General Services,646.0,True
-2021,Actual,L00,Department of Agriculture,412.1,True
-2021,Actual,M00,Maryland Department of Health,9902.05,True
-2021,Actual,N00,Department of Human Services,6118.05,True
-2021,Actual,R00,State Department of Education,1405.9,True
-2021,Actual,R95,Baltimore City Community College,437.0,False
-2021,Actual,R99,Maryland School for the Deaf,334.5,True
-2021,Actual,V00,Department of Juvenile Services,1995.55,True
-2022,Actual,C80,Office of the Public Defender,883.5,True
-2022,Actual,C90,Public Service Commission,138.0,True
-2022,Actual,D15,"Executive Department-Boards, Commissions and Offices",69.6,True
-2022,Actual,D16,Secretary of State,24.0,True
-2022,Actual,D26,Department of Aging,39.0,True
-2022,Actual,D60,State Archives,61.0,True
-2022,Actual,D90,Canal Place Preservation and Development Authority,3.0,True
-2022,Actual,D99,Office of Administrative Hearings,115.0,True
-2022,Actual,E50,State Department of Assessments and Taxation,570.3,True
-2022,Actual,E75,Maryland Lottery and Gaming Control Agency,364.1,True
-2022,Actual,H00,Department of General Services,656.0,True
-2022,Actual,L00,Department of Agriculture,411.7,True
-2022,Actual,M00,Maryland Department of Health,10090.62,True
-2022,Actual,P00,Maryland Department of Labor,1355.17,True
-2022,Actual,Q00,Department of Public Safety and Correctional Services,9217.4,True
-2022,Actual,R14,St. Mary's College of Maryland,416.0,False
-2022,Actual,R62,Maryland Higher Education Commission,64.0,True
-2022,Actual,V00,Department of Juvenile Services,1995.55,True
-2023,Actual,C80,Office of the Public Defender,883.5,True
-2023,Actual,C81,Office of the Attorney General,298.5,True
-2023,Actual,C82,Office of the State Prosecutor,13.0,True
-2023,Actual,C96,Uninsured Employers' Fund,13.0,True
-2023,Actual,D05,Board of Public Works,9.0,True
-2023,Actual,D10,Executive Department - Governor,98.0,True
-2023,Actual,D11,Office of the Deaf and Hard of Hearing,3.0,True
-2023,Actual,D15,"Executive Department-Boards, Commissions and Offices",73.6,True
-2023,Actual,D16,Secretary of State,24.0,True
-2023,Actual,D17,Historic St. Mary's City Commission,32.0,True
-2023,Actual,D18,Governor's Office for Children,0.0,True
-2023,Actual,D26,Department of Aging,40.0,True
-2023,Actual,D29,Maryland Thoroughbred Racetrack Operating Authority,0.0,True
-2023,Actual,D55,Department of Veterans and Military Families,119.0,True
-2023,Actual,D91,West North Avenue Development Authority,0.0,True
-2023,Actual,E50,State Department of Assessments and Taxation,570.3,True
-2023,Actual,F50,Department of Information Technology,184.0,True
-2023,Actual,G20,Maryland State Retirement and Pension Systems,214.0,True
-2023,Actual,K00,Department of Natural Resources,1379.5,True
-2023,Actual,L00,Department of Agriculture,409.2,True
-2023,Actual,P00,Maryland Department of Labor,1356.17,True
-2023,Actual,R62,Maryland Higher Education Commission,69.0,True
-2024,Actual,C80,Office of the Public Defender,938.5,True
-2024,Actual,C81,Office of the Attorney General,360.5,True
-2024,Actual,C98,Workers' Compensation Commission,115.0,True
-2024,Actual,D13,Maryland Energy Administration,44.0,True
-2024,Actual,D18,Governor's Office for Children,8.0,True
-2024,Actual,D22,Maryland Commission on African American History and Culture,9.0,True
-2024,Actual,D25,Interagency Commission On School Construction,41.0,True
-2024,Actual,D38,State Board of Elections,51.0,True
-2024,Actual,D50,Military Department,227.5,True
-2024,Actual,D52,Maryland Department of Emergency Management,97.0,True
-2024,Actual,D53,Maryland Institute for Emergency Medical Services Systems,98.0,True
-2024,Actual,D77,Prescription Drug Affordability Board,5.0,True
-2024,Actual,D80,Maryland Insurance Administration,259.0,True
-2024,Actual,D99,Office of Administrative Hearings,117.0,True
-2024,Actual,E00,Comptroller of Maryland,1132.9,True
-2024,Actual,N00,Department of Human Services,5978.68,True
-2024,Actual,P00,Maryland Department of Labor,1440.17,True
-2024,Actual,R11,Maryland State Library Agency,32.0,True
-2024,Actual,R62,Maryland Higher Education Commission,72.0,True
-2024,Actual,S00,Department of Housing and Community Development,355.0,True
-2024,Actual,T00,Department of Commerce,189.0,True
-2025,Actual,B75,Legislative Branch,813.0,True
-2025,Actual,C90,Public Service Commission,165.0,True
-2025,Actual,C96,Uninsured Employers' Fund,13.0,True
-2025,Actual,D05,Board of Public Works,11.0,True
-2025,Actual,D10,Executive Department - Governor,121.0,True
-2025,Actual,D12,Department of Disabilities,39.0,True
-2025,Actual,D13,Maryland Energy Administration,49.0,True
-2025,Actual,D22,Maryland Commission on African American History and Culture,11.0,True
-2025,Actual,D23,Maryland Cannabis Administration,110.0,True
-2025,Actual,D24,Department of Social and Economic Mobility,0.0,True
-2025,Actual,D26,Department of Aging,49.0,True
-2025,Actual,D28,Maryland Stadium Authority,149.8,True
-2025,Actual,D74,Office of the Correctional Ombudsman,7.0,True
-2025,Actual,D80,Maryland Insurance Administration,274.0,True
-2025,Actual,E17,"Alcohol, Tobacco, and Cannabis Commission",60.0,True
-2025,Actual,E80,Property Tax Assessment Appeals Boards,8.0,True
-2025,Actual,J00,Department of Transportation,10910.5,True
-2025,Actual,K00,Department of Natural Resources,1501.0,True
-2025,Actual,R00,State Department of Education,1393.9,True
-2025,Actual,R11,Maryland State Library Agency,33.0,True
-2025,Actual,R12,Accountability and Implementation Board,16.0,True
-2025,Actual,R14,St. Mary's College of Maryland,450.0,False
-2025,Actual,R15,Maryland Public Broadcasting Commission,151.0,True
-2025,Actual,R30,University System of Maryland,26682.27,False
-2025,Actual,R62,Maryland Higher Education Commission,84.0,True
-2025,Actual,R95,Baltimore City Community College,437.0,False
-2025,Actual,R99,Maryland School for the Deaf,362.5,True
-2025,Actual,S00,Department of Housing and Community Development,446.0,True
-2026,Working budget,C00,Judiciary,4173.0,True
-2026,Working budget,C85,Maryland Tax Court,9.0,True
-2026,Working budget,C90,Public Service Commission,175.0,True
-2026,Working budget,D12,Department of Disabilities,40.0,True
-2026,Working budget,D16,Secretary of State,29.0,True
-2026,Working budget,D21,Governor's Office of Crime Prevention and Policy,104.0,True
-2026,Working budget,D23,Maryland Cannabis Administration,101.0,True
-2026,Working budget,D40,Department of Planning,142.0,True
-2026,Working budget,D60,State Archives,64.0,True
-2026,Working budget,D73,Office of the Inspector General for Education,16.0,True
-2026,Working budget,D74,Office of the Correctional Ombudsman,13.0,True
-2026,Working budget,D76,Maryland Office of the Inspector General for Health,39.0,True
-2026,Working budget,D78,Maryland Health Benefit Exchange,79.0,True
-2026,Working budget,D90,Canal Place Preservation and Development Authority,4.0,True
-2026,Working budget,E75,Maryland Lottery and Gaming Control Agency,354.75,True
-2026,Working budget,E80,Property Tax Assessment Appeals Boards,8.0,True
-2026,Working budget,F10,Department of Budget and Management,344.0,True
-2026,Working budget,F50,Department of Information Technology,262.0,True
-2026,Working budget,J00,Department of Transportation,10803.5,True
-2026,Working budget,Q00,Department of Public Safety and Correctional Services,9199.4,True
-2026,Working budget,R14,St. Mary's College of Maryland,450.0,False
-2026,Working budget,R15,Maryland Public Broadcasting Commission,151.0,True
-2026,Working budget,R62,Maryland Higher Education Commission,88.0,True
-2026,Working budget,S00,Department of Housing and Community Development,446.0,True
-2026,Working budget,V00,Department of Juvenile Services,2126.95,True
-2026,Working budget,W00,Department of State Police,2574.0,True
-2027,Legislative appropriation,C80,Office of the Public Defender,1011.5,True
-2027,Legislative appropriation,C82,Office of the State Prosecutor,18.0,True
-2027,Legislative appropriation,C85,Maryland Tax Court,9.0,True
-2027,Legislative appropriation,C90,Public Service Commission,191.0,True
-2027,Legislative appropriation,D05,Board of Public Works,11.0,True
-2027,Legislative appropriation,D17,Historic St. Mary's City Commission,40.0,True
-2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,104.0,True
-2027,Legislative appropriation,D22,Maryland Commission on African American History and Culture,11.0,True
-2027,Legislative appropriation,D25,Interagency Commission On School Construction,44.0,True
-2027,Legislative appropriation,D28,Maryland Stadium Authority,160.8,True
-2027,Legislative appropriation,D50,Military Department,167.5,True
-2027,Legislative appropriation,D91,West North Avenue Development Authority,15.0,True
-2027,Legislative appropriation,E17,"Alcohol, Tobacco, and Cannabis Commission",60.0,True
-2027,Legislative appropriation,E50,State Department of Assessments and Taxation,568.3,True
-2027,Legislative appropriation,F50,Department of Information Technology,273.0,True
-2027,Legislative appropriation,G20,Maryland State Retirement and Pension Systems,259.0,True
-2027,Legislative appropriation,Q00,Department of Public Safety and Correctional Services,9199.4,True
-2027,Legislative appropriation,R00,State Department of Education,1391.3,True
-2027,Legislative appropriation,R13,Morgan State University,1870.0,False
-2027,Legislative appropriation,S00,Department of Housing and Community Development,447.0,True
-2027,Legislative appropriation,V00,Department of Juvenile Services,2134.95,True
-2027,Legislative appropriation,W00,Department of State Police,2574.0,True
 2017,Actual,D26,Department of Aging,41.7,True
 2017,Actual,L00,Department of Agriculture,356.1,True
 2017,Actual,C00,Judiciary,3950.5,True

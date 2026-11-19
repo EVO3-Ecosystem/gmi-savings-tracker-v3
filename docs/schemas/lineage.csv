@@ -129,6 +129,7 @@ mart.d_econ,core.cpi_fy
 mart.d_econ,core.fact_budget
 mart.d_econ,core.fact_md_employment
 mart.d_econ,core.fact_md_gdp
+mart.d_econ,core.fact_payment
 mart.d_econ,core.fact_population
 mart.d_families,mart.v_purchase
 mart.d_federal_crosswalk,mart.d_fund_hierarchy
@@ -148,6 +149,18 @@ mart.d_fund_hierarchy,core.fact_fund
 mart.d_fund_hierarchy,mart.agency_name
 mart.d_fund_hierarchy,ref.dim_stage
 mart.d_fund_shift,mart.d_fund_hierarchy
+mart.d_fytd_log,core.fact_payment
+mart.d_fytd_log,core.fact_payment_mapped
+mart.d_fytd_log,mart.f_payee_type
+mart.d_fytd_log,ops.check_result
+mart.d_fytd_log,raw.budget
+mart.d_fytd_log,raw.fte
+mart.d_fytd_log,raw.fund
+mart.d_fytd_log,raw.grants
+mart.d_fytd_log,raw.highered
+mart.d_fytd_log,raw.payments
+mart.d_fytd_log,ref.map_payee_vendor
+mart.d_fytd_log,ref.map_payment_agency
 mart.d_grant_group_members,mart.v_grant_rows
 mart.d_grant_groups,mart.v_grant_rows
 mart.d_grant_groups_sensitivity,mart.v_grant_rows
@@ -281,6 +294,11 @@ mart.f_forecast,mart.d_range_coverage
 mart.f_forecast,mart.f_code
 mart.f_forecast,mart.f_scope
 mart.f_forecast,ref.dim_stage
+mart.f_fte,core.fact_budget_highered
+mart.f_fte,core.fact_fte
+mart.f_fte,mart.agency_name
+mart.f_fte,raw.fte
+mart.f_fte,ref.dim_stage
 mart.f_function,core.fact_budget_scope
 mart.f_function,ref.dim_stage
 mart.f_fund,core.fact_fund
@@ -366,6 +384,7 @@ mart.sources,ref.map_payee_vendor
 mart.sources,ref.map_payment_agency
 mart.spending_scope,core.fact_budget_scope
 mart.spending_scope,ref.dim_stage
+mart.totals_by_fy,core.fact_payment
 mart.totals_by_fy,mart.payment_area
 mart.v_grant_rows,core.fact_grant
 mart.v_grant_rows,ref.grantor_agency_aliases

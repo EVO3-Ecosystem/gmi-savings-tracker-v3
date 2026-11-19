@@ -43,3 +43,4 @@ d_source_issues,narrow,Only the years where a publication issue was found
 f_forecast,narrow,Forecast actuals FY2017 on (budget source) and forecast years to forecast.horizon_fy
 review_queue,narrow,Anomaly flags need four years of history and full payment years only
 stage_evidence,narrow,Only the budget years whose stage needed evidence from DBM's books
+d_fytd_log,narrow,"One row per State refresh of the open year's payments, kept across runs; starts with the first refresh logged (Nov 9, 2026)"

@@ -1344,8 +1344,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2020,Actual,16.580,Edward Byrne Memorial State and Local Law Enforcement Assistance Discretionary Grants Programs,1,1,11960.0,,False,False,
 2020,Actual,14.401C,Fair Housing Assistance Program,1,1,11180.0,,False,False,
 2020,Actual,93.687,Maternal Opioid Misuse Model,1,1,10792.0,735828.0,True,False,0.01
-2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,81.090,State Heating Oil and Propane Program,1,1,10000.0,,False,False,
+2020,Actual,14.228C,Community Development Block Grants/State's program and Non-Entitlement Grants in Hawaii,1,1,10000.0,,False,False,
 2020,Actual,93.747,Elder Abuse Prevention Interventions Program,1,2,9239.0,,False,False,
 2020,Actual,17.280,Workforce Investment Act (WIA) Dislocated Worker National Reserve Demonstration Grants,1,7,8678.0,,False,False,
 2020,Actual,16.842,Opioid Affected Youth Initiative,1,1,7017.0,,False,False,
@@ -3533,8 +3533,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,97.075,Rail and Transit Security Grant Program,1,1,1081738.0,,False,False,
 2026,Working budget,93.659,Adoption Assistance,1,9,1044187.0,,False,False,
 2026,Working budget,84.323,State Improvement Grants for Students with Disabilities,1,2,1018093.0,,False,False,
-2026,Working budget,14.905,Lead Hazard Reduction Demonstration Grant Program,1,1,1000000.0,,False,False,
 2026,Working budget,10.196,Chesapeake Bay Blue Catfish Control,1,1,1000000.0,,False,False,
+2026,Working budget,14.905,Lead Hazard Reduction Demonstration Grant Program,1,1,1000000.0,,False,False,
 2026,Working budget,93.771,Medicaid and Chip SBS Implementation Grant,1,1,995502.0,,False,False,
 2026,Working budget,17.002,Labor Force Statistics,1,2,967949.0,457061.45,True,False,2.12
 2026,Working budget,20.700,Pipeline Safety Program State Base Grant,1,1,958912.0,47709.0,True,False,20.1
@@ -3632,8 +3632,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,66.708,Pollution Prevention Grants Program,1,1,254726.0,,False,False,
 2026,Working budget,93.234,Traumatic Brain Injury Demonstration Grant Program,1,1,251158.0,,False,False,
 2026,Working budget,93.270,Adult Viral Hepatitis Prevention and Control,1,1,250469.0,,False,False,
-2026,Working budget,15.069,Zoonotic Disease Initiative,1,1,250000.0,,False,False,
 2026,Working budget,93.354E,Public Health Emergency Response - COVID 19 Workforce (ARP),1,1,250000.0,,False,False,
+2026,Working budget,15.069,Zoonotic Disease Initiative,1,1,250000.0,,False,False,
 2026,Working budget,16.741,DNA Backlog Reduction Program,1,1,249836.0,-53420.71,True,False,
 2026,Working budget,93.946,"Cooperative Agreements to Support State-Based Safe Motherhood and Infant Health Initiative Programs, Recovery Act",1,1,247304.0,,False,False,
 2026,Working budget,15.925,National Maritime Heritage Grant Program,1,1,246303.0,,False,False,
@@ -3681,8 +3681,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,15.808,Geological Survey-Research and Data Acquisition,1,5,106182.0,,False,False,
 2026,Working budget,16.550,State Justice Statistics Program for Statistical Analysis Centers,1,1,106125.0,,False,False,
 2026,Working budget,97.029,Flood Mitigation Assistance,1,1,101251.0,823715.28,True,False,0.12
-2026,Working budget,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,99935.0,90000.0,True,False,1.11
 2026,Working budget,16.004,Law Enforcement Assistance-Narcotics and Dangerous Drugs Training,1,1,99935.0,,False,False,
+2026,Working budget,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,99935.0,90000.0,True,False,1.11
 2026,Working budget,16.750,Support for Adam Walsh Act Implementation Grant Program,1,1,99691.0,138399.17,True,False,0.72
 2026,Working budget,15.814,National Geological and Geophysical Data Preservation Program,1,5,96748.0,,False,False,
 2026,Working budget,81.086,Conservation Research and Development,1,1,92277.0,0.0,True,False,

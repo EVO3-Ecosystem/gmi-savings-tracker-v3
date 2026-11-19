@@ -7,7 +7,7 @@
 [![CI](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml/badge.svg)](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml)
 [![Pages](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/pages.yml/badge.svg)](https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/)
 <!-- facts:badges -->
-![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
+![Data checks](https://img.shields.io/badge/data%20checks-145%20of%20145%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
 <!-- /facts:badges -->
 ![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C340%20of%202%2C394-dbab09) ![Version](https://img.shields.io/badge/version-4.0.0-0969da)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
@@ -154,15 +154,15 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Step | Module | Result |
 |---|---|---|
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
-| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
+| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->145<!-- /n --> checks; a failed stop check keeps the last good database |
 | Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
-| Rules | `reference/` (<!-- n:reference_files -->30<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
-| Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
+| Rules | `reference/` (<!-- n:reference_files -->31<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Marts | `sql/mart/` (<!-- n:marts -->63<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (16 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: <!-- n:documented_columns -->2,394<!-- /n --> columns catalogued and 2,340 documented, the rest listed in `docs/data-governance.md` (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: <!-- n:documented_columns -->2,441<!-- /n --> columns catalogued and 2,340 documented, the rest listed in `docs/data-governance.md` (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## Tech stack
 
@@ -172,7 +172,7 @@ The architecture is the diagram and step table above. This is what it is built w
 - **Extraction and data handling:** `sodapy` (the Socrata SODA 2.1 client), pandas, PyArrow, `pdfplumber` (DBM's budget books), PyYAML and requests.
 - **Storage:** Parquet (one file per dataset per run, and the published tables in `site_data/`) and DuckDB with the layers `raw`, `ref`, `core`, `mart` and `ops`. DVC is configured for an optional local store (`dvc.yaml`); it is not a locked dependency.
 - **Models:** scikit-learn (K-Means, TF-IDF, Isolation Forest, logistic regression), LightGBM quantile regression, and split-conformal calibration (`src/models/calibration.py`). The model registry and the PSI and KS drift monitor are in `src/models/registry.py`. Sentence embeddings for grant groups are an optional extra; TF-IDF is the default.
-- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->30<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
+- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->31<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
 - **Presentation:** a static site built by `src/pipeline/site.py` and served from GitHub Pages. D3.js is inlined in the page, so the dashboard loads nothing from another host; the SQL explorer loads DuckDB-WASM from jsDelivr (the one external request, with a plain JavaScript fallback). Figures come from matplotlib, the walkthrough notebook is executed with nbclient, and Playwright drives the page tests and the README screenshots.
 - **AI access:** a read-only Model Context Protocol server over stdio (`src/mcp/`), and one-line briefs with a number guardrail (`src/briefs/`). The template backend needs nothing; the optional Gemini backend uses `google-genai`.
 - **Delivery:** GitHub Actions runs CI (lint, compile check, tests, the forecast rebuild check, the notebook check and a container test), the Pages deploy, the data release to GitHub and Hugging Face, a monthly extract and build (the 3rd), and weekly freshness alerts (Mondays). A branch ruleset requiring the `test` check on `main` is defined in `.github/rulesets/main.json`, and Dependabot keeps the Actions and pip dependencies current.

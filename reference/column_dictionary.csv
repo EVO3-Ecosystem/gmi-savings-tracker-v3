@@ -827,3 +827,6 @@ data_total,"mart.d_site_reconciliation,d_site_reconciliation",derived,The open d
 difference,"mart.d_site_reconciliation,d_site_reconciliation",derived,data_total - site_total
 partial_year,"mart.d_site_reconciliation,d_site_reconciliation",derived,True for a year still in progress (the site can move ahead of the extract)
 in_gmi_baseline,f_fte,mart,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)"
+days_into_year,d_fytd_log,mart,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive"
+year_elapsed_share,d_fytd_log,mart,Share of the fiscal year elapsed at the State's refresh of the payments data
+payment_records,d_fytd_log,mart,Rows in the payments data for the open fiscal year at that refresh
