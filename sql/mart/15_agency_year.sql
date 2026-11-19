@@ -13,4 +13,5 @@ SELECT k.agency_code, n.agency, k.fiscal_year, coalesce(s.stage, 'Payments only'
        CASE WHEN f.fte > 0 THEN b.controllable / f.fte END AS controllable_per_fte
 FROM k LEFT JOIN b USING (agency_code, fiscal_year) LEFT JOIN ref.dim_stage s USING (fiscal_year) LEFT JOIN mart.agency_name n USING (agency_code)
 LEFT JOIN f USING (agency_code, fiscal_year) LEFT JOIN p USING (agency_code, fiscal_year)
-WHERE b.agency_code IS NOT NULL OR s.stage IS NULL  -- payments-only rows only for years with no budget data
+-- payments-only rows only for years with no budget data (the yoy runner strips whole-line comments only)
+WHERE b.agency_code IS NOT NULL OR s.stage IS NULL

@@ -249,9 +249,10 @@ def phase4(con, check, one):
             FULL JOIN (SELECT fiscal_year, sum(amount) s, count(*) n FROM mart.f_grants GROUP BY 1) m USING (fiscal_year)
             WHERE abs(coalesce(c.s, 0) - coalesce(m.s, 0)) > 1 OR c.n IS DISTINCT FROM m.n""")
         check("mart", "Grants as listed = core grants (rows and dollars, every year)", bad == 0, f"{bad} years differ")
-        bad = one("""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM core.fact_budget GROUP BY 1) c
+        first = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["years"]["history_first_fy"]
+        bad = one(f"""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM core.fact_budget GROUP BY 1) c
             FULL JOIN (SELECT fiscal_year, sum(budget) b, sum(payments) p FROM mart.f_budget_vs_pay GROUP BY 1) m USING (fiscal_year)
-            LEFT JOIN (SELECT fiscal_year, sum(amount) p FROM core.fact_payment WHERE fiscal_year >= 2017 GROUP BY 1) q USING (fiscal_year)
+            LEFT JOIN (SELECT fiscal_year, sum(amount) p FROM core.fact_payment WHERE fiscal_year >= {int(first)} GROUP BY 1) q USING (fiscal_year)
             WHERE abs(coalesce(c.b, 0) - coalesce(m.b, 0)) > 1 OR abs(coalesce(q.p, 0) - coalesce(m.p, 0)) > 1""")
         check("mart", "Budget vs payments: budget and payments = core totals (every year)", bad == 0, f"{bad} years differ")
         bad = one("""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM mart.f_program GROUP BY 1) a
