@@ -186,14 +186,24 @@ metrics:
       WHERE fiscal_year = 2026 AND stage = 'Working budget'
 
   - id: payments_latest_fy_usd
-    name: State payments, latest fiscal year in the data
-    definition: Total payments by State agencies to payees in the latest fiscal year of the payments data, nominal dollars.
+    name: State payments, latest completed fiscal year
+    definition: Total payments by State agencies to payees in the latest COMPLETED fiscal year of the payments data, nominal dollars. The open (partial) year is never returned here; it is published separately as payments_fytd_usd.
     unit: usd
     grain: one row per fiscal year
     tables: [totals_by_fy]
     owner: Sierra Napier
     shown_in: [portfolio payments chart]
-    sql: SELECT total_payments FROM mart.totals_by_fy ORDER BY fiscal_year DESC LIMIT 1
+    sql: SELECT total_payments FROM mart.totals_by_fy WHERE NOT partial_year ORDER BY fiscal_year DESC LIMIT 1
+
+  - id: payments_fytd_usd
+    name: State payments, fiscal year to date (partial year)
+    definition: Total payments by State agencies to payees in the open (partial) fiscal year, nominal dollars. Always read as fiscal-year-to-date (FYTD); it is never a full year and never compared with one.
+    unit: usd
+    grain: one row per fiscal year
+    tables: [totals_by_fy]
+    owner: Sierra Napier
+    shown_in: [Overview payments tile FYTD note, portfolio payments chart]
+    sql: SELECT total_payments FROM mart.totals_by_fy WHERE partial_year ORDER BY fiscal_year DESC LIMIT 1
 
   - id: rows_checked_against_portal
     name: Rows checked against the portal
