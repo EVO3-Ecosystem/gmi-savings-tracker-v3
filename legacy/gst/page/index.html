@@ -143,7 +143,7 @@
     </div>
     <div style="display:grid;gap:6px;justify-items:end">
       <span class="st" id="runPill" data-source="c_run" data-field="pill">—</span>
-      <span class="st" id="freshPill" title="Newest data timestamp on the state open-data portal, the pipeline's last build, and whether portal rows reconcile with the downloads">—</span>
+      <span class="st" id="freshPill" title="When the State (DBM) last refreshed its data on the portal, when the GitHub pipeline last pulled and checked it, and whether the downloads reconcile with the portal">—</span>
       <span class="proto">Prototype by Sierra Napier · not an official State of Maryland product</span>
       <a class="replink" id="repLink" data-source="reports" data-field="title" href="#" target="_blank" rel="noopener" hidden>—</a>
     </div>
@@ -828,6 +828,8 @@
 function inkOn(){ const r = this.parentNode && this.parentNode.querySelector('rect'); if (!r) return; const m = (getComputedStyle(r).fill || '').match(/\d+(\.\d+)?/g); if (!m || m.length < 3) return;
   const [R, G, B] = m.slice(0, 3).map(Number).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; });
   this.setAttribute('fill', .2126 * R + .7152 * G + .0722 * B > .179 ? '#0b0b0b' : '#fff'); }
+const ET = s => { s = String(s || ''); if (!s) return '—'; if (s.length <= 10) { const d = new Date(s + 'T12:00:00Z'); return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric', timeZone:'UTC'}); }
+  const d = new Date(s.replace(' ', 'T')); return isNaN(d) ? s : d.toLocaleString('en-US', {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZone:'America/New_York', timeZoneName:'short'}); }; // timestamps shown in Maryland time
 const M = v => v==null||isNaN(v)?'—':(v < 0 ? '−$' : '$') + new Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(Math.abs(v));
 const PCT = d3.format('.1%'), N = d3.format(','), N0 = d3.format(',.0f');
 const TEXT = new Set(['agency_code','agency','stage','category_title','fund_type_name','object_name','scope','title','dataset_id','use','portal_name','portal_updated','years','reconciled','mismatch_notes','stage_pair','measure','definition','grouped_by','higher_is','table','run_id','started_utc','status','mode','check','detail','family','how_matched','source','published','in_budget','area','spending_code','vendor','url','run_date','file_label','official_stage','evidence','evidence_url','note','code','opp_id','payee_name','label','detector','method','kind','vendor','top_agencies','action','basis','tab','status','previous_status','progress','previous','title','spending_code','saving_id','workstream','item','type','count','check_id','check_note','source_url','flag_id','why','model','cluster_name','top_area','goal','objective','agency_name']);
@@ -2322,11 +2324,14 @@ function corridor(box, rows, o={}){ // rows: {year, actual?, p10?, p50?, p90?}; 
 }
 function fillFresh(){ const fp = document.getElementById('freshPill'); if (!fp) return; const src = ok('sources'), rn = ok('runs');
   if (!src || !src.length) { fp.textContent = '\u2014'; return; }
-  const dates = src.map(r => String(r.portal_updated || '')).filter(Boolean).sort();
+  // two clocks: when the State (DBM) last refreshed a dataset on the portal, and when the GitHub pipeline last pulled it
+  const ts = r => String(r.portal_updated_utc || r.portal_updated || '');
+  const lastPortal = src.map(ts).filter(Boolean).sort().slice(-1)[0] || '';
   const lastRun = (rn || []).slice().sort((a,b) => d3.ascending(a.started_utc, b.started_utc)).slice(-1)[0] || {};
-  const built = String(lastRun.started_utc || '').slice(0, 10);
   const allOk = src.every(r => ['1','true','yes'].includes(String(r.reconciled).toLowerCase()));
-  fp.textContent = `Portal data as of ${dates[0]}${dates[dates.length-1] !== dates[0] ? ' to ' + dates[dates.length-1] : ''} \u00b7 built ${built} \u00b7 sources ${allOk ? 'reconciled' : 'reconciliation pending'}`;
+  fp.textContent = `Portal updated by DBM: ${ET(lastPortal)} \u00b7 Refreshed by GitHub: ${ET(lastRun.started_utc)} \u00b7 sources ${allOk ? 'reconciled' : 'reconciliation pending'}`;
+  fp.title = 'Portal updated by DBM: the latest time the State refreshed one of its datasets on opendata.maryland.gov. By dataset: '
+    + src.map(r => `${r.title} ${ET(ts(r))}`).join('; ') + `. Refreshed by GitHub: when the pipeline last downloaded and checked every dataset (run ${lastRun.run_id || '?'}).`;
   fp.className = 'st ' + (allOk ? 'pass' : 'warn');
 }
 function drawFcast(p){

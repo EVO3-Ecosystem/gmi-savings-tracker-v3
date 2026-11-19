@@ -147,6 +147,7 @@ title,sources,derived,Dataset title used on the dashboard
 title,d_rec_status,derived,Recommendation title
 portal_name,,ops,Dataset title as the portal publishes it
 portal_updated,,ops,Date the portal data last changed
+portal_updated_utc,,ops,"Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt"
 use,sources,derived,What the dataset contributes to the tracker
 years,sources,derived,Fiscal years used
 reconciled,sources,ops,True when downloaded rows equal the portal's count
