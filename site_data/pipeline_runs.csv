@@ -1,2 +1,2 @@
 run_id,started_utc,seconds,status,published,checks,passed,warnings,failed,repairs,payment_rows,budget_rows,mode
-20261113T180346Z,2026-11-13T18:03:46+00:00,745.3,passed,1,143,143,0,0,0,412880,741957,fresh download
+20261119T115247Z,2026-11-19T11:52:47+00:00,835.9,passed,1,143,143,0,0,0,412880,741957,fresh download

@@ -33,6 +33,8 @@ def test_the_page_and_the_module_flag_the_same_programs():
     if not PT.D3.exists():
         pytest.skip("the vendored d3 the page harness needs is not here")
     tables = PT.tables_from([ROOT / "site_data", ROOT / "reference"])
+    # the site build writes this file from reference/ (src/pipeline/site.py derived); without it the page shows no audit findings
+    tables["audit_findings_by_program"] = S.reported_findings().to_csv(index=False)
     html = PT.build_html(tables, {"spendType": "All", "years": [], "areas": [], "agencies": [], "tab": "budget"})
     tmp = ROOT / "legacy" / "gst" / "model"
     tmp.mkdir(exist_ok=True)

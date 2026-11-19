@@ -13,9 +13,12 @@
 -- payments); without invoices it can never confirm an overpayment (config payment_screen.review).
 CREATE OR REPLACE TABLE mart.d_payment_screen AS
 WITH v AS (SELECT * FROM mart.v_payment_screen_rows WHERE source_issue_id IS NULL),
+-- the paying unit shown for a group: the unit on most of its records, ties broken alphabetically, so every run picks the same one
+vn AS (SELECT group_id, rule, agency_name_as_paid, count(*) AS n_unit FROM v GROUP BY ALL),
+vu AS (SELECT group_id, rule, arg_min(agency_name_as_paid, (-n_unit, agency_name_as_paid)) AS agency_raw FROM vn GROUP BY ALL),
 g AS (
   SELECT group_id, rule, any_value(date_grain) AS date_grain, min(fiscal_year) AS fiscal_year, any_value(agency_key) AS agency_key,
-         any_value(agency_code) AS agency_code, mode(agency_name_as_paid) AS agency_raw, any_value(vendor) AS vendor_full,
+         any_value(agency_code) AS agency_code, any_value(u.agency_raw) AS agency_raw, any_value(vendor) AS vendor_full,
          bool_or(regexp_matches(upper(vendor_name_as_paid), {{payment_screen.org_name_pattern}})) AS org_name, any_value(payee_type) AS payee_type,
          min(record_date) AS first_date, max(record_date) AS last_date, count(*) AS n,
          CASE WHEN rule = 'Possible split purchase' THEN NULL ELSE max(amount) END AS amount,
@@ -25,7 +28,7 @@ g AS (
          count(DISTINCT agency_name_as_paid) AS units, count(DISTINCT coalesce(agency_code_as_paid, '')) AS unit_codes,
          string_agg(DISTINCT agency_name_as_paid, '; ' ORDER BY agency_name_as_paid) AS unit_names,
          round(max(amount) * 100) AS cents
-  FROM v GROUP BY group_id, rule
+  FROM v LEFT JOIN vu u USING (group_id, rule) GROUP BY group_id, rule
 ), o AS (
   SELECT a.group_id, string_agg(DISTINCT b.rule, '; ' ORDER BY b.rule) AS also_flagged_under
   FROM g a JOIN g b ON a.agency_key = b.agency_key AND a.vendor_full = b.vendor_full AND a.fiscal_year = b.fiscal_year AND a.rule <> b.rule
