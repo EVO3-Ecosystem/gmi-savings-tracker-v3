@@ -32,6 +32,7 @@ d_payment_screen_summary,mart,15,True
 d_plan50,mart,30,True
 d_range_coverage,mart,59,True
 d_rec_status,mart,6,True
+d_reported_claims,mart,38,True
 d_revenue_backtest,mart,20,True
 d_revenue_model,mart,1,True
 d_savings,mart,18,True
@@ -78,4 +79,4 @@ d_state_plan,mart,51,True
 d_econ,mart,11,True
 d_detector_outcomes,mart,621,True
 d_detector_lift,mart,45,True
-d_reported_claims,mart,38,True
+d_program_screen,mart,298,True
