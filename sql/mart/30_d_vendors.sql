@@ -1,5 +1,8 @@
 -- mart.d_vendors (dashboard Vendors tab)
 -- Grain: one row per non-government vendor paid at least $1M in some year FY2022-FY2026.
+-- A deliberate recent-years summary (its fixed fy2022..fy2026 columns feed the Vendors tab and a build check); the
+-- full year-by-year history of these vendors, FY2010 (years.history_first_fy) to the open year, is in mart.f_vendor_pay.
+-- Listed as narrow by design in reference/year_coverage.csv.
 -- What: payee type, main function, focus area (payee-name rule), payee names, agencies paying (FY2025, FY2026) and
 -- payments per year FY2022-FY2026. Government payees (counties, school boards, public funds) are left out: they are
 -- transfers, not purchases. Check: every vendor here has rows in mart.f_vendor_pay.

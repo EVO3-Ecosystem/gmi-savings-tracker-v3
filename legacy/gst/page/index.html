@@ -838,7 +838,7 @@ const ARROW = v => v==null||isNaN(v)||!isFinite(v)?'â€”':Math.abs(v)<=0.0005?'â–
 const toneOf = (v,good) => v==null||isNaN(v)||!isFinite(v)||Math.abs(v)<=0.0005||good==='neutral'?'flat':((v>0)===(good==='higher')?'good':'bad');
 const stageShort = s => ({'Actual':'actual','Working budget':'working budget','Appropriation':'appropriation','Legislative appropriation':'Legislative Appropriation','Legislative Appropriation':'Legislative Appropriation','Payments only':'payments'})[s]||String(s||'').toLowerCase();
 const GMI_TARGET = 50e6; // GMI's yearly savings target (WYPR, Jan 10, 2025; listed under Sources on the Savings tracker tab)
-let PAY_LAST = 2026, PAY_OPEN = null, PAY_NOW = 2026; // latest full payments year, the open (partial) year's totals_by_fy row, and the latest payments year with any data (the open year when there is one); all set from the data on load
+let PAY_LAST = 2026, PAY_OPEN = null, PAY_NOW = 2026, PAY_FIRST = 2017; // latest full payments year, the open (partial) year's totals_by_fy row, and the latest payments year with any data (the open year when there is one); all set from the data on load
 const isOpen = y => !!PAY_OPEN && +PAY_OPEN.fiscal_year === +y; // the live fiscal year: payments to date, never compared with a full year
 const SMALL_BASE = 1e6;   // no percent change from a prior-year base under $1M (mirrors the pipeline's growth-detector minimum)
 const SMALL_TXT = 'new or small base';
@@ -862,7 +862,7 @@ const prm = () => { const p = Object.assign({}, DEF, dash.params() || {}); for (
 const setP = o => dash.setParams(o);
 let STAGE_OF = {}; // fiscal year -> stage, from the budget facts
 const isBudgetYear = y => !!STAGE_OF[y] && STAGE_OF[y] !== 'Actual';
-const stageOK = (y, p, payments) => payments ? p.stage !== 'budget' && y >= 2017 && y <= PAY_NOW : (p.stage === 'all' ? !!STAGE_OF[y] : p.stage === 'actual' ? STAGE_OF[y] === 'Actual' : isBudgetYear(y));
+const stageOK = (y, p, payments) => payments ? p.stage !== 'budget' && y >= PAY_FIRST && y <= PAY_NOW : (p.stage === 'all' ? !!STAGE_OF[y] : p.stage === 'actual' ? STAGE_OF[y] === 'Actual' : isBudgetYear(y));
 function yearsFor(rows, p, payments){ const have = [...new Set(rows.map(r => r.fiscal_year))]; return have.filter(y => stageOK(y, p, payments) && (!p.years.length || p.years.includes(y))).sort((a,b) => a-b); }
 function sel(rows, p, o = {}){ // apply area, agency and (optionally) year filters
   const ys = o.years ? new Set(o.years) : null;
@@ -961,7 +961,7 @@ const agName = code => { const d = ok('d_agency') || []; const r = d.find(x => x
 function fillFilters(p){
   const da = ok('d_agency'); if (!da) return;
   document.getElementById('fStage').value = p.stage;
-  const allYears = d3.range(2017, 2028).filter(y => p.stage === 'budget' ? isBudgetYear(y) : p.stage === 'actual' ? (!isBudgetYear(y) || y <= PAY_NOW) : true).sort((a,b) => b-a);
+  const allYears = d3.range(p.stage === 'budget' ? 2017 : Math.min(2017, PAY_FIRST), Math.max(PAY_NOW, d3.max(Object.keys(STAGE_OF).map(Number)) || PAY_NOW) + 1).filter(y => p.stage === 'budget' ? isBudgetYear(y) : p.stage === 'actual' ? (!isBudgetYear(y) || y <= PAY_NOW) : true).sort((a,b) => b-a);
   const latest = d3.max(Object.keys(STAGE_OF).map(Number).filter(y => STAGE_OF[y] === 'Actual')) || 2025;
   multiSelect(document.getElementById('msYears'), {key:'years', unit:'years', allLabel: p.stage === 'budget' ? 'All budget years' : p.stage === 'actual' ? 'All actual years' : 'All years',
     items: allYears.map(y => ({value:y, label:`FY${y}`, hint: p.stage === 'actual' && isOpen(y) ? 'payments to date (partial)' : p.stage === 'actual' && isBudgetYear(y) ? 'payments only' : STAGE_OF[y] ? stageShort(STAGE_OF[y]) : 'payments only'}))});
@@ -2635,6 +2635,7 @@ const DRAW = {exec:drawExec, opp:p => { drawOpp(p); drawAnomalies(p); drawAgency
 let rendering = false, healedOnError = false;
 function render(){ if (rendering) return; rendering = true; let again = false;
   try { fillMarks(); fillFresh(); drawReport(); drawRecTables(); const ff = ok('f_function'); if (ff) STAGE_OF = Object.fromEntries(d3.rollups(ff, v => v[0].stage, r => r.fiscal_year)); const tb = ok('totals'); if (tb && tb.length) { const full = tb.filter(r => !isTrue(r.partial_year)); if (full.length) PAY_LAST = d3.max(full, r => +r.fiscal_year); PAY_OPEN = tb.find(r => isTrue(r.partial_year)) || null; PAY_NOW = PAY_OPEN ? +PAY_OPEN.fiscal_year : PAY_LAST; }
+    const bvp = ok('f_budget_vs_pay'); if (bvp && bvp.length) PAY_FIRST = d3.min(bvp, r => +r.fiscal_year); // first payments year the marts keep (config years.history_first_fy)
     if (healParams()) { again = true; return; }   // a repaired filter re-renders through setParams
     const p = prm(); fillFilters(p); document.getElementById('filterBar').style.opacity = ((tab === 'data' || tab === 'exec') && !detail) ? .5 : 1;
     if (detail) drawDetail(p); else (DRAW[tab] || (() => {}))(p); notice = ''; adInit(); }

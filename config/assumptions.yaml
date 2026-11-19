@@ -1,5 +1,12 @@
 # Assumptions behind the forecasts (src/models/forecast.py). Change a value here, not in code.
 
+# Fiscal-year coverage: one place for the first year every payments and grants mart keeps. The budget-family sources
+# (yu65-jmmv, gy87-e27x, x8qy-486w, 4mca-332u) start at FY2017 on the portal, so budget marts start there by source.
+# Marts have no fixed last year: they run to the latest year in the data, and the open fiscal year (payments still being
+# posted) is published flagged partial_year and shown as FYTD. The keys below that say *history reuse this value.
+years:
+  history_first_fy: &history 2010   # payments and grants marts keep FY2010 onward (portal: payments FY2008+, grants FY2009+)
+
 forecast:
   first_actual_fy: 2017        # the series starts here (earlier years are not in the operating budget data)
   last_actual_fy: 2025         # last year with a confirmed actual; later years are the State's own plan, never used to fit
@@ -80,7 +87,7 @@ opportunities:
 
 # Savings checks (src/models/savings.py): GMI's reported savings paired with the payments that would show them.
 savings:
-  first_fy: 2022               # payments considered from this fiscal year
+  first_fy: *history           # payments considered from this fiscal year (years.history_first_fy)
   before_fy: 2025              # a check compares payments in this year ...
   after_fy: 2026               # ... with this year (the two completed years; the open year is never a verdict year)
   tracking_fy: 2027            # the open (partial) year: d_savings_status shows its payments to date as fytd_paid, tagged FYTD on the page; never verdicted
@@ -101,7 +108,7 @@ recommendations:
   target_saving: 50000000      # the path to this many dollars a year (GMI's yearly target; the page tags the current tracking year FY2027)
   matched_fy: 2026             # recommendation 5 reports the share of this year's payments matched to an agency (last COMPLETED payments year)
   vendor_detail:
-    first_fy: 2022             # drill-down tables from this year
+    first_fy: *history         # drill-down tables from this year (years.history_first_fy)
     names_fy: 2026             # payee names merged into a vendor, by this year's payments (last COMPLETED payments year)
   plan:
     forecast_fy: 2027          # step 1 applies GMI's reported rates to this year's forecast median
