@@ -826,3 +826,4 @@ checked_on,"mart.d_site_reconciliation,d_site_reconciliation",source,Date the si
 data_total,"mart.d_site_reconciliation,d_site_reconciliation",derived,The open data's total for the year from this build
 difference,"mart.d_site_reconciliation,d_site_reconciliation",derived,data_total - site_total
 partial_year,"mart.d_site_reconciliation,d_site_reconciliation",derived,True for a year still in progress (the site can move ahead of the extract)
+in_gmi_baseline,f_fte,mart,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)"

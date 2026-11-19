@@ -1,11 +1,37 @@
-fiscal_year,basis,vendors,spend
-2022,company and budget agency,45,353257096.67
-2023,company and budget agency,45,400032305.61
-2024,company and budget agency,42,539950801.86
-2025,company and budget agency,42,579861726.48
-2026,company and budget agency,42,572416015.04
-2022,payee name and payment account,56,393810982.08
-2023,payee name and payment account,58,477356034.26
-2024,payee name and payment account,54,552173886.02
-2025,payee name and payment account,54,598741496.4
-2026,payee name and payment account,54,603119805.79
+fiscal_year,basis,vendors,spend,partial_year
+2010,company and budget agency,60,396144597.48,False
+2011,company and budget agency,61,406588446.27,False
+2012,company and budget agency,62,309283596.49,False
+2013,company and budget agency,58,309662115.61,False
+2014,company and budget agency,53,387614136.98,False
+2015,company and budget agency,51,314355454.2,False
+2016,company and budget agency,53,298673590.29,False
+2017,company and budget agency,51,285361339.81,False
+2018,company and budget agency,50,274419742.61,False
+2019,company and budget agency,52,373006313.03,False
+2020,company and budget agency,46,335125691.64,False
+2021,company and budget agency,39,278885735.31,False
+2022,company and budget agency,45,353257096.67,False
+2023,company and budget agency,45,400032305.61,False
+2024,company and budget agency,42,539950801.86,False
+2025,company and budget agency,42,579861726.48,False
+2026,company and budget agency,42,572416015.04,False
+2027,company and budget agency,27,191533950.77,True
+2010,payee name and payment account,79,399129277.15,False
+2011,payee name and payment account,76,399019215.74,False
+2012,payee name and payment account,80,294961737.47,False
+2013,payee name and payment account,74,315088939.23,False
+2014,payee name and payment account,68,450337672.81,False
+2015,payee name and payment account,63,317013758.49,False
+2016,payee name and payment account,68,327812695.59,False
+2017,payee name and payment account,64,323491708.25,False
+2018,payee name and payment account,62,300529202.62,False
+2019,payee name and payment account,67,384622581.1,False
+2020,payee name and payment account,62,378173770.32,False
+2021,payee name and payment account,51,316741069.81,False
+2022,payee name and payment account,56,393810982.08,False
+2023,payee name and payment account,58,477356034.26,False
+2024,payee name and payment account,54,552173886.02,False
+2025,payee name and payment account,54,598741496.4,False
+2026,payee name and payment account,54,603119805.79,False
+2027,payee name and payment account,37,203695958.7,True

@@ -1,0 +1,45 @@
+table,family,reason
+totals_by_fy,payments,All payments per fiscal year; the open year is flagged partial_year
+f_vendor,payments,Focus-area payments by agency and vendor
+f_vendor_pay,payments,Listed vendors' payments by agency and year (the full history behind d_vendors)
+f_vendor_detail,payments,Vendor drill-down by payee name
+f_vendor_year,payments,Vendors and payees per year
+f_payee_type,payments,Payments by payee type
+d_multi,payments,Vendors paid by 15 or more agencies in a year
+d_multi_basis,payments,The 15+ agency count on both counting bases
+d_area_top,payments,Largest vendors per focus area and year
+d_families,payments,Companies paid under two or more payee names
+f_concentration,payments,How concentrated each focus area's buying is
+f_savings_check,payments,Payments matched to each reported saving; verdicts use completed years only
+d_deflator,payments,CPI and population factors for every payments year
+f_grants,grants,Every grant and loan row as published (absk-avps starts FY2009)
+f_agency,mixed,Budget agencies: budget from FY2017 (source) and payments from years.history_first_fy
+f_budget_vs_pay,mixed,Budget next to payments; payments-only years before the budget data starts
+f_overlap,mixed,Budget by fund type and payments with grants inside them
+d_econ,mixed,Economic context on the budget and payments years
+f_area,mixed,Focus-area spending by spending code (budget) and by payee name (payments)
+d_site_reconciliation,mixed,Every yearly total against the State's Open Finance sites
+f_function,budget,Operating budget by function (yu65-jmmv starts FY2017)
+f_object,budget,Operating budget by object
+f_scope,budget,Operating budget by spending scope
+f_code,budget,Operating budget by spending code
+f_program,budget,Operating budget by program
+f_fund,budget,Budget by fund type (gy87-e27x starts FY2017)
+f_fund_source,budget,Budget by fund source
+d_fund_shift,budget,Program fund mix by year
+d_federal_crosswalk,budget,State federal funds next to USAspending (State budget from FY2017)
+f_fte,budget,Budgeted FTEs exactly as published (x8qy-486w starts FY2017)
+d_all_funds,budget,All-funds budget including public higher education (4mca-332u starts FY2017)
+d_book_reconciliation,budget,Every budget year against DBM's budget books
+f_revenue,budget,General Fund revenue on the budget years (history file starts FY2017)
+agency_clusters,narrow,Peer groups fitted on one actual year (opportunities.current_fy)
+d_book_program_differences,narrow,Only the years where a program differs from DBM's book figure
+d_challenger_total,narrow,The challenger forecast's one scored year
+f_challenger,narrow,The challenger forecast's one scored year
+d_grant_groups_sensitivity,narrow,Grant groups on the lead year (grant_groups.lead_fy)
+d_payment_screen,narrow,Leads only in the years where the screen found them
+d_payment_screen_summary,narrow,Screened years payment_screen.first_fy to last_fy: the small-procurement limit before the Oct 2023 change (Md. Code SF&P 13-109) is sourced only for FY2022 on; earlier years are not screened until it is
+d_source_issues,narrow,Only the years where a publication issue was found
+f_forecast,narrow,Forecast actuals FY2017 on (budget source) and forecast years to forecast.horizon_fy
+review_queue,narrow,Anomaly flags need four years of history and full payment years only
+stage_evidence,narrow,Only the budget years whose stage needed evidence from DBM's books

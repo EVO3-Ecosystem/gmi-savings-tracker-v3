@@ -149,7 +149,8 @@ def dashboard_html(src):
 def published_files(datasets):
     """Every file the page loads plus every file in config/dashboard.yaml (data the page does not draw yet stays downloadable)."""
     cfg = yaml.safe_load((ROOT / "config" / "dashboard.yaml").read_text())
-    return sorted(set(datasets.values()) | set(cfg.values())) + ["manifest"]
+    from .export import EXTRA  # decision-register tables the export publishes beside the dashboard datasets
+    return sorted(set(datasets.values()) | set(cfg.values()) | set(EXTRA)) + ["manifest"]
 
 
 def header(src, sha):

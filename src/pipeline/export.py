@@ -32,7 +32,8 @@ RATIO = ("_yoy", "_rate", "_mape", "_share", "growth", "share")
 # (a part-year against a full year is not a change, so _yoy columns are left empty on partial rows). Nothing is
 # held back or emptied: this is a live tracking tool, and dropping the open year hid real payments (November 19,
 # 2026 gap fix — FY2027 was missing from the vendor, payee-type, area and agency tables).
-FLAG_PARTIAL = {"totals_by_fy", "f_vendor", "f_payee_type", "f_vendor_year", "f_vendor_detail", "f_area", "f_agency"}
+FLAG_PARTIAL = {"totals_by_fy", "f_vendor", "f_payee_type", "f_vendor_year", "f_vendor_detail", "f_area", "f_agency",
+                "f_vendor_pay", "d_multi", "d_multi_basis", "d_area_top", "d_families", "f_concentration", "f_savings_check"}  # every payment table that reaches the open year
 
 
 # Decision-register additions published beside the dashboard datasets (#20 State Plan map, #21 OLA findings,
