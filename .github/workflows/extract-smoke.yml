@@ -59,6 +59,8 @@ jobs:
         id: build
         run: python -m src.pipeline.build
         env: {BLS_API_KEY: "${{ secrets.BLS_API_KEY }}"}
+      - name: Verify the fiscal-year datamart bundle (local only)
+        run: python -m src.pipeline.datamarts --from-warehouse
       - name: Model evaluation tables (also after a failed build)
         if: always() && steps.build.conclusion != 'skipped'
         run: python -m src.pipeline.review_tables data/review | tee -a "$GITHUB_STEP_SUMMARY"
@@ -80,7 +82,7 @@ jobs:
           { echo "### Docs this run would change"; echo; git diff --stat -- README.md docs/models || true; echo; echo "The full patch is data/review/docs-refresh.patch in the run-evidence artifact."; } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
-        with: {name: run-evidence, path: "data/review/*\ndata/raw/*/manifest.json\ndata/check_history.csv\ndata/runs.csv\ndocs/data-governance.md\ndocs/schemas/*\ndocs/reconciliation/*\ndocs/figures/*"}
+        with: {name: run-evidence, path: "data/review/*\ndata/raw/*/manifest.json\ndata/raw/*/coverage.csv\ndata/check_history.csv\ndata/runs.csv\ndocs/data-governance.md\ndocs/schemas/*\ndocs/reconciliation/*\ndocs/figures/*"}
       - name: Open an issue when a scheduled run fails
         if: failure() && github.event_name == 'schedule'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9

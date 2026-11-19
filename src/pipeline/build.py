@@ -12,9 +12,10 @@ from pathlib import Path
 
 import duckdb
 import pandas as pd
+import yaml
 
 from ..models import anomaly, backtest, registry, challenger, clustering, forecast, grant_groups, opportunities, payee_classifier, program_screen, recommendations, revenue, savings
-from . import checks, facts, marts, reference, txn
+from . import checks, datamarts, facts, marts, reference, txn
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
@@ -29,6 +30,8 @@ def latest_run():
 def build(run_id):
     raw = DATA / "raw" / run_id
     man = json.loads((raw / "manifest.json").read_text())
+    if man["status"] != "passed":
+        raise ValueError(f"Extract {run_id} did not pass; refusing to build it")
     tmp = DB.with_suffix(".building")
     tmp.unlink(missing_ok=True)
     con = _Lineage(duckdb.connect(str(tmp)))
@@ -41,6 +44,7 @@ def build(run_id):
     for name in ("cpi", "federal_awards", "population", "mfr_index", "bls_employment", "bea_md_gdp", "federal_by_listing"):
         if (raw / f"{name}.parquet").exists():
             con.execute(f"CREATE TABLE raw.{name} AS SELECT *, '{run_id}' AS _run_id FROM read_parquet('{raw}/{name}.parquet')")
+    datamarts.build(con, yaml.safe_load((ROOT / "config" / "datasets.yaml").read_text()), man)
 
     # ---- ops: what the portal reported for this run
     con.execute("""CREATE TABLE ops.source_snapshot (run_id TEXT, dataset TEXT, dataset_id TEXT, rows_downloaded BIGINT, portal_count BIGINT,

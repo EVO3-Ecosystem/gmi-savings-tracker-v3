@@ -68,8 +68,8 @@ def card(src, files, rid):
     lines += ["", "Context sources (CPI, population, federal awards, Managing for Results plans) are listed in the repository's "
               f"[data sources]({REPO}/blob/main/docs/data-sources.md).", "",
               "## Licence", "",
-              "The source datasets are published on Maryland's open data portal (https://opendata.maryland.gov), whose metadata lists "
-              "each of them as Public Domain; use follows the portal's open data terms. The derived tables add "
+              "The source datasets are published on Maryland's open data portal (https://opendata.maryland.gov); consult each source's "
+              "licence and portal terms. The local full-fidelity datamart bundle is not part of this publication. The derived tables add "
               "the pipeline's own groupings and screening assumptions (labeled in config/assumptions.yaml). Not an official State product.", "",
               "## Tables", "", "Every column is defined in the repository's data dictionary: "
               f"[docs/data-governance.md section 11.3]({REPO}/blob/main/docs/data-governance.md#113-dashboard-datasets) "

@@ -29,3 +29,4 @@ Per-dataset numbers (kept consistent by construction; update both files together
   BETA ANALYTICS INC, `category` carries the budget agency code (as coded rows do on the portal).
 - `absk-avps` grants: FY2024 grant + FY2025 loan.
 - `4mca-332u` highered: FY2024-26, agency R30 (public higher education).
+- `t6vk-rvwe` school-board disclosures: synthetic rows in FY2010, FY2019 and FY2025, with cent amounts.

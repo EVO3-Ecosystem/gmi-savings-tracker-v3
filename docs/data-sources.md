@@ -1,6 +1,6 @@
 # Data sources (opendata.maryland.gov)
 
-Full schemas, owners, licences, known issues and the assumptions register are in [data-governance.md](data-governance.md).
+Full schemas, owners, licences, known issues and the assumptions register are in [data-governance.md](data-governance.md). See the [FY2017–FY2027 datamart runbook](datamarts.md) for the direct pull, per-source gaps and partial years.
 
 | Dataset | ID | Years | Notes |
 |---|---|---|---|
@@ -8,7 +8,8 @@ Full schemas, owners, licences, known issues and the assumptions register are in
 | Funding source | gy87-e27x | FY2017–FY2027 | Totals equal the budget within $1 |
 | Budgeted positions (FTE) | x8qy-486w | FY2017–FY2027 | Extracted through the API like the others; the extract matches the portal's own count and yearly totals. The portal's View Data page has no website download to compare. Portal description still calls FY2026 the Governor's Allowance; stages follow `reference/budget_stage.csv` |
 | Payments to vendors | 7syw-q4cy | FY2008–FY2027 | Agency names, not codes; FY2027 is a partial year; `date` and `fiscal_period` are placeholders |
-| Grants and loans | absk-avps | | Year column is `fiscalyear` |
+| Grants and loans | absk-avps | FY2009–FY2025 | Year column is `fiscalyear` |
+| Public higher education budget | 4mca-332u | FY2017–FY2027 | Not in the GMI savings baseline |
+| County school-board spending disclosures | t6vk-rvwe | FY2010–FY2025 | County coverage is partial FY2010–FY2018 and FY2025; never combined with state vendor payments |
 
 Quirks the code handles: 50,000-row pages drop without a token (use 20,000); sub-object codes in two spellings ("0930"/"930"); object and program codes "1"/"01"; function codes 10–12 carry more than one title (key by title); agency A15 named "…:A15" in FY2026–FY2027.
-

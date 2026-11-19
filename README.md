@@ -10,7 +10,7 @@
 ![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
 <!-- /facts:badges -->
 ![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C319%20of%202%2C319-2da44e) ![Version](https://img.shields.io/badge/version-3.2.0-0969da)
-![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
+![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%207%20datasets-6e7781)
 [![License: All rights reserved](https://img.shields.io/badge/license-all%20rights%20reserved-6e7781)](LICENSE)
 
 Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov); State websites and DBM's budget books are used only to verify it.
@@ -101,6 +101,8 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 
 ## Data
 
+Run `make datamarts` to pull FY2017–FY2027 directly from Maryland's API, with no analytics rebuild or context downloads. This writes one local Parquet file per source, including county school-board disclosures separately, plus a manifest and `coverage.csv` with missing and partial years. See the [datamart runbook](docs/datamarts.md).
+
 | Dataset | Portal ID | Rows | Years | Matches portal | Verified against | Notes on the source |
 |---|---|---|---|---|---|---|
 | Operating budget | [yu65-jmmv](https://opendata.maryland.gov/d/yu65-jmmv) | 741,957 | FY2017–FY2027 | Yes, every year | mtp.maryland.gov download; operatingbudget.maryland.gov totals | The portal's stage labels are out of date (FY2021 "Working", FY2022 "Appropriation", FY2027 "Governor's Allowance"); stages come from DBM's budget books |
@@ -138,7 +140,7 @@ The identity that makes the books tie: **book Total Expenditure − reimbursable
 
 Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U (BLS, with FRED as fallback), federal awards to Maryland (USAspending), population (Census) and every agency's Managing for Results plan (DBM).
 
-**API version.** The extract uses the SODA 2.1 endpoints (`/resource/<id>.json`) through `sodapy`, which work without a token; Tyler Technologies says SODA 2.1 remains fully supported. The SODA3 endpoint (`/api/v3/views/<id>/query.json`) requires an app token; see [Next steps](#next-steps).
+**API version.** The extract uses [SODA 2.1](https://dev.socrata.com/docs/endpoints) through `sodapy`; public rows are readable without a token. SODA3 queries require a valid application token or user authentication. See the [datamart runbook](docs/datamarts.md) for the endpoint decision and verification steps.
 
 **What the open data cannot answer** (Data & pipeline tab, `reference/field_availability.csv`): 4 of the 13 fields an audit-grade tracker needs are public. Payment and invoice numbers and dates, the fund on each payment and vendor numbers sit in FMIS; MD-VIEW shows them one search at a time with no download and is never scraped. The schema for payment-level records is ready (`src/pipeline/txn.py`, `core.fact_payment_txn`), so a Public Information Act response loads with no code change.
 
@@ -210,7 +212,7 @@ python -m src.briefs.generate       # briefs (template backend without a key)
 python -m src.pipeline.publish --dry-run   # validate a data release without network
 ```
 
-All `make` targets: extract, extract-full, extract-scheduled, build, all, test, test-fault, reconcile, parity, export, snapshot, restore, figures, diagrams, docs, docs-strict, site, site-snapshot, site-artifact, readme-shots.
+All `make` targets: extract, extract-full, extract-scheduled, build, all, test, test-fault, reconcile, parity, export, datamarts, snapshot, restore, figures, diagrams, docs, docs-strict, site, site-snapshot, site-artifact, readme-shots.
 
 Secrets: `MD_SODA_APP_TOKEN` (optional for SODA 2.1, required for SODA3), `HF_TOKEN` (Hugging Face upload), `GEMINI_API_KEY` (live briefs). Copy `.env.example` to `.env` for local use; in CI they are repository secrets. None is ever committed.
 
@@ -273,7 +275,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - Scheduled runs: the monthly Extract and build runs on the 3rd (first scheduled run Dec 3, 2026); a manual run on Nov 18 passed every step. It needs no token: the datasets are public, a valid `MD_SODA_APP_TOKEN` only raises the request limits, and a rejected one is dropped with a warning. A data-refresh PR (published `site_data/`, which would publish `mart.d_program_screen`) is the next data step.
 - Phase 7, BI as an application (see [docs/roadmap.md](docs/roadmap.md)): an Explore view with Plotly and filters, hosted questions in plain English, a metric registry and exception-based alerts, hosted on Cloudflare.
 - Live demo of the dashboard inside the portfolio: [goaiarchitect.com/demo/gmi-savings-tracker.html](https://goaiarchitect.com/demo/gmi-savings-tracker.html).
-- Move the extract to SODA3 with `MD_SODA_APP_TOKEN`, keeping SODA 2.1 as a fallback.
+- Reassess SODA3 if Maryland changes its public SODA 2.1 endpoints. A migration needs authentication and count, fiscal-year and schema parity on all sources.
 
 Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
 
