@@ -27,12 +27,12 @@ from . import gate
 ROOT = Path(__file__).resolve().parents[2]
 EXP = ROOT / "data" / "export"
 RATIO = ("_yoy", "_rate", "_mape", "_share", "growth", "share")
-# The open (partial) payments year. totals_by_fy publishes it, flagged partial_year = true with its year-over-year change
-# left empty (a part-year against a full year is not a change); the page shows it only as "FY<year> so far". The other
-# payment tables still hold it back (drop, or empty the payment columns): the page charts and ranks those by year and
-# has no partial-year treatment for them yet.
-FLAG_PARTIAL = {"totals_by_fy"}
-PARTIAL = {"f_vendor": "drop", "f_payee_type": "drop", "f_vendor_year": "drop", "f_vendor_detail": "drop", "f_area": ["payee_spend"], "f_agency": ["payments"]}
+# The open (partial) payments year is published in every payment table, flagged partial_year = true; the page tags
+# those rows "FYTD" (fiscal year to date) and keeps them out of full-year comparisons and year-over-year changes
+# (a part-year against a full year is not a change, so _yoy columns are left empty on partial rows). Nothing is
+# held back or emptied: this is a live tracking tool, and dropping the open year hid real payments (November 19,
+# 2026 gap fix — FY2027 was missing from the vendor, payee-type, area and agency tables).
+FLAG_PARTIAL = {"totals_by_fy", "f_vendor", "f_payee_type", "f_vendor_year", "f_vendor_detail", "f_area", "f_agency"}
 
 
 # Decision-register additions published beside the dashboard datasets (#20 State Plan map, #21 OLA findings,
@@ -64,7 +64,6 @@ def main(argv=None):
         print("export refused:\n  - " + "\n  - ".join(blocked), file=sys.stderr)
         return 2
     run_id = con.execute("SELECT max(run_id) FROM ops.run_log").fetchone()[0]
-    hold = True  # hold_partial_payments: the tables in PARTIAL; totals_by_fy is flagged instead (FLAG_PARTIAL)
     full = con.execute("SELECT max(fiscal_year) FROM core.fact_payment WHERE NOT partial_year").fetchone()[0]
     marts = {r[0] for r in con.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'mart'").fetchall()}
     files += [e for e in EXTRA if e in marts and e not in files]
@@ -83,14 +82,6 @@ def main(argv=None):
                 df["partial_year"] = df.fiscal_year > full
                 for c in [c for c in df.columns if c.endswith("_yoy")]:
                     df.loc[df.partial_year, c] = None
-            if hold and name in PARTIAL:
-                rule = PARTIAL[name]
-                if rule == "drop":
-                    df = df[df.fiscal_year <= full]
-                else:
-                    df.loc[df.fiscal_year > full, rule] = None
-                    if name == "f_area":
-                        df = df[~((df.fiscal_year > full) & df.spend.isna())]
             if carry and carry.exists():  # keep the dashboard's column order
                 cols = list(pd.read_csv(carry, nrows=0).columns)
                 df = df[[c for c in cols if c in df.columns] + [c for c in df.columns if c not in cols]]
