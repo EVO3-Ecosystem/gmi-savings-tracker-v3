@@ -9,7 +9,7 @@
 <!-- facts:badges -->
 ![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
 <!-- /facts:badges -->
-![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C340%20of%202%2C394-dbab09) ![Version](https://img.shields.io/badge/version-3.2.0-0969da)
+![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C340%20of%202%2C394-dbab09) ![Version](https://img.shields.io/badge/version-4.0.0-0969da)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
 [![License: All rights reserved](https://img.shields.io/badge/license-all%20rights%20reserved-6e7781)](LICENSE)
 
@@ -27,6 +27,8 @@ Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **Al
 - **Payment screen:** 8 possible duplicate payment groups ($1.86M to review). None can be confirmed without payment records.
 - **Source data issue:** the published FY2022 payments data lists a second block of $874.5M for Maryland Environmental Service And Maryland Transportation Authority, confirmed on both State sites on Nov 10, 2026. It is reported as a source issue, never as a lead.
 <!-- /facts:readme -->
+
+**Live tracking (v4.0):** the open fiscal year is published, not held back. FY2027 payments so far appear in every payment table and on every relevant tab, tagged **FYTD** (fiscal year to date) — never charted against completed years, never counted as a check result. The Savings tracker carries an FY2027 FYTD column so progress against the $50M yearly target is visible as the year unfolds; the checks themselves stay on the two completed years.
 
 **Data accuracy (v3.2):** every actual year FY2017–FY2025 reconciles with DBM's printed budget books (statewide totals within 0.008%, 99.3–100% of programs equal to the dollar), the enacted FY2027 budget equals DBM's Fiscal Digest to the dollar in every fund, and 31 of 31 yearly totals equal the State's Open Finance sites to the cent ([details](#data)).
 
@@ -105,7 +107,7 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 |---|---|---|---|---|---|---|
 | Operating budget | [yu65-jmmv](https://opendata.maryland.gov/d/yu65-jmmv) | 741,957 | FY2017–FY2027 | Yes, every year | mtp.maryland.gov download; operatingbudget.maryland.gov totals | The portal's stage labels are out of date (FY2021 "Working", FY2022 "Appropriation", FY2027 "Governor's Allowance"); stages come from DBM's budget books |
 | Funding source | [gy87-e27x](https://opendata.maryland.gov/d/gy87-e27x) | 26,178 | FY2017–FY2027 | Yes, every year | budgetsource.maryland.gov download | Same stage labels as the budget |
-| Payments | [7syw-q4cy](https://opendata.maryland.gov/d/7syw-q4cy) | 412,880 | FY2008–FY2027 (FY2027 partial) | Yes, every year | vendorpayments.maryland.gov download and totals | Title says FY2008–FY2024 but the data runs to FY2027. Yearly totals per payee, not payments (the date is always Jan 1). FY2022 lists a second $874.5M block. Refreshed on the portal after the Nov 9 extract; re-extracted Nov 10 |
+| Payments | [7syw-q4cy](https://opendata.maryland.gov/d/7syw-q4cy) | 412,880 | FY2008–FY2027 (FY2027 partial, published as FYTD) | Yes, every year | vendorpayments.maryland.gov download and totals | Title says FY2008–FY2024 but the data runs to FY2027. Yearly totals per payee, not payments (the date is always Jan 1). FY2022 lists a second $874.5M block. Refreshed on the portal after the Nov 9 extract; re-extracted Nov 10 |
 | Grants and loans | [absk-avps](https://opendata.maryland.gov/d/absk-avps) | 23,085 | FY2009–FY2025 | Yes, every year | grantsandloans.maryland.gov download | The portal says grants of $50,000 or more, but some rows are smaller |
 | Budgeted full-time equivalents (FTEs) | [x8qy-486w](https://opendata.maryland.gov/d/x8qy-486w) | 6,026 | FY2017–FY2027 | Yes, every year | The portal's own count and totals only | Values are FTEs (1,578 rows are fractional), not position counts. The portal page reads the same table as the API, and no separate State website publishes it (checked Nov 10, 2026); a check against DBM's budget documents is planned |
 | Public higher education budget | [4mca-332u](https://opendata.maryland.gov/d/4mca-332u) | 84,446 | FY2017–FY2027 | Yes, every year | The portal's own count and totals only | Reported separately and kept out of every savings baseline |
@@ -253,6 +255,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 | v3.1 Audit depth | Released Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema, model registry, drift monitor |
 | v3.2 Data accuracy | Released Nov 16, 2026: every year reconciled with DBM's budget books, the Fiscal Digest and the State's Open Finance sites |
 | Release 3.2.0 on GitHub | Published Nov 17, 2026: tags `v3.1.0` and `v3.2.0`, GitHub releases, site deployed from `main` |
+| v4.0 Live tracking | Nov 20, 2026: FY2027 payments (partial year) published in every table, tagged FYTD; Savings tracker FYTD column; registry separates latest-completed from FYTD; repo inventory, refresh plan and gap-fix map in `docs/` |
 | Program screen and walkthrough | Merged Nov 17, 2026: the statewide program screen with audit findings linked through the register, and the accessible walkthrough report |
 | Community | Set up Nov 17, 2026: Discussions (Q&A and Ideas), issue chooser links, support routing, tech stack section |
 | 6. Automate | Workflows in place (weekly freshness run, monthly extract and build, Pages, ruleset, Dependabot). The monthly extract and build run has not completed yet; it needs a working Socrata token |
@@ -277,7 +280,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 
 Questions, ideas and feedback: [Discussions](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/discussions) (Q&A and Ideas). Bugs and data issues: [Issues](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/issues/new/choose). Security: [SECURITY.md](SECURITY.md).
 
-History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md).
+History, decisions D1–D9 and the gap list: [docs/roadmap.md](docs/roadmap.md). Data governance: [docs/data-governance.md](docs/data-governance.md). Checks: [docs/checks.md](docs/checks.md). Every file and its refresh owner: [docs/repo-inventory.md](docs/repo-inventory.md). The global refresh plan and the asset-to-source map: [docs/refresh-plan.md](docs/refresh-plan.md). Every known gap and its fix: [docs/gap-fixes.md](docs/gap-fixes.md).
 
 ## License
 

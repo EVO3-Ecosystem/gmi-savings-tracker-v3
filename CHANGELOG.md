@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.0] — 2026-11-20
+
+The open fiscal year goes live. FY2027 payments are published everywhere, tagged FYTD (fiscal year to date), and never compared with completed years — the tracker now follows the current year as it happens instead of holding it back.
+
+### Changed
+- FY2027 payments ($18.07B so far, 14,669 records, 82 agencies, 8,591 vendors) are published in every payment table (`f_vendor`, `f_payee_type`, `f_vendor_year`, `f_vendor_detail`, `f_area`, `f_agency`), flagged `partial_year` with year-over-year cells blanked on partial rows. The export no longer drops the open year's rows or empties its columns — the hold-back had hidden $18.07B of fiscal-year-to-date payments from the vendor, area and agency views.
+- FYTD is the dashboard's tag for the open year: the Overview payments tile, the vendor ledger note and the budget-vs-payments note show "FY2027 FYTD" figures, and the Savings tracker gains an FY2027 FYTD column per check — live tracking only, never a check result and never charted against completed years.
+- The savings checks stay on the two completed years; `tracking_fy: 2027` in `config/assumptions.yaml` adds `fytd_paid` to `d_savings_status`, so FY2026 reported savings and FY2027 projections stay separate. `d_vendor_moves` year columns now follow config. The metric registry separates the two: `payments_latest_fy_usd` reads the latest completed year; a new `payments_fytd_usd` publishes the open year, defined as never a full year and never compared with one.
+
+### Added
+- `docs/repo-inventory.md`: every folder, subfolder and file in the repository, numbered, each tagged with its refresh owner (hand-maintained or the pipeline step that rewrites it) and whether a total refresh or a Pages update touches it.
+- `docs/refresh-plan.md`: the global refresh plan — the two refresh events (total refresh, Pages update), the eight tiers with their commands and logs, the asset-to-pipeline-source map, and the downstream asset log for goaiarchitect.com.
+- `docs/gap-fixes.md`: every known gap mapped to its fix or its standing handling, including the FY2028 rollover checklist (move every pinned year together when FY2027 completes).
+
+### Fixed
+- The Pages build writes a favicon and tolerates filesystems that lag behind `rmtree` (no more spurious build failures on network mounts).
+
+
 ## 2026-11-19 — Fiscal-year alignment; FY2027 payments published as partial; v3 is the live site
 
 - Fresh pipeline run 20261119T124859Z: 143 of 143 checks passed; every budget and payments year matches the State's sites.
@@ -15,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `docs/LAUNCH_CHECKLIST.md`: the green launch checklist, numbered by folder and file.
 - The "testing ground / flagship is v1" banner and README callout are removed: v3 is the live version; v1 and v2 no longer publish a site.
 - Fixed a stale definition that called FY2026 payments part-year.
+- (The FY2027 hold-back removal, FYTD tagging and gap-fix mapping landed in 4.0.0 — see above.)
 
 ## [Unreleased]
 
