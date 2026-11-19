@@ -888,14 +888,15 @@ function measure(rows, key, p, o = {}){
 // (Actual spending: the latest actual year; Budgets or Actual and budgets: the latest budget, the FY2027 Legislative Appropriation)
 const tileYear = p => { const fit = Object.keys(STAGE_OF).map(Number).filter(y => stageOK(y, p, false)); const pick = p.years.filter(y => fit.includes(y));
   return pick.length ? d3.max(pick) : (d3.max(fit) || PAY_LAST); };
-// payments year: the latest selected year with a full year of payments (FY2026 at most)
-const payYear = (p, Y) => Math.min(p.years.length ? d3.max(p.years) : p.stage === 'actual' ? PAY_LAST : Y, PAY_LAST);
+// payments year: the latest selected year, else the headline year, capped at the last full year of payments (FY2026),
+// so with no year selected the payments tile sits on the same fiscal year as the budget tiles whenever that year has full payments
+const payYear = (p, Y) => Math.min(p.years.length ? d3.max(p.years) : Y, PAY_LAST);
 const subline = m => !m.n ? '' : (m.n > 1 ? `${fyLabel(m.years)} combined · ${M(m.avg)} a year` : fyLabel(m.years)) + (m.mixed ? ' · mixes actual spending and budgets' : '');
 
 /* ======================= self-healing state + feedback ======================= */
 let lastClean = '', notice = '', selfcheck = {ok:true, msg:''};
 function healParams(){ // drop filter values that no longer exist in the data, and say so
-  const fa = ok('f_agency'); if (!fa || !Object.keys(STAGE_OF).length) return false; const raw = dash.params() || {}; const p = prm(); const codes = new Set(fa.map(r => r.agency_code)); const years = new Set(Object.keys(STAGE_OF).map(Number).concat(d3.range(2008,2027)));
+  const fa = ok('f_agency'); if (!fa || !ok('f_budget_vs_pay') || !Object.keys(STAGE_OF).length) return false; const raw = dash.params() || {}; const p = prm(); const codes = new Set(fa.map(r => r.agency_code).concat(payOnly().map(r => r.code))); const years = new Set(Object.keys(STAGE_OF).map(Number).concat(d3.range(2008,2027)));
   const fix = {}, dropped = [];
   const ag = p.agencies.filter(c => codes.has(c)); if (ag.length !== p.agencies.length || (raw.agencies != null && !Array.isArray(raw.agencies))) { fix.agencies = ag; if (ag.length !== p.agencies.length) dropped.push(`${p.agencies.length - ag.length} agency`); }
   const ar = p.areas.filter(a => AREAS.includes(a)); if (ar.length !== p.areas.length || (raw.areas != null && !Array.isArray(raw.areas))) { fix.areas = ar; if (ar.length !== p.areas.length) dropped.push(`${p.areas.length - ar.length} focus-area`); }
@@ -944,7 +945,15 @@ function multiSelect(host, o){ // o: {key, items:[{value,label,hint}], presets:[
 }
 document.addEventListener('click', () => closeAll(null));
 const toggleIn = (key, v) => { const cur = prm()[key].map(String); const s = String(v); setP({[key]: (cur.includes(s) ? cur.filter(x => x !== s) : cur.concat(s)).map(x => key === 'years' ? Number(x) : x)}); };
-const agName = code => { const d = ok('d_agency') || []; return (d.find(r => r.agency_code === code) || {}).agency || code; };
+/* payment accounts that pay vendors but have no operating budget rows (capital budget accounts, authorities and colleges outside
+   yu65-jmmv). They are in "All agencies" payments, so they are selectable too: every agency selected then equals All agencies. */
+const PAY_ONLY_NAMES = {CAPITAL:'Capital budget accounts', J11:'Maryland Transportation Authority', U10:'Maryland Environmental Service',
+  R95:'Baltimore City Community College', R37:'Universities at Shady Grove', D30:'Maryland Food Center Authority', E90:'Registers of Wills',
+  R60:'College Savings Plans of Maryland'};
+function payOnly(){ if (payOnly._r) return payOnly._r; const bp = ok('f_budget_vs_pay'), fa = ok('f_agency'); if (!bp || !fa) return [];
+  const budget = new Set(fa.map(r => r.agency_code)); const paid = d3.rollup(bp.filter(r => r.agency_code && !budget.has(r.agency_code) && r.payments), v => d3.sum(v, r => r.payments), r => r.agency_code);
+  return payOnly._r = [...paid].map(([code, s]) => ({code, name: PAY_ONLY_NAMES[code] || `Payment account ${code}`, s})); }
+const agName = code => { const d = ok('d_agency') || []; const r = d.find(x => x.agency_code === code); if (r) return r.agency; const q = payOnly().find(x => x.code === code); return q ? q.name : code; };
 function fillFilters(p){
   const da = ok('d_agency'); if (!da) return;
   document.getElementById('fStage').value = p.stage;
@@ -953,8 +962,9 @@ function fillFilters(p){
   multiSelect(document.getElementById('msYears'), {key:'years', unit:'years', allLabel: p.stage === 'budget' ? 'All budget years' : p.stage === 'actual' ? 'All actual years' : 'All years',
     items: allYears.map(y => ({value:y, label:`FY${y}`, hint: p.stage === 'actual' && isBudgetYear(y) ? 'payments only' : STAGE_OF[y] ? stageShort(STAGE_OF[y]) : 'payments only'}))});
   multiSelect(document.getElementById('msAreas'), {key:'areas', unit:'areas', allLabel:'All six areas', items: AREAS.map(a => ({value:a, label:a}))});
-  if (!fillFilters._items && ok('f_agency')) { const spend = d3.rollup(ok('f_agency') || [], v => d3.sum(v, r => r.operating_spending || 0), r => r.agency_code);
-    fillFilters._items = da.map(r => ({value:r.agency_code, label:r.agency, s:spend.get(r.agency_code) || 0})).sort((a,b) => d3.ascending(a.label, b.label)); }
+  if (!fillFilters._items && ok('f_agency') && ok('f_budget_vs_pay')) { const spend = d3.rollup(ok('f_agency') || [], v => d3.sum(v, r => r.operating_spending || 0), r => r.agency_code);
+    fillFilters._items = da.map(r => ({value:r.agency_code, label:r.agency, s:spend.get(r.agency_code) || 0})).sort((a,b) => d3.ascending(a.label, b.label))
+      .concat(payOnly().map(r => ({value:r.code, label:`${r.name} (payments only)`, hint:'no operating budget rows; payments only', s:0})).sort((a,b) => d3.ascending(a.label, b.label))); }
   const items = fillFilters._items || [];
   multiSelect(document.getElementById('msAgencies'), {key:'agencies', unit:'agencies', allLabel:'All agencies', search:true, items,
     presets:[{label:'Top 10 by spending', values: items.slice().sort((a,b) => b.s - a.s).slice(0,10).map(i => i.value)}]});
@@ -1093,7 +1103,7 @@ const scopeCol = k => k === 'Controllable purchases' ? dash.colors[0] : k === 'C
 /* ======================= shared figures ======================= */
 function payments(p){ // payments to vendors: statewide totals, by agency, or by focus area (payee name)
   if (p.areas.length) { const fa = ok('f_area'); return fa ? {rows: fa.filter(r => r.payee_spend != null), key: 'payee_spend', label: 'Payments in the selected areas, by payee name', area:true} : null; }
-  if (p.agencies.length) { const f = ok('f_agency'); return f ? {rows: f.filter(r => r.fiscal_year <= 2026 && r.payments != null), key: 'payments', label: 'Payments to vendors'} : null; }
+  if (p.agencies.length) { const f = ok('f_budget_vs_pay'); return f ? {rows: f.filter(r => r.fiscal_year <= PAY_LAST && r.agency_code && r.payments != null), key: 'payments', label: 'Payments to vendors'} : null; }
   const t = ok('totals'); return t ? {rows: t, key: 'total_payments', label: 'Payments to vendors'} : null; }
 const who = p => !p.agencies.length ? 'Maryland' : p.agencies.length === 1 ? agName(p.agencies[0]) : `${p.agencies.length} selected agencies`;
 
