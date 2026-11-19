@@ -44,7 +44,7 @@ gmi_baseline_exclusions:
 opportunities:
   current_fy: 2025             # budget detectors look at this actual year ...
   base_fy: 2022                # ... and, for growth, compare it with this one
-  payments_fy: 2026            # payment detectors (tail spend, leverage, bid list) use this year
+  payments_fy: 2026            # payment detectors (tail spend, leverage, bid list) use this year — always the last COMPLETED payments year; FY2027 is FYTD (partial) and never feeds detectors
   peer_gap:
     min_positions: 50          # agencies with fewer budgeted positions are not compared
     min_agencies: 8            # a spending code needs this many comparable agencies
@@ -76,13 +76,14 @@ opportunities:
     rate_low: 0.02
     rate_high: 0.05
     excluded_agency_codes: [CAPITAL, D06, D25]
-    not_biddable: "CONSTRUCT|PAVING|CONTRACTING|MCO|HEALTH|TRUST|BANK|SCHOOL|ACADEMY|UNIVERSITY|COLLEGE|HOSPITAL|COUNTY|CITY OF|\\bJV\\b|BUS|INSURANCE|ROOF|MECHANICAL|ENGINEERS|TITLE|RESCUE|BUILDERS|EXCAVAT|BRIDGE|STEEL|CONCRETE|YESHIVA|TALMUD|HOME OF|ARC OF|HUMANIM|LEAGUE FOR PEOPLE|CIRCUIT C(OUR)?T|COUNCIL|CHARIT|SHELTER|FAMILY|YOUTH|COMMUNITY|SERVICES FOR|CENTER FOR|SOCIETY|FOUNDATION|ASSOCIATION|BALTIMORE GAS|PEPCO|POTOMAC ELECTRIC|DELMARVA|POTOMAC EDISON|WASHINGTON GAS LIGHT|SCHLOSSER|MYERS|ZIMMER|CHRISTMAN"
+    not_biddable: "CONSTRUCT|PAVING|CONTRACTING|MCO|HEALTH|TRUST|BANK|SCHOOL|ACADEMY|UNIVERSITY|COLLEGE|HOSPITAL|COUNTY|CITY OF|\bJV\b|BUS|INSURANCE|ROOF|MECHANICAL|ENGINEERS|TITLE|RESCUE|BUILDERS|EXCAVAT|BRIDGE|STEEL|CONCRETE|YESHIVA|TALMUD|HOME OF|ARC OF|HUMANIM|LEAGUE FOR PEOPLE|CIRCUIT C(OUR)?T|COUNCIL|CHARIT|SHELTER|FAMILY|YOUTH|COMMUNITY|SERVICES FOR|CENTER FOR|SOCIETY|FOUNDATION|ASSOCIATION|BALTIMORE GAS|PEPCO|POTOMAC ELECTRIC|DELMARVA|POTOMAC EDISON|WASHINGTON GAS LIGHT|SCHLOSSER|MYERS|ZIMMER|CHRISTMAN"
 
 # Savings checks (src/models/savings.py): GMI's reported savings paired with the payments that would show them.
 savings:
   first_fy: 2022               # payments considered from this fiscal year
   before_fy: 2025              # a check compares payments in this year ...
-  after_fy: 2026               # ... with this year
+  after_fy: 2026               # ... with this year (the two completed years; the open year is never a verdict year)
+  tracking_fy: 2027            # the open (partial) year: d_savings_status shows its payments to date as fytd_paid, tagged FYTD on the page; never verdicted
   seen_share: 0.5              # "Seen" when payments fell by at least this share of the reported saving
   counted_status: [Saved in FY2026, Under way]   # only these items' amounts are measured against payments; projected ones are not due yet
   vendor_moves:
@@ -93,15 +94,15 @@ savings:
     excluded_agency_codes: [CAPITAL, D06, D25, R13, R14, R30, R95]   # operating spending only; public higher education out of GMI baselines:
     # Md. Code SF&P 11-203(e)(2): Division II (procurement) does not apply to USM, Morgan State, St. Mary's College or BCCC,
     # which follow their own procurement policies under 11-203(e)(3) (mgaleg.maryland.gov, read Nov 13, 2026; decision D4)
-    not_procurement: "CONSTRUCT|PAVING|CONTRACTING|MCO|HEALTH PLAN|PARTNERS MCO|TRUST|BANK|SCHOOL|ACADEMY|UNIVERSITY|COLLEGE|HOSPITAL|COUNTY|CITY OF|\\bJV\\b|BUS SALES|NOVA BUS|INSURANCE|MEDICAL CENTER|YESHIVA|TALMUD|BNOS|ROOF|MECHANICAL|CORPS OF ENGINEERS|HEALTH|TITLE|RESCUE|BUILDERS|EXCAVAT|BRIDGE|STEEL|CONCRETE|HOME OF|\\bARC OF|BOYS & GIRLS|EASTER SEALS|GOODWILL|HUMANIM|INSTITUTIONS & ALTERNATIVES|STAR COMMUNITY|SHORE UP|MARITIME ADV TRAINING|LEAGUE FOR PEOPLE|CIRCUIT C(OUR)?T"   # last group: health and human-service non-profits, which the payments data does not flag
+    not_procurement: "CONSTRUCT|PAVING|CONTRACTING|MCO|HEALTH PLAN|PARTNERS MCO|TRUST|BANK|SCHOOL|ACADEMY|UNIVERSITY|COLLEGE|HOSPITAL|COUNTY|CITY OF|\bJV\b|BUS SALES|NOVA BUS|INSURANCE|MEDICAL CENTER|YESHIVA|TALMUD|BNOS|ROOF|MECHANICAL|CORPS OF ENGINEERS|HEALTH|TITLE|RESCUE|BUILDERS|EXCAVAT|BRIDGE|STEEL|CONCRETE|HOME OF|\bARC OF|BOYS & GIRLS|EASTER SEALS|GOODWILL|HUMANIM|INSTITUTIONS & ALTERNATIVES|STAR COMMUNITY|SHORE UP|MARITIME ADV TRAINING|LEAGUE FOR PEOPLE|CIRCUIT C(OUR)?T"   # last group: health and human-service non-profits, which the payments data does not flag
 
 # Recommendations (src/models/recommendations.py): the Overview's six recommendations as tracked tables.
 recommendations:
-  target_saving: 50000000      # the path to this many dollars a year
-  matched_fy: 2026             # recommendation 5 reports the share of this year's payments matched to an agency
+  target_saving: 50000000      # the path to this many dollars a year (GMI's yearly target; the page tags the current tracking year FY2027)
+  matched_fy: 2026             # recommendation 5 reports the share of this year's payments matched to an agency (last COMPLETED payments year)
   vendor_detail:
     first_fy: 2022             # drill-down tables from this year
-    names_fy: 2026             # payee names merged into a vendor, by this year's payments
+    names_fy: 2026             # payee names merged into a vendor, by this year's payments (last COMPLETED payments year)
   plan:
     forecast_fy: 2027          # step 1 applies GMI's reported rates to this year's forecast median
     contract_rate: 0.035       # assumed saving on a statewide contract (assumed range 2-5%)
@@ -136,8 +137,8 @@ payment_screen:
   small_procurement_source: "Md. Code SF&P 13-109(a)(1); Ch. 161 of 2023 (HB 543), effective 2023-10-01; accessed 2026-11-10"
   transaction_grain_min_dates: 24      # the split rule runs only when a screened year has at least this many distinct dates (payment-level data); otherwise "not measurable"
   excluded_payee_types: [Government, Health care organization, Financial institution]   # transfers to government, benefits/health plans, debt service (reference/payee_type_rules.csv)
-  exclude_payee_pattern: "CLERK OF|ATTORNEY GENERAL|CIRCUIT COURT|DISTRICT COURT|PAYROLL|RETIREMENT|PENSION|UNEMPLOYMENT|CHILD SUPPORT|INTERNAL REVENUE|\\bIRS\\b|FICA|DEFERRED COMP|BENEFIT"   # payroll-like and benefit payees, matched on the normalized payee name
-  org_name_pattern: "\\b(INC|LLC|L L C|CORP|CORPORATION|CO|COMPANY|LTD|LP|LLP|PC|PA|PLLC|GROUP|ASSOCIATES|SERVICES|SYSTEMS|SOLUTIONS|TECHNOLOGIES|ENTERPRISES|INTERNATIONAL|PARTNERS|HOLDINGS|AUTHORITY|FOUNDATION|ASSOCIATION|JOINT VENTURE|JV|USA|AMERICA|CENTER|INSTITUTE|UNIVERSITY|COLLEGE)\\b"   # a "Business or other" payee is named only if its name looks like an organization; others may be individuals and are never shown by name
+  exclude_payee_pattern: "CLERK OF|ATTORNEY GENERAL|CIRCUIT COURT|DISTRICT COURT|PAYROLL|RETIREMENT|PENSION|UNEMPLOYMENT|CHILD SUPPORT|INTERNAL REVENUE|\bIRS\b|FICA|DEFERRED COMP|BENEFIT"   # payroll-like and benefit payees, matched on the normalized payee name
+  org_name_pattern: "\b(INC|LLC|L L C|CORP|CORPORATION|CO|COMPANY|LTD|LP|LLP|PC|PA|PLLC|GROUP|ASSOCIATES|SERVICES|SYSTEMS|SOLUTIONS|TECHNOLOGIES|ENTERPRISES|INTERNATIONAL|PARTNERS|HOLDINGS|AUTHORITY|FOUNDATION|ASSOCIATION|JOINT VENTURE|JV|USA|AMERICA|CENTER|INSTITUTE|UNIVERSITY|COLLEGE)\b"   # a "Business or other" payee is named only if its name looks like an organization; others may be individuals and are never shown by name
   # Confidence of each lead (sql/mart/48), rules fixed before the leads were measured (docs/models/payment_screen.md):
   # score = +1 amount not a multiple of round_cents_low; -1 amount a multiple of round_unit; +1 every record paid by one
   # paying unit; -1 records paid by different paying units; -1 the same agency, vendor and amount in another screened year
