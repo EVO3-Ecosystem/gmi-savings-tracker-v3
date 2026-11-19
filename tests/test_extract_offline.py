@@ -184,3 +184,41 @@ def test_fault_hook_drives_self_healing_redownload(soda_portal, extract_dirs, mo
     fte = next(e for e in man["datasets"] if e["dataset"] == "fte")
     assert fte["heal_attempts"] == 1 and fte["source"] == "re-downloaded (1)" and fte["match"]
     assert pq.ParquetFile(run_dir / "fte.parquet").metadata.num_rows == fte["portal_count"]
+
+
+def test_equal_grand_counts_do_not_hide_wrong_years_or_totals(soda_portal, tmp_path):
+    spec = extract.CFG["datasets"]["school_spending"]
+    fid = spec["id"]
+    _, n, totals, _ = extract.portal_facts(extract.client(), fid, spec)
+    path = tmp_path / "school.parquet"
+    rows = pd.DataFrame(soda_portal.rows(fid))
+    rows.loc[0, "amount"] = "100.00"
+    rows.to_parquet(path)
+    count, error = extract.validate_download(path, spec, n, totals)
+    assert count == n and "FY2010" in error
+    rows.loc[0, "fiscal_year"] = "2009"
+    rows.to_parquet(path)
+    assert extract.validate_download(path, spec, n, totals)[1] == "fiscal years in Parquet differ from the portal"
+
+
+def test_mid_run_portal_revision_triggers_redownload(soda_portal, extract_dirs, monkeypatch):
+    fid = IDS["budget"]
+    original = soda_portal.meta
+    hits = 0
+
+    def changed(dataset):
+        nonlocal hits
+        data = original(dataset)
+        if dataset == fid:
+            hits += 1
+            if hits >= 2:
+                data["rowsUpdatedAt"] += 1
+        return data
+
+    monkeypatch.delenv("MD_SODA_APP_TOKEN", raising=False)
+    monkeypatch.setattr(soda_portal, "meta", changed)
+    assert extract.run() == 0
+    raw, = (extract_dirs / "raw").iterdir()
+    budget = json.loads((raw / "manifest.json").read_text())["datasets"][0]
+    assert budget["source"] == "re-downloaded (1)"
+    assert budget["rowsUpdatedAt"] == original(fid)["rowsUpdatedAt"] + 1

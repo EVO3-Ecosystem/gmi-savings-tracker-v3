@@ -1,0 +1,5 @@
+[
+  {"fiscal_year":"2010","agency_name":"Example County A","payee_name":"Example Supplier","amount":"25000.25"},
+  {"fiscal_year":"2019","agency_name":"Example County B","payee_name":"Example Supplier","amount":"50000.50"},
+  {"fiscal_year":"2025","agency_name":"Example County A","payee_name":"Example Supplier","amount":"75000.75"}
+]

@@ -73,6 +73,9 @@ class RecordedSODA:
         if not m:
             raise AssertionError(f"no recorded route for {url}")
         rows = self.rows(m.group(1))
+        if where := params.get("$where"):
+            col, lo, hi = re.fullmatch(r"(\w+) between '?(\d{4})'? and '?(\d{4})'?", where).groups()
+            rows = [r for r in rows if r.get(col) and int(lo) <= int(r[col]) <= int(hi)]
         select = params.get("$select", "")
         if "sum(" in select:  # per-year totals, computed from the same rows so portal and download agree
             year_col = re.search(r"(\w+) as fiscal_year", select).group(1)
