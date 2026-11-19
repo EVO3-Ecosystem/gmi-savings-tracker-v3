@@ -243,6 +243,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - [Walkthrough notebook](notebooks/walkthrough.ipynb): the story end to end from the published tables only, committed with its outputs.
 - [Executive overview](docs/executive-overview.md): one page, six figures (`docs/figures/overview/`).
 - [Model cards](docs/models): <!-- n:model_cards -->12<!-- /n --> cards, each with its baseline, validation and limits.
+- [Developer wiki](docs/wiki/README.md): the SODA Developers API reference, the FY2010–FY2027 datamart map and the research gap analysis (November 19, 2026 portal scan).
 
 ## Status
 
