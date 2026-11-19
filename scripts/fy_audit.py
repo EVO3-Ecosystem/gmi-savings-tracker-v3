@@ -270,7 +270,7 @@ def mentions(text):
 
 
 PAY_WORDS = re.compile(r"\bpa(id|yment|yments|yee|yees)\b|\bvendor", re.I)
-PARTIAL_WORDS = re.compile(r"partial|in progress|so far|not a full year|year to date|began July 1|left out", re.I)
+PARTIAL_WORDS = re.compile(r"partial|in progress|so far|not a full year|year to date|\bFYTD\b|began July 1|left out", re.I)
 SENT = re.compile(r"(?<=[.;!?])\s+(?=[A-Z(])|\n+")
 FYALL = re.compile(r"\bFY ?(20\d\d)\b")
 
