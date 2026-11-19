@@ -154,7 +154,7 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
 | Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
 | Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
-| Rules | `reference/` (<!-- n:reference_files -->30<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Rules | `reference/` (<!-- n:reference_files -->31<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
 | Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (16 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
@@ -170,7 +170,7 @@ The architecture is the diagram and step table above. This is what it is built w
 - **Extraction and data handling:** `sodapy` (the Socrata SODA 2.1 client), pandas, PyArrow, `pdfplumber` (DBM's budget books), PyYAML and requests.
 - **Storage:** Parquet (one file per dataset per run, and the published tables in `site_data/`) and DuckDB with the layers `raw`, `ref`, `core`, `mart` and `ops`. DVC is configured for an optional local store (`dvc.yaml`); it is not a locked dependency.
 - **Models:** scikit-learn (K-Means, TF-IDF, Isolation Forest, logistic regression), LightGBM quantile regression, and split-conformal calibration (`src/models/calibration.py`). The model registry and the PSI and KS drift monitor are in `src/models/registry.py`. Sentence embeddings for grant groups are an optional extra; TF-IDF is the default.
-- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->30<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
+- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->31<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
 - **Presentation:** a static site built by `src/pipeline/site.py` and served from GitHub Pages. D3.js is inlined in the page, so the dashboard loads nothing from another host; the SQL explorer loads DuckDB-WASM from jsDelivr (the one external request, with a plain JavaScript fallback). Figures come from matplotlib, the walkthrough notebook is executed with nbclient, and Playwright drives the page tests and the README screenshots.
 - **AI access:** a read-only Model Context Protocol server over stdio (`src/mcp/`), and one-line briefs with a number guardrail (`src/briefs/`). The template backend needs nothing; the optional Gemini backend uses `google-genai`.
 - **Delivery:** GitHub Actions runs CI (lint, compile check, tests, the forecast rebuild check, the notebook check and a container test), the Pages deploy, the data release to GitHub and Hugging Face, a monthly extract and build (the 3rd), and weekly freshness alerts (Mondays). A branch ruleset requiring the `test` check on `main` is defined in `.github/rulesets/main.json`, and Dependabot keeps the Actions and pip dependencies current.
@@ -243,6 +243,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 - [Walkthrough notebook](notebooks/walkthrough.ipynb): the story end to end from the published tables only, committed with its outputs.
 - [Executive overview](docs/executive-overview.md): one page, six figures (`docs/figures/overview/`).
 - [Model cards](docs/models): <!-- n:model_cards -->12<!-- /n --> cards, each with its baseline, validation and limits.
+- [Developer wiki](docs/wiki/README.md): the SODA Developers API reference, the FY2010–FY2027 datamart map and the research gap analysis (November 19, 2026 portal scan).
 
 ## Status
 
