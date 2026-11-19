@@ -4,6 +4,14 @@ page_size: 20000        # 50,000-row pages drop mid-download without an app toke
 retries: 6              # per page, with exponential backoff
 backoff_seconds: 5
 heal_attempts: 2        # re-download a dataset whose row count does not match the portal
+coverage:
+  first_fy: 2009
+  last_fy: 2027
+  # FY2027 payments are still being reported. Revisit when the publisher posts a complete year.
+  partial_years:
+    payments: [2027]
+    # County-level historical submissions predate the statewide requirement; FY2025 has 23 of 24 reporting units.
+    school_spending: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2025]
 datasets:   # portal_name: the title as published on the portal (checked 2026-11-09); the extract also records the live title
   budget:   {id: yu65-jmmv, year_col: fiscal_year, sum_col: budget, portal_name: "Maryland Operating Budget (current)"}
   fund:     {id: gy87-e27x, year_col: fiscal_year, sum_col: budget, portal_name: "Maryland Operating Budget - Funding Source"}
@@ -14,6 +22,8 @@ datasets:   # portal_name: the title as published on the portal (checked 2026-11
   # R95 Baltimore City Community College. None of these agencies is in yu65-jmmv. Loaded as raw.highered / core.fact_budget_highered,
   # shown only in all-funds totals labeled "including public higher education", never in a GMI savings baseline.
   highered: {id: 4mca-332u, year_col: fiscal_year, sum_col: budget, portal_name: "Maryland Operating Budget: CUR and CR"}
+  # Linked separately from the portal. County school-board disclosures are not State vendor payments.
+  school_spending: {id: t6vk-rvwe, year_col: fiscal_year, sum_col: amount, portal_name: "County Board of Education - Spending Disclosures"}
 
 # Second copy of each dataset: the Maryland Transparency Portal's own downloads (mtp.maryland.gov/#!/view-data,
 # "Data ... as displayed on this website"). reconcile.py compares them with the API extract, year by year.

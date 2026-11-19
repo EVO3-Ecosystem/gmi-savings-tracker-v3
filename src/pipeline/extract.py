@@ -5,8 +5,8 @@ For each dataset in config/datasets.yaml:
   2. Freshness check: if rowsUpdatedAt is unchanged since the last good run, reuse that run's Parquet file
      (hard link, or copy) instead of downloading again. --force always downloads.
   3. Otherwise download in 20,000-row pages ordered by :id, retrying each page with exponential backoff.
-  4. Verify the file: row count = portal count(*). On a mismatch, re-download (self-healing) up to
-     heal_attempts times; if it still does not match, the run fails.
+  4. Verify row counts and totals for every fiscal year, and verify that the portal did not change
+     during paging. Re-download up to heal_attempts times; if still inconsistent, fail the run.
   5. Write manifest.json: per dataset rows, portal count, match, rowsUpdatedAt, source (downloaded/reused),
      seconds, heal attempts, and the portal's per-year totals (saved for the Phase 2 totals check).
 
@@ -25,10 +25,13 @@ import sys
 import time
 from pathlib import Path
 
+import duckdb
 import pandas as pd
 import requests
 import yaml
 from sodapy import Socrata
+
+from . import datamarts
 
 ROOT = Path(__file__).resolve().parents[2]
 CFG = yaml.safe_load((ROOT / "config" / "datasets.yaml").read_text())
@@ -132,6 +135,36 @@ def parquet_rows(path):
     return pq.ParquetFile(path).metadata.num_rows
 
 
+def validate_download(path, spec, expect, totals):
+    """Check every year, not just the grand count (different bad pages can cancel each other out)."""
+    try:
+        n = parquet_rows(path)
+    except (ValueError, OSError) as err:
+        return 0, f"unreadable Parquet: {err}"
+    if n != expect or n != sum(t["rows"] for t in totals):
+        return n, f"{n:,} rows vs {expect:,} on the portal; portal year groups sum to {sum(t['rows'] for t in totals):,}"
+    if not n:
+        return n, "portal returned an empty datamart"
+    y, s = spec["year_col"], spec["sum_col"]
+    with duckdb.connect() as con:
+        try:
+            rows = con.execute(f"""SELECT CAST("{y}" AS INTEGER), count(*),
+                sum(CAST("{s}" AS DECIMAL(38, 9))),
+                count(*) FILTER (WHERE "{y}" IS NULL OR "{s}" IS NULL)
+                FROM read_parquet(?) GROUP BY 1""", [str(path)]).fetchall()
+        except duckdb.Error as err:
+            return n, f"unexpected year/measure schema or values: {err}"
+    actual = {fy: (count, total, nulls) for fy, count, total, nulls in rows}
+    if actual.keys() != {t["fiscal_year"] for t in totals}:
+        return n, "fiscal years in Parquet differ from the portal"
+    for t in totals:
+        fy = t["fiscal_year"]
+        count, total, nulls = actual[fy]
+        if nulls or count != t["rows"] or total is None or abs(float(total) - t["total"]) >= 0.01:
+            return n, f"FY{fy}: {count:,}/{t['rows']:,} rows, {total}/{t['total']} total, {nulls} null rows"
+    return n, None
+
+
 def last_good_run():
     if not RUNS.exists():
         return None
@@ -162,38 +195,43 @@ def run(force=False):
         updated, expect, totals, pname = portal_facts(c, fid, spec)
         dest = out / f"{name}.parquet"
         p = prev_by.get(name)
-        fresh = (not force) and p and p.get("rowsUpdatedAt") == updated and p.get("match") and (RAW / prev_id / f"{name}.parquet").exists()
+        fresh = (not force) and p and updated is not None and p.get("id") == fid and p.get("rowsUpdatedAt") == updated and p.get("match") and (RAW / prev_id / f"{name}.parquet").exists()
         heals = 0
-        if fresh:
-            reuse(RAW / prev_id, name, dest)
-            source = f"reused from {prev_id} (portal unchanged)"
-        else:
-            download(c, fid, dest)
-            source = "downloaded"
-        if FAULT == name:  # test hook: drop half the rows to prove the re-download repairs it
-            pd.read_parquet(dest).iloc[: expect // 2].to_parquet(dest, index=False)
-            log(f"  test fault: dropped half of {name}")
-        n = parquet_rows(dest)
-        while n != expect and heals < CFG["heal_attempts"]:  # self-heal: re-download on a count mismatch
-            heals += 1
-            log(f"  {name}: {n:,} rows vs {expect:,} on portal; re-downloading (attempt {heals})")
-            if dest.exists():
+        while True:
+            if fresh and not heals:
+                reuse(RAW / prev_id, name, dest)
+                source = f"reused from {prev_id} (portal unchanged)"
+            else:
+                download(c, fid, dest)
+                source = f"re-downloaded ({heals})" if heals else "downloaded"
+            if FAULT == name and not heals:  # unlink first: a reused Parquet file may be hard-linked
+                truncated = pd.read_parquet(dest).iloc[: expect // 2]
                 dest.unlink()
-            download(c, fid, dest)
-            n = parquet_rows(dest)
-            source = f"re-downloaded ({heals})"
-            updated, expect, totals, pname = portal_facts(c, fid, spec)  # the portal may have updated mid-run
-        e = {"dataset": name, "id": fid, "rows": n, "portal_count": expect, "match": n == expect, "rowsUpdatedAt": updated, "portal_name": pname,
+                truncated.to_parquet(dest, index=False)
+                log(f"  test fault: dropped half of {name}")
+            n, error = validate_download(dest, spec, expect, totals)
+            end_revision = call(lambda fid=fid: c.get_metadata(fid), f"{fid} post-download metadata").get("rowsUpdatedAt")
+            if updated != end_revision:
+                error = "portal revision changed during extraction"
+            if error is None or heals >= CFG["heal_attempts"]:
+                break
+            heals += 1
+            log(f"  {name}: {error}; re-downloading (attempt {heals})")
+            dest.unlink(missing_ok=True)
+            updated, expect, totals, pname = portal_facts(c, fid, spec)
+        e = {"dataset": name, "id": fid, "rows": n, "portal_count": expect, "match": error is None, "rowsUpdatedAt": updated, "portal_name": pname,
              "rowsUpdatedAt_utc": dt.datetime.fromtimestamp(updated, dt.timezone.utc).isoformat() if updated else None,
-             "source": source, "heal_attempts": heals, "secs": round(time.time() - t, 1), "portal_totals": totals}
+             "source": source, "heal_attempts": heals, "secs": round(time.time() - t, 1), "portal_totals": totals, "error": error}
         entries.append(e)
         log(f"{name:9s} {fid}  {n:>8,} rows  portal {expect:>8,}  {'OK' if e['match'] else 'MISMATCH'}  {source}  {e['secs']}s")
     from . import enrich  # context sources for the six recommendations; warnings never block the core extract
     extra = enrich.run_all(out, (RAW / prev_id) if prev_id else None, log)
     ok = all(e["match"] for e in entries)
     manifest = {"run": run_id, "status": "passed" if ok else "failed", "forced": force, "seconds": round(time.time() - t_run, 1),
+                "coverage_scope": CFG["coverage"],
                 "domain": CFG["domain"], "page_size": CFG["page_size"], "app_token": TOKEN_USED, "datasets": entries, "enrichment": extra}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
+    datamarts.write_coverage(out / "coverage.csv", CFG, manifest)
     row = {"run_id": run_id, "status": manifest["status"], "forced": force, "seconds": manifest["seconds"],
            "rows": sum(e["rows"] for e in entries), "downloaded": sum(not e["source"].startswith("reused") for e in entries),
            "reused": sum(e["source"].startswith("reused") for e in entries), "heals": sum(e["heal_attempts"] for e in entries),

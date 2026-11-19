@@ -11,6 +11,7 @@ test-fault: ; $(PY) -m pytest -q tests/test_fault_injection.py
 reconcile: ; $(PY) -m src.pipeline.reconcile $(RECONCILE_FLAGS)
 parity:   ; $(PY) -m src.pipeline.parity --legacy $(or $(LEGACY),legacy/gst/out) --strict
 export:   ; $(PY) -m src.pipeline.export $(EXPORT_FLAGS)
+datamarts: ; $(PY) -m src.pipeline.datamarts $(DATAMART_FLAGS)
 snapshot: ; $(PY) -m src.pipeline.snapshot create
 restore:  ; $(PY) -m src.pipeline.snapshot restore $(SNAP) $(RESTORE_FLAGS)
 figures:  ; $(PY) -m src.pipeline.figures
@@ -40,4 +41,5 @@ docker-test: docker-build ; docker run --rm gmi-savings-tracker:local
 
 .PHONY: forecast-check overview-figures notebook notebook-check lock docker-build docker-test
 .PHONY: readme-shots
+.PHONY: datamarts
 .PHONY: extract extract-full gate1 build gate3 all test test-fault docs docs-strict reconcile figures diagrams parity export snapshot restore site site-snapshot site-artifact postgres extract-scheduled

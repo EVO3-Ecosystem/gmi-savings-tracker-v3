@@ -28,8 +28,9 @@ SOURCES = {
     "grants": ("State of Maryland Grant and Loan Data", "State aid grants (from FY2009) and loans (from FY2010) to for-profit and non-profit entities; the portal says $50,000 or more, but some rows are smaller"),
     "highered": ("Maryland Operating Budget: CUR and CR", "Operating budget of public higher education (Morgan State, St. Mary's College, University System of Maryland, Baltimore City Community College), "
                  "which the operating budget dataset leaves out; used only in all-funds totals labeled including public higher education, never in a GMI savings baseline"),
+    "school_spending": ("County Board of Education - Spending Disclosures", "County school-board payee disclosures, kept separate from State vendor payments and not used in GMI savings."),
 }
-ORDER = ["payments", "budget", "fund", "fte", "grants", "highered"]
+ORDER = ["payments", "budget", "fund", "fte", "grants", "highered", "school_spending"]
 RUN_COLUMNS = ["run_id", "started_utc", "seconds", "status", "published", "checks", "passed", "warnings", "failed", "repairs",
                "payment_rows", "budget_rows", "mode"]
 
