@@ -16,7 +16,7 @@ preview = ["playwright>=1.40"]
 ml = ["sentence-transformers>=2.2"]   # grant groups embeddings (src/models/grant_groups.py); without it TF-IDF is used
 mcp = ["mcp==2.3.0"]                 # src/mcp: read-only MCP server (python -m src.mcp.server); docs/mcp.md
 notebook = ["nbclient>=0.10", "nbconvert>=7.16", "nbformat>=5.10", "ipykernel>=6.29", "nbmake>=1.5"]  # notebooks/walkthrough.ipynb: executed in CI (pytest --nbmake), rendered by make notebook
-ai = ["google-genai==3.2.0"]        # src/briefs gemini backend (GEMINI_API_KEY); the template backend needs nothing
+ai = ["google-genai==3.4.0"]        # src/briefs gemini backend (GEMINI_API_KEY); the template backend needs nothing
 
 [tool.setuptools]
 packages = ["src", "src.pipeline", "src.models", "src.mcp", "src.briefs"]
