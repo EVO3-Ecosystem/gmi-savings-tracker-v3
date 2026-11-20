@@ -22,7 +22,7 @@ On this pipeline's marts the port gives **exactly the legacy scripts' output**: 
 ## What the numbers show (FY2025 and FY2026 data; current build)
 
 <!-- facts:opportunities -->
-_Generated from `mart.d_opps` and `mart.d_bid_list`, extract run 20261119T115247Z, by `python -m src.models.doc_facts`._
+_Generated from `mart.d_opps` and `mart.d_bid_list`, extract run 20261119T123559Z, by `python -m src.models.doc_facts`._
 
 | Detector | Findings | Likely saving | Range |
 |---|---|---|---|

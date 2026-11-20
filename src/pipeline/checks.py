@@ -249,9 +249,10 @@ def phase4(con, check, one):
             FULL JOIN (SELECT fiscal_year, sum(amount) s, count(*) n FROM mart.f_grants GROUP BY 1) m USING (fiscal_year)
             WHERE abs(coalesce(c.s, 0) - coalesce(m.s, 0)) > 1 OR c.n IS DISTINCT FROM m.n""")
         check("mart", "Grants as listed = core grants (rows and dollars, every year)", bad == 0, f"{bad} years differ")
-        bad = one("""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM core.fact_budget GROUP BY 1) c
+        first = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["years"]["history_first_fy"]
+        bad = one(f"""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM core.fact_budget GROUP BY 1) c
             FULL JOIN (SELECT fiscal_year, sum(budget) b, sum(payments) p FROM mart.f_budget_vs_pay GROUP BY 1) m USING (fiscal_year)
-            LEFT JOIN (SELECT fiscal_year, sum(amount) p FROM core.fact_payment WHERE fiscal_year >= 2017 GROUP BY 1) q USING (fiscal_year)
+            LEFT JOIN (SELECT fiscal_year, sum(amount) p FROM core.fact_payment WHERE fiscal_year >= {int(first)} GROUP BY 1) q USING (fiscal_year)
             WHERE abs(coalesce(c.b, 0) - coalesce(m.b, 0)) > 1 OR abs(coalesce(q.p, 0) - coalesce(m.p, 0)) > 1""")
         check("mart", "Budget vs payments: budget and payments = core totals (every year)", bad == 0, f"{bad} years differ")
         bad = one("""SELECT count(*) FROM (SELECT fiscal_year, sum(budget) b FROM mart.f_program GROUP BY 1) a
@@ -561,13 +562,31 @@ def phase5_econ(con, check, one):
         check("core", "Maryland GDP (BEA) covers every budget year", False, "BEA GDP not downloaded this run", "warn")
     if one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'd_econ'"):
         n = one("SELECT count(*) FROM mart.d_econ")
-        yrs = one("SELECT count(DISTINCT fiscal_year) FROM core.fact_budget")
+        first = yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "assumptions.yaml").read_text())["years"]["history_first_fy"]
+        yrs = one(f"""SELECT count(*) FROM (SELECT DISTINCT fiscal_year FROM core.fact_budget UNION
+                     SELECT DISTINCT fiscal_year FROM core.fact_payment WHERE fiscal_year >= {int(first)})""")
         mism = 0
         if "fact_md_gdp" in tabs:
             mism = one("""SELECT count(*) FROM mart.d_econ e JOIN core.fact_md_gdp g USING (fiscal_year)
                 WHERE e.real_gdp_millions IS DISTINCT FROM g.real_gdp_millions""")
         check("mart", "Economic context mart covers every budget year and ties to the core series", n == yrs and mism == 0,
-              f"{n} fiscal years on the budget spine, {mism} GDP mismatches", "warn")
+              f"{n} fiscal years on the budget and payments spine, {mism} GDP mismatches", "warn")
+    if one("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'mart' AND table_name = 'f_fte'"):
+        bad = one("""SELECT count(*) FROM (SELECT fiscal_year, agency_code, sum(CAST("count" AS DOUBLE)) t FROM raw.fte GROUP BY ALL) r
+            FULL JOIN mart.f_fte m ON m.fiscal_year = CAST(r.fiscal_year AS INTEGER) AND m.agency_code = trim(r.agency_code)
+            WHERE abs(coalesce(r.t, 0) - coalesce(m.fte, 0)) > 0.005""")
+        check("mart", "FTEs as published = the portal's FTEs (every year and agency, higher education included)", bad == 0, f"{bad} year-agency pairs differ")
+    # Fiscal-year coverage (src/pipeline/coverage.py): every published table covers every year its source has
+    from . import coverage
+    from .export import EXTRA
+    pub = set(yaml.safe_load((Path(__file__).resolve().parents[2] / "config" / "dashboard.yaml").read_text()).values()) | set(EXTRA)
+    withfy = {r[0] for r in con.execute("""SELECT table_name FROM information_schema.columns
+                 WHERE table_schema = 'mart' AND column_name = 'fiscal_year'""").fetchall()} & pub
+    def yr(t):
+        return tuple(con.execute(f"SELECT min(fiscal_year)::INT, max(fiscal_year)::INT FROM mart.{t}").fetchone()) if t in withfy else None
+    gaps = coverage.problems(withfy, yr, require_listed=False)
+    check("mart", "Every published table covers every fiscal year its source has (years.history_first_fy to the open year)", not gaps,
+          f"{len(withfy)} tables checked against reference/year_coverage.csv" + ("; " + "; ".join(gaps[:6]) if gaps else ""))
 
 
 def phase5_state_plan(con, check, one):

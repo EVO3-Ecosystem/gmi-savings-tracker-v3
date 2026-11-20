@@ -1,5 +1,12 @@
 # Assumptions behind the forecasts (src/models/forecast.py). Change a value here, not in code.
 
+# Fiscal-year coverage: one place for the first year every payments and grants mart keeps. The budget-family sources
+# (yu65-jmmv, gy87-e27x, x8qy-486w, 4mca-332u) start at FY2017 on the portal, so budget marts start there by source.
+# Marts have no fixed last year: they run to the latest year in the data, and the open fiscal year (payments still being
+# posted) is published flagged partial_year and shown as FYTD. The keys below that say *history reuse this value.
+years:
+  history_first_fy: &history 2010   # payments and grants marts keep FY2010 onward (portal: payments FY2008+, grants FY2009+)
+
 forecast:
   first_actual_fy: 2017        # the series starts here (earlier years are not in the operating budget data)
   last_actual_fy: 2025         # last year with a confirmed actual; later years are the State's own plan, never used to fit
@@ -44,7 +51,7 @@ gmi_baseline_exclusions:
 opportunities:
   current_fy: 2025             # budget detectors look at this actual year ...
   base_fy: 2022                # ... and, for growth, compare it with this one
-  payments_fy: 2026            # payment detectors (tail spend, leverage, bid list) use this year
+  payments_fy: 2026            # payment detectors (tail spend, leverage, bid list) use this year — always the last COMPLETED payments year; FY2027 is FYTD (partial) and never feeds detectors
   peer_gap:
     min_positions: 50          # agencies with fewer budgeted positions are not compared
     min_agencies: 8            # a spending code needs this many comparable agencies
@@ -80,9 +87,10 @@ opportunities:
 
 # Savings checks (src/models/savings.py): GMI's reported savings paired with the payments that would show them.
 savings:
-  first_fy: 2022               # payments considered from this fiscal year
+  first_fy: *history           # payments considered from this fiscal year (years.history_first_fy)
   before_fy: 2025              # a check compares payments in this year ...
-  after_fy: 2026               # ... with this year
+  after_fy: 2026               # ... with this year (the two completed years; the open year is never a verdict year)
+  tracking_fy: 2027            # the open (partial) year: d_savings_status shows its payments to date as fytd_paid, tagged FYTD on the page; never verdicted
   seen_share: 0.5              # "Seen" when payments fell by at least this share of the reported saving
   counted_status: [Saved in FY2026, Under way]   # only these items' amounts are measured against payments; projected ones are not due yet
   vendor_moves:
@@ -97,11 +105,11 @@ savings:
 
 # Recommendations (src/models/recommendations.py): the Overview's six recommendations as tracked tables.
 recommendations:
-  target_saving: 50000000      # the path to this many dollars a year
-  matched_fy: 2026             # recommendation 5 reports the share of this year's payments matched to an agency
+  target_saving: 50000000      # the path to this many dollars a year (GMI's yearly target; the page tags the current tracking year FY2027)
+  matched_fy: 2026             # recommendation 5 reports the share of this year's payments matched to an agency (last COMPLETED payments year)
   vendor_detail:
-    first_fy: 2022             # drill-down tables from this year
-    names_fy: 2026             # payee names merged into a vendor, by this year's payments
+    first_fy: *history         # drill-down tables from this year (years.history_first_fy)
+    names_fy: 2026             # payee names merged into a vendor, by this year's payments (last COMPLETED payments year)
   plan:
     forecast_fy: 2027          # step 1 applies GMI's reported rates to this year's forecast median
     contract_rate: 0.035       # assumed saving on a statewide contract (assumed range 2-5%)
@@ -120,20 +128,27 @@ stage_evidence:
 # The payments dataset (7syw-q4cy) is one row per paying agency x payee name x ZIP x fiscal year, and its date column is a
 # record date (Jan 1 of a year), not a payment date: the windows below can only be applied at that grain (see the model notes).
 payment_screen:
-  first_fy: 2022               # screened years (full payment years only; the partial latest year is never screened)
+  first_fy: *history           # screened years FY2010 on (years.history_first_fy); full payment years only, the partial latest year is never screened
   last_fy: 2026
   min_amount: 1000             # duplicates: each line at least this many dollars (and positive)
   duplicate_window_days: 7     # duplicates: same agency, vendor and exact amount with record dates this close
   split_window_days: 14        # splits: 2+ payments to one vendor by one agency within this many days ...
   # ... each under the small-procurement limit in force on the record date, together above it. Primary source: Md. Code, State
-  # Finance and Procurement Art. 13-109(a)(1) ("a unit spends $50,000 or less"), raised to $100,000 by Ch. 161 of the Acts
-  # of 2023 (HB 543), effective Oct 1, 2023: https://mgaleg.maryland.gov/2023RS/chapters_noln/Ch_161_hb0543T.pdf
-  # (accessed 2026-11-10). COMAR 21.05.07 (small procurement procedures) applies the statutory limit; its regs.maryland.gov
+  # Finance and Procurement Art. 13-109(a)(1). Three limits cover FY2010 on:
+  #   $25,000 or less: Ch. 215 of 1996 (HB 352, raised from $10,000) until Sep 30, 2017
+  #     https://mgaleg.maryland.gov/1996rs/billfile/hb0352.htm
+  #   $50,000 or less: Ch. 588/589 of 2017 (SB 311/HB 426, "Promoting Efficiencies in State Procurement"), effective Oct 1, 2017
+  #     https://mgaleg.maryland.gov/2017RS/Chapters_noln/CH_589_hb0426e.pdf ; fiscal note: https://mgaleg.maryland.gov/2017RS/fnotes/bil_0006/hb0426.pdf
+  #   $100,000 or less: Ch. 161 of 2023 (HB 543), effective Oct 1, 2023: https://mgaleg.maryland.gov/2023RS/chapters_noln/Ch_161_hb0543T.pdf
+  # (accessed 2026-11-10 and 2026-11-20; the 1996 and 2017 texts were confirmed through search results, the State sites could
+  # not be opened from the build environment). COMAR 21.05.07 (small procurement procedures) applies the statutory limit; its regs.maryland.gov
   # page could not be fetched from the build environment. DGS/DOT construction limits ((a)(3), $200,000) are not modeled.
   small_procurement_threshold: 100000          # SF&P 13-109(a)(1) as amended by Ch. 161 of 2023, from the effective date below
-  small_procurement_threshold_before: 50000    # SF&P 13-109(a)(1) before Oct 1, 2023
+  small_procurement_threshold_before: 50000    # SF&P 13-109(a)(1), Oct 1, 2017 to Sep 30, 2023 (Ch. 588/589 of 2017)
   small_procurement_effective: "2023-10-01"    # Ch. 161 of 2023, section 2
-  small_procurement_source: "Md. Code SF&P 13-109(a)(1); Ch. 161 of 2023 (HB 543), effective 2023-10-01; accessed 2026-11-10"
+  small_procurement_threshold_before_2017: 25000   # SF&P 13-109(a)(1) before Oct 1, 2017 (Ch. 215 of 1996)
+  small_procurement_effective_2017: "2017-10-01"   # Ch. 588/589 of 2017
+  small_procurement_source: "Md. Code SF&P 13-109(a)(1): $25,000 (Ch. 215 of 1996) to 2017-09-30; $50,000 (Ch. 588/589 of 2017) from 2017-10-01; $100,000 (Ch. 161 of 2023, HB 543) from 2023-10-01; accessed 2026-11-20"
   transaction_grain_min_dates: 24      # the split rule runs only when a screened year has at least this many distinct dates (payment-level data); otherwise "not measurable"
   excluded_payee_types: [Government, Health care organization, Financial institution]   # transfers to government, benefits/health plans, debt service (reference/payee_type_rules.csv)
   exclude_payee_pattern: "CLERK OF|ATTORNEY GENERAL|CIRCUIT COURT|DISTRICT COURT|PAYROLL|RETIREMENT|PENSION|UNEMPLOYMENT|CHILD SUPPORT|INTERNAL REVENUE|\\bIRS\\b|FICA|DEFERRED COMP|BENEFIT"   # payroll-like and benefit payees, matched on the normalized payee name

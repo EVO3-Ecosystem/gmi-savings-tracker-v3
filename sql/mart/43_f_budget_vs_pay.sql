@@ -14,9 +14,9 @@ p AS (SELECT p.fiscal_year, p.agency_code, sum(p.amount) AS payments,
              sum(p.amount) FILTER (WHERE NOT coalesce(m.is_government, false)) AS paid_to_others,
              bool_or(p.partial_year) AS partial_year
       FROM core.fact_payment_mapped p LEFT JOIN ref.map_payee_vendor m ON m.payee = p.vendor_name_as_paid
-      WHERE p.fiscal_year >= 2017 GROUP BY ALL)
-SELECT coalesce(b.fiscal_year, p.fiscal_year) AS fiscal_year, s.stage, coalesce(b.agency_code, p.agency_code) AS agency_code,
+      WHERE p.fiscal_year >= {{years.history_first_fy}} GROUP BY ALL)  -- years.history_first_fy: payments FY2010 on, budget FY2017 on by source
+SELECT coalesce(b.fiscal_year, p.fiscal_year) AS fiscal_year, coalesce(s.stage, 'Payments only') AS stage, coalesce(b.agency_code, p.agency_code) AS agency_code,
        b.budget, b.general_funds, b.special_funds, b.federal_funds, p.payments, p.paid_to_government, p.paid_to_others,
        coalesce(p.partial_year, false) AS partial_year
 FROM b FULL JOIN p ON p.fiscal_year = b.fiscal_year AND p.agency_code IS NOT DISTINCT FROM b.agency_code
-JOIN ref.dim_stage s ON s.fiscal_year = coalesce(b.fiscal_year, p.fiscal_year);
+LEFT JOIN ref.dim_stage s ON s.fiscal_year = coalesce(b.fiscal_year, p.fiscal_year);

@@ -30,8 +30,9 @@ def test_the_four_tables_match_the_legacy_scripts(tmp_path):
     pm = pay.rename(columns={"vendor": "family", "area": "lens"})
     old_d, old_f, old_mv = _legacy("savings").build(pm)
     old_st = _legacy("recs").recurrence(old_d, old_f, "RUN1", tmp_path / "h.csv")
-    d, f = V.check_payments(pay)
-    legacy = V.assumptions()  # the legacy script leaves out only CAPITAL, D06 and D25; public higher education (Nov 9, 2026) is new
+    legacy = V.assumptions()
+    legacy["first_fy"] = 2022  # the legacy script reads payments from FY2022; the pipeline now starts at years.history_first_fy
+    d, f = V.check_payments(pay, cfg=legacy)  # the legacy script leaves out only CAPITAL, D06 and D25; public higher education (Nov 9, 2026) is new
     legacy["vendor_moves"]["excluded_agency_codes"] = ["CAPITAL", "D06", "D25"]
     # deliberate differences (Nov 13, 2026 accuracy review): non-profits dropped from vendor moves by name, checks measured
     # only against saved or under-way amounts, and a fiscal-year tag on one event date; undone here to compare with legacy
@@ -48,4 +49,5 @@ def test_stored_tables_have_the_documented_dashboard_columns():
     doc = pd.read_csv(ROOT / "docs" / "schemas" / "dashboard_columns.csv")
     con = duckdb.connect(str(DB), read_only=True)
     for t in ("d_savings", "f_savings_check", "d_vendor_moves", "d_savings_status"):
-        assert list(con.execute(f"SELECT * FROM mart.{t}").df().columns) == list(doc[doc.table == t].column), t
+        # the export adds partial_year to payment tables that reach the open year (src/pipeline/export.py FLAG_PARTIAL)
+        assert list(con.execute(f"SELECT * FROM mart.{t}").df().columns) == [c for c in doc[doc.table == t].column if c != "partial_year"], t

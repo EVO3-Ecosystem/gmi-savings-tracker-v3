@@ -2488,8 +2488,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2023,Actual,93.251,Universal Newborn Hearing Screening,1,1,306208.0,135000.0,True,False,2.27
 2023,Actual,66.817,Corrective Action Program State and Tribal Response Program Grants,1,1,305155.0,463665.0,True,False,0.66
 2023,Actual,93.747D,Elder Abuse Prevention Interventions Program,2,2,304234.0,,False,False,
-2023,Actual,84.206,Javits Gifted and Talented Program,1,1,300000.0,,False,False,
 2023,Actual,10.556,Special Milk Program for Children,1,1,300000.0,,False,False,
+2023,Actual,84.206,Javits Gifted and Talented Program,1,1,300000.0,,False,False,
 2023,Actual,16.745,Juvenile and Mental Health Collaboration Program,1,1,299143.0,,False,False,
 2023,Actual,10.565,Commodity Supplemental Food Program,1,2,293480.0,386737.0,True,False,0.76
 2023,Actual,93.747,Elder Abuse Prevention Interventions Program,2,2,291491.0,58850.0,True,False,4.95
@@ -3681,8 +3681,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,15.808,Geological Survey-Research and Data Acquisition,1,5,106182.0,,False,False,
 2026,Working budget,16.550,State Justice Statistics Program for Statistical Analysis Centers,1,1,106125.0,,False,False,
 2026,Working budget,97.029,Flood Mitigation Assistance,1,1,101251.0,823715.28,True,False,0.12
-2026,Working budget,16.004,Law Enforcement Assistance-Narcotics and Dangerous Drugs Training,1,1,99935.0,,False,False,
 2026,Working budget,20.614,National Highway Traffic Safety Administration (NHTSA) Discretionary Safety Grants,1,1,99935.0,90000.0,True,False,1.11
+2026,Working budget,16.004,Law Enforcement Assistance-Narcotics and Dangerous Drugs Training,1,1,99935.0,,False,False,
 2026,Working budget,16.750,Support for Adam Walsh Act Implementation Grant Program,1,1,99691.0,138399.17,True,False,0.72
 2026,Working budget,15.814,National Geological and Geophysical Data Preservation Program,1,5,96748.0,,False,False,
 2026,Working budget,81.086,Conservation Research and Development,1,1,92277.0,0.0,True,False,
@@ -4044,8 +4044,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2027,Legislative appropriation,15.929,Save America's Treasures,1,1,63102.0,,False,False,
 2027,Legislative appropriation,93.938,Cooperative Agreements to Support Comprehensive School Health Programs to Prevent the Spread of HIV and Other Important Health Problems,1,1,55502.0,,False,False,
 2027,Legislative appropriation,10.676,Forest Legacy Program,1,5,50954.0,,False,False,
-2027,Legislative appropriation,15.684,White-nose Syndrome National Response Implementation,1,5,50463.0,,False,False,
 2027,Legislative appropriation,15.615,Cooperative Endangered Species Conservation Fund,1,5,50463.0,,False,False,
+2027,Legislative appropriation,15.684,White-nose Syndrome National Response Implementation,1,5,50463.0,,False,False,
 2027,Legislative appropriation,93.421,Strengthening Public Health Systems and Service through National Partnerships to Improve and Protect the Nation’s Health,1,1,49597.0,,False,False,
 2027,Legislative appropriation,45.164,Promotion of the Humanities-Public Programs,1,1,47132.0,,False,False,
 2027,Legislative appropriation,93.301,Small Rural Hospital Improvement Grant Program,1,1,41628.0,,False,False,

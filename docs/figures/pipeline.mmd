@@ -1,7 +1,7 @@
 flowchart TB
   subgraph S[Sources]
     direction LR
-    A[opendata.maryland.gov<br/>SODA API, 5 datasets]
+    A[opendata.maryland.gov<br/>SODA API, 6 datasets]
     X[BLS · USAspending · Census<br/>DBM Managing for Results PDFs]
   end
   A -->|extract.py<br/>paged, retried, self-healing| R[(raw Parquet<br/>per run + manifest)]

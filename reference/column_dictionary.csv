@@ -147,6 +147,7 @@ title,sources,derived,Dataset title used on the dashboard
 title,d_rec_status,derived,Recommendation title
 portal_name,,ops,Dataset title as the portal publishes it
 portal_updated,,ops,Date the portal data last changed
+portal_updated_utc,,ops,"Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt"
 use,sources,derived,What the dataset contributes to the tracker
 years,sources,derived,Fiscal years used
 reconciled,sources,ops,True when downloaded rows equal the portal's count
@@ -318,7 +319,7 @@ description,"core.fact_grant,mart.f_grants,f_grants",portal,"Grant or loan progr
 zipcode,"core.fact_grant,mart.f_grants,f_grants",portal,Grantee ZIP code as published
 category,"mart.f_grants,f_grants",derived,"Grant or Loan, from the dataset's category code (G/L)"
 payments,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap",derived,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)"
-partial_year,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap",derived,True for the latest payments year while it is still being updated monthly
+partial_year,"mart.f_budget_vs_pay,mart.f_overlap,f_budget_vs_pay,f_overlap,totals_by_fy",derived,True for the latest payments year while it is still being updated monthly
 grants,"mart.f_overlap,f_overlap",derived,Grants dataset rows with category Grant
 method,mart.d_forecast_backtest,derived,"Forecast model scored: log-linear trend, naive (last actual), drift (average yearly growth) or the equal-weight combination of those three (scored only, never kept)"
 origin_fy,mart.d_forecast_backtest,derived,Last fiscal year of actual spending the model was allowed to see (the forecast origin)
@@ -578,7 +579,7 @@ p10,d_revenue_backtest,derived,10th percentile of the candidate's simulated band
 p50,d_revenue_backtest,derived,Median of the candidate's simulated band at that origin
 p90,d_revenue_backtest,derived,90th percentile of the candidate's simulated band at that origin
 payments,f_budget_vs_pay,derived,Payments to all payees that fiscal year (actual payments only)
-partial_year,f_budget_vs_pay,derived,1 when the payments year is still in progress (FY2026 payments are part-year)
+partial_year,f_budget_vs_pay,derived,1 when the payments year is still in progress (the latest payments year in the data until it closes)
 code,f_challenger,derived,Comptroller sub-object number for the spending code
 p10,f_challenger,derived,10th percentile of the one-year-ahead band from the series' kept model
 p50,f_challenger,derived,Median of the one-year-ahead band from the series' kept model
@@ -825,3 +826,7 @@ checked_on,"mart.d_site_reconciliation,d_site_reconciliation",source,Date the si
 data_total,"mart.d_site_reconciliation,d_site_reconciliation",derived,The open data's total for the year from this build
 difference,"mart.d_site_reconciliation,d_site_reconciliation",derived,data_total - site_total
 partial_year,"mart.d_site_reconciliation,d_site_reconciliation",derived,True for a year still in progress (the site can move ahead of the extract)
+in_gmi_baseline,f_fte,derived,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)"
+days_into_year,d_fytd_log,derived,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive"
+year_elapsed_share,d_fytd_log,derived,Share of the fiscal year elapsed at the State's refresh of the payments data
+payment_records,d_fytd_log,derived,Rows in the payments data for the open fiscal year at that refresh

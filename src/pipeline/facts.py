@@ -79,7 +79,7 @@ def sources(con, man):
         lo, hi = _row(con, f"SELECT min(CAST({cfg[key]['year_col']} AS INTEGER)), max(CAST({cfg[key]['year_col']} AS INTEGER)) FROM raw.{key}")
         title, use = SOURCES[key]
         rows.append({"source": key, "dataset_id": d["id"], "title": title, "use": use, "portal_name": d.get("portal_name") or cfg[key].get("portal_name", ""),
-                     "portal_updated": str(d.get("rowsUpdatedAt_utc", ""))[:10], "rows_portal": d["portal_count"], "rows_downloaded": d["rows"],
+                     "portal_updated": str(d.get("rowsUpdatedAt_utc", ""))[:10], "portal_updated_utc": str(d.get("rowsUpdatedAt_utc") or ""), "rows_portal": d["portal_count"], "rows_downloaded": d["rows"],
                      "years": f"FY{lo}-FY{hi}", "reconciled": int(bool(d["match"])),
                      "mismatch_notes": " ".join(_notes(con, key, d, notes))})
     return pd.DataFrame(rows)
@@ -148,10 +148,38 @@ def master_quality(con):
     return pd.DataFrame(rows, columns=["measure", "value", "ok"])
 
 
+def fytd_log(con, src, run_id, prior=None):
+    """Payments to date in the open fiscal year, one row per State refresh of the payments data, kept across runs.
+
+    The payments dataset (7syw-q4cy) is one yearly total per agency and payee, so it cannot say where last year stood on
+    the same date. This log records the open year's total each time the State refreshes it, so a fiscal year to date can
+    be compared with the same point of the previous year once a year of refreshes has been logged (same-period
+    comparison, the practice for year-to-date figures). prior: the published log (site_data/d_fytd_log.csv) or None."""
+    cols = ["fiscal_year", "portal_updated_utc", "days_into_year", "year_elapsed_share", "total_payments", "payment_records", "run_id"]
+    old = pd.read_csv(prior) if prior is not None and Path(prior).exists() else pd.DataFrame(columns=cols)
+    fy = _row(con, "SELECT max(fiscal_year) FROM core.fact_payment WHERE partial_year")
+    fy = fy[0] if fy else None
+    pay = src[src.source == "payments"]
+    if fy is None or pay.empty or not str(pay.portal_updated_utc.iloc[0]):
+        return old[cols]
+    when = pd.Timestamp(pay.portal_updated_utc.iloc[0])
+    start = pd.Timestamp(year=int(fy) - 1, month=7, day=1, tz="UTC")
+    year_days = (pd.Timestamp(year=int(fy), month=7, day=1, tz="UTC") - start).days
+    days = (when.normalize() - start).days + 1
+    tot, n = _row(con, f"SELECT sum(amount), count(*) FROM core.fact_payment WHERE fiscal_year = {int(fy)}")
+    new = pd.DataFrame([{"fiscal_year": int(fy), "portal_updated_utc": when.isoformat(), "days_into_year": int(days),
+                         "year_elapsed_share": round(days / year_days, 4), "total_payments": round(float(tot), 2),
+                         "payment_records": int(n), "run_id": run_id}])
+    out = pd.concat([old[cols], new], ignore_index=True) if len(old) else new
+    return out.drop_duplicates(["fiscal_year", "portal_updated_utc"], keep="last").sort_values(["fiscal_year", "portal_updated_utc"])[cols]
+
+
 def build(con, run_id, man, data, hist_path):
-    """Create the four tables in the mart schema (call after checks.run, which writes ops.check_result)."""
-    tables = {"sources": sources(con, man), "run_checks": run_checks(con, run_id),
-              "pipeline_runs": pipeline_runs(Path(data), hist_path), "d_master_quality": master_quality(con)}
+    """Create the five tables in the mart schema (call after checks.run, which writes ops.check_result)."""
+    src = sources(con, man)
+    tables = {"sources": src, "run_checks": run_checks(con, run_id),
+              "pipeline_runs": pipeline_runs(Path(data), hist_path), "d_master_quality": master_quality(con),
+              "d_fytd_log": fytd_log(con, src, run_id, ROOT / "site_data" / "d_fytd_log.csv")}
     for name, df in tables.items():
         con.register("_df", df)
         con.execute(f"CREATE OR REPLACE TABLE mart.{name} AS SELECT * FROM _df")

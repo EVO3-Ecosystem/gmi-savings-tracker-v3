@@ -139,7 +139,9 @@ def reference_tables(con):
     if have:
         joins = " ".join(f"LEFT JOIN core.{t} USING (fiscal_year)" for t, _ in have)
         con.execute(f"""CREATE OR REPLACE TABLE mart.d_econ AS SELECT s.fiscal_year, {", ".join(c for _, c in have)}
-          FROM (SELECT DISTINCT fiscal_year FROM core.fact_budget) s {joins} ORDER BY 1""")
+          FROM (SELECT DISTINCT fiscal_year FROM core.fact_budget UNION
+                SELECT DISTINCT fiscal_year FROM core.fact_payment WHERE fiscal_year >= {int(yaml.safe_load(CFG.read_text())["years"]["history_first_fy"])}) s
+          {joins} ORDER BY 1""")  # budget years plus every payments year from years.history_first_fy
         done.append("d_econ")
     return done
 

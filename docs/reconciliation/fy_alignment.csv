@@ -1,0 +1,21 @@
+fiscal_year,stage,budget_plan,actual,payments,payments_partial,budget_plan_all_funds,actual_all_funds,grants,budget_matches_state_site,payments_match_state_site,note
+2008,,,,19879214690.5,False,,,,,True,before the operating budget data (FY2017); payments only
+2009,,,,21332447618.17,False,,,552274922.22,,True,before the operating budget data (FY2017); payments only
+2010,,,,21539475152.65,False,,,468824406.89,,True,before the operating budget data (FY2017); payments only
+2011,,,,22934297775.31,False,,,534060484.97,,True,before the operating budget data (FY2017); payments only
+2012,,,,23161189954.97,False,,,726726970.33,,True,before the operating budget data (FY2017); payments only
+2013,,,,23513627923.59,False,,,723862906.76,,True,before the operating budget data (FY2017); payments only
+2014,,,,25276062611.34,False,,,802351149.95,,True,before the operating budget data (FY2017); payments only
+2015,,,,27191588192.03,False,,,1061257284.94,,True,before the operating budget data (FY2017); payments only
+2016,,,,27359576439.27,False,,,826133142.66,,True,before the operating budget data (FY2017); payments only
+2017,Actual,,37724317396.0,29306316834.44,False,,43435338898.0,905479311.53,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2018,Actual,,37921880120.0,29596397070.73,False,,43845302079.0,909053635.53,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2019,Actual,,39177189937.0,30320726617.77,False,,45362447206.0,985965431.93,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2020,Actual,,42951352329.0,32926283982.95,False,,49156491894.0,2396452132.47,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2021,Actual,,49288468194.0,34670078096.04,False,,55556111423.0,1579702378.0,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2022,Actual,,55922903027.0,36656748837.5,False,,62894643294.0,1612689724.11,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2023,Actual,,59140558625.0,39277722859.48,False,,66763921944.0,1816080939.17,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2024,Actual,,59149193950.0,40390013646.72,False,,67192050521.0,1841913889.4,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2025,Actual,,60541555644.0,43703480470.19,False,,68983142579.0,1082775419.26,True,True,actual published; the open data no longer carries this year's appropriation (see the budget books)
+2026,Working budget,64833251250.0,,45536152938.14,False,73445862657.0,,,True,True,working budget; actuals expected with the FY2028 Governor's budget (January 2027)
+2027,Legislative appropriation,65184504124.0,,18069430213.49,True,73839080654.0,,,True,True,legislative appropriation; actuals expected with the FY2029 Governor's budget (January 2028); payments are the year so far (partial)

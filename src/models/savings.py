@@ -4,14 +4,17 @@ recurrence status in legacy/gst/scripts/recs.py).
 The reported figures come from reference/gmi_reported_savings.csv (Governor's Government Modernization Initiative Joint
 Chairmen's Report, January 26, 2026; every item carries its page and verbatim quote). Each item is paired, where
 possible, with the payments to vendors that would show the saving: payee names that sell the thing being cut (wireless
-carriers for phone plans, dealers for vehicle purchases, and so on). The check compares FY2025 with FY2026 payments.
-It shows direction and size, not proof: payee names miss some spending and contracts change for other reasons.
+carriers for phone plans, dealers for vehicle purchases, and so on). The check compares the two completed payments
+years in config (FY2025 with FY2026; the open year is never a verdict year). It shows direction and size, not proof:
+payee names miss some spending and contracts change for other reasons.
 
 Builds four dashboard files (and d_reported_claims, every reported figure by source and date: src/models/claims.py):
   d_savings         the 18 reported items and how each is checked
   f_savings_check   matching payments by check, fiscal year and agency
-  d_savings_status  per check: reported saving, payments before and after, a status, and the previous run's status
-  d_vendor_moves    the largest vendor decreases FY2025 to FY2026: candidates for the unnamed renegotiated contracts
+  d_savings_status  per check: reported saving, payments before and after, a status, and the previous run's status;
+                    fytd_paid tracks the open year's payments to date (FYTD, partial — shown, never verdicted)
+  d_vendor_moves    the largest vendor decreases between the last two completed years in config (FY2025 to FY2026):
+                    candidates for the unnamed renegotiated contracts
 
 Thresholds and years live in config/assumptions.yaml (`savings`).
 """
@@ -102,7 +105,8 @@ def vendor_moves(payments, cfg=None):
     v = v[(agencies.reindex(v.index).fillna(0) >= vm["min_agencies"]) & ~v.index.str.upper().str.contains(vm["not_procurement"], regex=True)]
     v = v[(v[y1] >= vm["min_before"]) & (v[y2] > 0)].assign(change=lambda x: x[y2] - x[y1])
     v = v[v.change < 0].sort_values("change").head(vm["top"])  # decreases only: with few of them the legacy script listed increases too
-    return pd.DataFrame({"vendor": v.index.str.title(), "fy2024": v[y0].round(2).values, "fy2025": v[y1].round(2).values, "fy2026": v[y2].round(2).values,
+    # the output columns follow the configured years (completed years only), so a new year is a config change, not a code change
+    return pd.DataFrame({"vendor": v.index.str.title(), f"fy{y0}": v[y0].round(2).values, f"fy{y1}": v[y1].round(2).values, f"fy{y2}": v[y2].round(2).values,
                          "change": v.change.round(2).values, "agencies": agencies.reindex(v.index).fillna(0).astype(int).values})
 
 
@@ -111,9 +115,13 @@ def status(d_sav, f_chk, run_id, history=None, cfg=None):
 
     With a reported saving: Seen when payments fell by at least half of it, Partly seen when they fell by less, Not seen
     yet when they did not fall. Only items whose status is in counted_status (saved or under way) count toward the reported
-    saving; a check whose items are all projected is Projected only. Without any figure: Payments fell / Payments did not fall."""
+    saving; a check whose items are all projected is Projected only. Without any figure: Payments fell / Payments did not fall.
+    fytd_paid tracks the open (partial) year's payments to date next to each check: FY2027 is a live tracking year, shown
+    as FYTD, and never verdicted — a part-year against a full year is not a change. Reported FY2026 savings stay measured
+    against the two completed years (before_fy, after_fy); FY2027 projections stay separate until the year completes."""
     cfg = cfg or assumptions()
     before, after = cfg["before_fy"], cfg["after_fy"]
+    fytd = cfg.get("tracking_fy")  # the open (partial) year, tracked as FYTD
     paid = f_chk.groupby(["check_id", "fiscal_year"]).paid.sum().unstack(fill_value=0)
     fig = d_sav.dropna(subset=["reported_low"]).assign(mid=lambda x: (x.reported_low + x.reported_high) / 2)
     counted = cfg.get("counted_status")
@@ -126,7 +134,8 @@ def status(d_sav, f_chk, run_id, history=None, cfg=None):
         drop = b - a
         st = ("Projected only" if not rp and proj.get(cid) else ("Payments fell" if drop > 0 else "Payments did not fall") if not rp else
               ("Seen" if drop >= cfg["seen_share"] * rp else "Partly seen" if drop > 0 else "Not seen yet"))
-        rows.append({"check_id": cid, "item": d_sav[d_sav.saving_id == cid].item.iloc[0], "reported": rp, "before": b, "after": a, "status": st})
+        rows.append({"check_id": cid, "item": d_sav[d_sav.saving_id == cid].item.iloc[0], "reported": rp, "before": b, "after": a, "status": st,
+                     "fytd_paid": round(float(r.get(fytd, 0)), 2) if fytd else None})
     cur = pd.DataFrame(rows)
     hist = history if history is not None else pd.DataFrame(columns=["run_id", "check_id", "status", "after"])
     prev = hist[hist.run_id != run_id].sort_values("run_id").groupby("check_id").tail(1).set_index("check_id")

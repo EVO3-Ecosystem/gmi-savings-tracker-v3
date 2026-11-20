@@ -19,6 +19,7 @@ download buttons (a build flag, not runtime sniffing; Copy results stays). Any U
 file is replaced with '?' and reported, since the artifact host rejects or mangles it.
 """
 import argparse
+import base64
 import csv
 import html
 import io
@@ -28,6 +29,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 import sys
 import tempfile
 from contextlib import redirect_stdout
@@ -89,16 +91,36 @@ def commit_sha():
 
 def as_of(src):
     """Date of the latest pipeline run in the export, and the latest portal update of its sources."""
+    run, portal = as_of_times(src)
+    return run[:10], portal[:10]
+
+
+def as_of_times(src):
+    """Full UTC timestamps: the latest passed pipeline refresh, and the State's latest refresh of a source on the portal
+    (portal_updated_utc, falling back to the date-only portal_updated in older exports)."""
     run = portal = ""
     p = src / "pipeline_runs.csv"
     if p.exists():
         runs = [r["started_utc"] for r in csv.DictReader(open(p)) if r.get("status") == "passed"]
-        run = max(runs)[:10] if runs else ""
+        run = max(runs) if runs else ""
     p = src / "sources.csv"
     if p.exists():
-        ups = [r["portal_updated"] for r in csv.DictReader(open(p)) if r.get("portal_updated")]
-        portal = max(ups)[:10] if ups else ""
+        ups = [r.get("portal_updated_utc") or r.get("portal_updated") for r in csv.DictReader(open(p))]
+        ups = [u for u in ups if u]
+        portal = max(ups) if ups else ""
     return run, portal
+
+
+def eastern(ts):
+    """'2026-11-09T16:00:29+00:00' -> 'Nov 9, 2026, 11:00 AM ET' (a date alone stays a date)."""
+    if not ts:
+        return ""
+    if len(ts) <= 10:
+        d = datetime.fromisoformat(ts)
+        return f"{d:%b} {d.day}, {d.year}"
+    from zoneinfo import ZoneInfo
+    d = datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(ZoneInfo("America/New_York"))
+    return f"{d:%b} {d.day}, {d.year}, {d.strftime('%I:%M %p').lstrip('0')} {'EDT' if d.dst() else 'EST'}"
 
 
 def dashboard_html(src):
@@ -127,12 +149,13 @@ def dashboard_html(src):
 def published_files(datasets):
     """Every file the page loads plus every file in config/dashboard.yaml (data the page does not draw yet stays downloadable)."""
     cfg = yaml.safe_load((ROOT / "config" / "dashboard.yaml").read_text())
-    return sorted(set(datasets.values()) | set(cfg.values())) + ["manifest"]
+    from .export import EXTRA  # decision-register tables the export publishes beside the dashboard datasets
+    return sorted(set(datasets.values()) | set(cfg.values()) | set(EXTRA)) + ["manifest"]
 
 
 def header(src, sha):
-    run, portal = as_of(src)
-    bits = [f"Data as of {run}" if run else "", f"portal updated {portal}" if portal else ""]
+    run, portal = as_of_times(src)
+    bits = [f"Portal updated by DBM: {eastern(portal)}" if portal else "", f"refreshed by GitHub: {eastern(run)}" if run else ""]
     when = ", ".join(b for b in bits if b)
     ref = f'commit <a href="{REPO}/commit/{sha}"><code>{sha[:7]}</code></a>' if sha else "commit unknown"
     return ('<div id="site-head" style="border-bottom:1px solid var(--color-border-line);padding:8px 0;font:13px/1.45 ui-sans-serif,system-ui,sans-serif;color:var(--color-fg-muted)">'
@@ -286,14 +309,33 @@ def scrub_replacement_chars(out):
     return found
 
 
+def _copy(src, dst, tries=4):
+    """shutil.copy with retries: network mounts (SSHFS, some containers) can briefly lose a file between write and chmod."""
+    for attempt in range(tries):
+        try:
+            shutil.copy(src, dst)
+            return
+        except OSError:
+            if attempt == tries - 1:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+
+
 def build(out=OUT, src=None, artifact=False):
     """Build the site into out. artifact=True builds the claude.ai artifact variant (see the module docstring)."""
     src = Path(src) if src else source_dir()
     out = Path(out)
     sha = commit_sha()
-    if out.exists():
-        shutil.rmtree(out)
-    (out / "data").mkdir(parents=True)
+    for attempt in range(4):  # network mounts can report "not empty" or lose entries mid-rmtree; retry a few times
+        try:
+            if out.exists():
+                shutil.rmtree(out)
+            break
+        except OSError:
+            if attempt == 3:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+    (out / "data").mkdir(parents=True, exist_ok=True)  # exist_ok: network mounts can lag behind rmtree
     from ..models import exec_walkthrough, program_screen  # the page's per-program audit findings; the executive walkthrough's steps
     derived = {"audit_findings_by_program": program_screen.reported_findings,  # files the site writes from reference files
                "exec_walkthrough": lambda: exec_walkthrough.build(src)}  # eight steps and three asks, every number from the registry and the tables
@@ -303,23 +345,31 @@ def build(out=OUT, src=None, artifact=False):
     missing = sorted({f for f in datasets.values() if f not in derived and not (src / f"{f}.csv").exists()})
     if missing:
         raise SystemExit(f"export is missing dashboard files: {', '.join(missing)}")
-    for f in published_files(datasets):
-        if (src / f"{f}.csv").exists():
-            shutil.copy(src / f"{f}.csv", out / "data" / f"{f}.csv")
+    for attempt in range(4):  # network mounts can briefly hide source files; never publish a partial data/ dir
+        for f in published_files(datasets):
+            if (src / f"{f}.csv").exists():
+                _copy(src / f"{f}.csv", out / "data" / f"{f}.csv")
+        skipped = [f for f in published_files(datasets)
+                   if not (out / "data" / f"{f}.csv").exists() and (src / f"{f}.csv").exists()]
+        if not skipped:
+            break
+        if attempt == 3:
+            raise SystemExit(f"site build could not copy every published table: {', '.join(skipped)}")
+        time.sleep(0.5 * (attempt + 1))
     (out / "index.html").write_text(index)
     if not artifact:  # the metric registry with current values: one definition per number, readable by the dashboard, agents and alerts
         from ..models import metrics as metric_registry
         metric_registry.write_json(src, out / "metrics.json")
     pq = [] if artifact else parquet_files(src)
     if pq:
-        (out / "parquet").mkdir()
+        (out / "parquet").mkdir(exist_ok=True)
         for f in pq:
-            shutil.copy(f, out / "parquet" / f.name)
-    (out / "figures").mkdir()
+            _copy(f, out / "parquet" / f.name)
+    (out / "figures").mkdir(exist_ok=True)
     for f in sorted(FIGURES.rglob("*.png")):  # subfolders too (readme/, overview/): the about page shows README figures from them
         dest = out / "figures" / f.relative_to(FIGURES)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(f, dest)
+        _copy(f, dest)
     intro, summary = readme_summary((ROOT / "README.md").read_text())
     (out / "about.html").write_text(page("About the GMI Savings Tracker",
                                          "<h1>GMI Savings Tracker: how it is built</h1>" + md_to_html(intro) + md_to_html(summary)
@@ -351,6 +401,12 @@ def build(out=OUT, src=None, artifact=False):
                                        "Page not found."))
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\n# {SITE_URL}\n")
     (out / ".nojekyll").write_text("")
+    # a real favicon keeps browsers from logging a 404 on every visit
+    (out / "favicon.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">'
+                                   '<rect width="16" height="16" rx="3" fill="#1b5e20"/>'
+                                   '<text x="8" y="12" font-size="10" text-anchor="middle" fill="#fff" font-family="sans-serif">G</text></svg>')
+    (out / "favicon.ico").write_bytes(base64.b64decode(
+        "AAABAAEAEBAAAAAAIAAhAQAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAOhJREFUeJxjlI5T+M9AAWCiRPPgMIAFm2C0QyRDlEMEw5+/fxg+ffvEUDa/kuH5uxfEucBOx4bB08Sdwb85mMG/OZjh+I2TDD3JXThdgGFAumcaQ/faPoY/f/8wMDAwMCzau5jhx68fDMxMzMR5QV1aleH64xtw/pcfXxmSJ6bhdAGGAcxMCKE0jxQGN0MXBlF+UQb7CmfivHD/5QMGTVkNBgYGBoZZO+YwJE1MY5ARkcbpAgwDlh5YxlAaXMTAwgxxSYJLHMPff3+J98K6YxsYVKVUGPa07mB4+f4lw7pjG/AawDiaFxgA3AdGPQLWvq0AAAAASUVORK5CYII="))
     return _report(out, src, pq, artifact)
 
 
