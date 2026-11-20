@@ -127,7 +127,7 @@ metrics:
     tables: [d_source_issues]
     owner: Sierra Napier
     shown_in: [README What it found, Data & pipeline tab]
-    sql: SELECT sum(amount) FROM mart.d_source_issues
+    sql: SELECT sum(amount) FROM mart.d_source_issues WHERE verified_on IS NOT NULL
 
   - id: controllable_fy2026_usd
     name: Controllable purchases, FY2026 working budget

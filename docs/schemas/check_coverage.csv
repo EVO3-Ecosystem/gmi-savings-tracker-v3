@@ -123,7 +123,7 @@ Deflator: FY2026 = 1 and every budget year through FY2026 has a full-year CPI fa
 Deflator: population for every actual budget year,mart,mart.d_deflator ref.dim_stage
 "Payment screen: counts and dollars non-negative, every record in exactly one group of one rule",mart,mart.d_payment_screen mart.d_payment_screen_summary mart.v_payment_screen_rows
 Payment screen: summary ties to the groups by rule and year; overlap between rules labeled; excluded payee types absent,mart,mart.d_payment_screen mart.d_payment_screen_summary mart.v_payment_screen_rows
-Payment screen backtest: every screened year FY2022-FY2026 and rule reported (stability),mart,mart.d_payment_screen_summary
+Payment screen backtest: every screened year FY2010-FY2026 and rule reported (stability),mart,mart.d_payment_screen_summary
 "Payee classifier: one row per payee name, no missing or unknown label, confidence in [0, 1]",mart,mart.d_payee_class mart.v_payee_class_input
 "Payee classifier: evaluation metrics present for rules, model and combined; sample labeled",mart,mart.d_payee_class_eval
 "Payee classifier: a name is shown as paid or withheld, never altered",mart,mart.d_payee_class mart.v_payee_class_input

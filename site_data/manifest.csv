@@ -28,8 +28,8 @@ d_multi_basis,mart,36,True
 d_opps,mart,389,True
 d_payee_class,mart,62022,True
 d_payee_class_eval,mart,67,True
-d_payment_screen,mart,8,True
-d_payment_screen_summary,mart,15,True
+d_payment_screen,mart,25,True
+d_payment_screen_summary,mart,51,True
 d_plan50,mart,30,True
 d_range_coverage,mart,59,True
 d_rec_status,mart,6,True
@@ -39,7 +39,7 @@ d_revenue_model,mart,1,True
 d_savings,mart,18,True
 d_savings_status,mart,12,True
 d_site_reconciliation,mart,31,True
-d_source_issues,mart,2,True
+d_source_issues,mart,3,True
 d_vendor_alias_review,mart,3178,True
 d_vendor_moves,mart,40,True
 d_vendor_names,mart,269,True

@@ -17,8 +17,8 @@
 --   block of the year published with another date; FY2022 MDTA and MES, verified at the source on Nov 10, 2026) and whose
 --   records differ only by record date (Jan 1 of consecutive years) is a publication issue, not a payment lead: it gets a
 --   source_issue_id ('SRC-<fy>-<agency>') and goes to mart.d_source_issues, never to mart.d_payment_screen.
--- Split threshold: the small-procurement limit in force on the record date (SF&P 13-109(a)(1); $50,000 before Oct 1, 2023,
---   $100,000 from then, Ch. 161 of 2023), from config payment_screen.small_procurement_*.
+-- Split threshold: the small-procurement limit in force on the record date (SF&P 13-109(a)(1); $25,000 before Oct 1, 2017,
+--   $50,000 from then (Ch. 588/589 of 2017), $100,000 from Oct 1, 2023 (Ch. 161 of 2023)), from config payment_screen.small_procurement_*.
 CREATE OR REPLACE TABLE mart.v_payment_screen_rows AS
 WITH grain AS (
   SELECT CASE WHEN max(d) >= {{payment_screen.transaction_grain_min_dates}} THEN 'payment' ELSE 'annual' END AS date_grain
@@ -61,7 +61,8 @@ WITH grain AS (
   SELECT *, sum(brk) OVER (PARTITION BY agency_key, vendor ORDER BY record_date, record_key) AS island
   FROM (SELECT *, CASE WHEN date_diff('day', lag(record_date) OVER (PARTITION BY agency_key, vendor ORDER BY record_date, record_key), record_date)
                             <= {{payment_screen.split_window_days}} THEN 0 ELSE 1 END AS brk
-        FROM (SELECT *, CASE WHEN record_date < CAST({{payment_screen.small_procurement_effective}} AS DATE) THEN {{payment_screen.small_procurement_threshold_before}}
+        FROM (SELECT *, CASE WHEN record_date < CAST({{payment_screen.small_procurement_effective_2017}} AS DATE) THEN {{payment_screen.small_procurement_threshold_before_2017}}
+                           WHEN record_date < CAST({{payment_screen.small_procurement_effective}} AS DATE) THEN {{payment_screen.small_procurement_threshold_before}}
                            ELSE {{payment_screen.small_procurement_threshold}} END AS threshold FROM c) c
         WHERE (SELECT date_grain FROM grain) = 'payment' AND amount < threshold
           AND record_key NOT IN (SELECT record_key FROM dup UNION ALL SELECT record_key FROM rep))

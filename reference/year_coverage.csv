@@ -38,7 +38,7 @@ d_challenger_total,narrow,The challenger forecast's one scored year
 f_challenger,narrow,The challenger forecast's one scored year
 d_grant_groups_sensitivity,narrow,Grant groups on the lead year (grant_groups.lead_fy)
 d_payment_screen,narrow,Leads only in the years where the screen found them
-d_payment_screen_summary,narrow,Screened years payment_screen.first_fy to last_fy: the small-procurement limit before the Oct 2023 change (Md. Code SF&P 13-109) is sourced only for FY2022 on; earlier years are not screened until it is
+d_payment_screen_summary,narrow,Screened years payment_screen.first_fy (years.history_first_fy) to last_fy: full payment years only; the open year is never screened. Small-procurement limits by date: $25K to Sep 2017; $50K to Sep 2023; $100K after (Md. Code SF&P 13-109)
 d_source_issues,narrow,Only the years where a publication issue was found
 f_forecast,narrow,Forecast actuals FY2017 on (budget source) and forecast years to forecast.horizon_fy
 review_queue,narrow,Anomaly flags need four years of history and full payment years only

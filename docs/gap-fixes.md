@@ -44,7 +44,7 @@ pipeline run (scheduled December 3, or manual: Actions → Extract and build, th
 
 | # | Gap | Status |
 |---|---|---|
-| O1 | eMM bid-family datasets (8 DGS per-FY feeds) not extracted | Next extraction task; two dataset IDs still to capture from the catalog |
+| O1 | eMM bid-family datasets (8 DGS per-FY feeds) not extracted | Next extraction task. All 8 IDs confirmed on the portal (Nov 20, 2026): FY2012 d7pu-ebad, FY2013 n4xa-2zgn, FY2014 itax-4ccz, FY2015 3hzs-sazv, FY2016 7ang-84wj, FY2017 qkjf-rv4t, FY2018 pgna-cxjh, FY2019 ttg5-zfzj, plus the eMM Grouping view 3tu2-tyav. The portal has no FY2020 eMM bid feed; the wiki's FY2020 entry is wrong (bids moved to eMMA) |
 | O2 | Wiki not yet wired into the Pages nav | Pending PR #31 merge |
 | O3 | SODA 3.0 migration | Not started; 2.1 serves all pinned feeds tokenless |
 | O4 | Catalog-diff automation (new/retired datasets each run) | Proposed; freshness workflow covers update dates only |

@@ -1,19 +1,4 @@
 agency_code,agency,in_budget,payment_names,how_matched
-E17,"Alcohol, Tobacco, and Cannabis Commission",True,2,agency code in payments
-D15,"Executive Department-Boards, Commissions and Offices",True,2,agency code in payments; decision: mapped: budget unit found
-T00,Department of Commerce,True,3,agency code in payments; manual rule
-F50,Department of Information Technology,True,1,agency code in payments
-D24,Department of Social and Economic Mobility,True,1,agency code in payments
-D55,Department of Veterans and Military Families,True,3,agency code in payments; closest name (MARYLAND DEPARTMENT OF VETERANS AFFAIRS)
-D17,Historic St. Mary's City Commission,True,1,agency code in payments
-D80,Maryland Insurance Administration,True,1,agency code in payments
-E75,Maryland Lottery and Gaming Control Agency,True,2,agency code in payments
-W00,Department of State Police,True,1,agency code in payments
-C85,Maryland Tax Court,True,1,agency code in payments
-J11,MARYLAND TRANSPORTATION AUTHORITY,False,1,agency code in payments
-S50,Maryland African American Museum Corporation,True,1,agency code in payments
-D11,Office of the Deaf and Hard of Hearing,True,1,agency code in payments
-D74,Office of the Correctional Ombudsman,True,1,agency code in payments
 R60,COLLEGE SAVINGS PLANS OF MARYLAND,False,1,agency code in payments
 D27,Maryland Commission On Civil Rights,True,2,agency code in payments; manual rule
 L00,Department of Agriculture,True,2,agency code in payments
@@ -35,6 +20,21 @@ X00,Public Debt,True,1,agency code in payments
 E90,REGISTERS OF WILLS,False,1,agency code in payments
 D16,Secretary of State,True,1,agency code in payments
 D91,West North Avenue Development Authority,True,1,agency code in payments
+E17,"Alcohol, Tobacco, and Cannabis Commission",True,2,agency code in payments
+D15,"Executive Department-Boards, Commissions and Offices",True,2,agency code in payments; decision: mapped: budget unit found
+T00,Department of Commerce,True,3,agency code in payments; manual rule
+F50,Department of Information Technology,True,1,agency code in payments
+D24,Department of Social and Economic Mobility,True,1,agency code in payments
+D55,Department of Veterans and Military Families,True,3,agency code in payments; closest name (MARYLAND DEPARTMENT OF VETERANS AFFAIRS)
+D17,Historic St. Mary's City Commission,True,1,agency code in payments
+D80,Maryland Insurance Administration,True,1,agency code in payments
+E75,Maryland Lottery and Gaming Control Agency,True,2,agency code in payments
+W00,Department of State Police,True,1,agency code in payments
+C85,Maryland Tax Court,True,1,agency code in payments
+J11,MARYLAND TRANSPORTATION AUTHORITY,False,1,agency code in payments
+S50,Maryland African American Museum Corporation,True,1,agency code in payments
+D11,Office of the Deaf and Hard of Hearing,True,1,agency code in payments
+D74,Office of the Correctional Ombudsman,True,1,agency code in payments
 D05,Board of Public Works,True,1,agency code in payments
 D90,Canal Place Preservation and Development Authority,True,1,agency code in payments
 E00,Comptroller of Maryland,True,1,agency code in payments

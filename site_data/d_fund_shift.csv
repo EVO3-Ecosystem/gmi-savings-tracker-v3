@@ -730,8 +730,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2018,Actual,R11,Maryland State Library Agency,04,Aid for Local Library Employee Fringe Benefits,20316067.0,20316067.0,,,,1.0,0.0,,,,
 2018,Actual,M00,Maryland Department of Health,03,Office of Health Care Quality,20127558.0,13036675.0,6525314.0,,565569.0,0.6477,0.3242,,,,
 2018,Actual,R62,Maryland Higher Education Commission,38,Nurse Support Program II,20039564.0,,,,20039564.0,0.0,0.0,,,,
-2018,Actual,D28,Maryland Stadium Authority,02,Maryland Stadium Facilities Fund,20000000.0,,,,20000000.0,0.0,0.0,,,,
 2018,Actual,D28,Maryland Stadium Authority,66,Baltimore City Public Schools Construction Financing Fund,20000000.0,,,,20000000.0,0.0,0.0,,,,
+2018,Actual,D28,Maryland Stadium Authority,02,Maryland Stadium Facilities Fund,20000000.0,,,,20000000.0,0.0,0.0,,,,
 2018,Actual,D13,Maryland Energy Administration,08,Renewable and Clean Energy Programs and Initiatives,19777219.0,,,,19777219.0,0.0,0.0,,,,
 2018,Actual,U00,Department of the Environment,01,Coordinating Offices,19234594.0,2310354.0,1553840.0,,15370400.0,0.12011,0.08078,,,,
 2018,Actual,V00,Department of Juvenile Services,01,Eastern Shore Region Operations,18883469.0,18507099.0,158348.0,,218022.0,0.98007,0.00839,,,,
@@ -1028,9 +1028,9 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2018,Actual,R00,State Department of Education,03,Division of Academic Policy and Innovation,1003823.0,910677.0,93146.0,,,0.90721,0.09279,,,,False
 2018,Actual,D15,"Executive Department-Boards, Commissions and Offices",03,"Governor's Office of Small, Minority & Women Business Affairs",1003017.0,1003017.0,,,,1.0,0.0,,,,False
 2018,Actual,C90,Public Service Commission,09,Staff Counsel,1001459.0,,,,1001459.0,0.0,0.0,,,,False
+2018,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2018,Actual,T00,Department of Commerce,10,Maryland Marketing Partnership,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2018,Actual,K00,Department of Natural Resources,06,Ocean City Maintenance,1000000.0,,,,1000000.0,0.0,0.0,,,,False
-2018,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2018,Actual,K00,Department of Natural Resources,06,Office of Communications,989195.0,576092.0,,,413103.0,0.58238,0.0,,,,False
 2018,Actual,L00,Department of Agriculture,13,Tobacco Transition Program,987500.0,,,,987500.0,0.0,0.0,,,,False
 2018,Actual,L00,Department of Agriculture,06,Turf and Seed,981646.0,743516.0,,,238130.0,0.75742,0.0,,,,False
@@ -1046,8 +1046,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2018,Actual,C90,Public Service Commission,08,Public Utility Law Judge,815626.0,,,,815626.0,0.0,0.0,,,,False
 2018,Actual,D26,Department of Aging,02,Senior Citizens Activities Centers Operating Fund,764003.0,764003.0,,,,1.0,0.0,,,,False
 2018,Actual,P00,Maryland Department of Labor,07,Prevailing Wage,761868.0,761868.0,,,,1.0,0.0,,,,False
-2018,Actual,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,,,,False
 2018,Actual,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,,,,False
+2018,Actual,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,,,,False
 2018,Actual,T00,Department of Commerce,01,Office of the Assistant Secretary,735880.0,735880.0,,,,1.0,0.0,,,,False
 2018,Actual,D15,"Executive Department-Boards, Commissions and Offices",24,Maryland State Board of Contract Appeals,732525.0,732525.0,,,,1.0,0.0,,,,False
 2018,Actual,C90,Public Service Commission,04,Accounting Investigations,726408.0,,,,726408.0,0.0,0.0,,,,False
@@ -1289,8 +1289,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2019,Actual,S00,Department of Housing and Community Development,04,Housing and Building Energy Programs,20628416.0,,3048818.0,,17579598.0,0.0,0.1478,0.0,0.11,0.0,False
 2019,Actual,M00,Maryland Department of Health,04,Health Professional Boards and Commissions,20472019.0,541836.0,,,19930183.0,0.02647,0.0,0.03,0.0,-0.0,False
 2019,Actual,Q00,Department of Public Safety and Correctional Services,05,Youth Detention Center,20009246.0,20004680.0,,,4566.0,0.99977,0.0,0.99,0.0,0.0,False
-2019,Actual,D28,Maryland Stadium Authority,02,Maryland Stadium Facilities Fund,20000000.0,,,,20000000.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,D28,Maryland Stadium Authority,66,Baltimore City Public Schools Construction Financing Fund,20000000.0,,,,20000000.0,0.0,0.0,0.0,0.0,0.0,False
+2019,Actual,D28,Maryland Stadium Authority,02,Maryland Stadium Facilities Fund,20000000.0,,,,20000000.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,Q00,Department of Public Safety and Correctional Services,01,Division of Parole and Probation - West Region,19982707.0,17803745.0,,,2178962.0,0.89096,0.0,0.89,0.0,0.0,False
 2019,Actual,N00,Department of Human Services,01,"Division of Budget, Finance and Personnel",19967633.0,12436980.0,7484158.0,,46495.0,0.62286,0.37481,0.65,0.34,-0.03,False
 2019,Actual,V00,Department of Juvenile Services,01,Eastern Shore Region Operations,19713513.0,19289998.0,161130.0,,262385.0,0.97852,0.00817,0.97,0.02,0.01,False
@@ -1356,8 +1356,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2019,Actual,C00,Judiciary,12,Major IT,10295236.0,,,,10295236.0,0.0,0.0,,,,
 2019,Actual,T00,Department of Commerce,23,Maryland Economic Development Assistance Authority and Fund (MEDAAF),10258667.0,,,,10258667.0,0.0,0.0,0.69,0.0,-0.69,False
 2019,Actual,R15,Maryland Public Broadcasting Commission,04,Content Enterprises,10065898.0,3000000.0,279684.0,,6786214.0,0.29804,0.02779,0.02,0.07,0.28,True
-2019,Actual,R00,State Department of Education,02,Capital Appropriation,10000000.0,10000000.0,,,,1.0,0.0,,,,
 2019,Actual,T00,Department of Commerce,16,Economic Development Opportunity Fund,10000000.0,,,,10000000.0,0.0,0.0,0.0,0.0,0.0,False
+2019,Actual,R00,State Department of Education,02,Capital Appropriation,10000000.0,10000000.0,,,,1.0,0.0,,,,
 2019,Actual,R15,Maryland Public Broadcasting Commission,03,Broadcasting,9945941.0,,,,9945941.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,Q00,Department of Public Safety and Correctional Services,03,Intelligence and Investigative Division,9881601.0,9881601.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2019,Actual,C90,Public Service Commission,01,General Administration and Hearings,9879405.0,,,,9879405.0,0.0,0.0,0.0,0.0,0.0,False
@@ -1421,8 +1421,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2019,Actual,Q00,Department of Public Safety and Correctional Services,02,Pretrial Release Services,6185677.0,6185677.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2019,Actual,L00,Department of Agriculture,18,Rural Maryland Council,6154737.0,6154737.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2019,Actual,Q00,Department of Public Safety and Correctional Services,01,General Administration and Hearings,6042030.0,6042030.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2019,Actual,T50,Maryland Technology Development Corporation,07,Capital - Enterprise Investment Fund,6000000.0,,,,6000000.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,Y01,State Reserve Fund,01,Dedicated Purpose Account,6000000.0,6000000.0,,,,1.0,0.0,,,,False
+2019,Actual,T50,Maryland Technology Development Corporation,07,Capital - Enterprise Investment Fund,6000000.0,,,,6000000.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,Q00,Department of Public Safety and Correctional Services,07,Eastern Pre-Release Unit,5990190.0,5732812.0,,,257378.0,0.95703,0.0,0.97,0.0,-0.02,False
 2019,Actual,K00,Department of Natural Resources,05,Power Plant Assessment Program,5953337.0,488427.0,,,5464910.0,0.08204,0.0,0.08,0.0,0.01,False
 2019,Actual,D13,Maryland Energy Administration,07,"Energy Efficiency and Conservation Programs, All Other Sectors",5821143.0,,131680.0,,5689463.0,0.0,0.02262,0.0,0.03,0.0,False
@@ -1593,10 +1593,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2019,Actual,L00,Department of Agriculture,04,Pesticide Regulation,1070408.0,,323355.0,,747053.0,0.0,0.30209,0.0,0.27,0.0,False
 2019,Actual,F10,Department of Budget and Management,08,Statewide Expenses,1048933.0,1048933.0,,,,1.0,0.0,,,,False
 2019,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2019,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2019,Actual,K00,Department of Natural Resources,06,Ocean City Maintenance,1000000.0,,,,1000000.0,0.0,0.0,0.0,0.0,0.0,False
-2019,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2019,Actual,T00,Department of Commerce,25,More Jobs For Marylanders Sales and Use Tax Credit Reserve Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2019,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2019,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2019,Actual,L00,Department of Agriculture,13,Tobacco Transition Program,999000.0,,,,999000.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,L00,Department of Agriculture,06,Turf and Seed,997435.0,706796.0,,,290639.0,0.70861,0.0,0.72,0.0,-0.01,False
 2019,Actual,L00,Department of Agriculture,07,State Board of Veterinary Medical Examiners,994702.0,,,,994702.0,0.0,0.0,0.0,0.0,0.0,False
@@ -1669,8 +1669,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2019,Actual,D80,Maryland Insurance Administration,02,Major Information Technology Development Projects,208397.0,,,,208397.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,D05,Board of Public Works,05,Wetlands Administration,206074.0,206074.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2019,Actual,E50,State Department of Assessments and Taxation,09,Major Information Technology Development Projects,204089.0,,,,204089.0,0.0,0.0,,,,False
-2019,Actual,T00,Department of Commerce,18,Military Personnel and Service-Disabled Veteran Loan Program,200000.0,100000.0,,,100000.0,0.5,0.0,0.5,0.0,0.0,False
 2019,Actual,R62,Maryland Higher Education Commission,21,Jack F. Tolbert Memorial Student Grant Program,200000.0,200000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2019,Actual,T00,Department of Commerce,18,Military Personnel and Service-Disabled Veteran Loan Program,200000.0,100000.0,,,100000.0,0.5,0.0,0.5,0.0,0.0,False
 2019,Actual,C81,Office of the Attorney General,21,Mortgage Foreclosure Settlement Program,188029.0,,,,188029.0,0.0,0.0,0.0,0.0,0.0,False
 2019,Actual,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,179600.0,,,,179600.0,0.0,0.0,,,,False
 2019,Actual,E20,State Treasurer's Office,02,Major Information Technology Development Projects,169925.0,,,,169925.0,0.0,0.0,,,,False
@@ -2174,12 +2174,12 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2020,Actual,D05,Board of Public Works,01,Administration Office,1028285.0,1028285.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2020,Actual,R62,Maryland Higher Education Commission,47,Community College Facilities Renewal Grant Program,1008775.0,1008775.0,,,,1.0,0.0,,,,False
 2020,Actual,L00,Department of Agriculture,06,Turf and Seed,1004817.0,764779.0,,,240038.0,0.76111,0.0,0.76,0.0,0.0,False
-2020,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2020,Actual,T00,Department of Commerce,24,More Jobs For Marylanders Tax Credit Reserve Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2020,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,0.95,0.0,0.05,False
+2020,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2020,Actual,T00,Department of Commerce,25,More Jobs For Marylanders Sales and Use Tax Credit Reserve Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2020,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2020,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2020,Actual,T00,Department of Commerce,24,More Jobs For Marylanders Tax Credit Reserve Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2020,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2020,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,0.95,0.0,0.05,False
 2020,Actual,R15,Maryland Public Broadcasting Commission,01,Executive Direction and Control,986658.0,,,,986658.0,0.0,0.0,0.0,0.0,0.0,False
 2020,Actual,E80,Property Tax Assessment Appeals Boards,01,Property Tax Assessment Appeals Boards,953522.0,953522.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2020,Actual,L00,Department of Agriculture,04,Pesticide Regulation,939895.0,,335392.0,,604503.0,0.0,0.35684,0.0,0.3,0.0,False
@@ -2239,8 +2239,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2020,Actual,P00,Maryland Department of Labor,09,Building Codes Unit,339034.0,261440.0,,,77594.0,0.77113,0.0,,,,False
 2020,Actual,D15,"Executive Department-Boards, Commissions and Offices",23,State Labor Relations Boards,335170.0,335170.0,,,,1.0,0.0,,,,False
 2020,Actual,P00,Maryland Department of Labor,09,Governor's Workforce Development Board,308678.0,308678.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2020,Actual,R62,Maryland Higher Education Commission,09,2 + 2 Transfer Scholarship Program,300000.0,300000.0,,,,1.0,0.0,,,,False
 2020,Actual,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,300000.0,,,,300000.0,0.0,0.0,0.0,0.0,0.0,False
+2020,Actual,R62,Maryland Higher Education Commission,09,2 + 2 Transfer Scholarship Program,300000.0,300000.0,,,,1.0,0.0,,,,False
 2020,Actual,D15,"Executive Department-Boards, Commissions and Offices",22,Governor's Grants Office,274968.0,225364.0,,,49604.0,0.8196,0.0,0.79,0.0,0.03,False
 2020,Actual,D55,Department of Veterans and Military Families,11,Outreach and Advocacy,266901.0,266901.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2020,Actual,U00,Department of the Environment,04,Capital Appropriation - Hazardous Substance Clean-Up Program,255000.0,255000.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -2746,10 +2746,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2021,Actual,F10,Department of Budget and Management,07,Division of Recruitment and Examination,1016545.0,1016545.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,P00,Maryland Department of Labor,01,General Administration,1008637.0,90216.0,299755.0,,618666.0,0.08944,0.29719,0.09,0.29,-0.0,False
 2021,Actual,M00,Maryland Department of Health,01,Developmental Disabilities Administration Facility Maintenance,1005750.0,1005750.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2021,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2021,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2021,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2021,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,L00,Department of Agriculture,06,Turf and Seed,977406.0,796003.0,,,181403.0,0.8144,0.0,0.71,0.0,0.11,False
 2021,Actual,E80,Property Tax Assessment Appeals Boards,01,Property Tax Assessment Appeals Boards,970981.0,970981.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,R15,Maryland Public Broadcasting Commission,01,Executive Direction and Control,950513.0,,,,950513.0,0.0,0.0,0.0,0.0,0.0,False
@@ -2798,8 +2798,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2021,Actual,C90,Public Service Commission,06,Washington Metropolitan Area Transit Commission,331168.0,,,,331168.0,0.0,0.0,0.0,0.0,0.0,False
 2021,Actual,P00,Maryland Department of Labor,09,Building Codes Unit,324520.0,248783.0,,,75737.0,0.76662,0.0,0.74,0.0,0.02,False
 2021,Actual,P00,Maryland Department of Labor,09,Governor's Workforce Development Board,309786.0,309786.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2021,Actual,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,300000.0,,,,300000.0,0.0,0.0,0.0,0.0,0.0,False
 2021,Actual,T00,Department of Commerce,21,Maryland Economic Adjustment Fund,300000.0,,300000.0,,,0.0,1.0,,,,False
+2021,Actual,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,300000.0,,,,300000.0,0.0,0.0,0.0,0.0,0.0,False
 2021,Actual,E20,State Treasurer's Office,02,Major Information Technology Development Projects,290196.0,,,,290196.0,0.0,0.0,0.0,0.0,0.0,False
 2021,Actual,T00,Department of Commerce,01,Office of the Assistant Secretary,288374.0,288374.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2021,Actual,D40,Department of Planning,02,State Clearinghouse,280076.0,280076.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -3316,11 +3316,11 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2022,Actual,R15,Maryland Public Broadcasting Commission,01,Executive Direction and Control,1072485.0,,,,1072485.0,0.0,0.0,0.0,0.0,0.0,False
 2022,Actual,F10,Department of Budget and Management,07,Division of Recruitment and Examination,1072461.0,1072461.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,A15,Payments to Civil Divisions of the State,03,Miscellaneous Grants,1052330.0,,,,1052330.0,0.0,0.0,0.0,0.0,0.0,False
-2022,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2022,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2022,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2022,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,E80,Property Tax Assessment Appeals Boards,01,Property Tax Assessment Appeals Boards,983482.0,983482.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,C90,Public Service Commission,08,Public Utility Law Judge,950576.0,,,,950576.0,0.0,0.0,0.0,0.0,0.0,False
 2022,Actual,C81,Office of the Attorney General,11,Independent Investigations Division,946880.0,946880.0,,,,1.0,0.0,,,,False
@@ -3334,8 +3334,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2022,Actual,C90,Public Service Commission,04,Accounting Investigations,774297.0,,,,774297.0,0.0,0.0,0.0,0.0,0.0,False
 2022,Actual,P00,Maryland Department of Labor,01,General Administration,774249.0,83776.0,78937.0,,611536.0,0.1082,0.10195,0.1,0.29,0.01,False
 2022,Actual,D26,Department of Aging,02,Senior Citizens Activities Centers Operating Fund,764888.0,764888.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2022,Actual,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,U00,Department of the Environment,04,Capital Appropriation - Hazardous Substance Clean-Up Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2022,Actual,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,L00,Department of Agriculture,02,Program Planning and Development,743317.0,348662.0,,,394655.0,0.46906,0.0,0.07,0.0,0.4,False
 2022,Actual,P00,Maryland Department of Labor,07,Prevailing Wage,742228.0,742228.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2022,Actual,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,738230.0,738230.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -3650,8 +3650,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2023,Actual,C00,Judiciary,02,Appellate Court of Maryland,15199732.0,15199732.0,,,,1.0,0.0,,,,
 2023,Actual,J00,Department of Transportation,02,Operating Grants-In-Aid,15196224.0,,9911709.0,,5284515.0,0.0,0.65225,0.0,0.66,0.0,False
 2023,Actual,C00,Judiciary,01,The Supreme Court of Maryland,15060072.0,15060072.0,,,,1.0,0.0,,,,
-2023,Actual,R62,Maryland Higher Education Commission,48,Maryland Community College Promise Scholarship Program,15000000.0,15000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,U00,Department of the Environment,12,Capital Appropriation - Bay Restoration Fund-Septic Systems,15000000.0,,,,15000000.0,0.0,0.0,0.0,0.0,0.0,False
+2023,Actual,R62,Maryland Higher Education Commission,48,Maryland Community College Promise Scholarship Program,15000000.0,15000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,D28,Maryland Stadium Authority,02,Maryland Stadium Facilities Fund,14637225.0,,,,14637225.0,0.0,0.0,0.0,0.0,0.0,False
 2023,Actual,R62,Maryland Higher Education Commission,07,Educational Grants,14447335.0,13447335.0,,,1000000.0,0.93078,0.0,1.0,0.0,-0.07,False
 2023,Actual,N00,Department of Human Services,02,Division of Administrative Services,14146985.0,7478020.0,6658621.0,,10344.0,0.52859,0.47067,0.31,0.69,0.22,True
@@ -3669,8 +3669,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2023,Actual,R00,State Department of Education,20,Division of Rehabilitation Services-Headquarters,12220196.0,1646681.0,10553034.0,,20481.0,0.13475,0.86357,0.14,0.86,-0.0,False
 2023,Actual,P00,Maryland Department of Labor,02,Financial Regulation,12113689.0,6251.0,,,12107438.0,0.00052,0.0,0.01,0.0,-0.01,False
 2023,Actual,H00,Department of General Services,01,Procurement and Logistics,12044596.0,9584476.0,,,2460120.0,0.79575,0.0,0.77,0.0,0.03,False
-2023,Actual,T00,Department of Commerce,12,Maryland Biotechnology Investment Tax Credit Reserve Fund,12000000.0,12000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,S00,Department of Housing and Community Development,10,Partnership Rental Housing-Capital Appropriation,12000000.0,12000000.0,,,,1.0,0.0,,,,
+2023,Actual,T00,Department of Commerce,12,Maryland Biotechnology Investment Tax Credit Reserve Fund,12000000.0,12000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,W00,Department of State Police,01,Fire Prevention Services,11995890.0,11995890.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,R15,Maryland Public Broadcasting Commission,02,Administration and Support Services,11864123.0,11033443.0,,19265.0,811415.0,0.92998,0.00162,0.97,0.0,-0.04,False
 2023,Actual,T50,Maryland Technology Development Corporation,07,Enterprise Investment Fund - Capital,11679163.0,,,11679163.0,,0.0,1.0,,,,
@@ -3779,8 +3779,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2023,Actual,R62,Maryland Higher Education Commission,33,Part-Time Grant Program,5087780.0,5087780.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,K00,Department of Natural Resources,05,Power Plant Assessment Program,5014779.0,616143.0,,,4398636.0,0.12287,0.0,0.08,0.0,0.04,False
 2023,Actual,F10,Department of Budget and Management,02,Division of Finance and Administration,5001867.0,5001867.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2023,Actual,T00,Department of Commerce,28,Non-Profit Shared Services Support Program,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2023,Actual,T50,Maryland Technology Development Corporation,10,Minority Pre-Seed Investment Fund,5000000.0,5000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2023,Actual,T00,Department of Commerce,28,Non-Profit Shared Services Support Program,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2023,Actual,D12,Department of Disabilities,02,Telecommunications Access of Maryland,4949678.0,,,,4949678.0,0.0,0.0,0.0,0.0,0.0,False
 2023,Actual,P00,Maryland Department of Labor,12,Lower Appeals,4923181.0,,4921553.0,,1628.0,0.0,0.99967,0.0,0.99,0.0,False
 2023,Actual,D12,Department of Disabilities,01,General Administration,4898769.0,3810612.0,652887.0,,435270.0,0.77787,0.13328,0.77,0.16,0.0,False
@@ -3914,10 +3914,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2023,Actual,P00,Maryland Department of Labor,01,General Administration,1049978.0,92504.0,307721.0,,649753.0,0.0881,0.29307,0.09,0.3,-0.0,False
 2023,Actual,C90,Public Service Commission,08,Public Utility Law Judge,1047579.0,,,,1047579.0,0.0,0.0,0.0,0.0,0.0,False
 2023,Actual,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2023,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,D28,Maryland Stadium Authority,63,Office of Sports Marketing,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2023,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2023,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2023,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,993579.0,993579.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,E80,Property Tax Assessment Appeals Boards,01,Property Tax Assessment Appeals Boards,981100.0,981100.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,T00,Department of Commerce,27,Business Telework Assistance Grant Program,977090.0,977090.0,,,,1.0,0.0,,,,False
@@ -3986,8 +3986,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2023,Actual,P00,Maryland Department of Labor,01,Division of Paid Leave,249433.0,,,,249433.0,0.0,0.0,,,,False
 2023,Actual,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,240000.0,150000.0,,,90000.0,0.625,0.0,0.0,0.0,0.62,False
 2023,Actual,C81,Office of the Attorney General,17,Educational Affairs Division,215886.0,215886.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2023,Actual,R62,Maryland Higher Education Commission,21,Jack F. Tolbert Memorial Student Grant Program,200000.0,200000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,T00,Department of Commerce,21,Maryland Economic Adjustment Fund,200000.0,,,,200000.0,0.0,0.0,0.0,1.0,0.0,False
+2023,Actual,R62,Maryland Higher Education Commission,21,Jack F. Tolbert Memorial Student Grant Program,200000.0,200000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,K00,Department of Natural Resources,07,Major Information Technology Development Projects,172249.0,,,,172249.0,0.0,0.0,,,,False
 2023,Actual,D15,"Executive Department-Boards, Commissions and Offices",01,Survey Commissions,139503.0,139503.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2023,Actual,L00,Department of Agriculture,04,Maryland Agricultural Commission,118558.0,118558.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -4311,9 +4311,9 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2024,Actual,R00,State Department of Education,24,Division of Rehabilitation Services-Blindness and Vision Services,10423437.0,1801477.0,5562283.0,,3059677.0,0.17283,0.53363,0.19,0.54,-0.02,False
 2024,Actual,D60,State Archives,01,Archives,10359892.0,8347715.0,,,2012177.0,0.80577,0.0,0.77,0.0,0.04,False
 2024,Actual,R00,State Department of Education,03,Other Institutions,10046315.0,10046315.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,T00,Department of Commerce,32,Western Maryland Economic Future Investment Program - Capital Appropriation,10000000.0,10000000.0,,,,1.0,0.0,,,,
 2024,Actual,F10,Department of Budget and Management,10,Francis Scott Key Bridge Litigation,10000000.0,,,,10000000.0,0.0,0.0,,,,
 2024,Actual,T50,Maryland Technology Development Corporation,14,Maryland Equity Investment Fund,10000000.0,10000000.0,,,,1.0,0.0,,,,
-2024,Actual,T00,Department of Commerce,32,Western Maryland Economic Future Investment Program - Capital Appropriation,10000000.0,10000000.0,,,,1.0,0.0,,,,
 2024,Actual,R62,Maryland Higher Education Commission,15,Delegate Scholarships,9970469.0,9970469.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,E50,State Department of Assessments and Taxation,10,Charter Unit,9961332.0,294206.0,,,9667126.0,0.02953,0.0,0.01,0.0,0.02,False
 2024,Actual,C00,Judiciary,12,Major IT,9901691.0,,,,9901691.0,0.0,0.0,0.0,0.0,0.0,False
@@ -4356,8 +4356,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2024,Actual,Q00,Department of Public Safety and Correctional Services,02,Pretrial Release Services,7165767.0,7165767.0,,,,1.0,0.0,0.98,0.02,0.02,False
 2024,Actual,E00,Comptroller of Maryland,01,Executive Direction,7135294.0,5865417.0,,,1269877.0,0.82203,0.0,0.86,0.0,-0.04,False
 2024,Actual,C91,Office of People's Counsel,01,General Administration,7134246.0,,,,7134246.0,0.0,0.0,0.0,0.0,0.0,False
-2024,Actual,R62,Maryland Higher Education Commission,14,Edward T. and Mary A. Conroy Memorial Scholarship and Jean B. Cryor Memorial Scholarship Program,7000000.0,7000000.0,,,,1.0,0.0,0.69,0.0,0.31,False
 2024,Actual,S00,Department of Housing and Community Development,04,Port of Baltimore BusinessWorks,7000000.0,7000000.0,,,,1.0,0.0,,,,False
+2024,Actual,R62,Maryland Higher Education Commission,14,Edward T. and Mary A. Conroy Memorial Scholarship and Jean B. Cryor Memorial Scholarship Program,7000000.0,7000000.0,,,,1.0,0.0,0.69,0.0,0.31,False
 2024,Actual,S00,Department of Housing and Community Development,02,Asset Management,6931494.0,,1501788.0,243608.0,5186098.0,0.0,0.25181,0.0,0.03,0.0,False
 2024,Actual,D17,Historic St. Mary's City Commission,51,Administration,6900483.0,6382132.0,45961.0,,472390.0,0.92488,0.00666,0.86,0.01,0.07,False
 2024,Actual,S00,Department of Housing and Community Development,01,Administration,6823831.0,,,322239.0,6501592.0,0.0,0.04722,0.0,0.02,0.0,False
@@ -4538,14 +4538,14 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2024,Actual,P00,Maryland Department of Labor,09,Governor's Workforce Development Board,1019085.0,324781.0,,,694304.0,0.3187,0.0,1.0,0.0,-0.68,False
 2024,Actual,K00,Department of Natural Resources,01,Maryland Environmental Trust,1007318.0,916090.0,,,91228.0,0.90943,0.0,0.81,0.0,0.09,False
 2024,Actual,M00,Maryland Department of Health,01,Developmental Disabilities Administration Facility Maintenance,1007045.0,1007045.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2024,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2024,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,T00,Department of Commerce,27,Business Telework Assistance Grant Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2024,Actual,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2024,Actual,U00,Department of the Environment,04,Capital Appropriation - Hazardous Substance Clean-Up Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2024,Actual,M00,Maryland Department of Health,09,Capital Appropriation,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2024,Actual,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2024,Actual,T00,Department of Commerce,27,Business Telework Assistance Grant Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2024,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,U00,Department of the Environment,04,Capital Appropriation - Hazardous Substance Clean-Up Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,M00,Maryland Department of Health,09,Capital Appropriation,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2024,Actual,C90,Public Service Commission,04,Accounting Investigations,989307.0,,,,989307.0,0.0,0.0,0.0,0.0,0.0,False
 2024,Actual,L00,Department of Agriculture,01,Office of the Assistant Secretary,947628.0,947628.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,C85,Maryland Tax Court,01,Administration and Appeals,930461.0,930461.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -4561,10 +4561,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2024,Actual,D26,Department of Aging,02,Senior Citizens Activities Centers Operating Fund,765241.0,765241.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,C81,Office of the Attorney General,10,People's Insurance Counsel Division,754179.0,,,,754179.0,0.0,0.0,0.0,0.0,0.0,False
 2024,Actual,D15,"Executive Department-Boards, Commissions and Offices",20,State Commission On Criminal Sentencing Policy,750229.0,750229.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2024,Actual,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2024,Actual,T00,Department of Commerce,30,Regional Institution Strategic Enterprise Zone Program,750000.0,750000.0,,,,1.0,0.0,,,,False
 2024,Actual,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,T50,Maryland Technology Development Corporation,12,Inclusion Fund,750000.0,750000.0,,,,1.0,0.0,,,,False
-2024,Actual,T00,Department of Commerce,30,Regional Institution Strategic Enterprise Zone Program,750000.0,750000.0,,,,1.0,0.0,,,,False
+2024,Actual,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2024,Actual,R62,Maryland Higher Education Commission,43,Maryland Higher Education Outreach and College Access Program,700000.0,700000.0,,,,1.0,0.0,,,,False
 2024,Actual,D15,"Executive Department-Boards, Commissions and Offices",23,Public Employee Relations Board,671243.0,671243.0,,,,1.0,0.0,,,,False
 2024,Actual,C81,Office of the Attorney General,12,Juvenile Justice Monitoring Program,663403.0,663403.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -5009,8 +5009,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2025,Actual,P00,Maryland Department of Labor,05,Legal Services,5369828.0,704307.0,1244092.0,,3421429.0,0.13116,0.23168,0.17,0.4,-0.04,False
 2025,Actual,D23,Maryland Cannabis Administration,03,Office of Social Equity,5108845.0,,,,5108845.0,0.0,0.0,,,,False
 2025,Actual,R62,Maryland Higher Education Commission,33,Part-Time Grant Program,5087780.0,5087780.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2025,Actual,T50,Maryland Technology Development Corporation,15,Maryland Equitech Growth Fund,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2025,Actual,R00,State Department of Education,07,Major Information Technology Development Projects,5000000.0,,5000000.0,,,0.0,1.0,0.0,1.0,0.0,False
+2025,Actual,T50,Maryland Technology Development Corporation,15,Maryland Equitech Growth Fund,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2025,Actual,T00,Department of Commerce,10,Office of International Investment and Trade,4982270.0,4272490.0,701330.0,,8450.0,0.85754,0.14077,0.53,0.45,0.33,False
 2025,Actual,E00,Comptroller of Maryland,02,Financial and Support Services,4967696.0,4293343.0,,,674353.0,0.86425,0.0,0.83,0.0,0.04,False
 2025,Actual,E20,State Treasurer's Office,01,Maryland 529,4959943.0,753627.0,,,4206316.0,0.15194,0.0,,,,False
@@ -5104,8 +5104,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2025,Actual,C90,Public Service Commission,05,Common Carrier Investigations,2053568.0,,,,2053568.0,0.0,0.0,0.0,0.0,0.0,False
 2025,Actual,L00,Department of Agriculture,02,Forest Pest Management,2046486.0,1613435.0,254230.0,,178821.0,0.78839,0.12423,0.65,0.26,0.14,False
 2025,Actual,T00,Department of Commerce,02,Office of Policy and Research,2025570.0,1858351.0,12097.0,,155122.0,0.91745,0.00597,0.57,0.37,0.35,False
-2025,Actual,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,2000000.0,2000000.0,,,,1.0,0.0,,,,False
 2025,Actual,D23,Maryland Cannabis Administration,04,Capital Appropriation,2000000.0,2000000.0,,,,1.0,0.0,,,,False
+2025,Actual,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,2000000.0,2000000.0,,,,1.0,0.0,,,,False
 2025,Actual,P00,Maryland Department of Labor,01,General Administration,1990708.0,158481.0,654403.0,,1177824.0,0.07961,0.32873,0.09,0.29,-0.01,False
 2025,Actual,T00,Department of Commerce,03,Office of the Attorney General,1924489.0,1164.0,,,1923325.0,0.0006,0.0,0.0,0.0,-0.0,False
 2025,Actual,L00,Department of Agriculture,01,Executive Direction,1895456.0,1895456.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -5153,13 +5153,13 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2025,Actual,C90,Public Service Commission,10,Energy Analysis and Planning Division,1020903.0,,,,1020903.0,0.0,0.0,0.0,0.0,0.0,False
 2025,Actual,C90,Public Service Commission,04,Accounting Investigations,1006671.0,,,,1006671.0,0.0,0.0,0.0,0.0,0.0,False
 2025,Actual,U00,Department of the Environment,04,Capital Appropriation - Hazardous Substance Clean-Up Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2025,Actual,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2025,Actual,D52,Maryland Department of Emergency Management,04,State Disaster Recovery Division,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2025,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2025,Actual,R62,Maryland Higher Education Commission,57,Human Services Careers Scholarship,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2025,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2025,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2025,Actual,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2025,Actual,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2025,Actual,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2025,Actual,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2025,Actual,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2025,Actual,R62,Maryland Higher Education Commission,57,Human Services Careers Scholarship,1000000.0,1000000.0,,,,1.0,0.0,,,,False
+2025,Actual,D52,Maryland Department of Emergency Management,04,State Disaster Recovery Division,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2025,Actual,L00,Department of Agriculture,01,Office of the Assistant Secretary,983856.0,983856.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2025,Actual,D74,Office of the Correctional Ombudsman,01,Office of the Correctional Ombudsman,977891.0,603067.0,,,374824.0,0.6167,0.0,,,,False
 2025,Actual,T00,Department of Commerce,07,Partnership for Workforce Quality,974082.0,974082.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -5192,8 +5192,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2025,Actual,C90,Public Service Commission,06,Washington Metropolitan Area Transit Commission,531176.0,,,,531176.0,0.0,0.0,0.0,0.0,0.0,False
 2025,Actual,C90,Public Service Commission,07,Electricity Division,524869.0,,,,524869.0,0.0,0.0,0.0,0.0,0.0,False
 2025,Actual,P00,Maryland Department of Labor,02,Program Analysis and Audit,515315.0,101283.0,321957.0,,92075.0,0.19655,0.62478,0.19,0.59,0.01,False
-2025,Actual,R62,Maryland Higher Education Commission,52,Maryland Loan Assistance Repayment Program for Police Officers,500000.0,500000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2025,Actual,R62,Maryland Higher Education Commission,53,Maryland Police Officers Scholarship Program,500000.0,500000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2025,Actual,R62,Maryland Higher Education Commission,52,Maryland Loan Assistance Repayment Program for Police Officers,500000.0,500000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2025,Actual,E20,State Treasurer's Office,03,Maryland Achieving a Better Life Experience Program,480998.0,285287.0,,,195711.0,0.59311,0.0,,,,False
 2025,Actual,T00,Department of Commerce,34,Port of Baltimore Emergency Business Assistance Program,475000.0,,,,475000.0,0.0,0.0,,,,False
 2025,Actual,D55,Department of Veterans and Military Families,03,Memorials and Monuments Program,435652.0,435652.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -5545,10 +5545,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,M00,Maryland Department of Health,05,Office of Finance,10402272.0,4732823.0,5669449.0,,,0.45498,0.54502,0.48,0.52,-0.02,False
 2026,Working budget,M00,Maryland Department of Health,01,Deputy Secretary for Health Care Financing,10286312.0,4351788.0,5748015.0,186509.0,,0.42307,0.57693,0.26,0.56,0.16,False
 2026,Working budget,D23,Maryland Cannabis Administration,02,"Regulation, Enforcement, and Compliance",10086870.0,,,,10086870.0,0.0,0.0,0.0,0.0,0.0,False
+2026,Working budget,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,10000000.0,4000000.0,,,6000000.0,0.4,0.0,,,,
+2026,Working budget,D25,Interagency Commission On School Construction,03,School Safety Grant Program,10000000.0,10000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,T00,Department of Commerce,31,Child Care Capital Support Revolving Loan Fund,10000000.0,2200000.0,,,7800000.0,0.22,0.0,,,,
 2026,Working budget,T00,Department of Commerce,32,Western Maryland Economic Future Investment Program,10000000.0,10000000.0,,,,1.0,0.0,,,,
-2026,Working budget,D25,Interagency Commission On School Construction,03,School Safety Grant Program,10000000.0,10000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,10000000.0,4000000.0,,,6000000.0,0.4,0.0,,,,
 2026,Working budget,T50,Maryland Technology Development Corporation,01,"Technology Development, Transfer and Commercialization",9960816.0,9045816.0,,,915000.0,0.90814,0.0,1.0,0.0,-0.09,False
 2026,Working budget,F10,Department of Budget and Management,01,Executive Direction,9807762.0,9531896.0,,,275866.0,0.97187,0.0,0.84,0.0,0.13,False
 2026,Working budget,P00,Maryland Department of Labor,01,Office of Administration,9744784.0,1750372.0,6096190.0,,1898222.0,0.17962,0.62558,0.2,0.56,-0.02,False
@@ -5563,8 +5563,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,R00,State Department of Education,03,Other Institutions,9096449.0,9096449.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,E50,State Department of Assessments and Taxation,08,Property Tax Credit Programs,9060582.0,7107259.0,,,1953323.0,0.78442,0.0,0.61,0.0,0.17,False
 2026,Working budget,D40,Department of Planning,07,Management Planning and Educational Outreach,9010874.0,2262904.0,313129.0,,6434841.0,0.25113,0.03475,0.39,0.04,-0.14,False
-2026,Working budget,U00,Department of the Environment,16,Capital Appropriation - Conowingo Watershed Implementation Plan,9000000.0,,,,9000000.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,R00,State Department of Education,05,Broadening Options and Opportunities for Students Today,9000000.0,,,,9000000.0,0.0,0.0,0.0,0.0,0.0,False
+2026,Working budget,U00,Department of the Environment,16,Capital Appropriation - Conowingo Watershed Implementation Plan,9000000.0,,,,9000000.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,E20,State Treasurer's Office,02,Save4College State Contribution,8979500.0,8979500.0,,,,1.0,0.0,,,,False
 2026,Working budget,Q00,Department of Public Safety and Correctional Services,03,Field Support Services,8929248.0,8420668.0,483580.0,,25000.0,0.94304,0.05416,1.0,0.0,-0.05,False
 2026,Working budget,D26,Department of Aging,01,General Administration,8860582.0,4510643.0,3400113.0,277010.0,672816.0,0.50907,0.415,0.51,0.26,-0.01,False
@@ -5624,8 +5624,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,R62,Maryland Higher Education Commission,33,Part-Time Grant Program,5087780.0,5087780.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,T50,Maryland Technology Development Corporation,07,Enterprise Investment Fund - Capital,5045833.0,,,5045833.0,,0.0,1.0,,,,False
 2026,Working budget,D13,Maryland Energy Administration,02,The Jane E. Lawton Conservation Loan Program,5000000.0,,,,5000000.0,0.0,0.0,0.0,0.0,0.0,False
-2026,Working budget,D23,Maryland Cannabis Administration,04,Capital Appropriation,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2026,Working budget,T50,Maryland Technology Development Corporation,15,Maryland Equitech Growth Fund,5000000.0,5000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,D23,Maryland Cannabis Administration,04,Capital Appropriation,5000000.0,5000000.0,,,,1.0,0.0,,,,False
 2026,Working budget,P00,Maryland Department of Labor,05,Legal Services,4991398.0,670773.0,1993614.0,,2327011.0,0.13439,0.39941,0.19,0.36,-0.05,False
 2026,Working budget,T00,Department of Commerce,10,Office of International Investment and Trade,4981930.0,3761930.0,1120000.0,,100000.0,0.75511,0.22481,0.85,0.15,-0.09,False
 2026,Working budget,D12,Department of Disabilities,02,Telecommunications Access of Maryland,4920218.0,,,,4920218.0,0.0,0.0,0.0,0.0,0.0,False
@@ -5681,8 +5681,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,L00,Department of Agriculture,05,Maryland Agricultural Land Preservation Foundation,3088108.0,,,,3088108.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,Q00,Department of Public Safety and Correctional Services,09,General Administration,3026281.0,3026281.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,E50,State Department of Assessments and Taxation,05,Business Property Valuation,3004273.0,264552.0,,,2739721.0,0.08806,0.0,0.5,0.0,-0.41,False
-2026,Working budget,D21,Governor's Office of Crime Prevention and Policy,04,Violence Intervention and Prevention Program (VIPP),3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R00,State Department of Education,58,Head Start,3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,D21,Governor's Office of Crime Prevention and Policy,04,Violence Intervention and Prevention Program (VIPP),3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D40,Department of Planning,04,Planning Coordination,2990985.0,2663356.0,327629.0,,,0.89046,0.10954,0.85,0.15,0.04,False
 2026,Working budget,K00,Department of Natural Resources,02,Office of the Attorney General,2938759.0,2832029.0,,,106730.0,0.96368,0.0,1.0,0.0,-0.03,False
 2026,Working budget,L00,Department of Agriculture,02,Weights and Measures,2909116.0,538404.0,,,2370712.0,0.18507,0.0,0.21,0.0,-0.02,False
@@ -5767,21 +5767,21 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,C90,Public Service Commission,08,Public Utility Law Judge,1079179.0,,,,1079179.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,C85,Maryland Tax Court,01,Administration and Appeals,1031335.0,1031335.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,K00,Department of Natural Resources,06,Ocean City Maintenance - Capital Appropriation,1000000.0,,,,1000000.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,57,Human Services Careers Scholarship,1000000.0,1000000.0,,,,1.0,0.0,,,,False
 2026,Working budget,T00,Department of Commerce,07,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D05,Board of Public Works,02,Contingent Fund,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,K00,Department of Natural Resources,06,Ocean City Maintenance - Capital Appropriation,1000000.0,,,,1000000.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,D15,"Executive Department-Boards, Commissions and Offices",20,State Commission On Criminal Sentencing Policy,981114.0,981114.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,C81,Office of the Attorney General,06,Antitrust Division,972888.0,972888.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D90,Canal Place Preservation and Development Authority,01,General Administration,972342.0,356473.0,,,615869.0,0.36661,0.0,0.29,0.0,0.08,False
 2026,Working budget,D15,"Executive Department-Boards, Commissions and Offices",01,Survey Commissions,952539.0,952539.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D21,Governor's Office of Crime Prevention and Policy,02,MD Behavioral Health and Public Safety Center of Excellence,936732.0,936732.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,T00,Department of Commerce,09,Baltimore Symphony Orchestra (BSO),900000.0,900000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,T50,Maryland Technology Development Corporation,05,Cybersecurity Investment Fund,900000.0,900000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,T00,Department of Commerce,09,Baltimore Symphony Orchestra (BSO),900000.0,900000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D52,Maryland Department of Emergency Management,04,State Disaster Recovery Division,898736.0,898736.0,,,,1.0,0.0,,,,False
 2026,Working budget,N00,Department of Human Services,02,Citizens Review Board for Children,874452.0,555299.0,319153.0,,,0.63503,0.36497,0.87,0.13,-0.23,False
 2026,Working budget,C81,Office of the Attorney General,10,People's Insurance Counsel Division,823737.0,,,,823737.0,0.0,0.0,0.0,0.0,0.0,False
@@ -5790,13 +5790,13 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,L00,Department of Agriculture,01,Office of the Assistant Secretary,807766.0,807766.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,M00,Maryland Department of Health,01,Behavioral Health Administration Facility Maintenance,785189.0,499189.0,,,286000.0,0.63576,0.0,0.78,0.0,-0.15,False
 2026,Working budget,D26,Department of Aging,02,Senior Citizens Activities Centers Operating Fund,765241.0,765241.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,T50,Maryland Technology Development Corporation,12,Inclusion Fund,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,T50,Maryland Technology Development Corporation,12,Inclusion Fund,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,M00,Maryland Department of Health,01,Developmental Disabilities Administration Facility Maintenance,735570.0,735570.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,S00,Department of Housing and Community Development,01,Maryland Housing Fund,724352.0,,,,724352.0,0.0,0.0,0.0,0.0,0.0,False
-2026,Working budget,T00,Department of Commerce,21,Maryland Economic Adjustment Fund,700000.0,,,600000.0,100000.0,0.0,0.85714,0.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,43,Maryland Higher Education Outreach and College Access Program,700000.0,700000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2026,Working budget,T00,Department of Commerce,21,Maryland Economic Adjustment Fund,700000.0,,,600000.0,100000.0,0.0,0.85714,0.0,0.0,0.0,False
 2026,Working budget,C90,Public Service Commission,07,Electricity Division,698416.0,,,,698416.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,D15,"Executive Department-Boards, Commissions and Offices",07,Health Care Alternative Dispute Resolution Office,664240.0,639204.0,,,25036.0,0.96231,0.0,0.96,0.0,0.0,False
 2026,Working budget,C81,Office of the Attorney General,18,Correctional Litigation Division,654854.0,654854.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -5823,8 +5823,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2026,Working budget,D40,Department of Planning,02,State Clearinghouse,363532.0,363532.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,R62,Maryland Higher Education Commission,16,Charles W. Riley Firefighter and Ambulance and Rescue Squad Member Scholarship,358000.0,,,,358000.0,0.0,0.0,0.0,0.0,0.0,False
 2026,Working budget,D05,Board of Public Works,05,Wetlands Administration,305490.0,305490.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2026,Working budget,L00,Department of Agriculture,20,Maryland Agricultural and Resource-Based Industry Development Corporation,300000.0,300000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,T00,Department of Commerce,18,Military Personnel and Service-Disabled Veteran Loan Program,300000.0,,,,300000.0,0.0,0.0,0.0,0.0,0.0,False
+2026,Working budget,L00,Department of Agriculture,20,Maryland Agricultural and Resource-Based Industry Development Corporation,300000.0,300000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2026,Working budget,D60,State Archives,02,Artistic Property,298386.0,264856.0,,,33530.0,0.88763,0.0,0.83,0.0,0.05,False
 2026,Working budget,L00,Department of Agriculture,10,Nuisance Insects,275000.0,137500.0,,,137500.0,0.5,0.0,,,,False
 2026,Working budget,D50,Military Department,04,Capital Appropriation,227000.0,,227000.0,,,0.0,1.0,0.0,1.0,0.0,False
@@ -6099,8 +6099,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,P00,Maryland Department of Labor,14,Aid To Education,17478470.0,7611986.0,9866484.0,,,0.43551,0.56449,0.46,0.54,-0.02,False
 2027,Legislative appropriation,R00,State Department of Education,02,Maryland Center for School Safety - Grants,17100000.0,6500000.0,,,10600000.0,0.38012,0.0,0.36,0.0,0.02,False
 2027,Legislative appropriation,R00,State Department of Education,15,Language Assistance,17078765.0,,17078765.0,,,0.0,1.0,0.0,1.0,0.0,False
-2027,Legislative appropriation,D28,Maryland Stadium Authority,69,Racing and Community Development Financing Fund,17000000.0,,,,17000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,D40,Department of Planning,12,Maryland Historic Revitalization Tax Credit,17000000.0,17000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2027,Legislative appropriation,D28,Maryland Stadium Authority,69,Racing and Community Development Financing Fund,17000000.0,,,,17000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,H00,Department of General Services,01,Office of State Procurement,16666912.0,14227162.0,,,2439750.0,0.85362,0.0,,,,
 2027,Legislative appropriation,Q00,Department of Public Safety and Correctional Services,01,Division of Parole and Probation-Support Services,16594991.0,16509991.0,,,85000.0,0.99488,0.0,1.0,0.0,-0.0,False
 2027,Legislative appropriation,R15,Maryland Public Broadcasting Commission,03,Broadcasting,16222917.0,372099.0,,,15850818.0,0.02294,0.0,0.03,0.0,-0.01,False
@@ -6111,8 +6111,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,K00,Department of Natural Resources,05,Power Plant Assessment Program,15365733.0,,,,15365733.0,0.0,0.0,0.1,0.0,-0.1,False
 2027,Legislative appropriation,S00,Department of Housing and Community Development,03,Office of Management Services,15272893.0,,6710099.0,,8562794.0,0.0,0.43935,0.0,0.6,-0.0,False
 2027,Legislative appropriation,E20,State Treasurer's Office,01,Treasury Management,15118388.0,12464015.0,,,2654373.0,0.82443,0.0,0.9,0.0,-0.07,False
-2027,Legislative appropriation,U00,Department of the Environment,12,Capital Appropriation - Bay Restoration Fund-Septic Systems,15000000.0,,,,15000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,T00,Department of Commerce,17,More Jobs For Marylanders Tax Credit Reserve,15000000.0,3000000.0,,,12000000.0,0.2,0.0,,,,
+2027,Legislative appropriation,U00,Department of the Environment,12,Capital Appropriation - Bay Restoration Fund-Septic Systems,15000000.0,,,,15000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,01,Victim Services Unit,14858832.0,8996599.0,2000250.0,,3861983.0,0.60547,0.13462,0.7,0.12,-0.09,False
 2027,Legislative appropriation,D60,State Archives,01,Archives,14754473.0,13375835.0,40000.0,,1338638.0,0.90656,0.00271,0.72,0.0,0.18,False
 2027,Legislative appropriation,W00,Department of State Police,01,Fire Prevention Services,14657479.0,14657479.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -6161,10 +6161,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,E50,State Department of Assessments and Taxation,10,Charter Unit,10491869.0,613683.0,,,9878186.0,0.05849,0.0,0.02,0.0,0.04,False
 2027,Legislative appropriation,E00,Comptroller of Maryland,01,Executive Direction,10452984.0,9237703.0,,,1215281.0,0.88374,0.0,0.85,0.0,0.04,False
 2027,Legislative appropriation,Q00,Department of Public Safety and Correctional Services,05,Central Home Detention Unit,10131351.0,10131351.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2027,Legislative appropriation,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,10000000.0,5000000.0,,,5000000.0,0.5,0.0,1.0,0.0,-0.5,False
 2027,Legislative appropriation,D25,Interagency Commission On School Construction,03,School Safety Grant Program,10000000.0,10000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2027,Legislative appropriation,T00,Department of Commerce,10,Child Care Capital Support Revolving Loan Fund,10000000.0,2200000.0,,,7800000.0,0.22,0.0,,,,
 2027,Legislative appropriation,T00,Department of Commerce,15,Maryland Biotech Investment Tax Credit Reserve Fund,10000000.0,2658750.0,,,7341250.0,0.26587,0.0,,,,
+2027,Legislative appropriation,R62,Maryland Higher Education Commission,56,Teacher Development and Retention Program,10000000.0,5000000.0,,,5000000.0,0.5,0.0,1.0,0.0,-0.5,False
+2027,Legislative appropriation,T00,Department of Commerce,10,Child Care Capital Support Revolving Loan Fund,10000000.0,2200000.0,,,7800000.0,0.22,0.0,,,,
 2027,Legislative appropriation,M00,Maryland Department of Health,11,Senior Prescription Drug Assistance Program,9937523.0,,,,9937523.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,E00,Comptroller of Maryland,03,Unclaimed & Abandoned Property,9925439.0,1719051.0,,,8206388.0,0.1732,0.0,0.22,0.0,-0.04,False
 2027,Legislative appropriation,D55,Department of Veterans and Military Families,02,Cemetery Program,9850551.0,6601005.0,3249546.0,,,0.67012,0.32988,0.5,0.34,0.17,False
@@ -6248,9 +6248,9 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,E00,Comptroller of Maryland,01,Payroll Management,5110721.0,4882402.0,,,228319.0,0.95533,0.0,0.97,0.0,-0.02,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,33,Part-Time Grant Program,5087780.0,5087780.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,E00,Comptroller of Maryland,02,Financial and Support Services,5051182.0,4288623.0,,,762559.0,0.84903,0.0,0.86,0.0,-0.02,False
+2027,Legislative appropriation,D13,Maryland Energy Administration,02,The Jane E. Lawton Conservation Loan Program,5000000.0,,,,5000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,S00,Department of Housing and Community Development,08,Homeownership Programs-Capital Appropriation,5000000.0,,,,5000000.0,0.0,0.0,0.71,0.04,-0.71,False
 2027,Legislative appropriation,T50,Maryland Technology Development Corporation,15,Maryland Equitech Growth Fund,5000000.0,5000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2027,Legislative appropriation,D13,Maryland Energy Administration,02,The Jane E. Lawton Conservation Loan Program,5000000.0,,,,5000000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,K00,Department of Natural Resources,01,Secretariat,4975729.0,878013.0,234082.0,,3863634.0,0.17646,0.04704,0.74,0.07,-0.57,False
 2027,Legislative appropriation,T00,Department of Commerce,04,Office of International Investment and Trade,4960835.0,3740835.0,1120000.0,,100000.0,0.75407,0.22577,,,,False
 2027,Legislative appropriation,F10,Department of Budget and Management,04,Division of Personnel Services,4865282.0,4865282.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -6310,8 +6310,8 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,A15,Payments to Civil Divisions of the State,05,Cannabis Sales Tax Distributions,3044887.0,,,,3044887.0,0.0,0.0,,,,False
 2027,Legislative appropriation,K00,Department of Natural Resources,01,Critical Area Commission,3038188.0,3038188.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,S00,Department of Housing and Community Development,08,Division of Broadband - Operating,3017385.0,772671.0,1121935.0,1122779.0,,0.25607,0.74393,0.32,0.68,-0.06,False
-2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,04,Violence Intervention and Prevention Program (VIPP),3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,R00,State Department of Education,58,Head Start,3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,04,Violence Intervention and Prevention Program (VIPP),3000000.0,3000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D73,Office of the Inspector General for Education,01,Office of the Inspector General,2885210.0,2885210.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D40,Department of Planning,04,Planning Coordination,2847014.0,2465351.0,245072.0,,136591.0,0.86594,0.08608,0.43,0.57,0.43,False
 2027,Legislative appropriation,L00,Department of Agriculture,02,Administrative Services,2825886.0,2774931.0,,,50955.0,0.98197,0.0,1.0,0.0,-0.02,False
@@ -6388,14 +6388,14 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,C81,Office of the Attorney General,06,Antitrust Division,1057022.0,1057022.0,,,,1.0,0.0,0.08,0.13,0.92,False
 2027,Legislative appropriation,C81,Office of the Attorney General,10,People's Insurance Counsel Division,1041755.0,,,,1041755.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,C85,Maryland Tax Court,01,Administration and Appeals,1038914.0,1038914.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2027,Legislative appropriation,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2027,Legislative appropriation,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,51,Richard W. Collins III Leadership with Honor Scholarship Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,57,Human Services Careers Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2027,Legislative appropriation,R62,Maryland Higher Education Commission,46,Cybersecurity Public Service Scholarship,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
+2027,Legislative appropriation,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,T50,Maryland Technology Development Corporation,08,Second Stage Business Incubator,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,T00,Department of Commerce,12,Partnership for Workforce Quality,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2027,Legislative appropriation,T50,Maryland Technology Development Corporation,13,Maryland Makerspace Initiative Program,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,T00,Department of Commerce,22,Western Maryland Economic Future Investment Program,1000000.0,1000000.0,,,,1.0,0.0,,,,False
-2027,Legislative appropriation,R62,Maryland Higher Education Commission,45,Workforce Development Sequence Scholarships,1000000.0,1000000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,02,MD Behavioral Health and Public Safety Center of Excellence,952530.0,952530.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D55,Department of Veterans and Military Families,11,Outreach and Advocacy,925900.0,925900.0,,,,1.0,0.0,0.97,0.0,0.03,False
 2027,Legislative appropriation,D90,Canal Place Preservation and Development Authority,01,General Administration,915631.0,247037.0,,,668594.0,0.2698,0.0,0.27,0.0,-0.0,False
@@ -6408,10 +6408,10 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,C90,Public Service Commission,07,Electricity Division,767205.0,,,,767205.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,D26,Department of Aging,02,Senior Citizens Activities Centers Operating Fund,765241.0,765241.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,L00,Department of Agriculture,01,Office of the Assistant Secretary,762576.0,600882.0,,,161694.0,0.78796,0.0,1.0,0.0,-0.21,False
+2027,Legislative appropriation,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,T00,Department of Commerce,07,Baltimore Symphony Orchestra (BSO),750000.0,750000.0,,,,1.0,0.0,,,,False
 2027,Legislative appropriation,T50,Maryland Technology Development Corporation,12,Inclusion Fund,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,37,Veterans of the Afghanistan and Iraq Conflicts Scholarship,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
-2027,Legislative appropriation,R62,Maryland Higher Education Commission,02,College Prep/Intervention Program,750000.0,750000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D15,"Executive Department-Boards, Commissions and Offices",01,Survey Commissions,734382.0,734382.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,T00,Department of Commerce,14,Capital-Maryland Economic Adjustment Fund,700000.0,,,600000.0,100000.0,0.0,0.85714,,,,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,43,Maryland Higher Education Outreach and College Access Program,700000.0,700000.0,,,,1.0,0.0,1.0,0.0,0.0,False
@@ -6440,9 +6440,9 @@ fiscal_year,stage,agency_code,agency,program_code,program_name,program_budget,ge
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,16,Charles W. Riley Firefighter and Ambulance and Rescue Squad Member Scholarship,358000.0,,,,358000.0,0.0,0.0,0.0,0.0,0.0,False
 2027,Legislative appropriation,D05,Board of Public Works,05,Wetlands Administration,317100.0,317100.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D60,State Archives,02,Artistic Property,309386.0,281698.0,,,27688.0,0.91051,0.0,0.89,0.0,0.02,False
-2027,Legislative appropriation,T00,Department of Commerce,13,Military Personnel and Service-Disabled Veteran Loan Program,300000.0,,,,300000.0,0.0,0.0,,,,False
-2027,Legislative appropriation,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,300000.0,,,,300000.0,0.0,0.0,,,,False
 2027,Legislative appropriation,T00,Department of Commerce,18,Maryland New Start Microloan Program,300000.0,300000.0,,,,1.0,0.0,,,,False
+2027,Legislative appropriation,D40,Department of Planning,11,Historic Preservation - Capital Appropriation,300000.0,,,,300000.0,0.0,0.0,,,,False
+2027,Legislative appropriation,T00,Department of Commerce,13,Military Personnel and Service-Disabled Veteran Loan Program,300000.0,,,,300000.0,0.0,0.0,,,,False
 2027,Legislative appropriation,L00,Department of Agriculture,10,Nuisance Insects,275000.0,137500.0,,,137500.0,0.5,0.0,1.0,0.0,-0.5,False
 2027,Legislative appropriation,R62,Maryland Higher Education Commission,21,Jack F. Tolbert Memorial Student Grant Program,200000.0,200000.0,,,,1.0,0.0,1.0,0.0,0.0,False
 2027,Legislative appropriation,D21,Governor's Office of Crime Prevention and Policy,06,Maryland Statistical Analysis Center,199569.0,,199569.0,,,0.0,1.0,0.0,1.0,0.0,False

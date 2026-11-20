@@ -16,13 +16,13 @@ The rules were written down before the counts below were taken; the grain was in
 
 ## Rules
 
-Screened: full payment years FY2022-FY2026 (the partial latest year is never screened), amounts above zero. Left out, reusing the pipeline's payee rules: payees flagged government or institutional (`ref.map_payee_vendor.is_government`), payee types Government (transfers to government), Health care organization (health plans, benefits) and Financial institution (debt service, paying agents) from `reference/payee_type_rules.csv`, payroll-, benefit- and court-like payee names (`exclude_payee_pattern`), and pass-through payments (`reference/payee_area_exclusions.csv`, as `mart.payment_area` applies it). Agency = budget agency code (agency name as paid when unmatched); vendor = the company after payee names are grouped.
+Screened: full payment years FY2010-FY2026 (`years.history_first_fy` to the last full year; the partial latest year is never screened), amounts above zero. Left out, reusing the pipeline's payee rules: payees flagged government or institutional (`ref.map_payee_vendor.is_government`), payee types Government (transfers to government), Health care organization (health plans, benefits) and Financial institution (debt service, paying agents) from `reference/payee_type_rules.csv`, payroll-, benefit- and court-like payee names (`exclude_payee_pattern`), and pass-through payments (`reference/payee_area_exclusions.csv`, as `mart.payment_area` applies it). Agency = budget agency code (agency name as paid when unmatched); vendor = the company after payee names are grouped.
 
 | Rule | Groups records that have | At this data's grain |
 |---|---|---|
 | Possible duplicate | same agency, vendor and exact amount (to the cent, each $1,000+), record dates within 7 days | measured |
 | Repeated annual line | same agency, vendor and exact amount ($1,000+) twice or more in one fiscal year, record dates more than 7 days apart; not already a duplicate | measured (annual records only) |
-| Possible split purchase | same agency and vendor, 2+ payments within 14 days, each under the small-procurement limit on the record date ($50,000 before Oct 1, 2023, $100,000 from then: SF&P 13-109(a)(1), Ch. 161 of 2023), together above it | not measurable |
+| Possible split purchase | same agency and vendor, 2+ payments within 14 days, each under the small-procurement limit on the record date ($25,000 before Oct 1, 2017 (Ch. 215 of 1996), $50,000 from then (Ch. 588/589 of 2017), $100,000 from Oct 1, 2023 (Ch. 161 of 2023): SF&P 13-109(a)(1)), together above it | not measurable |
 
 A record is in at most one group (precedence: duplicate, repeated line, split). When two rules flag the same agency, vendor and year, `also_flagged_under` labels it; dollars are never counted twice. `review_amount` is what a review could recover if a group is confirmed: every copy after the first (amount x (n - 1)); 0 for a split (a compliance lead, not an overpayment). A "Business or other" payee none of whose names looks like an organization may be an individual and is shown as "Payee not named (may be an individual)" (41 of the 205 groups before the source issues were split out; 2 of the 8 leads now).
 
@@ -62,25 +62,27 @@ Note: a confirmed_duplicate_in_source lead is a publication issue, not recoverab
 <!-- facts:payment_screen -->
 _Generated from `mart.d_payment_screen`, `mart.d_source_issues` and `mart.d_payment_screen_summary`, extract run 20261119T123559Z, by `python -m src.models.doc_facts`._
 
-**Payment leads: 8 groups, 16 records, $3.72M in groups, $1.86M review dollars.**
+**Payment leads: 25 groups, 52 records, $4.38M in groups, $2.20M review dollars.**
 
 | Rule | Confidence | Review status | Groups | Records | Review dollars |
 |---|---|---|---|---|---|
+| Possible duplicate | high | confirmed_duplicate_in_source | 2 | 4 | $39,831 |
 | Possible duplicate | high | needs_records | 1 | 2 | $4,897 |
-| Possible duplicate | low | likely_legitimate | 1 | 2 | $5,000 |
-| Possible duplicate | low | needs_records | 5 | 10 | $1.83M |
-| Possible duplicate | medium | needs_records | 1 | 2 | $25,000 |
+| Possible duplicate | low | likely_legitimate | 8 | 18 | $79,361 |
+| Possible duplicate | low | needs_records | 10 | 20 | $1.98M |
+| Possible duplicate | medium | needs_records | 4 | 8 | $95,000 |
 
-**Source issues (not leads): 2**, 197 screen groups moved out of the leads ($96.73M review dollars they carried).
+**Source issues (not leads): 3**, 197 screen groups moved out of the leads ($96.73M review dollars they carried).
 
 | Issue | Agency | Second-block records | Second-block dollars | Identical to first block | Screen groups | Status |
 |---|---|---|---|---|---|---|
+| SRC-2012-R95 | BALTIMORE CITY COMMUNITY COLLEGE | 1 | $70,095 | 0 | 0 | Found in the extract; not yet checked against the source |
 | SRC-2022-J11 | MARYLAND TRANSPORTATION AUTHORITY | 218 | $781.25M | 91 | 81 | In published source (both State sites); ask the Comptroller's open-data team which FY2022 block is current |
 | SRC-2022-U10 | MARYLAND ENVIRONMENTAL SERVICE | 321 | $93.23M | 121 | 116 | In published source (both State sites); ask the Comptroller's open-data team which FY2022 block is current |
 
-**Backtest, by year** (lead groups / review dollars): FY2022 5 / $852,000; FY2023 0 / $0; FY2024 1 / $5,000; FY2025 2 / $1.00M; FY2026 0 / $0.
+**Backtest, by year** (lead groups / review dollars): FY2010 3 / $34,258; FY2011 0 / $0; FY2012 1 / $50,000; FY2013 1 / $6,950; FY2014 2 / $24,661; FY2015 2 / $31,611; FY2016 1 / $6,950; FY2017 0 / $0; FY2018 1 / $14,700; FY2019 1 / $7,350; FY2020 2 / $87,373; FY2021 3 / $70,000; FY2022 5 / $852,000; FY2023 0 / $0; FY2024 1 / $5,000; FY2025 2 / $1.00M; FY2026 0 / $0.
 
-**Measured confirmation rate:** not measured (not measurable without payment records; 8 leads reviewed, 0 confirmed). Lever rates low / likely / high: 0.0% / 0.0% / 0.0%.
+**Measured confirmation rate:** 8.0% (share of 25 reviewed leads confirmed from the data (2 confirmed); low/high = Wilson 95.0% interval; 25 leads reviewed, 2 confirmed). Lever rates low / likely / high: 2.2% / 8.0% / 25.0%.
 <!-- /facts:payment_screen -->
 
 ## Do fiscal_period and date vary within a fiscal year? (gap 4, Nov 10, 2026)

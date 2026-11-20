@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+Nothing yet.
+
 ## [4.0.0] — 2026-11-20
 
 The open fiscal year goes live. FY2027 payments are published everywhere, tagged FYTD (fiscal year to date), and never compared with completed years — the tracker now follows the current year as it happens instead of holding it back.
@@ -20,11 +24,36 @@ The open fiscal year goes live. FY2027 payments are published everywhere, tagged
 - `docs/refresh-plan.md`: the global refresh plan — the two refresh events (total refresh, Pages update), the eight tiers with their commands and logs, the asset-to-pipeline-source map, and the downstream asset log for goaiarchitect.com.
 - `docs/gap-fixes.md`: every known gap mapped to its fix or its standing handling, including the FY2028 rollover checklist (move every pinned year together when FY2027 completes).
 
+### Added (live tracking and FY2010 history)
+- **Payment history from FY2010:** one config value, `years.history_first_fy: 2010` in `config/assumptions.yaml`, sets the first year of every payments, vendor and agency mart; each runs from FY2010 to the open year. Budget tables keep their source's first year (FY2017). The payment screen stays FY2022–FY2026 because earlier small-procurement limits are not yet sourced.
+- **Year-coverage guard:** `src/pipeline/coverage.py` and `reference/year_coverage.csv` list every published table with a `fiscal_year` column by family (payments, grants, budget, mixed, narrow with a reason). A table that loses its source's first or last year stops the build (`checks.py`) and fails CI (`tests/test_year_coverage.py`); an unlisted table fails too.
+- **Two clocks in the header:** "Portal updated by DBM" (the payments dataset's last State refresh) and "Refreshed by GitHub" (the pipeline run), both in Maryland time.
+- **FYTD pace and refresh log:** the open year shows its pace (share of the last full year's payments against the share of the fiscal year elapsed at the State's refresh) instead of a change against a full year; the chart draws it as a hollow point with a dashed line. `d_fytd_log` keeps one row per State refresh, so later years can be compared at the same point in the year.
+- **`f_fte`:** budgeted FTEs exactly as published (x8qy-486w), checked at zero difference against the portal.
+- Every exported table is published in `site_data/` (including `d_econ`).
+- **Payment screen from FY2010:** the screen covers FY2010–FY2026 (`payment_screen.first_fy: *history`) with the small-procurement limit in force on each record date: $25,000 before Oct 1, 2017 (Ch. 215 of 1996), $50,000 to Sep 30, 2023 (Ch. 588/589 of 2017), $100,000 after (Ch. 161 of 2023; SF&P 13-109(a)(1)). 25 leads ($2.20M to review); the FY2022–FY2026 leads are the same 8 as before. A FY2012 Baltimore City Community College block ($70,095) is listed as a source issue not yet verified at the State's sites.
+
+### Changed (live tracking)
+- Payments on the Overview headline the open year to date; the agency tile reads budget-vs-payments up to the open year, and agencies with payments but no budget line appear as "Payments only".
+- Selecting every agency in the slicer gives the same totals as "All agencies".
+- Checks compare budget and payments from `years.history_first_fy` instead of a fixed FY2017; 145 checks.
+- README: a quickstart at the top, the live-tracking rules, the FY2010 window, the coverage step and today's pipeline counts; the pipeline diagram is redrawn.
+
+### Fixed (live tracking)
+- A yoy mart's inline SQL comment broke the mart wrapper; the comment moved to its own line.
+- A fan-out in `f_fte` from duplicate agency names (one name per agency code now).
+- Lint: ruff E731 in the coverage check.
+- The README's "Source data issue" line and the `source_issue_amount_usd` metric count only issues verified at the State's sites.
+- Docs: all eight eMM bid feeds' portal IDs recorded (FY2012 d7pu-ebad and FY2013 n4xa-2zgn included; the portal has no FY2020 feed); "six datasets" in `docs/checks.md` and the pipeline diagram; grants and higher-education rows in `docs/data-sources.md`.
+
+### Verification
+- 145 of 145 checks pass. 544 tests pass (1 skipped). Budget, actuals, fund, FTE, grants and loans, higher education and payments FY2008–FY2027 match the portal with $0 difference; every actual year reconciles with DBM's budget books.
+
 ### Fixed
 - The Pages build writes a favicon and tolerates filesystems that lag behind `rmtree` (no more spurious build failures on network mounts).
 
 
-## 2026-11-19 — Fiscal-year alignment; FY2027 payments published as partial; v3 is the live site
+### 2026-11-19 — Fiscal-year alignment; FY2027 payments published as partial; v3 is the live site
 
 - Fresh pipeline run 20261119T124859Z: 143 of 143 checks passed; every budget and payments year matches the State's sites.
 - FY2027 payments so far ($18.07B, the year in progress) are published in `totals_by_fy`, flagged `partial_year`, and shown on the Overview as "FY2027 so far (partial year)". The detail tables still hold the open year back; headlines stay on FY2026, the last full payments year.
@@ -35,29 +64,29 @@ The open fiscal year goes live. FY2027 payments are published everywhere, tagged
 - Fixed a stale definition that called FY2026 payments part-year.
 - (The FY2027 hold-back removal, FYTD tagging and gap-fix mapping landed in 4.0.0 — see above.)
 
-## [Unreleased]
+### Since 3.2.0 (merged before the live-tracking work)
 
-Added
+#### Added
 - Executive walkthrough: an 11th dashboard tab, right after Overview, that tells the story end to end in eight plain-language steps with the decisions asked, for the Governor's office and GMI. Its text is built by `src/models/exec_walkthrough.py` from the metric registry and the published tables (the site writes `data/exec_walkthrough.csv`), so no number is typed; it prints as a one-page brief.
 - Asset map (`docs/asset-map.csv`, `docs/asset-map.md`): each row of the Maryland Spend Lens roadmap mapped to v3's status, dashboard tab, published tables, code, roadmap decision and portfolio asset, plus the v3-only rows; `tests/test_asset_map.py` fails if a tab, table or file it names does not exist.
 - Reported savings figures kept by source and date: `reference/claim_sources.csv`, `reference/gmi_public_page_claims.csv` (20 figures from the Governor's Government Modernization Initiative page, status as of June 2026, each with its quote), `src/models/claims.py` and the published table `d_reported_claims` (38 rows: the January 2026 report and the page). The walkthrough gains "What GMI's public page says now" (sources, the two headline totals, item-by-item comparison); the README and the registry (`reported_actions_june_2026_usd`) state both totals. Decision D15.
 - Walkthrough front matter (from `docs/research/walkthrough-review.md`, gaps G1 to G4 and the as-of line): an *At a glance* section with the data as-of date, three computed bottom-line points and four actions the evidence supports; a plain-words opening; a "How savings are counted" note (payments versus cost avoidance, the simple year-before baseline, which reported items overlap and are checked together); and a "Using this approach elsewhere" section. Figures and findings are unchanged.
 - Metric registry (`config/metrics.yml`, `src/models/metrics.py`): 19 headline numbers (reported savings, the conditional path, opportunity leads, payment screen, source issue, controllable purchases and its change, rows checked, checks passed) each defined once with its definition, unit, grain, marts and SQL, checked by the MCP SQL guard. The README facts now read their numbers from it, and the site publishes `metrics.json` (definitions plus current values). Tests: registry shape, every metric evaluates on the published snapshot, README facts and the Overview finding equal the registry, unsafe SQL is refused. Roadmap Phase 7 pillar 3, step 1 (decision D14).
 
-Changed
+#### Changed
 - Walkthrough key findings rewritten so each finding leads with its conclusion in plain words (a sentence, then the evidence), fixes the "Section 7" link that pointed at section 8, and mentions GMI's two totals; every number is still computed from the published tables.
 - Roadmap: status as of Nov 18, 2026 and Phase 7 (BI as an application): decisions D10 to D13, the option comparison, the four pillars with gates, and the fate of each static report. Plotly is adopted for new interactive views (reverses the earlier decline).
 
-Fixed
+#### Fixed
 - The monthly Extract and build run failed `pytest` on any day after the README's as-of date, because the README facts were only regenerated after the tests. It now regenerates them from the new run first and keeps the resulting docs patch with the run evidence (found on the first run after the backtest fix: extract, build and 476 tests passed; only the README date check failed).
 
-Added
+#### Added
 - Opt-in `?palette=portfolio` (dark navy, gold and cyan; contrast checked in `tests/test_site_embed.py`) and `?embed=1` (hides the dashboard's own header) for embedding the dashboard in another site; a `#t-<tab>` link now switches tabs without a reload. The default look is unchanged.
 - Tech stack and architecture section in the README, verified against the repository (no Tailwind CSS, DVC optional, D3.js inlined, DuckDB-WASM from jsDelivr for the SQL explorer).
 - GitHub Discussions (Q&A and Ideas) with links in the issue chooser; `SUPPORT.md` and `CONTRIBUTING.md` route questions there.
 - Accessible walkthrough report: findings first, captioned tables, alt text on every chart, a skip link and table of contents; the render fails on missing alt text, captions or header scopes.
 
-Changed
+#### Changed
 - The Socrata app token is optional. A missing token runs at the public limits; a rejected token is dropped with a warning and the run continues. The scheduled extract no longer requires it, and the raw data is cached in CI keyed on the portal's own update dates. The weekly freshness check falls back the same way. Fails fast, with a clear message, if the portal rejects a token mid-run.
 - Statewide program screen reads findings from the audit register (`reference/audit_findings.csv`), tied to budget programs by `reference/audit_finding_programs.csv`; the separate override file is removed.
 
@@ -158,3 +187,7 @@ preserved there.
 tests, 36 dashboard page tests, 5 published-site tests — all green.
 
 [2.0.0]: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v2/releases/tag/v2.0.0
+[Unreleased]: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/releases/tag/v4.0.0
+[3.2.0]: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/releases/tag/v3.2.0
+[3.1.0]: https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/releases/tag/v3.1.0
