@@ -1,5 +1,5 @@
 -- mart.f_overlap: statewide evidence for where the budget, payments and grants overlap
--- Grain: one row per fiscal year (FY2017 onward).
+-- Grain: one row per fiscal year, FY2010 (years.history_first_fy) onward; budget columns from FY2017 (the source's first year).
 -- What: budget by fund type (how it's funded), payments by payee (where it's going), and grants with the share whose
 -- grantee is also paid in the payments data that year. A high grants_in_payments_share means grants are largely paid
 -- out through the payments data: show grants as part of payments, never on top of them.

@@ -22,12 +22,13 @@ d_all_funds,public_higher_education,number,11,"Operating budget of R13 Morgan St
 d_all_funds,all_funds_including_higher_education,number,11,"Operating budget plus public higher education: the all-funds total including public higher education, a separate labeled figure that no GMI savings baseline uses",derived
 d_all_funds,label,text,11,How the all-funds figure must be labeled wherever it is shown,derived
 d_all_funds,source_datasets,text,11,Portal datasets summed in the row,derived
-d_area_top,fiscal_year,number,175,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-d_area_top,area,text,175,One of GMI's six focus areas,derived
-d_area_top,vendor,text,175,Company name after grouping payee names,derived
-d_area_top,agencies,number,175,Agencies paying the vendor (or with payments in the year),derived
-d_area_top,spend,number,175,Dollars spent (budget actuals or payments),derived
-d_area_top,rank,number,175,Rank of the vendor within its area and year by spend,derived
+d_area_top,fiscal_year,number,623,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+d_area_top,area,text,623,One of GMI's six focus areas,derived
+d_area_top,vendor,text,623,Company name after grouping payee names,derived
+d_area_top,agencies,number,623,Agencies paying the vendor (or with payments in the year),derived
+d_area_top,spend,number,623,Dollars spent (budget actuals or payments),derived
+d_area_top,rank,number,623,Rank of the vendor within its area and year by spend,derived
+d_area_top,partial_year,number,623,,
 d_audit_findings,finding_id,text,19,"Finding id: agency, program and year for a public finding; OLA- plus the agency code for an OLA report row",reference
 d_audit_findings,agency_code,text,19,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 d_audit_findings,agency,text,19,Agency name shown on the dashboard,derived
@@ -128,11 +129,12 @@ d_drift,psi,number,46,"Population stability index of to_fy against from_fy (belo
 d_drift,ks,number,46,Two-sample Kolmogorov-Smirnov statistic (amount distributions only),derived
 d_drift,level,text,46,"Stable, Moderate shift or Major shift from the PSI",derived
 d_drift,partial_year,number,46,True when to_fy is still in progress,derived
-d_families,fiscal_year,number,1257,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-d_families,family,text,1257,Company that several payee names belong to,reference
-d_families,payee_name,text,1257,One payee name grouped into the vendor,derived
-d_families,agencies,number,1257,Agencies paying the vendor (or with payments in the year),derived
-d_families,spend,number,1257,Dollars spent (budget actuals or payments),derived
+d_families,fiscal_year,number,2454,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+d_families,family,text,2454,Company that several payee names belong to,reference
+d_families,payee_name,text,2454,One payee name grouped into the vendor,derived
+d_families,agencies,number,2454,Agencies paying the vendor (or with payments in the year),derived
+d_families,spend,number,2454,Dollars spent (budget actuals or payments),derived
+d_families,partial_year,number,2454,,
 d_federal_crosswalk,fiscal_year,number,4063,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 d_federal_crosswalk,stage,text,4063,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 d_federal_crosswalk,listing,text,4063,"Federal Assistance Listing number (formerly CFDA), e.g. 93.575 Child Care and Development Block Grant",derived
@@ -179,6 +181,13 @@ d_fund_shift,general_share_2y_before,number,6453,General Fund share two fiscal y
 d_fund_shift,federal_share_2y_before,number,6453,Federal share two fiscal years earlier,derived
 d_fund_shift,general_share_change,number,6453,Change in General Fund share against two years earlier (0.20 = 20 points),derived
 d_fund_shift,shift_to_general,boolean,6453,True when the General Fund share rose at least fund_hierarchy.shift_pp points and the budget is at least fund_hierarchy.min_program (config/assumptions.yaml),derived
+d_fytd_log,fiscal_year,number,1,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+d_fytd_log,portal_updated_utc,text,1,Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt,ops
+d_fytd_log,days_into_year,number,1,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive",derived
+d_fytd_log,year_elapsed_share,number,1,Share of the fiscal year elapsed at the State's refresh of the payments data,derived
+d_fytd_log,total_payments,number,1,All payments in the fiscal year,derived
+d_fytd_log,payment_records,number,1,Rows in the payments data for the open fiscal year at that refresh,derived
+d_fytd_log,run_id,text,1,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
 d_grant_groups,group_id,text,4570,Grant group identifier: hash of the group's member description keys (stable while the members are),derived
 d_grant_groups,rank_fy,number,4570,Rank of the group by FY2025 grant dollars,derived
 d_grant_groups,description,text,4570,Representative description of the group: the member with the most grant dollars over all years,derived
@@ -235,19 +244,21 @@ d_model_registry,beats_baseline,boolean,8,True when the model beats the baseline
 d_model_registry,decision,text,8,"Adopted, shown, not promoted, or leads only",derived
 d_model_registry,shown_as,text,8,Where the model appears on the dashboard,derived
 d_model_registry,model_card,text,8,Model card in docs/models,derived
-d_multi,fiscal_year,number,216,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-d_multi,vendor,text,216,Company name after grouping payee names,derived
-d_multi,area,text,216,"Payee-name focus area, or 'Other goods & services'",derived
-d_multi,agencies,number,216,Agencies paying the vendor (or with payments in the year),derived
-d_multi,spend,number,216,Dollars spent (budget actuals or payments),derived
-d_multi,payee_names,number,216,Payee names grouped into the vendor,derived
-d_multi,agency_codes,text,216,Budget agency codes that paid the vendor that year (comma-separated),derived
-d_multi,agencies_prior,number,216,Agencies that paid the vendor the year before,derived
-d_multi,spend_prior,number,216,Spend with the vendor the year before,derived
-d_multi_basis,fiscal_year,number,10,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-d_multi_basis,basis,text,10,Counting basis: company and budget agency (this dashboard) or payee name and payment account (Maryland Spend Lens),derived
-d_multi_basis,vendors,number,10,Distinct payees in the year,derived
-d_multi_basis,spend,number,10,Dollars spent (budget actuals or payments),derived
+d_multi,fiscal_year,number,879,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+d_multi,vendor,text,879,Company name after grouping payee names,derived
+d_multi,area,text,879,"Payee-name focus area, or 'Other goods & services'",derived
+d_multi,agencies,number,879,Agencies paying the vendor (or with payments in the year),derived
+d_multi,spend,number,879,Dollars spent (budget actuals or payments),derived
+d_multi,payee_names,number,879,Payee names grouped into the vendor,derived
+d_multi,agency_codes,text,879,Budget agency codes that paid the vendor that year (comma-separated),derived
+d_multi,agencies_prior,number,879,Agencies that paid the vendor the year before,derived
+d_multi,spend_prior,number,879,Spend with the vendor the year before,derived
+d_multi,partial_year,number,879,,
+d_multi_basis,fiscal_year,number,36,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+d_multi_basis,basis,text,36,Counting basis: company and budget agency (this dashboard) or payee name and payment account (Maryland Spend Lens),derived
+d_multi_basis,vendors,number,36,Distinct payees in the year,derived
+d_multi_basis,spend,number,36,Dollars spent (budget actuals or payments),derived
+d_multi_basis,partial_year,number,36,,
 d_opps,opp_id,text,389,Opportunity identifier,derived
 d_opps,detector,text,389,Screening rule that found the opportunity,derived
 d_opps,agency_code,text,389,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -402,6 +413,7 @@ d_savings_status,reported,number,12,Reported saving midpoint in dollars,source
 d_savings_status,before,number,12,Matching payments in FY2025,derived
 d_savings_status,after,number,12,Matching payments in FY2026,derived
 d_savings_status,status,text,12,"Whether the reported saving is seen in payments (Seen, Partly seen, Not seen yet, Payments fell, Payments did not fall)",derived
+d_savings_status,fytd_paid,number,12,,
 d_savings_status,previous_status,number,12,Status in the previous run,ops
 d_savings_status,changed,number,12,True when the status changed since the previous run,ops
 d_site_reconciliation,dataset,text,31,budget or payments,source
@@ -443,9 +455,9 @@ d_vendor_moves,fy2025,number,40,Payments in FY2025,derived
 d_vendor_moves,fy2026,number,40,Payments in FY2026,derived
 d_vendor_moves,change,number,40,FY2026 minus FY2025 payments,derived
 d_vendor_moves,agencies,number,40,Agencies paying the vendor (or with payments in the year),derived
-d_vendor_names,vendor,text,267,Company name after grouping payee names,derived
-d_vendor_names,payee_name,text,267,One payee name grouped into the vendor,derived
-d_vendor_names,fy2026,number,267,Payments in FY2026,derived
+d_vendor_names,vendor,text,269,Company name after grouping payee names,derived
+d_vendor_names,payee_name,text,269,One payee name grouped into the vendor,derived
+d_vendor_names,fy2026,number,269,Payments in FY2026,derived
 d_vendors,vendor,text,3638,Company name after grouping payee names,derived
 d_vendors,payee_type,text,3638,"Payee type from reference/payee_type_rules.csv: Government, Health care organization, Education institution, Financial institution, Utility, Non-profit (grants data) or Business or other",derived
 d_vendors,main_function,text,3638,"Budget function with the most payments to the vendor, all years",derived
@@ -458,31 +470,33 @@ d_vendors,fy2025,number,3638,Payments in FY2025,derived
 d_vendors,fy2026,number,3638,Payments in FY2026,derived
 d_vendors,agencies_fy2025,number,3638,Agencies that paid the vendor in FY2025,derived
 d_vendors,agencies_fy2026,number,3638,Agencies that paid the vendor in FY2026,derived
-f_agency,agency_code,text,795,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_agency,agency,text,795,Agency name shown on the dashboard,derived
-f_agency,fiscal_year,number,795,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_agency,stage,text,795,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-f_agency,operating_spending,number,795,Operating budget (all funds) for the agency and year,derived
-f_agency,controllable,number,795,"Controllable purchases: contractual services, supplies, equipment, rent and similar spending agencies can renegotiate, per reference/controllable_rules.csv",derived
-f_agency,fte,number,795,Budgeted full-time-equivalent positions,derived
-f_agency,payments,number,795,Payments made by the agency in the year,derived
-f_area,fiscal_year,number,6396,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_area,stage,text,6396,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-f_area,agency_code,text,6396,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_area,area,text,6396,One of GMI's six focus areas,derived
-f_area,spend,number,6396,Dollars spent (budget actuals or payments),derived
-f_area,payee_spend,number,6396,Payments to payees assigned to the focus area,derived
-f_budget_vs_pay,fiscal_year,number,874,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_budget_vs_pay,stage,text,874,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-f_budget_vs_pay,agency_code,text,874,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_budget_vs_pay,budget,number,874,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
-f_budget_vs_pay,general_funds,number,874,Operating budget paid from the General Fund,derived
-f_budget_vs_pay,special_funds,number,874,Operating budget paid from special funds (dedicated State revenue),derived
-f_budget_vs_pay,federal_funds,number,874,"Operating budget paid from federal funds, including the ARRA and COVID federal fund types",derived
-f_budget_vs_pay,payments,number,874,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)",derived
-f_budget_vs_pay,paid_to_government,number,874,"Payments to government payees (counties, cities, school systems, State and federal bodies) per reference/payee_type_rules.csv",derived
-f_budget_vs_pay,paid_to_others,number,874,"Payments to all other payees: businesses, non-profits, health care, education and financial institutions, utilities and individuals",derived
-f_budget_vs_pay,partial_year,number,874,True for the latest payments year while it is still being updated monthly,derived
+f_agency,agency_code,text,1229,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_agency,agency,text,1229,Agency name shown on the dashboard,derived
+f_agency,fiscal_year,number,1229,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_agency,stage,text,1229,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+f_agency,operating_spending,number,1229,Operating budget (all funds) for the agency and year,derived
+f_agency,controllable,number,1229,"Controllable purchases: contractual services, supplies, equipment, rent and similar spending agencies can renegotiate, per reference/controllable_rules.csv",derived
+f_agency,fte,number,1229,Budgeted full-time-equivalent positions,derived
+f_agency,payments,number,1229,Payments made by the agency in the year,derived
+f_agency,partial_year,number,1229,,
+f_area,fiscal_year,number,6435,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_area,stage,text,6435,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+f_area,agency_code,text,6435,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_area,area,text,6435,One of GMI's six focus areas,derived
+f_area,spend,number,6435,Dollars spent (budget actuals or payments),derived
+f_area,payee_spend,number,6435,Payments to payees assigned to the focus area,derived
+f_area,partial_year,number,6435,,
+f_budget_vs_pay,fiscal_year,number,1348,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_budget_vs_pay,stage,text,1348,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+f_budget_vs_pay,agency_code,text,1348,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_budget_vs_pay,budget,number,1348,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
+f_budget_vs_pay,general_funds,number,1348,Operating budget paid from the General Fund,derived
+f_budget_vs_pay,special_funds,number,1348,Operating budget paid from special funds (dedicated State revenue),derived
+f_budget_vs_pay,federal_funds,number,1348,"Operating budget paid from federal funds, including the ARRA and COVID federal fund types",derived
+f_budget_vs_pay,payments,number,1348,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)",derived
+f_budget_vs_pay,paid_to_government,number,1348,"Payments to government payees (counties, cities, school systems, State and federal bodies) per reference/payee_type_rules.csv",derived
+f_budget_vs_pay,paid_to_others,number,1348,"Payments to all other payees: businesses, non-profits, health care, education and financial institutions, utilities and individuals",derived
+f_budget_vs_pay,partial_year,number,1348,True for the latest payments year while it is still being updated monthly,derived
 f_challenger,agency_code,text,2609,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 f_challenger,agency,text,2609,Agency name shown on the dashboard,derived
 f_challenger,code,number,2609,Comptroller sub-object number for the spending code,derived
@@ -504,12 +518,13 @@ f_code,area,text,14744,One of GMI's six focus areas,derived
 f_code,code,number,14744,Comptroller sub-object code,derived
 f_code,spending_code,text,14744,Comptroller sub-object name (with code) shown on the dashboard,derived
 f_code,spend,number,14744,Dollars spent (budget actuals or payments),derived
-f_concentration,fiscal_year,number,114,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_concentration,area,text,114,One of GMI's six focus areas,derived
-f_concentration,vendors,number,114,Distinct payees in the year,derived
-f_concentration,spend,number,114,Dollars spent (budget actuals or payments),derived
-f_concentration,top5_share,number,114,Share of the area's private-vendor spend held by its five largest vendors,derived
-f_concentration,hhi,number,114,"Herfindahl-Hirschman Index: sum of squared percentage shares of spend (0-10,000; above 1,800 is highly concentrated under the 2023 DOJ/FTC Merger Guidelines)",derived
+f_concentration,fiscal_year,number,108,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_concentration,area,text,108,One of GMI's six focus areas,derived
+f_concentration,vendors,number,108,Distinct payees in the year,derived
+f_concentration,spend,number,108,Dollars spent (budget actuals or payments),derived
+f_concentration,top5_share,number,108,Share of the area's private-vendor spend held by its five largest vendors,derived
+f_concentration,hhi,number,108,"Herfindahl-Hirschman Index: sum of squared percentage shares of spend (0-10,000; above 1,800 is highly concentrated under the 2023 DOJ/FTC Merger Guidelines)",derived
+f_concentration,partial_year,number,108,,
 f_forecast,area,text,105,One of GMI's six focus areas,derived
 f_forecast,fiscal_year,number,105,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 f_forecast,kind,text,105,"Actual, forecast or plan",derived
@@ -521,6 +536,12 @@ f_forecast,plan,number,105,Spending after GMI's reported savings rate,derived
 f_forecast,p10_cal,number,105,Calibrated p10: the raw range widened by the conformal factor (src/models/calibration.py),derived
 f_forecast,p90_cal,number,105,Calibrated p90: the raw range widened by the conformal factor,derived
 f_forecast,range_source,text,105,"Where the published calibrated range comes from: bootstrap, or lightgbm where the pre-registered adoption rule chose it",derived
+f_fte,fiscal_year,number,794,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_fte,stage,text,794,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+f_fte,agency_code,text,794,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_fte,agency,text,794,Agency name shown on the dashboard,derived
+f_fte,fte,number,794,Budgeted full-time-equivalent positions,derived
+f_fte,in_gmi_baseline,number,794,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)",derived
 f_function,fiscal_year,number,795,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 f_function,stage,text,795,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 f_function,agency_code,text,795,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -554,30 +575,31 @@ f_object,agency_code,text,7817,Three-character State budget agency code (for exa
 f_object,object_name,text,7817,Comptroller object name,portal
 f_object,budget,number,7817,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
 f_object,controllable,number,7817,"Controllable purchases: contractual services, supplies, equipment, rent and similar spending agencies can renegotiate, per reference/controllable_rules.csv",derived
-f_overlap,fiscal_year,number,11,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_overlap,stage,text,11,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-f_overlap,budget,number,11,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
-f_overlap,general_funds,number,11,Operating budget paid from the General Fund,derived
-f_overlap,special_funds,number,11,Operating budget paid from special funds (dedicated State revenue),derived
-f_overlap,federal_funds,number,11,"Operating budget paid from federal funds, including the ARRA and COVID federal fund types",derived
-f_overlap,payments,number,11,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)",derived
-f_overlap,paid_to_government,number,11,"Payments to government payees (counties, cities, school systems, State and federal bodies) per reference/payee_type_rules.csv",derived
-f_overlap,paid_to_others,number,11,"Payments to all other payees: businesses, non-profits, health care, education and financial institutions, utilities and individuals",derived
-f_overlap,partial_year,number,11,True for the latest payments year while it is still being updated monthly,derived
-f_overlap,grants,number,11,Grants dataset rows with category Grant,derived
-f_overlap,loans,number,11,Grants dataset rows with category Loan,derived
-f_overlap,grants_and_loans,number,11,All grants dataset rows (grants and loans),derived
-f_overlap,grants_in_payments,number,11,Grant and loan dollars whose grantee is also a payee in the payments data that year,derived
-f_overlap,grants_in_payments_share,number,11,Share of grant and loan dollars whose grantee is also a payee that year (name match; a lower bound on overlap),derived
-f_overlap,grant_rows,number,11,Rows in the grants dataset that year,derived
-f_overlap,grant_rows_in_payments,number,11,Grant rows whose grantee is also a payee that year,derived
-f_overlap,payments_to_budget_share,number,11,Payments divided by the operating budget at its latest stage (a cross-check; the two measure different things),derived
-f_payee_type,fiscal_year,number,5601,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_payee_type,agency_code,text,5601,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_payee_type,payee_type,text,5601,"Payee type from reference/payee_type_rules.csv: Government, Health care organization, Education institution, Financial institution, Utility, Non-profit (grants data) or Business or other",derived
-f_payee_type,function_name,text,5601,Budget function title (from the portal's category_title),derived
-f_payee_type,paid,number,5601,Payments in dollars,derived
-f_payee_type,vendors,number,5601,Distinct payees in the year,derived
+f_overlap,fiscal_year,number,18,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_overlap,stage,text,18,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+f_overlap,budget,number,18,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
+f_overlap,general_funds,number,18,Operating budget paid from the General Fund,derived
+f_overlap,special_funds,number,18,Operating budget paid from special funds (dedicated State revenue),derived
+f_overlap,federal_funds,number,18,"Operating budget paid from federal funds, including the ARRA and COVID federal fund types",derived
+f_overlap,payments,number,18,"Payments to all payees in the year (vendor payments dataset, 7syw-q4cy)",derived
+f_overlap,paid_to_government,number,18,"Payments to government payees (counties, cities, school systems, State and federal bodies) per reference/payee_type_rules.csv",derived
+f_overlap,paid_to_others,number,18,"Payments to all other payees: businesses, non-profits, health care, education and financial institutions, utilities and individuals",derived
+f_overlap,partial_year,number,18,True for the latest payments year while it is still being updated monthly,derived
+f_overlap,grants,number,18,Grants dataset rows with category Grant,derived
+f_overlap,loans,number,18,Grants dataset rows with category Loan,derived
+f_overlap,grants_and_loans,number,18,All grants dataset rows (grants and loans),derived
+f_overlap,grants_in_payments,number,18,Grant and loan dollars whose grantee is also a payee in the payments data that year,derived
+f_overlap,grants_in_payments_share,number,18,Share of grant and loan dollars whose grantee is also a payee that year (name match; a lower bound on overlap),derived
+f_overlap,grant_rows,number,18,Rows in the grants dataset that year,derived
+f_overlap,grant_rows_in_payments,number,18,Grant rows whose grantee is also a payee that year,derived
+f_overlap,payments_to_budget_share,number,18,Payments divided by the operating budget at its latest stage (a cross-check; the two measure different things),derived
+f_payee_type,fiscal_year,number,5928,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_payee_type,agency_code,text,5928,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_payee_type,payee_type,text,5928,"Payee type from reference/payee_type_rules.csv: Government, Health care organization, Education institution, Financial institution, Utility, Non-profit (grants data) or Business or other",derived
+f_payee_type,function_name,text,5928,Budget function title (from the portal's category_title),derived
+f_payee_type,paid,number,5928,Payments in dollars,derived
+f_payee_type,vendors,number,5928,Distinct payees in the year,derived
+f_payee_type,partial_year,number,5928,,
 f_program,fiscal_year,number,6648,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 f_program,stage,text,6648,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 f_program,agency_code,text,6648,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
@@ -593,34 +615,39 @@ f_revenue,p50,number,11,Median of the FY2027 revenue band,derived
 f_revenue,p90,number,11,90th percentile of the FY2027 revenue band,derived
 f_revenue,p10_cal,number,11,Calibrated p10: the raw range widened by the conformal factor (src/models/calibration.py),derived
 f_revenue,p90_cal,number,11,Calibrated p90: the raw range widened by the conformal factor,derived
-f_savings_check,check_id,text,1618,Reported saving whose payments are checked,derived
-f_savings_check,fiscal_year,number,1618,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_savings_check,agency_code,text,1618,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_savings_check,paid,number,1618,Payments in dollars,derived
+f_savings_check,check_id,text,5572,Reported saving whose payments are checked,derived
+f_savings_check,fiscal_year,number,5572,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_savings_check,agency_code,text,5572,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_savings_check,paid,number,5572,Payments in dollars,derived
+f_savings_check,partial_year,number,5572,,
 f_scope,fiscal_year,number,2484,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
 f_scope,stage,text,2484,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
 f_scope,agency_code,text,2484,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
 f_scope,scope,text,2484,Spending scope bucket on the dashboard (controllable purchases or staff/grants/capital and so on),derived
 f_scope,budget,number,2484,Dollars budgeted or spent (actual years) on the row; nominal dollars,portal
-f_vendor,fiscal_year,number,4940,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_vendor,agency_code,text,4940,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_vendor,area,text,4940,One of GMI's six focus areas,derived
-f_vendor,vendor,text,4940,Company name after grouping payee names,derived
-f_vendor,spend,number,4940,Dollars spent (budget actuals or payments),derived
-f_vendor_detail,vendor,text,6292,Company name after grouping payee names,derived
-f_vendor_detail,agency_code,text,6292,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_vendor_detail,fiscal_year,number,6292,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_vendor_detail,paid,number,6292,Payments in dollars,derived
-f_vendor_pay,vendor,text,30800,Company name after grouping payee names,derived
-f_vendor_pay,agency_code,text,30800,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
-f_vendor_pay,fiscal_year,number,30800,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_vendor_pay,paid,number,30800,Payments in dollars,derived
-f_vendor_year,fiscal_year,number,19,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
-f_vendor_year,vendors,number,19,Distinct payees in the year,derived
-f_vendor_year,paid_non_government,number,19,Payments to non-government payees in the year,derived
-f_vendor_year,top10_share,number,19,Share of non-government payments held by the 10 largest vendors that year,derived
-f_vendor_year,top100_share,number,19,Share of non-government payments held by the 100 largest vendors that year,derived
-f_vendor_year,vendors_1m,number,19,Non-government vendors paid $1M or more that year,derived
+f_vendor,fiscal_year,number,15609,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_vendor,agency_code,text,15609,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_vendor,area,text,15609,One of GMI's six focus areas,derived
+f_vendor,vendor,text,15609,Company name after grouping payee names,derived
+f_vendor,spend,number,15609,Dollars spent (budget actuals or payments),derived
+f_vendor,partial_year,number,15609,,
+f_vendor_detail,vendor,text,19364,Company name after grouping payee names,derived
+f_vendor_detail,agency_code,text,19364,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_vendor_detail,fiscal_year,number,19364,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_vendor_detail,paid,number,19364,Payments in dollars,derived
+f_vendor_detail,partial_year,number,19364,,
+f_vendor_pay,vendor,text,82505,Company name after grouping payee names,derived
+f_vendor_pay,agency_code,text,82505,Three-character State budget agency code (for example D50); the key that joins budget and payments,portal
+f_vendor_pay,fiscal_year,number,82505,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_vendor_pay,paid,number,82505,Payments in dollars,derived
+f_vendor_pay,partial_year,number,82505,,
+f_vendor_year,fiscal_year,number,20,"Maryland fiscal year (July 1 to June 30), named for the year it ends",portal
+f_vendor_year,vendors,number,20,Distinct payees in the year,derived
+f_vendor_year,paid_non_government,number,20,Payments to non-government payees in the year,derived
+f_vendor_year,top10_share,number,20,Share of non-government payments held by the 10 largest vendors that year,derived
+f_vendor_year,top100_share,number,20,Share of non-government payments held by the 100 largest vendors that year,derived
+f_vendor_year,vendors_1m,number,20,Non-government vendors paid $1M or more that year,derived
+f_vendor_year,partial_year,number,20,,
 measures,table,text,14,Dashboard table the measure belongs to,derived
 measures,measure,text,14,Column name of the dashboard measure,derived
 measures,definition,text,14,What the dashboard measure means,derived
@@ -667,17 +694,18 @@ review_queue,score,number,2459,Isolation-forest anomaly score (higher = more unu
 review_queue,why,text,2459,Plain-language reasons the row was flagged (its two most extreme features),derived
 review_queue,rule_detector_overlap,text,2459,"Rule detector that already covers the row (Opportunity detector, Bid list), or none",derived
 review_queue,status,text,2459,"Review state of the flag (Under review, Approved variance, Refer to OLA)",derived
-run_checks,run_id,text,143,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
-run_checks,stage,text,143,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
-run_checks,check,text,143,Check description,ops
-run_checks,status,text,143,"pass, warn or fail",ops
-run_checks,detail,text,143,Numbers behind the check result,ops
+run_checks,run_id,text,145,"Pipeline run identifier, UTC timestamp YYYYMMDDTHHMMSSZ",ops
+run_checks,stage,text,145,"Confirmed budget stage for the fiscal year (Actual, Working, Legislative Appropriation) from ref.budget_stage, or the pipeline layer in run_checks",reference
+run_checks,check,text,145,Check description,ops
+run_checks,status,text,145,"pass, warn or fail",ops
+run_checks,detail,text,145,Numbers behind the check result,ops
 sources,source,text,6,Short name of the source dataset,derived
 sources,dataset_id,text,6,Portal four-by-four identifier,ops
 sources,title,text,6,Dataset title used on the dashboard,derived
 sources,use,text,6,What the dataset contributes to the tracker,derived
 sources,portal_name,text,6,Dataset title as the portal publishes it,ops
 sources,portal_updated,text,6,Date the portal data last changed,ops
+sources,portal_updated_utc,text,6,Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt,ops
 sources,rows_portal,number,6,Rows the portal reported,ops
 sources,rows_downloaded,number,6,Rows in the downloaded file,ops
 sources,years,text,6,Fiscal years used,derived
@@ -698,9 +726,9 @@ totals_by_fy,total_payments,number,20,All payments in the fiscal year,derived
 totals_by_fy,payment_records,number,20,Payment rows in the fiscal year,derived
 totals_by_fy,agencies,number,20,Agencies paying the vendor (or with payments in the year),derived
 totals_by_fy,vendors,number,20,Distinct payees in the year,derived
+totals_by_fy,partial_year,number,20,True for the latest payments year while it is still being updated monthly,derived
 totals_by_fy,total_payments_prior,number,20,All payments in the previous fiscal year,derived
 totals_by_fy,total_payments_yoy,number,20,Change in total payments from the previous fiscal year (share),derived
-totals_by_fy,partial_year,number,20,,
 vendor_families,family,text,130,Company that several payee names belong to,reference
 vendor_families,payee_names,number,130,Payee names grouped into the company,derived
 vendor_families,spend,number,130,Dollars spent (budget actuals or payments),derived

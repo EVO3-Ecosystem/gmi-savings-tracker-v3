@@ -1,176 +1,624 @@
-fiscal_year,area,vendor,agencies,spend,rank
-2022,Fleet & fuel,CARROLL INDEPENDENT FUEL,37,26541151.25,1
-2022,Fleet & fuel,ELEMENT FLEET,48,16213080.5,2
-2022,Fleet & fuel,APPLE FORD,13,7004376.12,3
-2022,Fleet & fuel,HERTRICH FLEET SERVICES,13,4446684.0,4
-2022,Fleet & fuel,SPORT CHEVROLET,6,1329481.0,5
-2022,Fleet & fuel,PETROLEUM MANAGEMENT,5,1057916.27,6
-2022,"IT hardware, software & services",SHI INTERNATIONAL,34,27323128.26,1
-2022,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,31,20234857.84,2
-2022,"IT hardware, software & services",CARAHSOFT,26,15600562.76,3
-2022,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,9,13866104.59,4
-2022,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,2,10900998.5,5
-2022,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,8234479.27,6
-2022,Real estate & leases,ST JOHN PROPERTIES,4,4001994.79,1
-2022,Real estate & leases,MERRITT PROPERTIES,2,1481095.89,2
-2022,Real estate & leases,BERKSHIRE PROPERTIES,2,1253438.04,3
-2022,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1236603.0,4
-2022,Real estate & leases,REISTERSTOWN PLAZA ASSOCIATES,3,1118061.11,5
-2022,Real estate & leases,DSM PROPERTIES,2,764667.42,6
-2022,"Print, copy & mail",XEROX,32,3899433.4,1
-2022,"Print, copy & mail",CANON,27,3089214.62,2
-2022,"Print, copy & mail",PITNEY BOWES,29,1453411.89,3
-2022,"Print, copy & mail",RICOH,22,1211557.25,4
-2022,"Print, copy & mail",QUADIENT LEASING,18,281942.67,5
-2022,"Print, copy & mail",SHARP ELECTRONICS,17,280812.15,6
-2023,Fleet & fuel,CARROLL INDEPENDENT FUEL,47,66519123.37,1
-2023,Fleet & fuel,ELEMENT FLEET,48,19528422.45,2
-2023,Fleet & fuel,APPLE FORD,16,10047930.23,3
-2023,Fleet & fuel,HERTRICH FLEET SERVICES,16,8383016.0,4
-2023,Fleet & fuel,CRISWELL CHEVROLET,5,3009970.54,5
-2023,Fleet & fuel,HILL S ELECTRIC MOTOR SERVICE,1,684305.27,6
-2023,"Print, copy & mail",XEROX,31,3829394.12,1
-2023,"Print, copy & mail",PITNEY BOWES,29,3538470.0,2
-2023,"Print, copy & mail",CANON,28,3022557.24,3
-2023,"Print, copy & mail",QUADIENT,25,1712683.29,4
-2023,"Print, copy & mail",RICOH,22,1049145.39,5
-2023,"Print, copy & mail",SHARP ELECTRONICS,19,459898.57,6
-2023,Real estate & leases,MERRITT PROPERTIES,3,1673715.05,1
-2023,Real estate & leases,KITE REALTY GROUP,3,1496138.06,2
-2023,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1360276.0,3
-2023,Real estate & leases,DSM PROPERTIES,2,1334458.95,4
-2023,Real estate & leases,BERKSHIRE PROPERTIES,2,1200143.93,5
-2023,Real estate & leases,TUERK HOUSE PROPERTIES,1,1138500.0,6
-2023,"IT hardware, software & services",SHI INTERNATIONAL,35,32609100.95,1
-2023,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,10,30049025.47,2
-2023,"IT hardware, software & services",CARAHSOFT,30,24809471.7,3
-2023,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,30,21685269.61,4
-2023,"IT hardware, software & services",IBM,6,8492315.69,5
-2023,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,8144233.46,6
-2024,Telecom,VERIZON,56,34664713.78,1
-2024,Telecom,COMCAST,3,3671406.42,2
-2024,Telecom,T-MOBILE,14,1210945.45,3
-2024,Telecom,AT&T,1,480748.15,4
-2024,Telecom,CROWN CASTLE FIBER,2,102825.31,5
-2024,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,32280135.25,1
-2024,Utilities & facility energy,PEPCO,16,6667622.54,2
-2024,Utilities & facility energy,CONSTELLATION ENERGY,6,6455134.89,3
-2024,Utilities & facility energy,DELMARVA POWER,19,5936431.61,4
-2024,Utilities & facility energy,POTOMAC EDISON,18,4999836.37,5
-2024,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,15,1433523.62,6
-2025,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,56231338.83,1
-2025,"IT hardware, software & services",CARAHSOFT,39,53852477.51,2
-2025,"IT hardware, software & services",SHI INTERNATIONAL,40,48755551.05,3
-2025,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,31,27470874.02,4
-2025,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9889875.26,5
-2025,"IT hardware, software & services",IBM,7,8399743.43,6
-2025,Fleet & fuel,CARROLL INDEPENDENT FUEL,49,57883948.34,1
-2025,Fleet & fuel,ELEMENT FLEET,51,21246603.83,2
-2025,Fleet & fuel,APPLE FORD,14,20368096.19,3
-2025,Fleet & fuel,HERTRICH FLEET SERVICES,16,9407243.26,4
-2025,Fleet & fuel,SPORT CHEVROLET,20,5775531.1,5
-2025,Fleet & fuel,CRISWELL NISSAN OF GERMANTOWN,7,1670750.0,6
-2025,"Print, copy & mail",CANON,37,4988168.04,1
-2025,"Print, copy & mail",XEROX,28,2909261.17,2
-2025,"Print, copy & mail",QUADIENT,26,1914253.44,3
-2025,"Print, copy & mail",PITNEY BOWES,24,1752841.45,4
-2025,"Print, copy & mail",RICOH,24,861156.94,5
-2025,"Print, copy & mail",SHARP ELECTRONICS,17,740919.55,6
-2025,Real estate & leases,MERRITT PROPERTIES,2,1661657.93,1
-2025,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,1603283.63,2
-2025,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1469832.0,3
-2025,Real estate & leases,BALTIMORE TOWER PROPERTIES,2,1428474.67,4
-2025,Real estate & leases,BERKSHIRE PROPERTIES,2,1125834.75,5
-2025,Real estate & leases,ST JOHN PROPERTIES,3,982557.68,6
-2026,Fleet & fuel,CARROLL INDEPENDENT FUEL,50,65588018.52,1
-2026,Fleet & fuel,ELEMENT FLEET,50,26598317.99,2
-2026,Fleet & fuel,APPLE FORD,12,12136350.23,3
-2026,Fleet & fuel,SPORT CHEVROLET,15,7329083.0,4
-2026,Fleet & fuel,HERTRICH FLEET SERVICES,10,5976673.34,5
-2026,Fleet & fuel,NATIONAL AUTO FLEET GROUP,1,1359836.0,6
-2026,"IT hardware, software & services",CARAHSOFT,38,57400434.54,1
-2026,"IT hardware, software & services",SHI INTERNATIONAL,40,52558360.47,2
-2026,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,35,43245118.3,3
-2026,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,18,27744252.95,4
-2026,"IT hardware, software & services",ADVANCED COMPUTER CONCEPTS,26,19726133.8,5
-2026,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,7637587.31,6
-2026,"Print, copy & mail",CANON,41,5872348.42,1
-2026,"Print, copy & mail",XEROX,25,2705490.14,2
-2026,"Print, copy & mail",QUADIENT,27,2179398.07,3
-2026,"Print, copy & mail",PITNEY BOWES,26,2005087.79,4
-2026,"Print, copy & mail",RICOH,25,1069132.01,5
-2026,"Print, copy & mail",SHARP ELECTRONICS,15,606381.18,6
-2026,Real estate & leases,MARYLAND REAL ESTATE CONVENTION,3,2002439.74,1
-2026,Real estate & leases,MERRITT PROPERTIES,2,1703051.51,2
-2026,Real estate & leases,BALTIMORE TOWER PROPERTIES,1,1548226.35,3
-2026,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1526773.0,4
-2026,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,1388837.6,5
-2026,Real estate & leases,BERKSHIRE PROPERTIES,2,1228020.68,6
-2022,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,31,29889871.63,1
-2022,Utilities & facility energy,DELMARVA POWER,20,5748703.28,2
-2022,Utilities & facility energy,PEPCO,17,5470778.29,3
-2022,Utilities & facility energy,POTOMAC EDISON,17,4598271.27,4
-2022,Utilities & facility energy,CONSTELLATION ENERGY,6,3650987.57,5
-2022,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,2420227.1,6
-2022,Telecom,VERIZON,58,34292677.95,1
-2022,Telecom,T-MOBILE,15,1586525.69,2
-2022,Telecom,COMCAST,11,1335267.78,3
-2022,Telecom,AT&T,2,515341.18,4
-2022,Telecom,CROWN CASTLE FIBER,2,80164.39,5
-2023,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,31,29188572.96,1
-2023,Utilities & facility energy,CONSTELLATION ENERGY,6,7284061.05,2
-2023,Utilities & facility energy,DELMARVA POWER,19,5965892.2,3
-2023,Utilities & facility energy,PEPCO,17,5410990.15,4
-2023,Utilities & facility energy,POTOMAC EDISON,17,4750510.24,5
-2023,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,15,2167604.7,6
-2023,Telecom,VERIZON,59,30167527.68,1
-2023,Telecom,COMCAST,10,4817409.01,2
-2023,Telecom,T-MOBILE,15,1810917.46,3
-2023,Telecom,AT&T,2,406053.18,4
-2023,Telecom,CROWN CASTLE FIBER,2,97632.05,5
-2024,"IT hardware, software & services",SHI INTERNATIONAL,37,39250584.63,1
-2024,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,41,37641706.33,2
-2024,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,27,33783130.21,3
-2024,"IT hardware, software & services",CARAHSOFT,36,33038145.94,4
-2024,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9467056.55,5
-2024,"IT hardware, software & services",ADVANCED COMPUTER CONCEPTS,25,8935407.94,6
-2024,Real estate & leases,MERRITT PROPERTIES,3,1661679.87,1
-2024,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1314786.0,2
-2024,Real estate & leases,BERKSHIRE PROPERTIES,2,1208845.95,3
-2024,Real estate & leases,ST JOHN PROPERTIES,3,941724.23,4
-2024,Real estate & leases,KITE REALTY GROUP,3,894583.43,5
-2024,Real estate & leases,DSM PROPERTIES,3,658356.14,6
-2024,Fleet & fuel,CARROLL INDEPENDENT FUEL,47,64977401.1,1
-2024,Fleet & fuel,ELEMENT FLEET,48,22031259.52,2
-2024,Fleet & fuel,HERTRICH FLEET SERVICES,22,14697765.0,3
-2024,Fleet & fuel,APPLE FORD,14,9962050.15,4
-2024,Fleet & fuel,SPORT CHEVROLET,16,4001364.6,5
-2024,Fleet & fuel,GOODYEAR TIRE & RUBBER,1,1751764.39,6
-2024,"Print, copy & mail",CANON,31,4274074.1,1
-2024,"Print, copy & mail",XEROX,31,3367789.13,2
-2024,"Print, copy & mail",QUADIENT,28,1873678.24,3
-2024,"Print, copy & mail",RICOH,26,958972.23,4
-2024,"Print, copy & mail",SHARP ELECTRONICS,16,468736.91,5
-2024,"Print, copy & mail",PITNEY BOWES,7,199945.21,6
-2025,Telecom,VERIZON,58,30285981.37,1
-2025,Telecom,AT&T,39,8503237.54,2
-2025,Telecom,COMCAST,11,3563882.52,3
-2025,Telecom,T-MOBILE,12,1206828.79,4
-2025,Telecom,CROWN CASTLE FIBER,2,79232.61,5
-2025,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,38493502.85,1
-2025,Utilities & facility energy,PEPCO,16,9579209.24,2
-2025,Utilities & facility energy,CONSTELLATION ENERGY,6,6899035.42,3
-2025,Utilities & facility energy,DELMARVA POWER,21,6663264.64,4
-2025,Utilities & facility energy,POTOMAC EDISON,18,6024566.7,5
-2025,Utilities & facility energy,WASHINGTON GAS,11,3393377.76,6
-2026,Telecom,VERIZON,56,30596407.6,1
-2026,Telecom,AT&T,38,9082572.01,2
-2026,Telecom,COMCAST,11,7206636.38,3
-2026,Telecom,T-MOBILE,13,1039253.77,4
-2026,Telecom,CROWN CASTLE FIBER,2,91554.77,5
-2026,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,29,40551651.95,1
-2026,Utilities & facility energy,PEPCO,16,10505298.93,2
-2026,Utilities & facility energy,WASHINGTON GAS,11,8016042.73,3
-2026,Utilities & facility energy,POTOMAC EDISON,17,6619056.31,4
-2026,Utilities & facility energy,DELMARVA POWER,19,6292318.09,5
-2026,Utilities & facility energy,CONSTELLATION ENERGY,2,6160072.03,6
+fiscal_year,area,vendor,agencies,spend,rank,partial_year
+2027,Telecom,VERIZON,52,6346636.77,1,True
+2027,Telecom,AT&T,37,3117420.79,2,True
+2027,Telecom,T-MOBILE,13,547226.21,3,True
+2027,Telecom,COMCAST,10,351528.06,4,True
+2027,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,28,13011077.65,1,True
+2027,Utilities & facility energy,PEPCO,17,3463328.95,2,True
+2027,Utilities & facility energy,DELMARVA POWER,20,2485786.88,3,True
+2027,Utilities & facility energy,CONSTELLATION ENERGY,4,2328833.14,4,True
+2027,Utilities & facility energy,POTOMAC EDISON,17,1664675.49,5,True
+2027,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,691374.75,6,True
+2017,Fleet & fuel,HERTRICH FLEET SERVICES,21,12271824.0,1,False
+2017,Fleet & fuel,APPLE FORD,15,5946012.0,2,False
+2017,Fleet & fuel,SPORT CHEVROLET,10,3538520.0,3,False
+2017,Fleet & fuel,GOODYEAR TIRE & RUBBER,2,3334525.86,4,False
+2017,Fleet & fuel,CRISWELL CHEVROLET,12,2405565.0,5,False
+2017,Fleet & fuel,AMERICAN ASSOCIATION OF MOTOR VEHICLE ADMIN,2,606406.74,6,False
+2017,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,11,22150988.1,1,False
+2017,"IT hardware, software & services",SHI INTERNATIONAL,37,17075809.17,2,False
+2017,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,10726005.32,3,False
+2017,"IT hardware, software & services",IBM,7,6170597.84,4,False
+2017,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,5757748.5,5,False
+2017,"IT hardware, software & services",ADVANCED SOFTWARE SYSTEMS,1,4186866.36,6,False
+2018,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,3,4685948.1,1,False
+2018,Real estate & leases,EXPO PROPERTIES,3,1440529.23,2,False
+2018,Real estate & leases,MERRITT PROPERTIES,3,1433012.14,3,False
+2018,Real estate & leases,DSM PROPERTIES,5,1133267.12,4,False
+2018,Real estate & leases,HAMPTON PLAZA LLLP,7,1100512.36,5,False
+2018,Real estate & leases,BERKSHIRE PROPERTIES,2,1099236.77,6,False
+2019,Fleet & fuel,HERTRICH FLEET SERVICES,22,15780771.0,1,False
+2019,Fleet & fuel,ELEMENT FLEET,45,13815804.76,2,False
+2019,Fleet & fuel,APPLE FORD,16,4636823.9,3,False
+2019,Fleet & fuel,CRISWELL CHEVROLET,9,1898882.0,4,False
+2019,Fleet & fuel,SPORT CHEVROLET,12,1639868.0,5,False
+2019,Fleet & fuel,GOODYEAR TIRE & RUBBER,2,1090819.1,6,False
+2019,"IT hardware, software & services",SHI INTERNATIONAL,38,29987267.25,1,False
+2019,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,8,20885615.89,2,False
+2019,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,30,16503295.49,3,False
+2019,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,8081284.72,4,False
+2019,"IT hardware, software & services",CARAHSOFT,19,7650456.39,5,False
+2019,"IT hardware, software & services",IBM,7,6868774.84,6,False
+2019,"Print, copy & mail",XEROX,36,5362658.18,1,False
+2019,"Print, copy & mail",PITNEY BOWES,29,2409829.25,2,False
+2019,"Print, copy & mail",CANON,21,2179450.32,3,False
+2019,"Print, copy & mail",RICOH,24,1598336.53,4,False
+2019,"Print, copy & mail",SHARP ELECTRONICS,14,329820.76,5,False
+2019,"Print, copy & mail",COPYQUIK PRINTING & GRAPHICS,2,68524.18,6,False
+2020,Real estate & leases,ST PAUL PLAZA OFFICE TOWER RENT ACCOUNT,2,4923461.27,1,False
+2020,Real estate & leases,DSM PROPERTIES,3,2574008.66,2,False
+2020,Real estate & leases,MERRITT PROPERTIES,2,1695639.48,3,False
+2020,Real estate & leases,HAMPTON PLAZA LLLP,7,1533093.89,4,False
+2020,Real estate & leases,BERKSHIRE PROPERTIES,2,1289526.81,5,False
+2020,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1249709.0,6,False
+2021,Real estate & leases,HAMPTON PLAZA LLLP,7,2234357.08,1,False
+2021,Real estate & leases,MERRITT PROPERTIES,2,1706779.26,2,False
+2021,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1418186.0,3,False
+2021,Real estate & leases,ST PAUL PLAZA OFFICE TOWER RENT ACCOUNT,2,1254290.01,4,False
+2021,Real estate & leases,BERKSHIRE PROPERTIES,2,1163880.71,5,False
+2021,Real estate & leases,ST JOHN PROPERTIES,1,636019.0,6,False
+2023,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,31,29188572.96,1,False
+2023,Utilities & facility energy,CONSTELLATION ENERGY,6,7284061.05,2,False
+2023,Utilities & facility energy,DELMARVA POWER,19,5965892.2,3,False
+2023,Utilities & facility energy,PEPCO,17,5410990.15,4,False
+2023,Utilities & facility energy,POTOMAC EDISON,17,4750510.24,5,False
+2023,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,15,2167604.7,6,False
+2024,Real estate & leases,MERRITT PROPERTIES,3,1661679.87,1,False
+2024,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1314786.0,2,False
+2024,Real estate & leases,BERKSHIRE PROPERTIES,2,1208845.95,3,False
+2024,Real estate & leases,ST JOHN PROPERTIES,3,941724.23,4,False
+2024,Real estate & leases,KITE REALTY GROUP,3,894583.43,5,False
+2024,Real estate & leases,DSM PROPERTIES,3,658356.14,6,False
+2010,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,3323376.22,1,False
+2010,Real estate & leases,MERRITT PROPERTIES,3,2092561.28,2,False
+2010,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1941079.23,3,False
+2010,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1399649.0,4,False
+2010,Real estate & leases,ARTEMIS PROPERTIES,1,1302053.3,5,False
+2010,Real estate & leases,SUNTRUST EQUIPTMENT FINANCING & LEASING,1,1246629.2,6,False
+2011,Utilities & facility energy,WASHINGTON GAS,16,42723547.38,1,False
+2011,Utilities & facility energy,PEPCO,16,22913233.4,2,False
+2011,Utilities & facility energy,DELMARVA POWER,17,3523241.82,3,False
+2011,Utilities & facility energy,CHOPTANK ELECTRIC COOPERATIVE,11,1830749.25,4,False
+2011,Utilities & facility energy,CONSTELLATION ENERGY,1,492532.86,5,False
+2011,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,1,25251.52,6,False
+2012,Utilities & facility energy,WASHINGTON GAS,17,43176651.63,1,False
+2012,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,28528735.62,2,False
+2012,Utilities & facility energy,PEPCO,16,22353081.25,3,False
+2012,Utilities & facility energy,POTOMAC EDISON,19,4264415.74,4,False
+2012,Utilities & facility energy,DELMARVA POWER,18,3641887.95,5,False
+2012,Utilities & facility energy,CHOPTANK ELECTRIC COOPERATIVE,11,1046622.4,6,False
+2012,Telecom,VERIZON,62,37220445.66,1,False
+2012,Telecom,T-MOBILE,19,826160.23,2,False
+2012,Telecom,AT&T,25,578283.3,3,False
+2012,Telecom,COMCAST,6,256962.19,4,False
+2013,Real estate & leases,SUNTRUST EQUIPMENT FINANCE & LEASING,1,4826303.02,1,False
+2013,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,4078618.01,2,False
+2013,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1839695.27,3,False
+2013,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1745252.0,4,False
+2013,Real estate & leases,MERRITT PROPERTIES,4,1537420.44,5,False
+2013,Real estate & leases,HOME PROPERTIES OF NEW YORK,1,1333929.0,6,False
+2017,"Print, copy & mail",XEROX,38,5138453.01,1,False
+2017,"Print, copy & mail",PITNEY BOWES,33,2477547.36,2,False
+2017,"Print, copy & mail",CANON,23,2410238.94,3,False
+2017,"Print, copy & mail",RICOH,25,1727078.96,4,False
+2017,"Print, copy & mail",SHARP ELECTRONICS,17,524288.35,5,False
+2017,"Print, copy & mail",COMPRINT PRINTING,2,280079.99,6,False
+2023,Telecom,VERIZON,59,30167527.68,1,False
+2023,Telecom,COMCAST,10,4817409.01,2,False
+2023,Telecom,T-MOBILE,15,1810917.46,3,False
+2023,Telecom,AT&T,2,406053.18,4,False
+2023,Telecom,CROWN CASTLE FIBER,2,97632.05,5,False
+2011,Telecom,VERIZON,62,51378998.55,1,False
+2011,Telecom,T-MOBILE,19,812122.3,2,False
+2011,Telecom,COMCAST,12,337591.74,3,False
+2011,Telecom,AT&T,7,157841.55,4,False
+2014,Telecom,VERIZON,60,38786050.89,1,False
+2014,Telecom,AT&T,33,2231489.36,2,False
+2014,Telecom,T-MOBILE,17,537895.49,3,False
+2014,Telecom,COMCAST,4,189556.36,4,False
+2025,Telecom,VERIZON,58,30285981.37,1,False
+2025,Telecom,AT&T,39,8503237.54,2,False
+2025,Telecom,COMCAST,11,3563882.52,3,False
+2025,Telecom,T-MOBILE,12,1206828.79,4,False
+2025,Telecom,CROWN CASTLE FIBER,2,79232.61,5,False
+2025,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,38493502.85,1,False
+2025,Utilities & facility energy,PEPCO,16,9579209.24,2,False
+2025,Utilities & facility energy,CONSTELLATION ENERGY,6,6899035.42,3,False
+2025,Utilities & facility energy,DELMARVA POWER,21,6663264.64,4,False
+2025,Utilities & facility energy,POTOMAC EDISON,18,6024566.7,5,False
+2025,Utilities & facility energy,WASHINGTON GAS,11,3393377.76,6,False
+2026,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,29,40551651.95,1,False
+2026,Utilities & facility energy,PEPCO,16,10505298.93,2,False
+2026,Utilities & facility energy,WASHINGTON GAS,11,8016042.73,3,False
+2026,Utilities & facility energy,POTOMAC EDISON,17,6619056.31,4,False
+2026,Utilities & facility energy,DELMARVA POWER,19,6292318.09,5,False
+2026,Utilities & facility energy,CONSTELLATION ENERGY,2,6160072.03,6,False
+2014,Utilities & facility energy,WASHINGTON GAS,16,60540921.5,1,False
+2014,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,28,35582851.63,2,False
+2014,Utilities & facility energy,PEPCO,14,6853409.01,3,False
+2014,Utilities & facility energy,DELMARVA POWER,19,4318344.49,4,False
+2014,Utilities & facility energy,CONSTELLATION ENERGY,2,4064857.29,5,False
+2014,Utilities & facility energy,POTOMAC EDISON,18,3666133.13,6,False
+2015,Telecom,VERIZON,60,36532687.39,1,False
+2015,Telecom,T-MOBILE,15,546076.68,2,False
+2015,Telecom,COMCAST,5,179883.97,3,False
+2015,Telecom,AT&T,5,70491.0,4,False
+2015,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,29,31882549.2,1,False
+2015,Utilities & facility energy,PEPCO,13,7644782.63,2,False
+2015,Utilities & facility energy,CONSTELLATION ENERGY,3,5513925.62,3,False
+2015,Utilities & facility energy,POTOMAC EDISON,19,5043621.46,4,False
+2015,Utilities & facility energy,DELMARVA POWER,18,4513243.17,5,False
+2015,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOP,14,1487200.76,6,False
+2016,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,27,29546058.72,1,False
+2016,Utilities & facility energy,PEPCO,13,7814409.32,2,False
+2016,Utilities & facility energy,CONSTELLATION ENERGY,3,7044363.55,3,False
+2016,Utilities & facility energy,DELMARVA POWER,17,5714648.97,4,False
+2016,Utilities & facility energy,POTOMAC EDISON,17,5436705.34,5,False
+2016,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,1397065.56,6,False
+2017,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,3,4407153.65,1,False
+2017,Real estate & leases,DSM PROPERTIES,2,1784823.86,2,False
+2017,Real estate & leases,MERRITT PROPERTIES,2,1542632.61,3,False
+2017,Real estate & leases,BERKSHIRE PROPERTIES,2,1210686.87,4,False
+2017,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1064948.0,5,False
+2017,Real estate & leases,HAMPTON PLAZA LLLP,6,978772.93,6,False
+2018,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,9,22658139.04,1,False
+2018,"IT hardware, software & services",SHI INTERNATIONAL,39,20837787.23,2,False
+2018,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,27,10997941.09,3,False
+2018,"IT hardware, software & services",CARAHSOFT,11,7791052.53,4,False
+2018,"IT hardware, software & services",IBM,6,6198772.31,5,False
+2018,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,6116915.96,6,False
+2018,Fleet & fuel,ELEMENT FLEET,45,14123477.15,1,False
+2018,Fleet & fuel,HERTRICH FLEET SERVICES,18,10108145.0,2,False
+2018,Fleet & fuel,APPLE FORD,13,3031748.0,3,False
+2018,Fleet & fuel,CRISWELL CHEVROLET,12,2295039.0,4,False
+2018,Fleet & fuel,SPORT CHEVROLET,9,2185646.0,5,False
+2018,Fleet & fuel,GOODYEAR TIRE & RUBBER,1,1508791.73,6,False
+2018,"Print, copy & mail",XEROX,36,4907444.11,1,False
+2018,"Print, copy & mail",PITNEY BOWES,31,2659078.26,2,False
+2018,"Print, copy & mail",CANON,25,2212381.29,3,False
+2018,"Print, copy & mail",RICOH,23,1536092.4,4,False
+2018,"Print, copy & mail",SHARP ELECTRONICS,15,377043.75,5,False
+2018,"Print, copy & mail",COMPRINT PRINTING,2,278957.0,6,False
+2019,Real estate & leases,ST PAUL PLAZA OFFICE TOWER RENT ACCOUNT,3,4479850.62,1,False
+2019,Real estate & leases,MERRITT PROPERTIES,3,1700885.43,2,False
+2019,Real estate & leases,HAMPTON PLAZA LLLP,7,1545245.63,3,False
+2019,Real estate & leases,BERKSHIRE PROPERTIES,2,1344438.28,4,False
+2019,Real estate & leases,DSM PROPERTIES,3,1177057.52,5,False
+2019,Real estate & leases,EXPO PROPERTIES,3,1145435.59,6,False
+2020,"IT hardware, software & services",SHI INTERNATIONAL,39,27830893.62,1,False
+2020,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,30,19361484.41,2,False
+2020,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,10,19182000.62,3,False
+2020,"IT hardware, software & services",TRAPEZE SOFTWARE GROUP,1,12081305.67,4,False
+2020,"IT hardware, software & services",CARAHSOFT,22,10016440.22,5,False
+2020,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,6270449.47,6,False
+2020,Fleet & fuel,ELEMENT FLEET,46,13403631.04,1,False
+2020,Fleet & fuel,HERTRICH FLEET SERVICES,19,4414689.0,2,False
+2020,Fleet & fuel,APPLE FORD,9,4037195.46,3,False
+2020,Fleet & fuel,SPORT CHEVROLET,7,1369330.46,4,False
+2020,Fleet & fuel,CRISWELL CHEVROLET,4,1018700.4,5,False
+2020,Fleet & fuel,DONALD B RICE TIRE,4,431142.09,6,False
+2021,Fleet & fuel,HERTRICH FLEET SERVICES,10,11123746.0,1,False
+2021,Fleet & fuel,ELEMENT FLEET,45,10098630.21,2,False
+2021,Fleet & fuel,APPLE FORD,11,3541222.84,3,False
+2021,Fleet & fuel,SPORT CHEVROLET,9,1489201.0,4,False
+2021,Fleet & fuel,FREDERICKTOWN NISSAN,6,827124.0,5,False
+2021,Fleet & fuel,DONALD B RICE TIRE,3,469550.8,6,False
+2021,"Print, copy & mail",SEACHANGE PRINTING AND MARKETING SERVICES,1,8116362.83,1,False
+2021,"Print, copy & mail",XEROX,32,4179073.36,2,False
+2021,"Print, copy & mail",CANON,22,2739991.3,3,False
+2021,"Print, copy & mail",PITNEY BOWES,30,1742131.47,4,False
+2021,"Print, copy & mail",RICOH,21,1259930.66,5,False
+2021,"Print, copy & mail",QUADIENT,21,683815.91,6,False
+2021,"IT hardware, software & services",SHI INTERNATIONAL,34,26192602.55,1,False
+2021,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,31,20574081.13,2,False
+2021,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,12,19682151.76,3,False
+2021,"IT hardware, software & services",CARAHSOFT,18,14725273.28,4,False
+2021,"IT hardware, software & services",TRAPEZE SOFTWARE GROUP,1,10500267.33,5,False
+2021,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,6642026.0,6,False
+2022,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,31,29889871.63,1,False
+2022,Utilities & facility energy,DELMARVA POWER,20,5748703.28,2,False
+2022,Utilities & facility energy,PEPCO,17,5470778.29,3,False
+2022,Utilities & facility energy,POTOMAC EDISON,17,4598271.27,4,False
+2022,Utilities & facility energy,CONSTELLATION ENERGY,6,3650987.57,5,False
+2022,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,2420227.1,6,False
+2022,Telecom,VERIZON,58,34292677.95,1,False
+2022,Telecom,T-MOBILE,15,1586525.69,2,False
+2022,Telecom,COMCAST,11,1335267.78,3,False
+2022,Telecom,AT&T,2,515341.18,4,False
+2022,Telecom,CROWN CASTLE FIBER,2,80164.39,5,False
+2024,Fleet & fuel,CARROLL INDEPENDENT FUEL,47,64977401.1,1,False
+2024,Fleet & fuel,ELEMENT FLEET,48,22031259.52,2,False
+2024,Fleet & fuel,HERTRICH FLEET SERVICES,22,14697765.0,3,False
+2024,Fleet & fuel,APPLE FORD,14,9962050.15,4,False
+2024,Fleet & fuel,SPORT CHEVROLET,16,4001364.6,5,False
+2024,Fleet & fuel,GOODYEAR TIRE & RUBBER,1,1751764.39,6,False
+2024,"IT hardware, software & services",SHI INTERNATIONAL,37,39250584.63,1,False
+2024,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,41,37641706.33,2,False
+2024,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,27,33783130.21,3,False
+2024,"IT hardware, software & services",CARAHSOFT,36,33038145.94,4,False
+2024,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9467056.55,5,False
+2024,"IT hardware, software & services",ADVANCED COMPUTER CONCEPTS,25,8935407.94,6,False
+2024,"Print, copy & mail",CANON,31,4274074.1,1,False
+2024,"Print, copy & mail",XEROX,31,3367789.13,2,False
+2024,"Print, copy & mail",QUADIENT,28,1873678.24,3,False
+2024,"Print, copy & mail",RICOH,26,958972.23,4,False
+2024,"Print, copy & mail",SHARP ELECTRONICS,16,468736.91,5,False
+2024,"Print, copy & mail",PITNEY BOWES,7,199945.21,6,False
+2010,"IT hardware, software & services",COMPUTER SCIENCES,5,20411823.88,1,False
+2010,"IT hardware, software & services",SHI INTERNATIONAL,40,7899308.49,2,False
+2010,"IT hardware, software & services",IBM,11,5540083.86,3,False
+2010,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,23,4307381.82,4,False
+2010,"IT hardware, software & services",SABER SOFTWARE,3,3258287.86,5,False
+2010,"IT hardware, software & services",DELL,17,3145111.73,6,False
+2010,"Print, copy & mail",XEROX,39,5615739.26,1,False
+2010,"Print, copy & mail",PITNEY BOWES,39,2652193.27,2,False
+2010,"Print, copy & mail",RICOH,31,2542752.59,3,False
+2010,"Print, copy & mail",SHARP ELECTRONICS,23,682476.42,4,False
+2010,"Print, copy & mail",CANON,10,286957.34,5,False
+2010,"Print, copy & mail",KONICA MINOLTA BUS SOLUTIONS,3,149743.72,6,False
+2010,Fleet & fuel,COMMERCIAL FUEL SYSTEMS,45,23908948.42,1,False
+2010,Fleet & fuel,PETROLEUM TRADERS,11,5507774.8,2,False
+2010,Fleet & fuel,HERTRICH FLEET SERVICES,12,3622025.0,3,False
+2010,Fleet & fuel,FLEET SERVICES,4,1432851.89,4,False
+2010,Fleet & fuel,CRISWELL CHEVROLET,12,1289388.0,5,False
+2010,Fleet & fuel,CHESAPEAKE FORD TRUCK SALES,5,986593.41,6,False
+2013,"IT hardware, software & services",COMPUTER SCIENCES,3,32846054.06,1,False
+2013,"IT hardware, software & services",SHI INTERNATIONAL,50,13440430.64,2,False
+2013,"IT hardware, software & services",IBM,13,6036048.57,3,False
+2013,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,21,3808348.61,4,False
+2013,"IT hardware, software & services",THREE SIGMA SOFTWARE,1,2279426.63,5,False
+2013,"IT hardware, software & services",DELL,22,1901804.83,6,False
+2013,"Print, copy & mail",XEROX,39,5250765.57,1,False
+2013,"Print, copy & mail",PITNEY BOWES,36,2035865.37,2,False
+2013,"Print, copy & mail",RICOH,29,2028229.78,3,False
+2013,"Print, copy & mail",CANON,23,919564.1,4,False
+2013,"Print, copy & mail",SHARP ELECTRONICS,19,619221.78,5,False
+2013,"Print, copy & mail",KONICA MINOLTA BUS SOLUTIONS,3,273386.28,6,False
+2013,Fleet & fuel,COMMERCIAL FUEL SYSTEMS,45,6147062.44,1,False
+2013,Fleet & fuel,APPLE FORD,18,4878613.84,2,False
+2013,Fleet & fuel,CRISWELL CHEVROLET,15,4828133.0,3,False
+2013,Fleet & fuel,SPORT CHEVROLET,12,2466903.7,4,False
+2013,Fleet & fuel,UNISSANT,1,894469.08,5,False
+2013,Fleet & fuel,HERTRICH FLEET SERVICES,11,621439.0,6,False
+2020,"Print, copy & mail",XEROX,33,5564300.17,1,False
+2020,"Print, copy & mail",SEACHANGE PRINTING AND MARKETING SERVICES,1,2977998.1,2,False
+2020,"Print, copy & mail",CANON,22,2953102.09,3,False
+2020,"Print, copy & mail",PITNEY BOWES,26,2069903.6,4,False
+2020,"Print, copy & mail",RICOH,24,1511270.55,5,False
+2020,"Print, copy & mail",SHARP ELECTRONICS,16,463628.49,6,False
+2026,Telecom,VERIZON,56,30596407.6,1,False
+2026,Telecom,AT&T,38,9082572.01,2,False
+2026,Telecom,COMCAST,11,7206636.38,3,False
+2026,Telecom,T-MOBILE,13,1039253.77,4,False
+2026,Telecom,CROWN CASTLE FIBER,2,91554.77,5,False
+2016,Telecom,VERIZON,61,39900379.32,1,False
+2016,Telecom,AT&T,32,3296466.44,2,False
+2016,Telecom,T-MOBILE,15,514331.92,3,False
+2016,Telecom,COMCAST,3,175104.99,4,False
+2016,Telecom,24 7 MID ATLANTIC DIVISION OF CROWN CASTLE,1,37400.0,5,False
+2014,Fleet & fuel,APPLE FORD,11,4897344.0,1,False
+2014,Fleet & fuel,HERTRICH FLEET SERVICES,23,3749145.0,2,False
+2014,Fleet & fuel,WINGFOOT COMMERCIAL TIRE SYS,2,2933677.55,3,False
+2014,Fleet & fuel,CRISWELL CHEVROLET,5,1981207.96,4,False
+2014,Fleet & fuel,WORLD FUEL SERVICES,2,827117.2,5,False
+2014,Fleet & fuel,UNISSANT,1,809222.49,6,False
+2025,Fleet & fuel,CARROLL INDEPENDENT FUEL,49,57883948.34,1,False
+2025,Fleet & fuel,ELEMENT FLEET,51,21246603.83,2,False
+2025,Fleet & fuel,APPLE FORD,14,20368096.19,3,False
+2025,Fleet & fuel,HERTRICH FLEET SERVICES,16,9407243.26,4,False
+2025,Fleet & fuel,SPORT CHEVROLET,20,5775531.1,5,False
+2025,Fleet & fuel,CRISWELL NISSAN OF GERMANTOWN,7,1670750.0,6,False
+2025,"Print, copy & mail",CANON,37,4988168.04,1,False
+2025,"Print, copy & mail",XEROX,28,2909261.17,2,False
+2025,"Print, copy & mail",QUADIENT,26,1914253.44,3,False
+2025,"Print, copy & mail",PITNEY BOWES,24,1752841.45,4,False
+2025,"Print, copy & mail",RICOH,24,861156.94,5,False
+2025,"Print, copy & mail",SHARP ELECTRONICS,17,740919.55,6,False
+2025,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,56231338.83,1,False
+2025,"IT hardware, software & services",CARAHSOFT,39,53852477.51,2,False
+2025,"IT hardware, software & services",SHI INTERNATIONAL,40,48755551.05,3,False
+2025,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,31,27470874.02,4,False
+2025,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,9889875.26,5,False
+2025,"IT hardware, software & services",IBM,7,8399743.43,6,False
+2026,"IT hardware, software & services",CARAHSOFT,38,57400434.54,1,False
+2026,"IT hardware, software & services",SHI INTERNATIONAL,40,52558360.47,2,False
+2026,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,35,43245118.3,3,False
+2026,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,18,27744252.95,4,False
+2026,"IT hardware, software & services",ADVANCED COMPUTER CONCEPTS,26,19726133.8,5,False
+2026,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,1,7637587.31,6,False
+2026,"Print, copy & mail",CANON,41,5872348.42,1,False
+2026,"Print, copy & mail",XEROX,25,2705490.14,2,False
+2026,"Print, copy & mail",QUADIENT,27,2179398.07,3,False
+2026,"Print, copy & mail",PITNEY BOWES,26,2005087.79,4,False
+2026,"Print, copy & mail",RICOH,25,1069132.01,5,False
+2026,"Print, copy & mail",SHARP ELECTRONICS,15,606381.18,6,False
+2026,Fleet & fuel,CARROLL INDEPENDENT FUEL,50,65588018.52,1,False
+2026,Fleet & fuel,ELEMENT FLEET,50,26598317.99,2,False
+2026,Fleet & fuel,APPLE FORD,12,12136350.23,3,False
+2026,Fleet & fuel,SPORT CHEVROLET,15,7329083.0,4,False
+2026,Fleet & fuel,HERTRICH FLEET SERVICES,10,5976673.34,5,False
+2026,Fleet & fuel,NATIONAL AUTO FLEET GROUP,1,1359836.0,6,False
+2027,Real estate & leases,BALTIMORE ARTS REALTY,2,800000.0,1,True
+2027,Real estate & leases,MERRITT PROPERTIES,2,691905.56,2,True
+2027,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,629542.0,3,True
+2027,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,578123.0,4,True
+2027,Real estate & leases,BALTIMORE TOWER PROPERTIES,1,550825.58,5,True
+2027,Real estate & leases,BERKSHIRE PROPERTIES,2,540979.9,6,True
+2014,"Print, copy & mail",XEROX,37,5267242.24,1,False
+2014,"Print, copy & mail",CANON,24,2405610.16,2,False
+2014,"Print, copy & mail",PITNEY BOWES,37,2347761.42,3,False
+2014,"Print, copy & mail",RICOH,29,1864733.71,4,False
+2014,"Print, copy & mail",SHARP ELECTRONICS,18,622059.65,5,False
+2014,"Print, copy & mail",KONICA MINOLTA BUS SOLUTIONS,3,267343.48,6,False
+2014,"IT hardware, software & services",COMPUTER SCIENCES,3,20909321.79,1,False
+2014,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,6,11998810.65,2,False
+2014,"IT hardware, software & services",SHI INTERNATIONAL,46,11209276.31,3,False
+2014,"IT hardware, software & services",QUALITY SOFTWARE SERVICES,1,8788807.29,4,False
+2014,"IT hardware, software & services",IBM,10,5800644.95,5,False
+2014,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,29,5347395.15,6,False
+2015,"IT hardware, software & services",QUALITY SOFTWARE SERVICES,1,25632057.68,1,False
+2015,"IT hardware, software & services",SHI INTERNATIONAL,47,17412105.03,2,False
+2015,"IT hardware, software & services",COMPUTER SCIENCES,3,16342976.85,3,False
+2015,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,7,14297927.95,4,False
+2015,"IT hardware, software & services",IBM,9,6138816.66,5,False
+2015,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,27,5490234.49,6,False
+2015,"Print, copy & mail",XEROX,37,5125827.33,1,False
+2015,"Print, copy & mail",PITNEY BOWES,36,2271061.57,2,False
+2015,"Print, copy & mail",CANON,22,2216164.73,3,False
+2015,"Print, copy & mail",RICOH,26,1977132.12,4,False
+2015,"Print, copy & mail",KOOL INK DBA SIR SPEEDY PRINTING,1,787379.31,5,False
+2015,"Print, copy & mail",SHARP ELECTRONICS,21,533062.93,6,False
+2015,Fleet & fuel,HERTRICH FLEET SERVICES,24,10394923.37,1,False
+2015,Fleet & fuel,APPLE FORD,9,5335503.6,2,False
+2015,Fleet & fuel,GOODYEAR TIRE & RUBBER,3,3122776.18,3,False
+2015,Fleet & fuel,CRISWELL CHEVROLET,14,1398729.55,4,False
+2015,Fleet & fuel,SPORT CHEVROLET,6,1047543.0,5,False
+2015,Fleet & fuel,WORLD FUEL SERVICES,1,633728.36,6,False
+2016,"Print, copy & mail",XEROX,38,5123819.26,1,False
+2016,"Print, copy & mail",CANON,24,2283649.95,2,False
+2016,"Print, copy & mail",PITNEY BOWES,34,1817749.81,3,False
+2016,"Print, copy & mail",RICOH,25,1752417.01,4,False
+2016,"Print, copy & mail",SHARP ELECTRONICS,18,543975.8,5,False
+2016,"Print, copy & mail",KOOL INK DBA SIR SPEEDY PRINTING,1,183046.27,6,False
+2016,Fleet & fuel,APPLE FORD,12,13451448.0,1,False
+2016,Fleet & fuel,HERTRICH FLEET SERVICES,14,4776104.0,2,False
+2016,Fleet & fuel,GOODYEAR TIRE & RUBBER,1,2659284.85,3,False
+2016,Fleet & fuel,CRISWELL CHEVROLET,14,2326895.0,4,False
+2016,Fleet & fuel,SPORT CHEVROLET,7,1806117.7,5,False
+2016,Fleet & fuel,AMERICAN ASSOCIATION OF MOTOR VEHICLE ADMIN,1,531482.11,6,False
+2016,"IT hardware, software & services",QUALITY SOFTWARE SERVICES,1,17986303.7,1,False
+2016,"IT hardware, software & services",SHI INTERNATIONAL,44,17870490.77,2,False
+2016,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,6,14389057.04,3,False
+2016,"IT hardware, software & services",COMPUTER SCIENCES,3,8107057.9,4,False
+2016,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,31,7231852.04,5,False
+2016,"IT hardware, software & services",IBM,9,6003994.1,6,False
+2018,Telecom,VERIZON,61,23692001.39,1,False
+2018,Telecom,T-MOBILE,15,714702.76,2,False
+2018,Telecom,COMCAST,4,262985.69,3,False
+2018,Telecom,CROWN CASTLE INTERNATIONAL,1,44880.0,4,False
+2018,Telecom,AT&T,5,33653.63,5,False
+2018,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,27,28283238.97,1,False
+2018,Utilities & facility energy,PEPCO,14,9549154.36,2,False
+2018,Utilities & facility energy,DELMARVA POWER,17,5904868.61,3,False
+2018,Utilities & facility energy,POTOMAC EDISON,17,4954871.1,4,False
+2018,Utilities & facility energy,CONSTELLATION ENERGY,4,3853427.33,5,False
+2018,Utilities & facility energy,CHOPTANK ELECTRIC COOPERATIVE,10,2426335.21,6,False
+2020,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,29,27872051.75,1,False
+2020,Utilities & facility energy,PEPCO,13,5708655.27,2,False
+2020,Utilities & facility energy,CONSTELLATION ENERGY,15,5160938.47,3,False
+2020,Utilities & facility energy,POTOMAC EDISON,17,4429572.01,4,False
+2020,Utilities & facility energy,WASHINGTON GAS,10,3520284.61,5,False
+2020,Utilities & facility energy,DELMARVA POWER,18,3396308.64,6,False
+2021,Telecom,VERIZON,57,32944338.28,1,False
+2021,Telecom,T-MOBILE,15,1290769.16,2,False
+2021,Telecom,COMCAST,10,689377.98,3,False
+2021,Telecom,CROWN CASTLE,3,111405.33,4,False
+2021,Telecom,AT&T,4,28909.25,5,False
+2021,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,28,26798909.13,1,False
+2021,Utilities & facility energy,PEPCO,12,8819670.46,2,False
+2021,Utilities & facility energy,POTOMAC EDISON,18,4765301.37,3,False
+2021,Utilities & facility energy,DELMARVA POWER,18,3655427.37,4,False
+2021,Utilities & facility energy,CONSTELLATION ENERGY,4,2938657.92,5,False
+2021,Utilities & facility energy,WASHINGTON GAS,10,2728250.65,6,False
+2022,"Print, copy & mail",XEROX,32,3899433.4,1,False
+2022,"Print, copy & mail",CANON,27,3089214.62,2,False
+2022,"Print, copy & mail",PITNEY BOWES,29,1453411.89,3,False
+2022,"Print, copy & mail",RICOH,22,1211557.25,4,False
+2022,"Print, copy & mail",QUADIENT LEASING,18,281942.67,5,False
+2022,"Print, copy & mail",SHARP ELECTRONICS,17,280812.15,6,False
+2022,"IT hardware, software & services",SHI INTERNATIONAL,34,27323128.26,1,False
+2022,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,31,20234857.84,2,False
+2022,"IT hardware, software & services",CARAHSOFT,26,15600562.76,3,False
+2022,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,9,13866104.59,4,False
+2022,"IT hardware, software & services",INTERNATIONAL SOFTWARE SYSTEMS,2,10900998.5,5,False
+2022,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,8234479.27,6,False
+2022,Fleet & fuel,CARROLL INDEPENDENT FUEL,37,26541151.25,1,False
+2022,Fleet & fuel,ELEMENT FLEET,48,16213080.5,2,False
+2022,Fleet & fuel,APPLE FORD,13,7004376.12,3,False
+2022,Fleet & fuel,HERTRICH FLEET SERVICES,13,4446684.0,4,False
+2022,Fleet & fuel,SPORT CHEVROLET,6,1329481.0,5,False
+2022,Fleet & fuel,PETROLEUM MANAGEMENT,5,1057916.27,6,False
+2023,Real estate & leases,MERRITT PROPERTIES,3,1673715.05,1,False
+2023,Real estate & leases,KITE REALTY GROUP,3,1496138.06,2,False
+2023,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1360276.0,3,False
+2023,Real estate & leases,DSM PROPERTIES,2,1334458.95,4,False
+2023,Real estate & leases,BERKSHIRE PROPERTIES,2,1200143.93,5,False
+2023,Real estate & leases,TUERK HOUSE PROPERTIES,1,1138500.0,6,False
+2024,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,32280135.25,1,False
+2024,Utilities & facility energy,PEPCO,16,6667622.54,2,False
+2024,Utilities & facility energy,CONSTELLATION ENERGY,6,6455134.89,3,False
+2024,Utilities & facility energy,DELMARVA POWER,19,5936431.61,4,False
+2024,Utilities & facility energy,POTOMAC EDISON,18,4999836.37,5,False
+2024,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,15,1433523.62,6,False
+2024,Telecom,VERIZON,56,34664713.78,1,False
+2024,Telecom,COMCAST,3,3671406.42,2,False
+2024,Telecom,T-MOBILE,14,1210945.45,3,False
+2024,Telecom,AT&T,1,480748.15,4,False
+2024,Telecom,CROWN CASTLE FIBER,2,102825.31,5,False
+2010,Utilities & facility energy,WASHINGTON GAS,17,30334086.3,1,False
+2010,Utilities & facility energy,PEPCO,22,28037500.61,2,False
+2010,Utilities & facility energy,DELMARVA POWER,19,4746836.77,3,False
+2010,Utilities & facility energy,CHOPTANK ELECTRIC COOPERATIVE,12,773429.08,4,False
+2010,Utilities & facility energy,CONSTELLATION BUILDING SYSTEMS,2,155686.82,5,False
+2010,Utilities & facility energy,USS CONSTELLATION MUSEUM,1,58893.0,6,False
+2010,Telecom,VERIZON,62,52295711.99,1,False
+2010,Telecom,AT&T,38,2562836.96,2,False
+2010,Telecom,COMCAST,10,456581.16,3,False
+2010,Telecom,T-MOBILE,17,410451.52,4,False
+2012,Real estate & leases,SUNTRUST EQUIPMENT FINANCE & LEASING,1,4902927.04,1,False
+2012,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,3711236.19,2,False
+2012,Real estate & leases,HOME PROPERTIES OF NEW YORK,1,3229004.0,3,False
+2012,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1779916.5,4,False
+2012,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1737017.0,5,False
+2012,Real estate & leases,MERRITT PROPERTIES,4,1562419.53,6,False
+2013,Utilities & facility energy,WASHINGTON GAS,17,45922214.39,1,False
+2013,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,29,29740730.02,2,False
+2013,Utilities & facility energy,PEPCO,14,10550828.66,3,False
+2013,Utilities & facility energy,DELMARVA POWER,18,4270487.31,4,False
+2013,Utilities & facility energy,POTOMAC EDISON,20,4103973.27,5,False
+2013,Utilities & facility energy,CONSTELLATION ENERGY,1,2056932.22,6,False
+2011,Real estate & leases,SUNTRUST EQUIPMENT FINANCE & LEASING,1,4732363.5,1,False
+2011,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,4224949.06,2,False
+2011,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1903133.0,3,False
+2011,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1850658.15,4,False
+2011,Real estate & leases,MERRITT PROPERTIES,4,1737052.18,5,False
+2011,Real estate & leases,BERKSHIRE PROPERTIES,1,1201053.62,6,False
+2013,Telecom,VERIZON,60,35425841.96,1,False
+2013,Telecom,AT&T,37,2407033.51,2,False
+2013,Telecom,T-MOBILE,17,827374.63,3,False
+2013,Telecom,COMCAST,3,187159.68,4,False
+2020,Telecom,VERIZON,57,34680958.42,1,False
+2020,Telecom,T-MOBILE,11,1762052.07,2,False
+2020,Telecom,COMCAST,8,533136.83,3,False
+2020,Telecom,CROWN CASTLE,3,100782.86,4,False
+2020,Telecom,AT&T,4,29063.04,5,False
+2025,Real estate & leases,MERRITT PROPERTIES,2,1661657.93,1,False
+2025,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,1603283.63,2,False
+2025,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1469832.0,3,False
+2025,Real estate & leases,BALTIMORE TOWER PROPERTIES,2,1428474.67,4,False
+2025,Real estate & leases,BERKSHIRE PROPERTIES,2,1125834.75,5,False
+2025,Real estate & leases,ST JOHN PROPERTIES,3,982557.68,6,False
+2026,Real estate & leases,MARYLAND REAL ESTATE CONVENTION,3,2002439.74,1,False
+2026,Real estate & leases,MERRITT PROPERTIES,2,1703051.51,2,False
+2026,Real estate & leases,BALTIMORE TOWER PROPERTIES,1,1548226.35,3,False
+2026,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1526773.0,4,False
+2026,Real estate & leases,RELIABLE PROPERTY MANAGEMENT,1,1388837.6,5,False
+2026,Real estate & leases,BERKSHIRE PROPERTIES,2,1228020.68,6,False
+2027,Fleet & fuel,CARROLL INDEPENDENT FUEL,49,29839516.05,1,True
+2027,Fleet & fuel,ELEMENT FLEET,48,7868833.59,2,True
+2027,Fleet & fuel,APPLE FORD,6,5574482.2,3,True
+2027,Fleet & fuel,HERTRICH FLEET SERVICES,9,1850857.68,4,True
+2027,Fleet & fuel,SPORT CHEVROLET,10,1805804.0,5,True
+2027,Fleet & fuel,PETROLEUM MANAGEMENT,1,643565.15,6,True
+2027,"Print, copy & mail",CANON,42,2576660.99,1,True
+2027,"Print, copy & mail",XEROX,24,1009789.14,2,True
+2027,"Print, copy & mail",PITNEY BOWES,20,844365.02,3,True
+2027,"Print, copy & mail",QUADIENT,22,491792.85,4,True
+2027,"Print, copy & mail",RICOH,23,363026.76,5,True
+2027,"Print, copy & mail",SHARP ELECTRONICS,12,210355.86,6,True
+2027,"IT hardware, software & services",CARAHSOFT,30,25929758.87,1,True
+2027,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,27,21958707.02,2,True
+2027,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,17,11225624.72,3,True
+2027,"IT hardware, software & services",ADVANCED COMPUTER CONCEPTS,21,9973379.03,4,True
+2027,"IT hardware, software & services",IBM,5,5392204.95,5,True
+2027,"IT hardware, software & services",SHI INTERNATIONAL,27,4603374.35,6,True
+2014,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,4345577.36,1,False
+2014,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1816467.0,2,False
+2014,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1764688.42,3,False
+2014,Real estate & leases,MERRITT PROPERTIES,4,1650230.96,4,False
+2014,Real estate & leases,ARTEMIS PROPERTIES,1,1107442.0,5,False
+2014,Real estate & leases,SUNTRUST EQUIPMENT FINANCE & LEASING,1,1079878.61,6,False
+2015,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,4182757.53,1,False
+2015,Real estate & leases,MERRITT PROPERTIES,3,1605821.74,2,False
+2015,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,1572620.0,3,False
+2015,Real estate & leases,FRANKLIN STREET PROPERTIES,1,1465453.15,4,False
+2015,Real estate & leases,BERKSHIRE PROPERTIES,1,1059783.06,5,False
+2015,Real estate & leases,HAMPTON PLAZA LLLP,7,960871.72,6,False
+2016,Real estate & leases,ST PAUL PLAZA OFFICE TOWER,2,5001650.93,1,False
+2016,Real estate & leases,MERRITT PROPERTIES,3,1509985.25,2,False
+2016,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1125772.0,3,False
+2016,Real estate & leases,BERKSHIRE PROPERTIES,2,1097071.92,4,False
+2016,Real estate & leases,HAMPTON PLAZA LLLP,7,992704.78,5,False
+2016,Real estate & leases,PEDESTAL GARDENS C O INT REALTY MGMT,1,850312.0,6,False
+2017,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,28,31824569.48,1,False
+2017,Utilities & facility energy,PEPCO,14,13253154.38,2,False
+2017,Utilities & facility energy,POTOMAC EDISON,17,5600053.27,3,False
+2017,Utilities & facility energy,DELMARVA POWER,17,4635539.16,4,False
+2017,Utilities & facility energy,CHOPTANK ELECTRIC COOPERATIVE,11,3247854.16,5,False
+2017,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,2158779.02,6,False
+2019,Telecom,VERIZON,60,26687177.82,1,False
+2019,Telecom,T-MOBILE,12,878586.66,2,False
+2019,Telecom,COMCAST,6,283737.91,3,False
+2019,Telecom,CROWN CASTLE INTL,2,92153.91,4,False
+2019,Telecom,CROWN CASTLE,2,54643.31,5,False
+2019,Telecom,AT&T,4,37930.87,6,False
+2019,Utilities & facility energy,BALTIMORE GAS & ELECTRIC,30,30866424.4,1,False
+2019,Utilities & facility energy,POTOMAC EDISON,17,4813970.38,2,False
+2019,Utilities & facility energy,CONSTELLATION ENERGY,7,4549547.86,3,False
+2019,Utilities & facility energy,DELMARVA POWER,17,3966018.31,4,False
+2019,Utilities & facility energy,PEPCO,13,3879121.67,5,False
+2019,Utilities & facility energy,SOUTHERN MARYLAND ELECTRIC COOPERATIVE,14,2076650.06,6,False
+2022,Real estate & leases,ST JOHN PROPERTIES,4,4001994.79,1,False
+2022,Real estate & leases,MERRITT PROPERTIES,2,1481095.89,2,False
+2022,Real estate & leases,BERKSHIRE PROPERTIES,2,1253438.04,3,False
+2022,Real estate & leases,REBECCA PARTNERSHIP C O MILES REALTY,1,1236603.0,4,False
+2022,Real estate & leases,REISTERSTOWN PLAZA ASSOCIATES,3,1118061.11,5,False
+2022,Real estate & leases,DSM PROPERTIES,2,764667.42,6,False
+2023,Fleet & fuel,CARROLL INDEPENDENT FUEL,47,66519123.37,1,False
+2023,Fleet & fuel,ELEMENT FLEET,48,19528422.45,2,False
+2023,Fleet & fuel,APPLE FORD,16,10047930.23,3,False
+2023,Fleet & fuel,HERTRICH FLEET SERVICES,16,8383016.0,4,False
+2023,Fleet & fuel,CRISWELL CHEVROLET,5,3009970.54,5,False
+2023,Fleet & fuel,HILL S ELECTRIC MOTOR SERVICE,1,684305.27,6,False
+2023,"Print, copy & mail",XEROX,31,3829394.12,1,False
+2023,"Print, copy & mail",PITNEY BOWES,29,3538470.0,2,False
+2023,"Print, copy & mail",CANON,28,3022557.24,3,False
+2023,"Print, copy & mail",QUADIENT,25,1712683.29,4,False
+2023,"Print, copy & mail",RICOH,22,1049145.39,5,False
+2023,"Print, copy & mail",SHARP ELECTRONICS,19,459898.57,6,False
+2023,"IT hardware, software & services",SHI INTERNATIONAL,35,32609100.95,1,False
+2023,"IT hardware, software & services",SKYLINE TECHNOLOGY SOLUTIONS,10,30049025.47,2,False
+2023,"IT hardware, software & services",CARAHSOFT,30,24809471.7,3,False
+2023,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,30,21685269.61,4,False
+2023,"IT hardware, software & services",IBM,6,8492315.69,5,False
+2023,"IT hardware, software & services",ELECTION SYSTEMS & SOFTWARE,1,8144233.46,6,False
+2011,Fleet & fuel,COMMERCIAL FUEL SYSTEMS,46,28090315.06,1,False
+2011,Fleet & fuel,MOTOR COACH INDUSTRIES,1,9273816.0,2,False
+2011,Fleet & fuel,PETROLEUM TRADERS,12,7485923.29,3,False
+2011,Fleet & fuel,HERTRICH FLEET SERVICES,11,3174170.0,4,False
+2011,Fleet & fuel,APPLE FORD,8,1417056.69,5,False
+2011,Fleet & fuel,CRISWELL CHEVROLET,11,1265585.59,6,False
+2011,"IT hardware, software & services",COMPUTER SCIENCES,4,16632809.2,1,False
+2011,"IT hardware, software & services",SHI INTERNATIONAL,42,10797955.17,2,False
+2011,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,23,7538255.45,3,False
+2011,"IT hardware, software & services",SABER SOFTWARE,2,6190929.63,4,False
+2011,"IT hardware, software & services",IBM,12,6133180.95,5,False
+2011,"IT hardware, software & services",DELL,21,5244879.38,6,False
+2011,"Print, copy & mail",XEROX,38,5375304.08,1,False
+2011,"Print, copy & mail",PITNEY BOWES,38,2911817.11,2,False
+2011,"Print, copy & mail",RICOH,28,2485135.05,3,False
+2011,"Print, copy & mail",SHARP ELECTRONICS,19,601048.64,4,False
+2011,"Print, copy & mail",CANON,3,256815.35,5,False
+2011,"Print, copy & mail",CHEERIO PRINTING,3,167665.78,6,False
+2012,"Print, copy & mail",XEROX,41,5896721.38,1,False
+2012,"Print, copy & mail",PITNEY BOWES,38,2418290.6,2,False
+2012,"Print, copy & mail",RICOH,28,2394678.98,3,False
+2012,"Print, copy & mail",SHARP ELECTRONICS,20,756021.53,4,False
+2012,"Print, copy & mail",CANON,3,230872.11,5,False
+2012,"Print, copy & mail",KONICA MINOLTA BUS SOLUTIONS,3,205260.22,6,False
+2012,Fleet & fuel,COMMERCIAL FUEL SYSTEMS,45,32904485.3,1,False
+2012,Fleet & fuel,PETROLEUM TRADERS,12,7589374.59,2,False
+2012,Fleet & fuel,APPLE FORD,18,1296044.0,3,False
+2012,Fleet & fuel,CRISWELL CHEVROLET,13,1291200.0,4,False
+2012,Fleet & fuel,HERTRICH FLEET SERVICES,9,1167741.0,5,False
+2012,Fleet & fuel,SPORT CHEVROLET,8,877683.0,6,False
+2012,"IT hardware, software & services",COMPUTER SCIENCES,5,25287622.61,1,False
+2012,"IT hardware, software & services",SHI INTERNATIONAL,46,11047700.11,2,False
+2012,"IT hardware, software & services",APPLIED TECHNOLOGY SERVICES,26,6051729.01,3,False
+2012,"IT hardware, software & services",IBM,11,5169312.25,4,False
+2012,"IT hardware, software & services",SABER SOFTWARE,1,3483520.62,5,False
+2012,"IT hardware, software & services",DELL,16,2364759.08,6,False
+2017,Telecom,VERIZON,59,24080891.75,1,False
+2017,Telecom,AT&T,34,2979333.54,2,False
+2017,Telecom,T-MOBILE,16,639977.43,3,False
+2017,Telecom,COMCAST,1,206536.47,4,False

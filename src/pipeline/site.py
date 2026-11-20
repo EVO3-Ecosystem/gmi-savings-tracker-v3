@@ -91,16 +91,36 @@ def commit_sha():
 
 def as_of(src):
     """Date of the latest pipeline run in the export, and the latest portal update of its sources."""
+    run, portal = as_of_times(src)
+    return run[:10], portal[:10]
+
+
+def as_of_times(src):
+    """Full UTC timestamps: the latest passed pipeline refresh, and the State's latest refresh of a source on the portal
+    (portal_updated_utc, falling back to the date-only portal_updated in older exports)."""
     run = portal = ""
     p = src / "pipeline_runs.csv"
     if p.exists():
         runs = [r["started_utc"] for r in csv.DictReader(open(p)) if r.get("status") == "passed"]
-        run = max(runs)[:10] if runs else ""
+        run = max(runs) if runs else ""
     p = src / "sources.csv"
     if p.exists():
-        ups = [r["portal_updated"] for r in csv.DictReader(open(p)) if r.get("portal_updated")]
-        portal = max(ups)[:10] if ups else ""
+        ups = [r.get("portal_updated_utc") or r.get("portal_updated") for r in csv.DictReader(open(p))]
+        ups = [u for u in ups if u]
+        portal = max(ups) if ups else ""
     return run, portal
+
+
+def eastern(ts):
+    """'2026-11-09T16:00:29+00:00' -> 'Nov 9, 2026, 11:00 AM ET' (a date alone stays a date)."""
+    if not ts:
+        return ""
+    if len(ts) <= 10:
+        d = datetime.fromisoformat(ts)
+        return f"{d:%b} {d.day}, {d.year}"
+    from zoneinfo import ZoneInfo
+    d = datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(ZoneInfo("America/New_York"))
+    return f"{d:%b} {d.day}, {d.year}, {d.strftime('%I:%M %p').lstrip('0')} {'EDT' if d.dst() else 'EST'}"
 
 
 def dashboard_html(src):
@@ -129,12 +149,13 @@ def dashboard_html(src):
 def published_files(datasets):
     """Every file the page loads plus every file in config/dashboard.yaml (data the page does not draw yet stays downloadable)."""
     cfg = yaml.safe_load((ROOT / "config" / "dashboard.yaml").read_text())
-    return sorted(set(datasets.values()) | set(cfg.values())) + ["manifest"]
+    from .export import EXTRA  # decision-register tables the export publishes beside the dashboard datasets
+    return sorted(set(datasets.values()) | set(cfg.values()) | set(EXTRA)) + ["manifest"]
 
 
 def header(src, sha):
-    run, portal = as_of(src)
-    bits = [f"Data as of {run}" if run else "", f"portal updated {portal}" if portal else ""]
+    run, portal = as_of_times(src)
+    bits = [f"Portal updated by DBM: {eastern(portal)}" if portal else "", f"refreshed by GitHub: {eastern(run)}" if run else ""]
     when = ", ".join(b for b in bits if b)
     ref = f'commit <a href="{REPO}/commit/{sha}"><code>{sha[:7]}</code></a>' if sha else "commit unknown"
     return ('<div id="site-head" style="border-bottom:1px solid var(--color-border-line);padding:8px 0;font:13px/1.45 ui-sans-serif,system-ui,sans-serif;color:var(--color-fg-muted)">'

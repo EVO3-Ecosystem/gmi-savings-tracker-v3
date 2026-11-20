@@ -37,12 +37,14 @@ def test_vendor_detail_matches_the_legacy_function_on_both_bases():
     bids = con.execute("SELECT * FROM mart.d_bid_list").df()
     lev = con.execute("SELECT spending_code FROM mart.d_opps WHERE detector = 'Leverage'").df().spending_code.tolist()
     ops = rc._ops(pm)
-    f1, n1 = R.vendor_detail(ops, list(bids.vendor) + lev)
+    legacy_cfg = R.assumptions()  # the legacy script starts the drill-down at FY2022; the pipeline now starts at years.history_first_fy
+    legacy_cfg["vendor_detail"] = {**legacy_cfg["vendor_detail"], "first_fy": 2022}
+    f1, n1 = R.vendor_detail(ops, list(bids.vendor) + lev, legacy_cfg)
     of1, on1 = rc.vendor_detail(ops, list(bids.vendor) + lev)
     _same(f1, of1)
     _same(n1, on1)
     rest = sorted(set(con.execute("SELECT DISTINCT vendor FROM mart.f_vendor").df().vendor) - {v.upper() for v in f1.vendor.str.upper()})
-    f2, n2 = R.vendor_detail(pay, rest)
+    f2, n2 = R.vendor_detail(pay, rest, legacy_cfg)
     of2, on2 = rc.vendor_detail(pm.assign(vendor=pm.family.fillna(pm.vendor_name).astype(str)), rest)
     _same(f2, of2)
     _same(n2, on2)
@@ -66,7 +68,8 @@ def test_stored_tables_have_the_documented_dashboard_columns():
     doc = pd.read_csv(ROOT / "docs" / "schemas" / "dashboard_columns.csv")
     con = _con()
     for t in ("d_plan50", "d_rec_status", "f_vendor_detail", "d_vendor_names"):
-        assert list(con.execute(f"SELECT * FROM mart.{t}").df().columns) == list(doc[doc.table == t].column), t
+        # the export adds partial_year to payment tables that reach the open year (src/pipeline/export.py FLAG_PARTIAL)
+        assert list(con.execute(f"SELECT * FROM mart.{t}").df().columns) == [c for c in doc[doc.table == t].column if c != "partial_year"], t
 
 
 def test_the_opportunity_module_and_the_recommendations_agree_on_the_bid_list_basis():

@@ -24,7 +24,7 @@ def test_index_has_disclaimer_and_no_banner(built):
     assert "Independent prototype by Sierra Napier, built from Maryland&#x27;s open data; not an official State of Maryland product" in page
     assert "Preview for approval" not in page
     assert "https://github.com/EVO3-Ecosystem/gmi-savings-tracker" in page
-    assert re.search(r"Data as of \d{4}-\d{2}-\d{2}", page)
+    assert re.search(r"Portal updated by DBM: \w{3} \d{1,2}, \d{4}", page) and re.search(r"refreshed by GitHub: \w{3} \d{1,2}, \d{4}", page)
 
 
 def test_data_is_fetched_by_relative_path_not_embedded(built):

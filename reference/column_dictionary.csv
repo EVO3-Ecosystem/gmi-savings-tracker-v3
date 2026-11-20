@@ -147,6 +147,7 @@ title,sources,derived,Dataset title used on the dashboard
 title,d_rec_status,derived,Recommendation title
 portal_name,,ops,Dataset title as the portal publishes it
 portal_updated,,ops,Date the portal data last changed
+portal_updated_utc,,ops,"Date and time (UTC) the State (DBM) last refreshed the dataset's rows on the portal: the portal's rowsUpdatedAt"
 use,sources,derived,What the dataset contributes to the tracker
 years,sources,derived,Fiscal years used
 reconciled,sources,ops,True when downloaded rows equal the portal's count
@@ -825,3 +826,7 @@ checked_on,"mart.d_site_reconciliation,d_site_reconciliation",source,Date the si
 data_total,"mart.d_site_reconciliation,d_site_reconciliation",derived,The open data's total for the year from this build
 difference,"mart.d_site_reconciliation,d_site_reconciliation",derived,data_total - site_total
 partial_year,"mart.d_site_reconciliation,d_site_reconciliation",derived,True for a year still in progress (the site can move ahead of the extract)
+in_gmi_baseline,f_fte,derived,"True when the agency counts toward GMI savings baselines; false for public higher education (R13, R14, R30, R95)"
+days_into_year,d_fytd_log,derived,"Days from July 1 (start of the fiscal year) to the State's refresh of the payments data, inclusive"
+year_elapsed_share,d_fytd_log,derived,Share of the fiscal year elapsed at the State's refresh of the payments data
+payment_records,d_fytd_log,derived,Rows in the payments data for the open fiscal year at that refresh

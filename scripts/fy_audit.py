@@ -141,7 +141,7 @@ def audit_exports(d, cal, R):
                 lo = b0 if n not in ("f_budget_vs_pay",) else b0
                 R.check(ys[0] >= min(b0, p0) and ys[-1] == b1, f"{n} reaches the latest budget year FY{b1}", rng)
             elif kind == "payments" and n not in FLAGGED:
-                R.check(ys[-1] == cal["last_full_pay"], f"{n} reaches the last full payments year FY{cal['last_full_pay']} (the open year is held back by design)", rng)
+                R.check(ys[-1] == p1, f"{n} reaches the latest payments year FY{p1} (v4: the open year is published as FYTD)", rng)
             elif kind == "payments":
                 R.check(ys[-1] == p1, f"{n} reaches the latest payments year FY{p1}", rng)
                 if cal["partial"] and "partial_year" in rr[0]:
@@ -156,7 +156,7 @@ def audit_exports(d, cal, R):
         ys = sorted({int(r["fiscal_year"]) for r in fa if r.get("spend") not in ("", None)})
         R.check(ys[-1] == b1, "f_area budget spending reaches the latest budget year", f"FY{ys[0]}-FY{ys[-1]}")
         ps = sorted({int(r["fiscal_year"]) for r in fa if r.get("payee_spend") not in ("", None)})
-        R.check(ps[-1] == cal["last_full_pay"], "f_area payee spending reaches the last full payments year (open year held back)", f"FY{ps[0]}-FY{ps[-1]}")
+        R.check(ps[-1] == p1, f"f_area payee spending reaches the latest payments year FY{p1} (v4: the open year is published as FYTD)", f"FY{ps[0]}-FY{ps[-1]}")
 
     R.h("1b. Exports: yearly totals reconciled across tables")
     tot = {int(r["fiscal_year"]): num(r["total_payments"]) for r in rows(d, "totals_by_fy")}

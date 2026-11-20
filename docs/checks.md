@@ -6,7 +6,7 @@ A failed "Stop" check ends the run before anything is exported. The export itsel
 |---|---|---|---|---|
 | Rows downloaded = portal `count(*)` (self-heals by re-downloading up to twice) | raw | Stop | 1 | yes (`extract.py`) |
 | Portal per-year totals saved with each run | raw | Stop | 1 | yes (`extract.py`, `tests/test_extract.py`) |
-| Yearly totals and row counts = portal's own `sum()` (all five datasets) | core | Stop | 2 | yes |
+| Yearly totals and row counts = portal's own `sum()` (all six datasets) | core | Stop | 2 | yes |
 | Budget totals = funding-source totals, within $1 | core | Stop | 2 | yes |
 | No missing year or amount | core | Stop | 2 | yes |
 | Agency names carry no code suffix; every budget year has a confirmed stage; latest payments year flagged partial | core/ref | Stop | 2 | yes |

@@ -130,7 +130,7 @@ def readme_facts(con):
     rate = pl.basis.str.extract(r"assumed ([\d.]+)%")[0].dropna()
     op = (v("opportunity_findings"), v("opportunity_high_usd"), v("opportunity_likely_usd"))
     ps = (v("possible_duplicate_groups"), v("possible_duplicate_review_usd"))
-    si = (v("source_issue_amount_usd"), *con.execute("select max(verified_on), string_agg(agency, ' and ' order by agency) from mart.d_source_issues").fetchone())
+    si = (v("source_issue_amount_usd"), *con.execute("select max(verified_on), string_agg(agency, ' and ' order by agency) from mart.d_source_issues where verified_on is not null").fetchone())
     other = len(sv) - len(gmi)
     return "\n".join([
         f"- **Reported savings:** GMI's January 26, 2026 report lists {len(gmi)} items" + ((" (plus a separate DGS facility estimate)" if other == 1 else f" (plus {other} separate DGS estimates)") if other else "")

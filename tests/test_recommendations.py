@@ -13,10 +13,10 @@ def _pay(rows):
 
 def test_vendor_detail_lists_payments_by_agency_and_year_and_payee_names_for_fy2026():
     pay = _pay([("A01", "ACME", "ACME INC", 100.123, 2025), ("A01", "ACME", "ACME INC", 50.0, 2026), ("A02", "ACME", "ACME LLC", 25.0, 2026),
-                ("A01", "ACME", "ACME INC", 999.0, 2021), ("A01", "OTHER", "OTHER CO", 7.0, 2026)])
+                ("A01", "ACME", "ACME INC", 999.0, 2009), ("A01", "OTHER", "OTHER CO", 7.0, 2026)])
     f, n = R.vendor_detail(pay, ["acme"])  # matched whatever the case
     assert set(f.vendor) == {"Acme"} and f[(f.agency_code == "A01") & (f.fiscal_year == 2025)].paid.iloc[0] == 100.12
-    assert 2021 not in set(f.fiscal_year) and len(f) == 3  # nothing before FY2022; A01 twice, A02 once
+    assert 2009 not in set(f.fiscal_year) and len(f) == 3  # nothing before years.history_first_fy (FY2010); A01 twice, A02 once
     assert dict(zip(n.payee_name, n.fy2026)) == {"ACME INC": 50.0, "ACME LLC": 25.0}  # FY2026 only
 
 

@@ -2488,8 +2488,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2023,Actual,93.251,Universal Newborn Hearing Screening,1,1,306208.0,135000.0,True,False,2.27
 2023,Actual,66.817,Corrective Action Program State and Tribal Response Program Grants,1,1,305155.0,463665.0,True,False,0.66
 2023,Actual,93.747D,Elder Abuse Prevention Interventions Program,2,2,304234.0,,False,False,
-2023,Actual,84.206,Javits Gifted and Talented Program,1,1,300000.0,,False,False,
 2023,Actual,10.556,Special Milk Program for Children,1,1,300000.0,,False,False,
+2023,Actual,84.206,Javits Gifted and Talented Program,1,1,300000.0,,False,False,
 2023,Actual,16.745,Juvenile and Mental Health Collaboration Program,1,1,299143.0,,False,False,
 2023,Actual,10.565,Commodity Supplemental Food Program,1,2,293480.0,386737.0,True,False,0.76
 2023,Actual,93.747,Elder Abuse Prevention Interventions Program,2,2,291491.0,58850.0,True,False,4.95
@@ -3533,8 +3533,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,97.075,Rail and Transit Security Grant Program,1,1,1081738.0,,False,False,
 2026,Working budget,93.659,Adoption Assistance,1,9,1044187.0,,False,False,
 2026,Working budget,84.323,State Improvement Grants for Students with Disabilities,1,2,1018093.0,,False,False,
-2026,Working budget,10.196,Chesapeake Bay Blue Catfish Control,1,1,1000000.0,,False,False,
 2026,Working budget,14.905,Lead Hazard Reduction Demonstration Grant Program,1,1,1000000.0,,False,False,
+2026,Working budget,10.196,Chesapeake Bay Blue Catfish Control,1,1,1000000.0,,False,False,
 2026,Working budget,93.771,Medicaid and Chip SBS Implementation Grant,1,1,995502.0,,False,False,
 2026,Working budget,17.002,Labor Force Statistics,1,2,967949.0,457061.45,True,False,2.12
 2026,Working budget,20.700,Pipeline Safety Program State Base Grant,1,1,958912.0,47709.0,True,False,20.1
@@ -3632,8 +3632,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2026,Working budget,66.708,Pollution Prevention Grants Program,1,1,254726.0,,False,False,
 2026,Working budget,93.234,Traumatic Brain Injury Demonstration Grant Program,1,1,251158.0,,False,False,
 2026,Working budget,93.270,Adult Viral Hepatitis Prevention and Control,1,1,250469.0,,False,False,
-2026,Working budget,93.354E,Public Health Emergency Response - COVID 19 Workforce (ARP),1,1,250000.0,,False,False,
 2026,Working budget,15.069,Zoonotic Disease Initiative,1,1,250000.0,,False,False,
+2026,Working budget,93.354E,Public Health Emergency Response - COVID 19 Workforce (ARP),1,1,250000.0,,False,False,
 2026,Working budget,16.741,DNA Backlog Reduction Program,1,1,249836.0,-53420.71,True,False,
 2026,Working budget,93.946,"Cooperative Agreements to Support State-Based Safe Motherhood and Infant Health Initiative Programs, Recovery Act",1,1,247304.0,,False,False,
 2026,Working budget,15.925,National Maritime Heritage Grant Program,1,1,246303.0,,False,False,
@@ -4044,8 +4044,8 @@ fiscal_year,stage,listing,listing_name,agencies,programs,state_federal_budget,fe
 2027,Legislative appropriation,15.929,Save America's Treasures,1,1,63102.0,,False,False,
 2027,Legislative appropriation,93.938,Cooperative Agreements to Support Comprehensive School Health Programs to Prevent the Spread of HIV and Other Important Health Problems,1,1,55502.0,,False,False,
 2027,Legislative appropriation,10.676,Forest Legacy Program,1,5,50954.0,,False,False,
-2027,Legislative appropriation,15.684,White-nose Syndrome National Response Implementation,1,5,50463.0,,False,False,
 2027,Legislative appropriation,15.615,Cooperative Endangered Species Conservation Fund,1,5,50463.0,,False,False,
+2027,Legislative appropriation,15.684,White-nose Syndrome National Response Implementation,1,5,50463.0,,False,False,
 2027,Legislative appropriation,93.421,Strengthening Public Health Systems and Service through National Partnerships to Improve and Protect the Nation’s Health,1,1,49597.0,,False,False,
 2027,Legislative appropriation,45.164,Promotion of the Humanities-Public Programs,1,1,47132.0,,False,False,
 2027,Legislative appropriation,93.301,Small Rural Hospital Improvement Grant Program,1,1,41628.0,,False,False,

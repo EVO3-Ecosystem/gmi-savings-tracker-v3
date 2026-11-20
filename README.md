@@ -7,7 +7,7 @@
 [![CI](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml/badge.svg)](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/ci.yml)
 [![Pages](https://github.com/EVO3-Ecosystem/gmi-savings-tracker-v3/actions/workflows/pages.yml/badge.svg)](https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/)
 <!-- facts:badges -->
-![Data checks](https://img.shields.io/badge/data%20checks-143%20of%20143%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
+![Data checks](https://img.shields.io/badge/data%20checks-145%20of%20145%20pass%2C%200%20fail-2da44e) ![Data as of](https://img.shields.io/badge/data%20as%20of-2026--11--19-0969da)
 <!-- /facts:badges -->
 ![Columns documented](https://img.shields.io/badge/columns%20documented-2%2C340%20of%202%2C394-dbab09) ![Version](https://img.shields.io/badge/version-4.0.0-0969da)
 ![Source](https://img.shields.io/badge/source-SODA%20API%20%C2%B7%206%20datasets-6e7781)
@@ -15,7 +15,17 @@
 
 Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **All data comes from the State's open data portal through the SODA API** (opendata.maryland.gov); State websites and DBM's budget books are used only to verify it.
 
-<a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/overview.png" alt="Dashboard overview: FY2026 against FY2025, with the computed finding at the top"></a>
+**Quickstart** (Python 3.12, [uv](https://docs.astral.sh/uv/)): no data download needed to see the results.
+
+```bash
+uv sync --frozen --extra dev        # locked environment
+make site                           # build the dashboard from the checked-in site_data/ snapshot
+make test                           # 544 tests; data-dependent ones skip without data/
+```
+
+Full pipeline (extract from the portal, build, check, export): `make all && make export && make site`. Every command is in [Run it](#run-it).
+
+<a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/overview.png" alt="Dashboard overview: FY2025 actual spending against FY2024, with the computed finding at the top"></a>
 
 ## What it found
 
@@ -24,15 +34,20 @@ Prototype by Sierra Napier, MPA. Not an official State of Maryland product. **Al
 - **Reported savings:** GMI's January 26, 2026 report lists 17 items (plus a separate DGS facility estimate). The 4 it describes as saved in FY2026 add up to $29M, its own FY2026 total; the rest are yearly savings under way or projected and are not added to it. The Governor's Government Modernization Initiative page (status as of June 2026) says GMI has implemented actions to save $50M. The two totals count different things and the tracker has verified neither; every figure is kept by source and date in `d_reported_claims`.
 - **Payment evidence:** about 14% of the path to $52.6M has payment evidence; the path is conditional on reported savings recurring and an assumed 3.5% from statewide contracts ($42.6M–$64.2M across the assumed ranges).
 - **Opportunities:** 389 findings worth up to $330.5M a year ($219.7M likely). They are leads to review; they overlap and are not additive.
-- **Payment screen:** 8 possible duplicate payment groups ($1.86M to review). None can be confirmed without payment records.
+- **Payment screen:** 25 possible duplicate payment groups ($2.20M to review). None can be confirmed without payment records.
 - **Source data issue:** the published FY2022 payments data lists a second block of $874.5M for Maryland Environmental Service And Maryland Transportation Authority, confirmed on both State sites on Nov 10, 2026. It is reported as a source issue, never as a lead.
 <!-- /facts:readme -->
 
-**Live tracking (v4.0):** the open fiscal year is published, not held back. FY2027 payments so far appear in every payment table and on every relevant tab, tagged **FYTD** (fiscal year to date) — never charted against completed years, never counted as a check result. The Savings tracker carries an FY2027 FYTD column so progress against the $50M yearly target is visible as the year unfolds; the checks themselves stay on the two completed years.
+**Live tracking (v4.0):** the open fiscal year is published, not held back. FY2027 payments so far ($18.07B in 14,669 payee-year records as of the portal's Nov 9, 2026 refresh, 36% of the way through the fiscal year) appear in every payment table and on every relevant tab, tagged **FYTD** (fiscal year to date). They are shown as a hollow point with a dashed line, never compared with a full year, and never counted as a check result; the page gives the pace instead (share of the last full year's payments against the share of the year elapsed). The Savings tracker carries an FY2027 FYTD column so progress against the $50M yearly target is visible as the year unfolds; the checks themselves stay on the two completed years.
+
+- **Two clocks in the header:** *Portal updated by DBM* (when the State last refreshed the payments dataset) and *Refreshed by GitHub* (when this pipeline last ran), both in Maryland time.
+- **Same-period comparisons:** every State refresh of the open year is logged in `d_fytd_log`, so FY2028 can be compared with FY2027 at the same point in the year.
+- **History from FY2010:** every payment, vendor and agency table starts at `years.history_first_fy` (FY2010, `config/assumptions.yaml`) and runs to the open year. Budget tables start where the budget data does (FY2017).
+- **No lost years:** a year-coverage guard (`src/pipeline/coverage.py`, `reference/year_coverage.csv`) stops the build, and fails CI, if any published table stops short of its source's first or last year.
 
 **Data accuracy (v3.2):** every actual year FY2017–FY2025 reconciles with DBM's printed budget books (statewide totals within 0.008%, 99.3–100% of programs equal to the dollar), the enacted FY2027 budget equals DBM's Fiscal Digest to the dollar in every fund, and 31 of 31 yearly totals equal the State's Open Finance sites to the cent ([details](#data)).
 
-**Audit depth (v3.1, data as of Nov 13, 2026):**
+**Audit depth (v3.1; figures from the Nov 13, 2026 run, not regenerated since):**
 - **Who pays changed:** 87 program-years moved at least 20 points toward the General Fund in two years. MSDE Child Care Assistance Grants went from 23% General Fund (FY2023) to 79% (FY2025, $562M), matching DLS's ~78%, as federal relief ran out.
 - **Federal cross-check:** in the funding data, federal fund source codes are Assistance Listing numbers, so each State budget line can be set beside USAspending obligations for the same program (State FY and federal FY side by side, never added).
 - **Payee identity:** 810 companies paid at addresses in more than one ZIP area and 2,368 likely missed name merges, queued for review. The public data has no vendor number, so name and ZIP are the only keys.
@@ -89,11 +104,11 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 <table>
 <tr>
 <td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/savings.png" alt="Savings tracker"></a><br><b>Savings tracker.</b> GMI's 17 items grouped by how the report words them; the four saved items equal its $29M.</td>
-<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/payment_screen.png" alt="Payment screen"></a><br><b>Payment screen.</b> 8 leads by confidence; the FY2022 double listing is a source issue, never a lead.</td>
+<td width="50%"><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/payment_screen.png" alt="Payment screen"></a><br><b>Payment screen.</b> 25 leads (FY2010–FY2026) by confidence; the FY2022 double listing is a source issue, never a lead.</td>
 </tr>
 <tr>
 <td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/audit_lifecycle.png" alt="Audit and recoupment lifecycle"></a><br><b>Audit lifecycle.</b> Identified, recouped, waived, legal opinion; every row sourced and dated.</td>
-<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/calculator.png" alt="Calculator"></a><br><b>Calculator.</b> The conditional path to $50.2M with calibrated ranges.</td>
+<td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/"><img src="docs/figures/readme/calculator.png" alt="Calculator"></a><br><b>Calculator.</b> The conditional path to $52.6M a year ($42.6M–$64.2M across the assumed ranges).</td>
 </tr>
 <tr>
 <td><a href="https://evo3-ecosystem.github.io/gmi-savings-tracker-v3/ai.html"><img src="docs/figures/readme/ai_layer.png" alt="AI layer"></a><br><b>AI layer.</b> Each model with its baseline, result and limits.</td>
@@ -107,14 +122,14 @@ Model cards: [`docs/models/`](docs/models). Gates in force: export refuses a fai
 |---|---|---|---|---|---|---|
 | Operating budget | [yu65-jmmv](https://opendata.maryland.gov/d/yu65-jmmv) | 741,957 | FY2017–FY2027 | Yes, every year | mtp.maryland.gov download; operatingbudget.maryland.gov totals | The portal's stage labels are out of date (FY2021 "Working", FY2022 "Appropriation", FY2027 "Governor's Allowance"); stages come from DBM's budget books |
 | Funding source | [gy87-e27x](https://opendata.maryland.gov/d/gy87-e27x) | 26,178 | FY2017–FY2027 | Yes, every year | budgetsource.maryland.gov download | Same stage labels as the budget |
-| Payments | [7syw-q4cy](https://opendata.maryland.gov/d/7syw-q4cy) | 412,880 | FY2008–FY2027 (FY2027 partial, published as FYTD) | Yes, every year | vendorpayments.maryland.gov download and totals | Title says FY2008–FY2024 but the data runs to FY2027. Yearly totals per payee, not payments (the date is always Jan 1). FY2022 lists a second $874.5M block. Refreshed on the portal after the Nov 9 extract; re-extracted Nov 10 |
+| Payments | [7syw-q4cy](https://opendata.maryland.gov/d/7syw-q4cy) | 412,880 | FY2008–FY2027 (FY2027 partial: $18.07B to date, published as FYTD) | Yes, every year | vendorpayments.maryland.gov download and totals | Title says FY2008–FY2024 but the data runs to FY2027. Yearly totals per payee, not payments (the date is always Jan 1). FY2022 lists a second $874.5M block. Refreshed on the portal after the Nov 9 extract; re-extracted Nov 10 |
 | Grants and loans | [absk-avps](https://opendata.maryland.gov/d/absk-avps) | 23,085 | FY2009–FY2025 | Yes, every year | grantsandloans.maryland.gov download | The portal says grants of $50,000 or more, but some rows are smaller |
 | Budgeted full-time equivalents (FTEs) | [x8qy-486w](https://opendata.maryland.gov/d/x8qy-486w) | 6,026 | FY2017–FY2027 | Yes, every year | The portal's own count and totals only | Values are FTEs (1,578 rows are fractional), not position counts. The portal page reads the same table as the API, and no separate State website publishes it (checked Nov 10, 2026); a check against DBM's budget documents is planned |
 | Public higher education budget | [4mca-332u](https://opendata.maryland.gov/d/4mca-332u) | 84,446 | FY2017–FY2027 | Yes, every year | The portal's own count and totals only | Reported separately and kept out of every savings baseline |
 
 ![Rows per fiscal year, by dataset](docs/figures/rows_by_year.png)
 
-Counts are from the Nov 10, 2026 run; the same notes appear on the dashboard's Data & pipeline tab (`reference/source_notes.csv`). Every run checks each dataset's row count and yearly totals against the portal's own figures before anything is built.
+Payment-based tables are published from FY2010 (`years.history_first_fy`); the payment screen covers FY2010–FY2026 (full years only) with the small-procurement limit in force on each record date: $25,000 before Oct 1, 2017, $50,000 to Sep 30, 2023, $100,000 after (SF&P 13-109). Counts are from the Nov 10, 2026 run; the same notes appear on the dashboard's Data & pipeline tab (`reference/source_notes.csv`). Every run checks each dataset's row count and yearly totals against the portal's own figures before anything is built.
 
 ![Which years reconcile with each source](docs/figures/readme/reconciliation.png)
 
@@ -148,21 +163,22 @@ Context sources (`src/pipeline/enrich.py`; a failure warns, never blocks): CPI-U
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/readme/pipeline_dark.png">
-  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 143 stop checks, 62 SQL marts and 15 model modules, the model registry, 75 published tables, the Pages site, a data release and a read-only MCP server; DBM's budget books, the Fiscal Digest and the Open Finance sites reconcile every year">
+  <img src="docs/figures/readme/pipeline_light.png" alt="Pipeline: SODA API to raw Parquet to DuckDB with 145 checks, 63 SQL marts and 16 model modules, the model registry, 84 published tables, the Pages site, a data release and a read-only MCP server; DBM's budget books, the Fiscal Digest and the Open Finance sites reconcile every year">
 </picture>
 
 | Step | Module | Result |
 |---|---|---|
 | Extract | `src/pipeline/extract.py`, `enrich.py` | One Parquet file per dataset per run with a manifest; context from BLS, BEA, FRED, Census, USAspending and DBM (a failure warns, never blocks) |
-| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->143<!-- /n --> checks; a failed stop check keeps the last good database |
+| Build and check | `build.py`, `checks.py` | DuckDB layers raw, ref, core, mart, ops; <!-- n:checks -->145<!-- /n --> checks; a failed stop check keeps the last good database |
+| Year coverage | `coverage.py`, `reference/year_coverage.csv` | Every published table covers its source's first and last year (payments to the open year); a lost year stops the build and fails CI |
 | Reconcile | `books.py`, `reconcile.py` | Every year against DBM's budget books, the Fiscal Digest and the Open Finance sites; results stored as sourced reference data and re-tested every build |
-| Rules | `reference/` (<!-- n:reference_files -->30<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
-| Marts | `sql/mart/` (<!-- n:marts -->62<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
+| Rules | `reference/` (<!-- n:reference_files -->31<!-- /n --> files) | Every mapping and decision in a reviewed file with its reason and source |
+| Marts | `sql/mart/` (<!-- n:marts -->63<!-- /n --> files) | The tables the dashboard reads; one mart per file, lineage recorded |
 | Models | `src/models/` (16 modules) | Forecasts, challenger, revenue, detectors and their backtest, savings checks, payment screen, classifier, grant groups, anomaly flags, registry and drift |
 | Publish | `export.py`, `site.py`, `publish.py` | Export refused unless every stop check passes; static site; data release |
 | AI access | `src/mcp/`, `src/briefs/` | Read-only MCP server; one-line briefs with a number guardrail |
 
-Quality bar: <!-- n:documented_columns -->2,394<!-- /n --> columns catalogued and 2,340 documented, the rest listed in `docs/data-governance.md` (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
+Quality bar: <!-- n:documented_columns -->2,441<!-- /n --> columns catalogued and 2,340 documented, the rest listed in `docs/data-governance.md` (`reference/column_dictionary.csv`), every figure on the page read from a published file, all financial figures by Maryland fiscal year (July 1–June 30).
 
 ## Tech stack
 
@@ -172,7 +188,7 @@ The architecture is the diagram and step table above. This is what it is built w
 - **Extraction and data handling:** `sodapy` (the Socrata SODA 2.1 client), pandas, PyArrow, `pdfplumber` (DBM's budget books), PyYAML and requests.
 - **Storage:** Parquet (one file per dataset per run, and the published tables in `site_data/`) and DuckDB with the layers `raw`, `ref`, `core`, `mart` and `ops`. DVC is configured for an optional local store (`dvc.yaml`); it is not a locked dependency.
 - **Models:** scikit-learn (K-Means, TF-IDF, Isolation Forest, logistic regression), LightGBM quantile regression, and split-conformal calibration (`src/models/calibration.py`). The model registry and the PSI and KS drift monitor are in `src/models/registry.py`. Sentence embeddings for grant groups are an optional extra; TF-IDF is the default.
-- **Quality and governance:** pytest (the data-free tests run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->30<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
+- **Quality and governance:** pytest (544 tests; the data-free ones run in CI), stop checks (`src/pipeline/checks.py`), reviewed CSV rules and dictionaries in `reference/` (<!-- n:reference_files -->31<!-- /n --> files), governance docs generated from the data (`src/pipeline/governance.py`), and ruff.
 - **Presentation:** a static site built by `src/pipeline/site.py` and served from GitHub Pages. D3.js is inlined in the page, so the dashboard loads nothing from another host; the SQL explorer loads DuckDB-WASM from jsDelivr (the one external request, with a plain JavaScript fallback). Figures come from matplotlib, the walkthrough notebook is executed with nbclient, and Playwright drives the page tests and the README screenshots.
 - **AI access:** a read-only Model Context Protocol server over stdio (`src/mcp/`), and one-line briefs with a number guardrail (`src/briefs/`). The template backend needs nothing; the optional Gemini backend uses `google-genai`.
 - **Delivery:** GitHub Actions runs CI (lint, compile check, tests, the forecast rebuild check, the notebook check and a container test), the Pages deploy, the data release to GitHub and Hugging Face, a monthly extract and build (the 3rd), and weekly freshness alerts (Mondays). A branch ruleset requiring the `test` check on `main` is defined in `.github/rulesets/main.json`, and Dependabot keeps the Actions and pip dependencies current.
@@ -181,7 +197,7 @@ The architecture is the diagram and step table above. This is what it is built w
 
 | Piece | Result | Limit |
 |---|---|---|
-| Payment screen | 8 leads, $1.86M to review; a confirmation rate is not measurable | Yearly totals, not payments |
+| Payment screen | 25 leads, $2.20M to review (FY2010–FY2026); a confirmation rate is not measurable | Yearly totals, not payments |
 | Payee classifier | Not adopted: macro F1 0.46 against 0.56 for the rules. Kept as a review queue of 2,185 names | Labels from one annotator |
 | Grant overlap | After resolving renamed agencies, 2 of the top 20 groups are real overlaps | Leads only, not additive |
 | MCP server | 6 read-only tools; 30 of 30 test questions answered exactly; 75 security tests | Local use (Claude Desktop or Claude Code) |
@@ -255,7 +271,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 | v3.1 Audit depth | Released Nov 16, 2026: fund hierarchy, federal cross-check, payee alias review, audit lifecycle register, payment-level schema, model registry, drift monitor |
 | v3.2 Data accuracy | Released Nov 16, 2026: every year reconciled with DBM's budget books, the Fiscal Digest and the State's Open Finance sites |
 | Release 3.2.0 on GitHub | Published Nov 17, 2026: tags `v3.1.0` and `v3.2.0`, GitHub releases, site deployed from `main` |
-| v4.0 Live tracking | Nov 20, 2026: FY2027 payments (partial year) published in every table, tagged FYTD; Savings tracker FYTD column; registry separates latest-completed from FYTD; repo inventory, refresh plan and gap-fix map in `docs/` |
+| v4.0 Live tracking | Nov 20, 2026: FY2027 payments (partial year) published in every table, tagged FYTD, with pace and a refresh log; payment history from FY2010 with a year-coverage guard; two header clocks (DBM portal update, GitHub refresh); every agency selected equals All agencies; Savings tracker FYTD column; registry separates latest-completed from FYTD; repo inventory, refresh plan and gap-fix map in `docs/` |
 | Program screen and walkthrough | Merged Nov 17, 2026: the statewide program screen with audit findings linked through the register, and the accessible walkthrough report |
 | Community | Set up Nov 17, 2026: Discussions (Q&A and Ideas), issue chooser links, support routing, tech stack section |
 | 6. Automate | Workflows in place (weekly freshness run, monthly extract and build, Pages, ruleset, Dependabot). The monthly extract and build run has not completed yet; it needs a working Socrata token |
@@ -270,7 +286,7 @@ legacy/        the original pandas pipeline and dashboard, kept as the parity ba
 
 ## Next steps
 
-- Sierra's review of the 8 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
+- Sierra's review of the 25 payment leads (`docs/reviews/payment_screen_review_sheet.csv`) and the 400 payee labels (`reference/payee_labels_sample.csv`).
 - Public Information Act requests: the Comptroller for payment-level MSDE records (FY2023–FY2025), and MSDE for audit, recoupment and waiver records.
 - January 2027: when DBM posts the FY2028 budget books, add them to `src/pipeline/books.py` so FY2026's working budget becomes an exact check instead of a bridge.
 - Scheduled runs: the monthly Extract and build runs on the 3rd (first scheduled run Dec 3, 2026); a manual run on Nov 18 passed every step. It needs no token: the datasets are public, a valid `MD_SODA_APP_TOKEN` only raises the request limits, and a rejected one is dropped with a warning. A data-refresh PR (published `site_data/`, which would publish `mart.d_program_screen`) is the next data step.

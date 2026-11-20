@@ -34,7 +34,7 @@ Last actual budget year FY2025; last full payments year FY2026; partial payments
 - PASS Published payments reach the last year in the State's data (FY2027): published FY2008-FY2027; the open year is published flagged partial
 - PASS Published budget reach the last year in the State's data (FY2027): published FY2017-FY2027
 - PASS f_function reaches the latest budget year FY2027: FY2017-FY2027
-- PASS f_agency reaches the latest budget year FY2027: FY2017-FY2027
+- PASS f_agency reaches the latest budget year FY2027: FY2010-FY2027
 - PASS f_scope reaches the latest budget year FY2027: FY2017-FY2027
 - PASS f_code reaches the latest budget year FY2027: FY2017-FY2027
 - PASS f_object reaches the latest budget year FY2027: FY2017-FY2027
@@ -42,32 +42,32 @@ Last actual budget year FY2025; last full payments year FY2026; partial payments
 - PASS f_fund reaches the latest budget year FY2027: FY2017-FY2027
 - PASS f_fund_source reaches the latest budget year FY2027: FY2017-FY2027
 - PASS d_all_funds reaches the latest budget year FY2027: FY2017-FY2027
-- PASS f_overlap reaches the latest budget year FY2027: FY2017-FY2027
-- PASS f_budget_vs_pay reaches the latest budget year FY2027: FY2017-FY2027
+- PASS f_overlap reaches the latest budget year FY2027: FY2010-FY2027
+- PASS f_budget_vs_pay reaches the latest budget year FY2027: FY2010-FY2027
 - PASS f_revenue reaches the latest budget year FY2027: FY2017-FY2027
 - PASS d_book_reconciliation reaches the latest budget year FY2027: FY2017-FY2027
 - PASS d_fund_shift reaches the latest budget year FY2027: FY2017-FY2027
 - PASS d_federal_crosswalk reaches the latest budget year FY2027: FY2017-FY2027
 - PASS totals_by_fy reaches the latest payments year FY2027: FY2008-FY2027
 - PASS totals_by_fy flags exactly the partial year: flagged [2027]
-- PASS f_payee_type reaches the last full payments year FY2026 (the open year is held back by design): FY2008-FY2026
-- PASS f_vendor_year reaches the last full payments year FY2026 (the open year is held back by design): FY2008-FY2026
-- PASS f_concentration reaches the last full payments year FY2026 (the open year is held back by design): FY2008-FY2026
-- PASS f_vendor stays within the payments calendar: FY2022-FY2026
-- PASS f_vendor_detail stays within the payments calendar: FY2022-FY2026
-- PASS f_vendor_pay stays within the payments calendar: FY2022-FY2026
-- PASS d_area_top stays within the payments calendar: FY2022-FY2026
-- PASS d_families stays within the payments calendar: FY2022-FY2026
-- PASS d_multi stays within the payments calendar: FY2022-FY2026
-- PASS d_multi_basis stays within the payments calendar: FY2022-FY2026
+- PASS f_payee_type reaches the latest payments year FY2027 (v4: the open year is published as FYTD): FY2008-FY2027
+- PASS f_vendor_year reaches the latest payments year FY2027 (v4: the open year is published as FYTD): FY2008-FY2027
+- PASS f_concentration reaches the latest payments year FY2027 (v4: the open year is published as FYTD): FY2010-FY2027
+- PASS f_vendor stays within the payments calendar: FY2010-FY2027
+- PASS f_vendor_detail stays within the payments calendar: FY2010-FY2027
+- PASS f_vendor_pay stays within the payments calendar: FY2010-FY2027
+- PASS d_area_top stays within the payments calendar: FY2010-FY2027
+- PASS d_families stays within the payments calendar: FY2010-FY2027
+- PASS d_multi stays within the payments calendar: FY2010-FY2027
+- PASS d_multi_basis stays within the payments calendar: FY2010-FY2027
 - PASS review_queue stays within the payments calendar: FY2011-FY2026
-- PASS d_payment_screen_summary stays within the payments calendar: FY2022-FY2026
+- PASS d_payment_screen_summary stays within the payments calendar: FY2010-FY2026
 - PASS f_area budget spending reaches the latest budget year: FY2017-FY2027
-- PASS f_area payee spending reaches the last full payments year (open year held back): FY2008-FY2026
+- PASS f_area payee spending reaches the latest payments year FY2027 (v4: the open year is published as FYTD): FY2008-FY2027
 
 ## 1b. Exports: yearly totals reconciled across tables
 
-- PASS Payments: f_agency payments are a subset of totals_by_fy every year (matched to an agency): 10 years; matched share 92.7%-96.9%
+- PASS Payments: f_agency payments are a subset of totals_by_fy every year (matched to an agency): 18 years; matched share 92.7%-96.9%
 - PASS Payments: totals_by_fy equals the reconciled data total every year: 20 years
 - PASS Payments: every payments year from FY2017 has agency rows
 - PASS Payments: every year matches the State's vendor-payments site: 20 years

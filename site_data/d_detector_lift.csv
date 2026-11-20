@@ -1,0 +1,46 @@
+detector,horizon,outcome,as_of_years,flagged_units,flagged_hits,flagged_rate,base_units,base_hits,base_rate,lift,lift_lo,lift_hi,rate_diff
+Peer gap,1,flagged_again,5,1417,1082,0.76359,1364,136,0.09971,7.66,6.51,9.01,0.66
+Peer gap,1,fell,5,1417,619,0.43684,1364,535,0.39223,1.11,1.02,1.22,0.04
+Peer gap,1,grew_slower_than_peers,5,1417,729,0.51447,1364,636,0.46628,1.1,1.02,1.19,0.05
+Peer gap,2,flagged_again,4,1088,818,0.75184,1060,117,0.11038,6.81,5.72,8.11,0.64
+Peer gap,2,fell,4,1088,464,0.42647,1060,380,0.35849,1.19,1.07,1.32,0.07
+Peer gap,2,grew_slower_than_peers,4,1088,543,0.49908,1060,456,0.43019,1.16,1.06,1.27,0.07
+Peer gap,3,flagged_again,3,798,585,0.73308,768,88,0.11458,6.4,5.23,7.82,0.62
+Peer gap,3,fell,3,798,320,0.401,768,250,0.32552,1.23,1.08,1.41,0.08
+Peer gap,3,grew_slower_than_peers,3,798,358,0.44862,768,291,0.37891,1.18,1.05,1.33,0.07
+Growth above trend,1,flagged_again,5,220,92,0.41818,1060,112,0.10566,3.96,3.13,5.0,0.31
+Growth above trend,1,fell,5,220,115,0.52273,1060,329,0.31038,1.68,1.44,1.97,0.21
+Growth above trend,1,grew_slower_than_peers,5,220,128,0.58182,1060,464,0.43774,1.33,1.17,1.52,0.14
+Growth above trend,2,flagged_again,4,166,45,0.27108,854,122,0.14286,1.9,1.41,2.56,0.13
+Growth above trend,2,fell,4,166,85,0.51205,854,244,0.28571,1.79,1.49,2.15,0.23
+Growth above trend,2,grew_slower_than_peers,4,166,89,0.53614,854,340,0.39813,1.35,1.14,1.59,0.14
+Growth above trend,3,flagged_again,3,121,15,0.12397,643,111,0.17263,0.72,0.43,1.19,-0.05
+Growth above trend,3,fell,3,121,65,0.53719,643,161,0.25039,2.15,1.73,2.65,0.29
+Growth above trend,3,grew_slower_than_peers,3,121,71,0.58678,643,215,0.33437,1.75,1.46,2.11,0.25
+Tail spend,1,flagged_again,6,18,18,,18,0,,,,,
+Tail spend,1,fell,6,18,10,,18,2,,,,,
+Tail spend,1,grew_slower_than_peers,6,18,12,,18,1,,,,,
+Tail spend,2,flagged_again,5,15,15,,15,0,,,,,
+Tail spend,2,fell,5,15,6,,15,1,,,,,
+Tail spend,2,grew_slower_than_peers,5,15,8,,15,2,,,,,
+Tail spend,3,flagged_again,4,12,12,,12,0,,,,,
+Tail spend,3,fell,4,12,6,,12,2,,,,,
+Tail spend,3,grew_slower_than_peers,4,12,6,,12,2,,,,,
+Leverage,1,flagged_again,6,157,130,0.82803,3069,12,0.00391,211.77,119.86,374.15,0.82
+Leverage,1,fell,6,157,56,0.35669,3069,1445,0.47084,0.76,0.61,0.94,-0.11
+Leverage,1,grew_slower_than_peers,6,157,52,0.33121,3069,1348,0.43923,0.75,0.6,0.95,-0.11
+Leverage,2,flagged_again,5,126,98,0.77778,2451,13,0.0053,146.64,84.59,254.2,0.77
+Leverage,2,fell,5,126,47,0.37302,2451,1266,0.51652,0.72,0.57,0.91,-0.14
+Leverage,2,grew_slower_than_peers,5,126,44,0.34921,2451,1161,0.47368,0.74,0.58,0.94,-0.12
+Leverage,3,flagged_again,4,97,71,0.73196,1908,15,0.00786,93.11,55.45,156.33,0.72
+Leverage,3,fell,4,97,35,0.36082,1908,1003,0.52568,0.69,0.52,0.9,-0.16
+Leverage,3,grew_slower_than_peers,4,97,31,0.31959,1908,908,0.47589,0.67,0.5,0.9,-0.16
+Bid list,1,flagged_again,6,123,97,0.78862,2992,12,0.00401,196.63,110.97,348.4,0.78
+Bid list,1,fell,6,123,48,0.39024,2992,1356,0.45321,0.86,0.69,1.08,-0.06
+Bid list,1,grew_slower_than_peers,6,123,45,0.36585,2992,1302,0.43516,0.84,0.66,1.06,-0.07
+Bid list,2,flagged_again,5,99,72,0.72727,2389,12,0.00502,144.79,81.3,257.86,0.72
+Bid list,2,fell,5,99,40,0.40404,2389,1196,0.50063,0.81,0.63,1.03,-0.1
+Bid list,2,grew_slower_than_peers,5,99,38,0.38384,2389,1115,0.46672,0.82,0.64,1.06,-0.08
+Bid list,3,flagged_again,4,75,51,0.68,1861,13,0.00699,97.34,55.41,171.02,0.67
+Bid list,3,fell,4,75,28,0.37333,1861,953,0.51209,0.73,0.54,0.98,-0.14
+Bid list,3,grew_slower_than_peers,4,75,27,0.36,1861,867,0.46588,0.77,0.57,1.05,-0.11
